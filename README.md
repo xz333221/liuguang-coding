@@ -41,6 +41,7 @@ npm install
 npm run dev        # http://localhost:5173
 npm run build      # 类型检查 + 生产构建
 npm run preview    # 预览 dist
+node scripts/check-live.mjs   # 检查 Pages 线上是否正常(标题、样式产物)
 ```
 
 图片素材只用在 `public/photos/` 下,重新拉取:`node scripts/fetch-photos.mjs`(来源见「素材说明」)。
