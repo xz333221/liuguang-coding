@@ -109,9 +109,9 @@
   }
 
   .lg-nav-item[data-active='true'] {
-    background: var(--surface);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
     color: var(--ink);
-    box-shadow: inset 2px 0 0 var(--accent);
+    font-weight: 500;
   }
 
   .lg-nav-item--child {

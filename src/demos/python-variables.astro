@@ -15,10 +15,14 @@ const captions = [
     <section class="lv-pane">
       <p class="lv-pane-title">代码</p>
       <ol class="lv-lines">
-        <li data-line="1"><code>a = [1, 2, 3]</code></li>
-        <li data-line="2"><code>b = a</code></li>
-        <li data-line="3"><code>b.append(4)</code></li>
-        <li data-line="4"><code>b = b + [5]</code></li>
+        <li data-line="1">
+          <code>a <span class="tk-op">=</span> [<span class="tk-num">1</span>, <span class="tk-num">2</span>, <span class="tk-num">3</span>]</code>
+        </li>
+        <li data-line="2"><code>b <span class="tk-op">=</span> a</code></li>
+        <li data-line="3"><code>b<span class="tk-fn">.append</span>(<span class="tk-num">4</span>)</code></li>
+        <li data-line="4">
+          <code>b <span class="tk-op">=</span> b <span class="tk-op">+</span> [<span class="tk-num">5</span>]</code>
+        </li>
       </ol>
     </section>
 
@@ -109,6 +113,28 @@ const captions = [
     border-radius: 18px;
     background: var(--surface);
     padding: 1.15rem;
+    /* 代码 token 的颜色跟正文里 Shiki 用的主题对齐(github light/dark default) */
+    --code-op: #ff7b72;
+    --code-num: #79c0ff;
+    --code-fn: #ffa657;
+  }
+
+  [data-theme='light'] .lv-demo {
+    --code-op: #cf222e;
+    --code-num: #0550ae;
+    --code-fn: #953800;
+  }
+
+  .tk-op {
+    color: var(--code-op);
+  }
+
+  .tk-num {
+    color: var(--code-num);
+  }
+
+  .tk-fn {
+    color: var(--code-fn);
   }
 
   .lv-grid {
@@ -157,7 +183,6 @@ const captions = [
   [data-step='4'] [data-line='4'] {
     background: var(--accent-soft);
     color: var(--ink);
-    box-shadow: inset 2px 0 0 var(--accent);
   }
 
   .lv-scene {
