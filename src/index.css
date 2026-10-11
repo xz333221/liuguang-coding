@@ -1,111 +1,214 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/jetbrains-mono';
+@import 'tailwindcss';
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+/*
+  流光 coding · 设计令牌
+  ---------------------------------------------------------------
+  审美方向:dark tech / 终端微光。单一强调色 = 琥珀色(品牌里的"光"),
+  中性色统一偏暖,不混冷暖两套灰。深浅两套主题共用同一批语义变量,
+  组件里只写 bg-canvas / text-ink / border-line 这类语义类名,不写死颜色。
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  圆角规则(全站统一,不要临场发挥):
+    交互控件(按钮 / 输入框 / 开关) = 胶囊 full
+    容器(卡片 / 图片 / 面板)      = 18px
+*/
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-panel: var(--panel);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-highlight: var(--highlight);
+  --color-accent-soft: var(--accent-soft);
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Source Han Sans SC', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --radius-panel: 18px;
+}
+
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --canvas: #0b0a09;
+  --surface: #141210;
+  --panel: #1c1917;
+  --line: #2a2622;
+  --line-strong: #3b352e;
+  --ink: #f5f2ee;
+  --muted: #a9a29a;
+  --accent: #e9a23b;
+  --on-accent: #1a1408;
+  --highlight: #f2b75e;
+  --accent-soft: rgb(233 162 59 / 0.12);
+  --scrim: rgb(11 10 9 / 0.72);
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+  --canvas: #f6f4f1;
+  --surface: #fbfaf8;
+  --panel: #f1eee9;
+  --line: #e2ddd6;
+  --line-strong: #cfc8bf;
+  --ink: #1a1815;
+  --muted: #6b645c;
+  --accent: #e9a23b;
+  --on-accent: #1a1408;
+  --highlight: #8a5510;
+  --accent-soft: rgb(233 162 59 / 0.16);
+  --scrim: rgb(26 24 21 / 0.55);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* 锚点跳转要给吸顶导航留出空间 */
+  [id] {
+    scroll-margin-top: 88px;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--on-accent);
+  }
+
+  :where(a, button, input, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  [id] > :where(h1, h2, h3) {
+    text-wrap: balance;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+/* 照片统一走一层暖灰双色调,免得素材风格各说各话 */
+.lg-photo {
+  filter: grayscale(1) contrast(1.08) brightness(0.75);
+}
+
+[data-theme='light'] .lg-photo {
+  filter: grayscale(1) contrast(1.02) brightness(1.04);
+}
+
+.lg-photo-tint {
+  background: linear-gradient(
+    170deg,
+    rgb(233 162 59 / 0.22) 0%,
+    transparent 45%,
+    rgb(11 10 9 / 0.55) 100%
+  );
+  mix-blend-mode: soft-light;
+}
+
+/* 素材加载失败时的兜底底色,别让页面出现破图 */
+.lg-photo-fallback {
+  background:
+    radial-gradient(120% 90% at 20% 0%, rgb(233 162 59 / 0.18), transparent 60%),
+    linear-gradient(160deg, var(--panel), var(--canvas));
+}
+
+/* Hero 的"流光":一道斜向高光扫过画面,扫完留一段静止。只动 transform/opacity。 */
+.lg-stream {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(255 255 255 / 0.05) 32%,
+    rgb(242 183 94 / 0.42) 50%,
+    rgb(255 255 255 / 0.05) 68%,
+    transparent 100%
+  );
+  animation: lg-stream 9s cubic-bezier(0.4, 0, 0.2, 1) 1.6s infinite;
+}
+
+@keyframes lg-stream {
+  0% {
+    transform: translate3d(-140%, 0, 0) skewX(-14deg);
+    opacity: 0;
   }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+  8% {
+    opacity: 0.6;
   }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+  42% {
+    opacity: 0.45;
   }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+  60%,
+  100% {
+    transform: translate3d(180%, 0, 0) skewX(-14deg);
+    opacity: 0;
   }
 }
-p {
-  margin: 0;
+
+/* 技术栈跑马灯:整页只有这一处横向滚动。 */
+.lg-marquee-track {
+  animation: lg-marquee 46s linear infinite;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+.lg-marquee:hover .lg-marquee-track {
+  animation-play-state: paused;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+@keyframes lg-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* 点阵底纹:只用在个别 bento 格子里做质感差,不做装饰性网格线。 */
+.lg-dots {
+  background-image: radial-gradient(var(--line-strong) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+
+/* 全屏颗粒:固定在顶层、不接收指针事件,不放在滚动容器里 */
+.lg-grain {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='0.55'/></svg>");
+  opacity: 0.035;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .lg-stream,
+  .lg-marquee-track {
+    animation: none !important;
+  }
+
+  .lg-stream {
+    opacity: 0 !important;
+  }
+
+  .lg-marquee-track {
+    transform: none !important;
+  }
+
+  /* 提交按钮上的转圈图标也停掉,状态靠文字表达 */
+  .animate-spin {
+    animation: none !important;
+  }
 }
