@@ -1,19 +1,12 @@
 import { MoonStars, SunDim } from '@phosphor-icons/react'
-import { useState } from 'react'
 
-type Theme = 'dark' | 'light'
-
-function readTheme(): Theme {
-  return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark'
-}
-
-/** 深色是品牌基调,浅色给不喜欢深色页面的读者。选择记在 localStorage。 */
+/**
+ * 深浅主题切换。图标用 CSS 跟着 html[data-theme] 走,组件本身不持状态 ——
+ * 这样服务端渲染和客户端首次渲染完全一致,不会有水合不匹配。
+ */
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(readTheme)
-
   function toggle() {
-    const next: Theme = theme === 'dark' ? 'light' : 'dark'
-    setTheme(next)
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'
     document.documentElement.dataset.theme = next
     try {
       localStorage.setItem('lg-theme', next)
@@ -26,10 +19,11 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      aria-label={theme === 'dark' ? '切换到浅色主题' : '切换到深色主题'}
+      aria-label="切换深浅主题"
       className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line text-muted transition-colors hover:border-line-strong hover:text-ink"
     >
-      {theme === 'dark' ? <SunDim size={17} /> : <MoonStars size={17} />}
+      <SunDim size={17} aria-hidden="true" className="hidden [html[data-theme=dark]_&]:block" />
+      <MoonStars size={17} aria-hidden="true" className="hidden [html[data-theme=light]_&]:block" />
     </button>
   )
 }

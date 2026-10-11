@@ -1,0 +1,99 @@
+---
+import Breadcrumbs from '../../components/kb/Breadcrumbs.astro'
+import CategoryCard from '../../components/kb/CategoryCard.astro'
+import TopicRow from '../../components/kb/TopicRow.astro'
+import { findCategory, visibleCategories } from '../../data/catalog'
+import {
+  categoryPath,
+  countByCategory,
+  countFor,
+  formatDate,
+  getTopics,
+  topicPath,
+} from '../../lib/content'
+import DocsLayout from '../../layouts/DocsLayout.astro'
+
+export function getStaticPaths() {
+  // 父分类和子分类都要能出页(编程语言 → Python / Java)
+  return visibleCategories().map((item) => ({ params: { category: item.id } }))
+}
+
+const meta = findCategory(Astro.params.category ?? '')
+if (!meta) throw new Error(`未知分类:${Astro.params.category}`)
+
+const topics = await getTopics()
+const counts = countByCategory(topics)
+const list = topics.filter((topic) => topic.data.category === meta.id)
+const children = (meta.children ?? []).filter((child) => child.status !== 'hidden')
+
+// 空分类时给一个去处:已经有内容的第一个分类
+const suggested = topics[0]
+---
+
+<DocsLayout
+  title={`${meta.name} · 流光 coding 知识库`}
+  description={meta.intro}
+  category={meta.id}
+>
+  <Breadcrumbs categoryId={meta.id} categoryName={meta.name} />
+
+  <h1 class="text-[1.75rem] leading-[1.3] font-medium tracking-tight md:text-[2rem]">{meta.name}</h1>
+  <p class="mt-4 max-w-[34em] text-[0.95rem] leading-relaxed text-muted">{meta.intro}</p>
+  {meta.status === 'soon' ? <span class="lg-badge mt-4 inline-block">筹备中</span> : null}
+
+  {
+    children.length > 0 ? (
+      <section class="mt-10">
+        <h2 class="text-sm text-muted">子分类</h2>
+        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+          {children.map((child) => (
+            <CategoryCard
+              name={child.name}
+              intro={child.intro}
+              href={categoryPath(child.id)}
+              status={child.status}
+              count={countFor(child.id, counts)}
+              note={child.note}
+            />
+          ))}
+        </div>
+      </section>
+    ) : null
+  }
+
+  {
+    list.length > 0 ? (
+      <section class="mt-10">
+        <h2 class="text-sm text-muted">知识点</h2>
+        <div class="lg-divide mt-2">
+          {list.map((topic) => (
+            <TopicRow
+              href={topicPath(topic)}
+              title={topic.data.title}
+              summary={topic.data.summary}
+              level={topic.data.level}
+              updated={formatDate(topic.data.updated)}
+            />
+          ))}
+        </div>
+      </section>
+    ) : (
+      <section class="mt-10 rounded-[18px] border border-line bg-surface p-6 md:p-7">
+        <h2 class="text-[1.05rem] font-medium">这个方向还在整理</h2>
+        <p class="mt-3 max-w-[32em] text-[0.88rem] leading-relaxed text-muted">
+          {meta.note ?? '先把已有的知识点看一遍，新内容会陆续补上来。'}
+        </p>
+        {
+          suggested ? (
+            <a
+              href={topicPath(suggested)}
+              class="mt-5 inline-flex items-center gap-2 rounded-full border border-line-strong px-4 py-2 text-sm transition-colors hover:border-highlight hover:text-highlight"
+            >
+              先看「{suggested.data.title}」
+            </a>
+          ) : null
+        }
+      </section>
+    )
+  }
+</DocsLayout>

@@ -1,103 +1,129 @@
-# 流光 coding
+# 流光 coding 知识库
 
-一个编程学习平台的落地页。项目驱动的课程、按交付物组织的课程目录、学员反馈与价格方案,深浅两套主题。
+按主题整理的编程知识库。每个知识点由三部分组成:**一张知识地图**、**一段可以动手的讲解**、**完整的正文**。
 
-线上预览:<https://xz333221.github.io/liuguang-coding/>(推送到 `main` 后由 GitHub Actions 自动部署)
+线上地址:<https://xz333221.github.io/liuguang-coding/>(推送到 `main` 后由 GitHub Actions 自动部署)
+早先做的那版课程落地页留档在 [/about/](https://xz333221.github.io/liuguang-coding/about/)。
 
-![深色主题首页](docs/preview-dark.png)
+![知识库首页](docs/kb-home.png)
 
-![浅色主题首页](docs/preview-light.png)
+![知识点页](docs/kb-topic.png)
 
-![课程区块](docs/preview-courses.png)
+![动手讲解](docs/kb-demo.png)
 
-## 这是什么
+## 现在有什么
 
-这是一个**前端落地页**,不是完整的教学产品。页面里的课程、价格、学员反馈都是演示数据,
-表单只有前端校验,没有后端。真正的课程体系、账号、支付都还没做(见文末的待办)。
+| 分类 | 状态 | 内容 |
+| --- | --- | --- |
+| 编程语言 → Python | 可用 | 变量不是盒子 |
+| 编程语言 → Java | 筹备中 | 紧随 Python 之后开始整理 |
+| AI | 可用 | 温度到底在调什么 |
+| 前端 / 后端 / 运维 / UI 设计 / 产品设计 | 筹备中 | 还没开始写，不要点进去找内容 |
 
-设计流程参考了本机的 `taste-skill`(anti-slop frontend skill),按它的要求先做判读再动手:
+分类的开关、顺序、说明都写在 `src/data/catalog.ts` 一个文件里。每个分类有 `active`(正常)、`soon`(置灰，点进去是"还在整理"的空状态)、`hidden`(完全不出现)三种状态。
 
-> **Design Read:** 面向中文自学者与转行者的开发者教育落地页,采用 dark tech / 终端微光语言,
-> 底座是 Tailwind v4 设计令牌 + 原生组件 + Motion,不用现成组件库的默认样式。
->
-> **三档位:** `DESIGN_VARIANCE 8`(非对称栅格、主推课大图 + 紧凑行)・
-> `MOTION_INTENSITY 6`(入场错峰、滚动淡入、按钮物理反馈、Hero 扫光)・
-> `VISUAL_DENSITY 4`(常规留白,数字与元信息用等宽)
+## 一个知识点由什么组成
+
+```
+src/content/knowledge/<分类>/<文件名>.md   → 正文(markdown) + frontmatter
+public/mindmaps/<名字>.mindmap.json        → 知识地图(flow-mindmap 的导出文件)
+src/demos/<名字>.astro                     → 动手讲解(自带动画/交互的组件)
+```
+
+三者通过 frontmatter 关联:
+
+```yaml
+---
+title: 变量不是盒子
+summary: 一句话摘要，列表页和页头都用它
+category: python          # 必须是 catalog.ts 里的叶子分类 id
+order: 1                  # 同分类内排序
+level: 入门               # 入门 / 进阶 / 深入
+tags: [内存模型, 引用]
+updated: 2026-10-11
+mindmap: python-variables.mindmap.json   # 可选
+demo: python-variables                   # 可选，指向 src/demos/<名字>.astro
+---
+```
+
+正文写普通的 markdown 就行：标题会自动生成右侧目录，代码块由 Astro 的 Shiki 做双主题高亮(深浅各一套 token 颜色)。
+
+## 加一个知识点
+
+1. **写正文**：在 `src/content/knowledge/<分类>/` 下新建 `<文件名>.md`，填好 frontmatter。文件名就是地址的最后一段(`/python/<文件名>/`)，所以要在全站唯一。
+2. **画导图**：用 [flow-mindmap](https://github.com/xz333221/flow-mindmap) 画完，右键导出 JSON，存成 `public/mindmaps/<名字>.mindmap.json`，然后在 frontmatter 里写 `mindmap:`。
+   - 节点文字尽量短(10 字以内)。面板是固定高度的，图越宽，自动缩放后字越小。
+3. **做讲解**：在 `src/demos/` 下新建 `<名字>.astro`，写 HTML + CSS(+ 少量 JS)，frontmatter 里写 `demo:` 即可，不需要注册。
+   - 讲解里的样式请用站内令牌(`var(--ink)` / `var(--line)` / `var(--accent)` 等)，这样深浅两套主题自动跟着变。
+   - 动效记得在 `prefers-reduced-motion: reduce` 下关掉。
+   - 参考现成的两个：`python-variables.astro`(用 `data-step` 驱动 CSS 逐帧讲解)、`ai-temperature.astro`(真算 softmax，滑块实时重画)。
+
+## 加一个分类
+
+改 `src/data/catalog.ts`：加一条记录，父分类用 `children` 带子分类。叶子分类会自动出现在导航、首页与路由里；`status: 'soon'` 的会置灰，`'hidden'` 的完全不出现。
 
 ## 技术栈
 
-| 项 | 选择 |
-| --- | --- |
-| 构建 | Vite 8 + React 19 + TypeScript |
-| 样式 | Tailwind v4(`@tailwindcss/vite`,语义化 CSS 变量,无 `tailwind.config.js`) |
-| 动效 | Motion(`motion/react`) |
-| 图标 | Phosphor(界面图标)+ simple-icons(技术栈品牌图形) |
-| 字体 | Geist Variable + JetBrains Mono Variable,`@fontsource-variable` 自托管 |
+| 项 | 选择 | 为什么 |
+| --- | --- | --- |
+| 站点框架 | Astro 7(static) | 一篇文章一页静态 HTML，正文不用等 JS |
+| 知识地图 | flow-mindmap(Vue 3 island) | 现成的导图组件，`client:only="vue"` 挂载，只读预览模式 |
+| 动手讲解 | 原生 HTML/CSS/JS(每个讲解一个 `.astro`) | 不引入框架，能继承站内令牌，浅色深色自动适配 |
+| 落地页 `/about` | React island(早先那版) | 直接复用，只在这一页加载 |
+| 样式 | Tailwind v4 + CSS 变量令牌 | 深浅两套主题共用一批语义变量 |
+| 正文高亮 | Astro 内置 Shiki(双主题) | 代码块跟随主题切换 |
+
+## 目录结构
+
+```
+astro.config.mjs            Astro 配置(集成、base、Shiki 双主题)
+src/
+  content.config.ts         内容集合定义(frontmatter 校验 + id 规则)
+  content/knowledge/        正文 markdown,按分类分目录
+  data/catalog.ts           分类树(顺序 / 状态 / 说明)
+  lib/content.ts            取数据与拼地址的公共函数(含 withBase)
+  lib/softmax.ts            温度讲解用的计算,SSR 与浏览器共用
+  demos/*.astro             动手讲解
+  components/kb/            知识库界面(Sidebar / MindMapPanel / Toc / Breadcrumb …)
+  components/ui/, data/, lib/motion.ts, App.tsx   落地页那套(只在 /about 用)
+  layouts/Base.astro        页面外壳(主题预置、颗粒层、跳转链接)
+  layouts/DocsLayout.astro  知识库外壳(头部、侧栏、页脚)
+  pages/                    路由:/、/[category]/、/[category]/[slug]/、/about、/404
+  styles/global.css         设计令牌 + 全局基础样式
+  styles/kb.css             知识库界面与正文排版
+public/mindmaps/            导图 JSON
+public/photos/              落地页照片(来源见下)
+```
+
+## 设计约定
+
+- **单一强调色**：全站只有琥珀色 `#e9a23b`。导图分支的多色来自 flow-mindmap 自带色板，属于图表本身。
+- **圆角规则**：交互控件(按钮、输入、胶囊)一律 `rounded-full`；容器(卡片、图片、代码块、导图面板)一律 `18px`；行内代码 `6px`。
+- **深浅两套主题**：默认深色(品牌基调)，页面加载前由 `Base.astro` 里的内联脚本定好，避免闪白；读者手动切过之后记在 `localStorage`。所有颜色都走语义令牌，组件里不写死色值。
+- **动效必须有理由**：导图里的展开/缩放是交互本身，讲解里的位移与高亮用来指示"哪一行在动、哪个对象被改了"。`prefers-reduced-motion: reduce` 下全部关掉。
 
 ## 本地运行
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173
-npm run build      # 类型检查 + 生产构建
+npm run dev        # http://localhost:4321
+npm run build      # 构建到 dist/
+npm run check      # astro check:类型 + 模板检查
+npm run lint       # oxlint
 npm run preview    # 预览 dist
-node scripts/check-live.mjs   # 检查 Pages 线上是否正常(标题、样式产物)
+node scripts/check-live.mjs   # 检查线上 Pages 是否正常
 ```
 
-图片素材只用在 `public/photos/` 下,重新拉取:`node scripts/fetch-photos.mjs`(来源见「素材说明」)。
+部署走 `.github/workflows/deploy.yml`：推 `main` 触发，构建时用 `BASE_PATH=/<仓库名>/` 注入 Vite 的 `base`，所以站内链接统一走 `withBase()`。
 
-## 设计约定
+## 已知边界
 
-- **单一强调色。** 全站只有琥珀色 `#e9a23b` 一个强调色,对应品牌里的「光」。中性色统一偏暖,
-  不混冷暖两套灰。深浅两套主题共用同一批语义变量(`--canvas` / `--surface` / `--ink` / `--accent` …),
-  组件里只写 `bg-canvas`、`text-ink` 这类语义类名,不写死颜色。
-- **圆角规则。** 交互控件(按钮、输入框、开关)一律胶囊 `rounded-full`;容器(卡片、图片、面板)
-  一律 `18px`。规则写在 `src/index.css` 顶部,不临场发挥。
-- **深色是默认。** 品牌基调是深色;首屏前由 `index.html` 里的内联脚本定下主题,避免闪白。
-  读者手动切过浅色后记在 `localStorage`,刷新保持。
-- **动效必须有理由。** Hero 的斜向扫光是品牌「流光」本身;其余动效只用来提示层级(滚动淡入)、
-  反馈操作(按钮按下)、衔接状态(表单发送中)。`prefers-reduced-motion: reduce` 下全部退化为静态。
-- **不用 scroll 事件。** 吸顶导航的状态靠 `IntersectionObserver` 观察页面顶部哨兵。
-
-## 结构
-
-```
-src/
-  App.tsx                 区块编排(z-index 只有三层:40 导航 / 50 颗粒 / 60 跳转链接)
-  index.css               设计令牌、双主题变量、少数几个自定义动效类
-  data/site.ts            全站文案与结构数据(演示数据集中在这里)
-  lib/motion.ts           全站共用缓动
-  components/
-    Nav.tsx               吸顶导航 + 移动端展开
-    Hero.tsx              非对称分栏首屏 + 真实课程片段卡片
-    TechStack.tsx         技术栈跑马灯(整页唯一的横向滚动)
-    Courses.tsx           主推课大图卡 + 其余课程紧凑行
-    LearningPath.tsx      学习节奏(纵向时间线)
-    Why.tsx               差异点 bento 网格
-    Voices.tsx            学员反馈(两栏错开)
-    Pricing.tsx           两个方案,会员卡强调
-    PreviewRequest.tsx    邮箱表单(空 / 错误 / 加载 / 成功四态)
-    Footer.tsx
-    ui/                   Reveal、Actions、Photo、Mark、SectionHeader、ThemeToggle
-```
-
-## 无障碍与性能
-
-- 所有图片有描述性 `alt`;照片加载失败时回落到同色系兜底底纹,不出现破图。
-- 表单:标签在输入框上方(不用 placeholder 当标签)、错误提示 `aria-describedby`、
-  成功态 `role="status"`;按钮文字与实际背景对比度达到 WCAG AA。
-- 全站键盘可达,`:focus-visible` 有统一的强调色描边,顶部有「跳到主要内容」。
-- 图片按用途给足 `aspect-ratio` 占位,避免 CLS;字体自托管并 `font-display: swap`。
-- 构建产物:JS 约 138 KB(gzip)、CSS 约 9.5 KB(gzip)。
+- **还没有搜索**，只有分类导航 + 目录。
+- 只有 2 个知识点，Java 与其余分类都还是空的。
+- 讲解目前只有两个，都是手写的 `.astro`；还没有沉淀出"讲解模板"。
+- 导图是构建前的静态 JSON，站内不能改图(要改用 flow-mindmap 编辑，再重新导出)。
+- `/about` 那版落地页用的课程、价格、学员信息都是演示数据，邮箱表单没有后端。
 
 ## 素材说明
 
-`public/photos/` 下的四张照片来自 Unsplash(按 Unsplash License 免费使用),在页面里统一做了
-灰度 + 暖色双色调处理,只作演示占位。品牌图形(流光标记、favicon)是自制几何标记。
-
-## 待办
-
-- 接真实后端:邮箱订阅接口(现在只有前端校验与状态模拟)。
-- 课程详情页 / 学习端页面(本页只承担落地页职责)。
-- 替换演示数据:课程、价格、学员反馈都需要真实内容。
-- 登录与支付入口:目前所有 CTA 都指向页内表单,没有真实注册流程。
+`public/photos/` 下的照片来自 Unsplash(按 Unsplash License 免费使用)，只用在 `/about`，统一做了灰度加暖色双色调处理。品牌标记是自制几何图形。

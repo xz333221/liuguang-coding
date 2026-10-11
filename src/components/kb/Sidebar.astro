@@ -1,0 +1,82 @@
+---
+import { catalog } from '../../data/catalog'
+import { categoryPath, countByCategory, countFor, getTopics } from '../../lib/content'
+
+interface Props {
+  /** 当前分类 id,用于高亮 */
+  current?: string
+  /** 当前知识点 id,列在分类下面 */
+  currentTopic?: string
+}
+
+const { current, currentTopic } = Astro.props
+const topics = await getTopics()
+const counts = countByCategory(topics)
+const roots = catalog.filter((item) => item.status !== 'hidden')
+
+function topicsIn(id: string) {
+  return topics.filter((topic) => topic.data.category === id)
+}
+---
+
+<nav aria-label="分类导航" class="grid gap-0.5">
+  {
+    roots.map((root) => (
+      <>
+        <a href={categoryPath(root.id)} class="lg-nav-item" data-active={current === root.id}>
+          <span>{root.name}</span>
+          {root.status === 'soon' ? <span class="lg-badge">筹备中</span> : null}
+          <span class="lg-nav-count">{countFor(root.id, counts)}</span>
+        </a>
+
+        {topicsIn(root.id).length > 0 && (
+          <ul class="grid gap-0.5">
+            {topicsIn(root.id).map((topic) => (
+              <li>
+                <a
+                  href={categoryPath(root.id) + `${topic.id}/`}
+                  class="lg-nav-item lg-nav-item--topic"
+                  data-active={currentTopic === topic.id}
+                >
+                  <span class="truncate">{topic.data.title}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {(root.children ?? [])
+          .filter((child) => child.status !== 'hidden')
+          .map((child) => (
+            <>
+              <a
+                href={categoryPath(child.id)}
+                class="lg-nav-item lg-nav-item--child"
+                data-active={current === child.id}
+              >
+                <span>{child.name}</span>
+                {child.status === 'soon' ? <span class="lg-badge">筹备中</span> : null}
+                <span class="lg-nav-count">{countFor(child.id, counts)}</span>
+              </a>
+
+              {topicsIn(child.id).length > 0 && (
+                <ul class="grid gap-0.5">
+                  {topicsIn(child.id).map((topic) => (
+                    <li>
+                      <a
+                        href={categoryPath(child.id) + `${topic.id}/`}
+                        class="lg-nav-item lg-nav-item--topic"
+                        data-active={currentTopic === topic.id}
+                      >
+                        <span class="truncate">{topic.data.title}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
+          ))}
+      </>
+    ))
+  }
+</nav>

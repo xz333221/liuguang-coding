@@ -1,0 +1,250 @@
+---
+// 讲解:温度与采样。
+// 首屏直接算好(和文章里那张表用的是同一份实现),交互时在浏览器里重算并重画。
+import { candidates, formatPercent, softmax } from '../lib/softmax'
+
+const initialTemperature = 0.7
+const initialProbabilities = softmax(candidates, initialTemperature)
+const logitLine = candidates.map((item) => `${item.token} ${item.logit}`).join('、')
+---
+
+<div class="at-demo" data-demo="temperature">
+  <div class="at-head">
+    <label class="at-label" for="at-temp">温度 T</label>
+    <input
+      id="at-temp"
+      class="at-range"
+      type="range"
+      min="0.1"
+      max="2"
+      step="0.05"
+      value={initialTemperature}
+      data-temp
+    />
+    <output class="at-value" for="at-temp" data-temp-value>T = {initialTemperature.toFixed(2)}</output>
+  </div>
+
+  <ul class="at-bars">
+    {
+      candidates.map((candidate, index) => (
+        <li class="at-row" data-token={candidate.token} data-top={index === 0} data-picked="false">
+          <span class="at-token">{candidate.token}</span>
+          <span class="at-track">
+            <span
+              class="at-fill"
+              style={{ transform: `scaleX(${initialProbabilities[index] ?? 0})` }}
+              data-fill
+            />
+          </span>
+          <span class="at-pct" data-pct>{formatPercent(initialProbabilities[index] ?? 0)}</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="at-foot">
+    <button type="button" class="at-sample" data-sample>采样一次</button>
+    <p class="at-result" data-result aria-live="polite">还没抽。拖一下温度，再点「采样一次」。</p>
+  </div>
+
+  <p class="at-formula">p_i = exp(z_i / T) / Σ exp(z_j / T)</p>
+  <p class="at-note">
+    这组分数是示例数据（{logitLine}），用来演示温度的作用，不代表任何具体模型的真实输出。
+  </p>
+</div>
+
+<script>
+  import { candidates, formatPercent, sample, softmax } from '../lib/softmax'
+
+  const root = document.querySelector<HTMLElement>('[data-demo="temperature"]')
+  if (root) {
+    const slider = root.querySelector<HTMLInputElement>('[data-temp]')
+    const valueLabel = root.querySelector<HTMLElement>('[data-temp-value]')
+    const result = root.querySelector<HTMLElement>('[data-result]')
+    const rows = Array.from(root.querySelectorAll<HTMLElement>('[data-token]'))
+    let probabilities = softmax(candidates, Number(slider?.value ?? 0.7))
+
+    const idleText = '还没抽。拖一下温度，再点「采样一次」。'
+
+    const render = () => {
+      const temperature = Number(slider?.value ?? 0.7)
+      probabilities = softmax(candidates, temperature)
+      const top = probabilities.indexOf(Math.max(...probabilities))
+
+      if (valueLabel) valueLabel.textContent = `T = ${temperature.toFixed(2)}`
+
+      rows.forEach((row, index) => {
+        const probability = probabilities[index] ?? 0
+        const fill = row.querySelector<HTMLElement>('[data-fill]')
+        const percent = row.querySelector<HTMLElement>('[data-pct]')
+        if (fill) fill.style.transform = `scaleX(${probability})`
+        if (percent) percent.textContent = formatPercent(probability)
+        row.dataset.top = String(index === top)
+        row.dataset.picked = 'false'
+      })
+
+      if (result) result.textContent = idleText
+    }
+
+    slider?.addEventListener('input', render)
+
+    root.querySelector<HTMLButtonElement>('[data-sample]')?.addEventListener('click', () => {
+      // 真按当前分布抽一次签,不是随便挑一个
+      const index = sample(probabilities)
+      const candidate = candidates[index]
+      rows.forEach((row, rowIndex) => {
+        row.dataset.picked = String(rowIndex === index)
+      })
+      if (result && candidate) {
+        result.textContent = `这次抽到「${candidate.token}」，它当前的权重是 ${formatPercent(probabilities[index] ?? 0)}。再点几次，看看同一个温度下结果会不会变。`
+      }
+    })
+
+    render()
+  }
+</script>
+
+<style>
+  .at-demo {
+    padding: 1.15rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+  }
+
+  .at-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .at-label {
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+  }
+
+  .at-range {
+    flex: 1;
+    min-width: 10rem;
+    accent-color: var(--accent);
+  }
+
+  .at-value {
+    min-width: 5.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+
+  .at-bars {
+    display: grid;
+    gap: 0.5rem;
+    margin: 1.1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .at-row {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr) 3rem;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.3rem 0.45rem;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+  }
+
+  .at-row[data-picked='true'] {
+    background: var(--accent-soft);
+  }
+
+  .at-token {
+    color: var(--muted);
+    font-size: 0.85rem;
+    transition: color 0.3s;
+  }
+
+  .at-row[data-top='true'] .at-token {
+    color: var(--ink);
+  }
+
+  .at-track {
+    display: block;
+    overflow: hidden;
+    height: 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--line) 65%, transparent);
+  }
+
+  .at-fill {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--accent);
+    transform-origin: left center;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .at-pct {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-align: right;
+  }
+
+  .at-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem;
+    margin-top: 1.1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .at-sample {
+    flex-shrink: 0;
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: filter 0.2s;
+  }
+
+  .at-sample:hover {
+    filter: brightness(1.05);
+  }
+
+  .at-result {
+    flex: 1;
+    min-width: 12rem;
+    color: color-mix(in srgb, var(--ink) 88%, transparent);
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  .at-formula {
+    margin-top: 1rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+
+  .at-note {
+    margin-top: 0.5rem;
+    color: var(--muted);
+    font-size: 0.76rem;
+    line-height: 1.7;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .at-fill,
+    .at-row,
+    .at-token {
+      transition: none;
+    }
+  }
+</style>

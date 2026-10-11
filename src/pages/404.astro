@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro'
+import { Mark } from '../components/ui/Mark'
+import { withBase } from '../lib/content'
+---
+
+<Base title="页面没找到 · 流光 coding 知识库">
+  <main id="main" class="mx-auto flex min-h-[100dvh] max-w-[720px] flex-col justify-center px-5 py-24">
+    <Mark className="h-9 w-9" />
+    <h1 class="mt-6 text-[1.7rem] font-medium tracking-tight">这个地址下没有内容</h1>
+    <p class="mt-4 text-sm leading-relaxed text-muted">
+      可能是链接过期了，或者这页还没写。回知识库首页看看现在有哪些内容。
+    </p>
+    <a
+      href={withBase()}
+      class="mt-8 inline-flex w-fit items-center rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-on-accent transition-[filter] hover:brightness-105"
+    >
+      回知识库首页
+    </a>
+  </main>
+</Base>

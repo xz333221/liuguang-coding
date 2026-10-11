@@ -1,0 +1,37 @@
+---
+import { parentOf } from '../../data/catalog'
+import { categoryPath, withBase } from '../../lib/content'
+
+interface Props {
+  categoryId: string
+  categoryName: string
+  title?: string
+}
+
+const { categoryId, categoryName, title } = Astro.props
+const parent = parentOf(categoryId)
+---
+
+<nav aria-label="面包屑" class="mb-6 flex flex-wrap items-center gap-2 text-[0.78rem] text-muted">
+  <a href={withBase()} class="hover:text-ink">知识库</a>
+  <span aria-hidden="true" class="text-line-strong">/</span>
+  {
+    parent ? (
+      <>
+        <a href={categoryPath(parent.id)} class="hover:text-ink">
+          {parent.name}
+        </a>
+        <span aria-hidden="true" class="text-line-strong">/</span>
+      </>
+    ) : null
+  }
+  <a href={categoryPath(categoryId)} class="hover:text-ink">{categoryName}</a>
+  {
+    title ? (
+      <>
+        <span aria-hidden="true" class="text-line-strong">/</span>
+        <span class="text-ink">{title}</span>
+      </>
+    ) : null
+  }
+</nav>

@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Astro 生成的内容类型
+.astro/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -25,4 +28,5 @@ dist-ssr
 
 # 本地验收产物
 shots/
+tmp/
 .preview.pid

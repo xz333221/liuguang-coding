@@ -1,0 +1,67 @@
+---
+import { Mark } from '../components/ui/Mark'
+import Sidebar from '../components/kb/Sidebar.astro'
+import ThemeToggle from '../components/kb/ThemeToggle.astro'
+import Base from './Base.astro'
+import { withBase } from '../lib/content'
+
+interface Props {
+  title: string
+  description?: string
+  /** 当前分类 id,给侧栏高亮用 */
+  category?: string
+  /** 当前知识点 id */
+  topic?: string
+}
+
+const { title, description, category, topic } = Astro.props
+const year = new Date().getFullYear()
+---
+
+<Base title={title} description={description}>
+  <header class="lg-header">
+    <div class="lg-header-inner">
+      <a href={withBase()} class="lg-brand">
+        <Mark className="h-7 w-7" />
+        <span>流光 coding</span>
+        <span class="lg-brand-tag">知识库</span>
+      </a>
+
+      <div class="ml-auto flex items-center gap-4">
+        <a href={withBase('about/')} class="lg-header-link hidden sm:inline">关于</a>
+        <ThemeToggle />
+      </div>
+    </div>
+  </header>
+
+  <div class="mx-auto flex max-w-[1240px] gap-10 px-5 md:px-8">
+    <aside class="hidden w-[240px] shrink-0 lg:block">
+      <div class="sticky top-16 max-h-[calc(100dvh-4rem)] overflow-y-auto py-8">
+        <p class="mb-3 px-3 text-[0.72rem] tracking-[0.08em] text-muted">知识分类</p>
+        <Sidebar current={category} currentTopic={topic} />
+      </div>
+    </aside>
+
+    <main id="main" class="min-w-0 flex-1 py-8 lg:py-10">
+      <details class="mb-8 rounded-[18px] border border-line bg-surface lg:hidden">
+        <summary class="cursor-pointer px-4 py-3 text-sm text-muted">分类导航</summary>
+        <div class="border-t border-line px-2 py-2">
+          <Sidebar current={category} currentTopic={topic} />
+        </div>
+      </details>
+
+      <slot />
+    </main>
+  </div>
+
+  <footer class="mt-16 border-t border-line">
+    <div
+      class="mx-auto flex max-w-[1240px] flex-col gap-3 px-5 py-8 text-xs text-muted md:flex-row md:items-center md:px-8"
+    >
+      <p>© {year} 流光 coding · 编程知识库</p>
+      <p class="md:ml-auto">
+        导图由 <a href="https://github.com/xz333221/flow-mindmap" class="hover:text-highlight">flow-mindmap</a> 渲染
+      </p>
+    </div>
+  </footer>
+</Base>

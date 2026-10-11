@@ -1,0 +1,390 @@
+/*
+  知识库的界面样式(导航、卡片、正文排版)。
+  统一放在 components 层,这样 Tailwind 的工具类还能在页面里覆盖它们。
+  圆角继续沿用全站规则:交互控件胶囊,容器 18px;行内代码这种小元素用 6px。
+*/
+@layer components {
+  /* ---------- 图标按钮 ---------- */
+  .lg-icon-btn {
+    display: inline-flex;
+    height: 2.25rem;
+    width: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .lg-icon-btn:hover {
+    border-color: var(--line-strong);
+    color: var(--ink);
+  }
+
+  .lg-theme-icon {
+    display: none;
+    height: 17px;
+    width: 17px;
+  }
+
+  .lg-theme-icon svg {
+    height: 100%;
+    width: 100%;
+  }
+
+  [data-theme='dark'] .lg-theme-icon--dark,
+  [data-theme='light'] .lg-theme-icon--light {
+    display: block;
+  }
+
+  /* ---------- 站点头部 ---------- */
+  .lg-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--canvas) 86%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  .lg-header-inner {
+    display: flex;
+    height: 4rem;
+    align-items: center;
+    gap: 1rem;
+    max-width: 1240px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .lg-header-inner {
+      padding-inline: 2rem;
+    }
+  }
+
+  .lg-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .lg-brand-tag {
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+  }
+
+  .lg-header-link {
+    color: var(--muted);
+    font-size: 0.875rem;
+    transition: color 0.2s;
+  }
+
+  .lg-header-link:hover {
+    color: var(--ink);
+  }
+
+  /* ---------- 侧边导航 ---------- */
+  .lg-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 10px;
+    color: var(--muted);
+    font-size: 0.875rem;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .lg-nav-item:hover {
+    background: var(--surface);
+    color: var(--ink);
+  }
+
+  .lg-nav-item[data-active='true'] {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+
+  .lg-nav-item--child {
+    padding-left: 1.6rem;
+    font-size: 0.85rem;
+  }
+
+  .lg-nav-item--topic {
+    padding-left: 2.4rem;
+    font-size: 0.82rem;
+  }
+
+  .lg-nav-count {
+    margin-left: auto;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    opacity: 0.75;
+  }
+
+  /* ---------- 徽标 ---------- */
+  .lg-badge {
+    padding: 0.1rem 0.45rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.68rem;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .lg-badge--accent {
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    background: var(--accent-soft);
+    color: var(--highlight);
+  }
+
+  /* 筹备中的分类:做成一行小胶囊,避免网格里留空格子 */
+  .lg-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.82rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .lg-chip:hover {
+    border-color: var(--line-strong);
+    color: var(--ink);
+  }
+
+  /* ---------- 卡片 ---------- */
+  .lg-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem 1.35rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+    transition: border-color 0.25s, transform 0.25s;
+  }
+
+  a.lg-card:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-2px);
+  }
+
+  .lg-card[data-status='soon'] {
+    background: transparent;
+  }
+
+  .lg-card[data-status='soon'] .lg-card-title {
+    color: var(--muted);
+  }
+
+  /* 置灰卡片不整体降透明度,否则文字对比度不达标;只压标题与用途说明 */
+  .lg-card[data-status='soon'] .lg-card-intro {
+    color: color-mix(in srgb, var(--muted) 80%, transparent);
+  }
+
+  .lg-card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .lg-card-intro {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+
+  .lg-card-meta {
+    margin-top: 0.25rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+
+  /* ---------- 知识点行 ---------- */
+  .lg-topic-row {
+    display: block;
+    padding: 1rem 1.1rem;
+    border-radius: 14px;
+    transition: background-color 0.2s;
+  }
+
+  .lg-topic-row:hover {
+    background: var(--surface);
+  }
+
+  .lg-meta {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+
+  .lg-divide > * + * {
+    border-top: 1px solid var(--line);
+  }
+
+  /* ---------- 正文排版 ---------- */
+  .lg-prose {
+    color: var(--ink);
+    font-size: 1rem;
+    line-height: 1.85;
+  }
+
+  .lg-prose > * + * {
+    margin-top: 1.15rem;
+  }
+
+  .lg-prose h2 {
+    margin-top: 3rem;
+    font-size: 1.3rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    scroll-margin-top: 5.5rem;
+  }
+
+  .lg-prose h3 {
+    margin-top: 2.25rem;
+    font-size: 1.08rem;
+    font-weight: 500;
+    scroll-margin-top: 5.5rem;
+  }
+
+  .lg-prose p,
+  .lg-prose li {
+    color: color-mix(in srgb, var(--ink) 88%, transparent);
+  }
+
+  .lg-prose strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .lg-prose a {
+    color: var(--highlight);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .lg-prose ul,
+  .lg-prose ol {
+    padding-left: 1.35rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .lg-prose ul {
+    list-style: disc;
+  }
+
+  .lg-prose ol {
+    list-style: decimal;
+  }
+
+  .lg-prose :not(pre) > code {
+    padding: 0.15rem 0.4rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--panel);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+  }
+
+  .lg-prose pre {
+    overflow-x: auto;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--panel);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+
+  /* Shiki 输出的双主题颜色:底色用站内令牌,token 颜色跟着主题换 */
+  .lg-prose pre.astro-code {
+    background: var(--panel) !important;
+  }
+
+  [data-theme='dark'] .lg-prose .astro-code,
+  [data-theme='dark'] .lg-prose .astro-code span {
+    color: var(--shiki-dark) !important;
+  }
+
+  [data-theme='light'] .lg-prose .astro-code,
+  [data-theme='light'] .lg-prose .astro-code span {
+    color: var(--shiki-light) !important;
+  }
+
+  .lg-prose pre code {
+    font-family: inherit;
+  }
+
+  .lg-prose blockquote {
+    padding: 0.25rem 0 0.25rem 1.1rem;
+    border-left: 2px solid var(--accent);
+    color: var(--muted);
+  }
+
+  .lg-prose table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .lg-prose th,
+  .lg-prose td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+
+  .lg-prose th {
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .lg-prose hr {
+    border: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .lg-prose img {
+    border-radius: 18px;
+  }
+
+  /* ---------- 三部分的分节标题 ---------- */
+  .lg-part {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.1rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .lg-part::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+}

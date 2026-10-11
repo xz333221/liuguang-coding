@@ -1,0 +1,44 @@
+{
+  "id": "root",
+  "text": "变量不是盒子",
+  "children": [
+    {
+      "id": "names",
+      "text": "名字与对象",
+      "children": [
+        { "id": "names-1", "text": "变量是名字", "children": [] },
+        { "id": "names-2", "text": "赋值 = 改绑定", "children": [] },
+        { "id": "names-3", "text": "id() 看地址", "children": [] },
+        { "id": "names-4", "text": "is 与 ==", "children": [] }
+      ]
+    },
+    {
+      "id": "mutability",
+      "text": "可变与不可变",
+      "children": [
+        { "id": "mut-1", "text": "list / dict / set", "children": [] },
+        { "id": "mut-2", "text": "int / str / tuple", "children": [] },
+        { "id": "mut-3", "text": "改不动就换对象", "children": [] }
+      ]
+    },
+    {
+      "id": "consequences",
+      "text": "会带来什么",
+      "children": [
+        { "id": "con-1", "text": "b = a 同一个对象", "children": [] },
+        { "id": "con-2", "text": "传参传的是引用", "children": [] },
+        { "id": "con-3", "text": "默认参数 [] 的坑", "children": [] },
+        { "id": "con-4", "text": "就地修改返回 None", "children": [] }
+      ]
+    },
+    {
+      "id": "copies",
+      "text": "要独立就复制",
+      "children": [
+        { "id": "copy-1", "text": "list() 浅拷贝", "children": [] },
+        { "id": "copy-2", "text": "deepcopy() 深拷贝", "children": [] },
+        { "id": "copy-3", "text": "嵌套只浅拷会串味", "children": [] }
+      ]
+    }
+  ]
+}

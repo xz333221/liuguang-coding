@@ -4,23 +4,31 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "astro dev",
+    "build": "astro build",
+    "check": "astro check",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "astro preview"
   },
   "dependencies": {
+    "@astrojs/react": "^7.0.1",
+    "@astrojs/vue": "^7.0.3",
     "@fontsource-variable/geist": "^5.3.0",
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@phosphor-icons/react": "^2.1.10",
     "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.8",
+    "flow-mindmap": "^0.6.4",
     "motion": "^14.1.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "simple-icons": "^16.35.0",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "vue": "^3.5.43"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@phosphor-icons/core": "^2.1.1",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",

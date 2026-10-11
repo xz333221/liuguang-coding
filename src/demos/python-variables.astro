@@ -1,0 +1,352 @@
+---
+// 讲解:变量不是盒子。
+// 视觉全部由 data-step 驱动 CSS 完成,JS 只负责推进步骤,所以每一步的状态都能被逐帧核对。
+const captions = [
+  '点「下一步」跟着走一遍。左边是代码，右边是内存里真实发生的事。',
+  '先造出一个列表对象，内容 [1, 2, 3]；然后名字 a 被贴到了它上面。',
+  'b = a 没有复制任何东西：两个名字贴到了同一个对象上。',
+  'b.append(4) 改的是对象本身。a 和 b 指向同一个列表，所以两边看到的都变成了四个元素。',
+  'b = b + [5] 造出了一个新对象，b 改贴到新对象上；a 还留在原来的列表上，纹丝不动。',
+]
+---
+
+<div class="lv-demo" data-demo="py-vars" data-step="0" data-captions={JSON.stringify(captions)}>
+  <div class="lv-grid">
+    <section class="lv-pane">
+      <p class="lv-pane-title">代码</p>
+      <ol class="lv-lines">
+        <li data-line="1"><code>a = [1, 2, 3]</code></li>
+        <li data-line="2"><code>b = a</code></li>
+        <li data-line="3"><code>b.append(4)</code></li>
+        <li data-line="4"><code>b = b + [5]</code></li>
+      </ol>
+    </section>
+
+    <section class="lv-pane">
+      <p class="lv-pane-title">内存</p>
+      <div class="lv-scene">
+        <div class="lv-names">
+          <div class="lv-name" data-name="a">
+            <span class="lv-name-text">a</span>
+            <span class="lv-chip lv-chip--1">对象 1</span>
+            <span class="lv-chip lv-chip--2">对象 2</span>
+          </div>
+          <div class="lv-name" data-name="b">
+            <span class="lv-name-text">b</span>
+            <span class="lv-chip lv-chip--1">对象 1</span>
+            <span class="lv-chip lv-chip--2">对象 2</span>
+          </div>
+        </div>
+
+        <div class="lv-objects">
+          <div class="lv-object lv-object--1">
+            <p class="lv-object-label">对象 1</p>
+            <p class="lv-object-value">
+              <span class="lv-val lv-val--short">[1, 2, 3]</span>
+              <span class="lv-val lv-val--long">[1, 2, 3, 4]</span>
+            </p>
+          </div>
+          <div class="lv-object lv-object--2">
+            <p class="lv-object-label">对象 2</p>
+            <p class="lv-object-value">[1, 2, 3, 4, 5]</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="lv-foot">
+    <p class="lv-caption" data-caption>{captions[0]}</p>
+    <div class="lv-actions">
+      <button type="button" data-action="prev">上一步</button>
+      <button type="button" data-action="next">下一步</button>
+      <button type="button" data-action="reset">重来</button>
+    </div>
+  </div>
+
+  <noscript>
+    <p class="lv-noscript">这段讲解需要 JavaScript 才能逐步播放，正文里有同样的内容。</p>
+  </noscript>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-demo="py-vars"]')
+  if (root) {
+    const captions: string[] = JSON.parse(root.dataset.captions ?? '[]')
+    const caption = root.querySelector<HTMLElement>('[data-caption]')
+    const prev = root.querySelector<HTMLButtonElement>('[data-action="prev"]')
+    const next = root.querySelector<HTMLButtonElement>('[data-action="next"]')
+    const reset = root.querySelector<HTMLButtonElement>('[data-action="reset"]')
+    let step = 0
+
+    const render = () => {
+      root.dataset.step = String(step)
+      if (caption) caption.textContent = captions[step] ?? ''
+      if (prev) prev.disabled = step === 0
+      if (next) next.disabled = step === captions.length - 1
+    }
+
+    prev?.addEventListener('click', () => {
+      step = Math.max(0, step - 1)
+      render()
+    })
+    next?.addEventListener('click', () => {
+      step = Math.min(captions.length - 1, step + 1)
+      render()
+    })
+    reset?.addEventListener('click', () => {
+      step = 0
+      render()
+    })
+
+    render()
+  }
+</script>
+
+<style>
+  .lv-demo {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+    padding: 1.15rem;
+  }
+
+  .lv-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 720px) {
+    .lv-grid {
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      gap: 1.4rem;
+    }
+  }
+
+  .lv-pane-title {
+    margin-bottom: 0.6rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+  }
+
+  .lv-lines {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lv-lines li {
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .lv-lines li code {
+    font-family: inherit;
+  }
+
+  [data-step='1'] [data-line='1'],
+  [data-step='2'] [data-line='2'],
+  [data-step='3'] [data-line='3'],
+  [data-step='4'] [data-line='4'] {
+    background: var(--accent-soft);
+    color: var(--ink);
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+
+  .lv-scene {
+    display: grid;
+    grid-template-columns: minmax(0, 5.5rem) minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: start;
+  }
+
+  .lv-names {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .lv-name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.55rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--panel);
+  }
+
+  .lv-name-text {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+  }
+
+  .lv-chip {
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    opacity: 0.2;
+    transition: opacity 0.35s;
+  }
+
+  .lv-chip--1 {
+    background: var(--accent-soft);
+    color: var(--highlight);
+  }
+
+  .lv-chip--2 {
+    background: color-mix(in srgb, var(--line) 70%, transparent);
+    color: var(--muted);
+  }
+
+  [data-step='1'] [data-name='a'] .lv-chip--1,
+  [data-step='2'] [data-name='a'] .lv-chip--1,
+  [data-step='3'] [data-name='a'] .lv-chip--1,
+  [data-step='4'] [data-name='a'] .lv-chip--1,
+  [data-step='2'] [data-name='b'] .lv-chip--1,
+  [data-step='3'] [data-name='b'] .lv-chip--1,
+  [data-step='4'] [data-name='b'] .lv-chip--2 {
+    opacity: 1;
+  }
+
+  .lv-objects {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .lv-object {
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.35s, transform 0.35s;
+  }
+
+  .lv-object--1 {
+    border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+
+  [data-step='1'] .lv-object--1,
+  [data-step='2'] .lv-object--1,
+  [data-step='3'] .lv-object--1,
+  [data-step='4'] .lv-object--1,
+  [data-step='4'] .lv-object--2 {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* 第 3 步:对象被就地改动,给一次短脉冲提示 */
+  [data-step='3'] .lv-object--1 {
+    animation: lv-pulse 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes lv-pulse {
+    0% {
+      box-shadow: 0 0 0 0 var(--accent-soft);
+    }
+    60% {
+      box-shadow: 0 0 0 6px var(--accent-soft);
+    }
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+  }
+
+  .lv-object-label {
+    color: var(--muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+  }
+
+  .lv-object-value {
+    margin-top: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+  }
+
+  .lv-val {
+    display: none;
+  }
+
+  [data-step='1'] .lv-object--1 .lv-val--short,
+  [data-step='2'] .lv-object--1 .lv-val--short,
+  [data-step='3'] .lv-object--1 .lv-val--long,
+  [data-step='4'] .lv-object--1 .lv-val--long {
+    display: inline;
+  }
+
+  .lv-foot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-top: 1.1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (min-width: 720px) {
+    .lv-foot {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+
+  .lv-caption {
+    flex: 1;
+    color: color-mix(in srgb, var(--ink) 88%, transparent);
+    font-size: 0.85rem;
+    line-height: 1.75;
+  }
+
+  .lv-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .lv-actions button {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    transition: color 0.2s, border-color 0.2s, opacity 0.2s;
+  }
+
+  .lv-actions button:hover:not(:disabled) {
+    border-color: var(--highlight);
+    color: var(--highlight);
+  }
+
+  .lv-actions button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .lv-noscript {
+    margin-top: 0.75rem;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lv-object,
+    .lv-chip,
+    .lv-lines li {
+      transition: none;
+    }
+
+    [data-step='3'] .lv-object--1 {
+      animation: none;
+    }
+  }
+</style>

@@ -1,0 +1,25 @@
+---
+interface Props {
+  headings: { depth: number; slug: string; text: string }[]
+}
+
+const { headings } = Astro.props
+const items = headings.filter((heading) => heading.depth === 2 || heading.depth === 3)
+---
+
+{
+  items.length > 1 ? (
+    <nav aria-label="本页目录" class="text-[0.82rem]">
+      <p class="mb-3 text-[0.72rem] tracking-[0.08em] text-muted">本页内容</p>
+      <ul class="grid gap-2">
+        {items.map((heading) => (
+          <li class={heading.depth === 3 ? 'pl-3' : ''}>
+            <a href={`#${heading.slug}`} class="text-muted transition-colors hover:text-ink">
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  ) : null
+}

@@ -1,6 +1,7 @@
 @import '@fontsource-variable/geist';
 @import '@fontsource-variable/jetbrains-mono';
 @import 'tailwindcss';
+@import './kb.css';
 
 /*
   流光 coding · 设计令牌

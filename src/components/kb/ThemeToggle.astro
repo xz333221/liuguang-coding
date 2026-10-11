@@ -1,0 +1,25 @@
+---
+import moonStars from '@phosphor-icons/core/assets/regular/moon-stars.svg?raw'
+import sunDim from '@phosphor-icons/core/assets/regular/sun-dim.svg?raw'
+---
+
+<button type="button" class="lg-icon-btn" data-theme-toggle aria-label="切换深浅主题">
+  <span class="lg-theme-icon lg-theme-icon--dark" set:html={sunDim} />
+  <span class="lg-theme-icon lg-theme-icon--light" set:html={moonStars} />
+</button>
+
+<script>
+  // 主题在 <html data-theme> 上切,全站令牌跟着变。图标显隐交给 CSS,这段只管状态与存储。
+  const buttons = document.querySelectorAll('[data-theme-toggle]')
+  for (const button of buttons) {
+    button.addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'
+      document.documentElement.dataset.theme = next
+      try {
+        localStorage.setItem('lg-theme', next)
+      } catch (error) {
+        void error
+      }
+    })
+  }
+</script>

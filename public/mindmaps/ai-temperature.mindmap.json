@@ -1,0 +1,44 @@
+{
+  "id": "root",
+  "text": "温度与采样",
+  "children": [
+    {
+      "id": "output",
+      "text": "模型给什么",
+      "children": [
+        { "id": "out-1", "text": "logits 分数", "children": [] },
+        { "id": "out-2", "text": "不是概率", "children": [] },
+        { "id": "out-3", "text": "softmax 归一化", "children": [] }
+      ]
+    },
+    {
+      "id": "temp",
+      "text": "温度做什么",
+      "children": [
+        { "id": "temp-1", "text": "p = exp(z / T)", "children": [] },
+        { "id": "temp-2", "text": "T 小更确定", "children": [] },
+        { "id": "temp-3", "text": "T 大更发散", "children": [] },
+        { "id": "temp-4", "text": "T 趋近 0 就贪心", "children": [] }
+      ]
+    },
+    {
+      "id": "truncate",
+      "text": "砍长尾的旋钮",
+      "children": [
+        { "id": "tr-1", "text": "top-k 砍掉一批", "children": [] },
+        { "id": "tr-2", "text": "top-p 累计截断", "children": [] },
+        { "id": "tr-3", "text": "温度调形状", "children": [] }
+      ]
+    },
+    {
+      "id": "practice",
+      "text": "怎么取值",
+      "children": [
+        { "id": "pr-1", "text": "抽取 0 - 0.3", "children": [] },
+        { "id": "pr-2", "text": "代码 0.2 - 0.5", "children": [] },
+        { "id": "pr-3", "text": "对话 0.6 - 0.8", "children": [] },
+        { "id": "pr-4", "text": "创意 0.9 - 1.2", "children": [] }
+      ]
+    }
+  ]
+}

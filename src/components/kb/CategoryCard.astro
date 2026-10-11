@@ -1,0 +1,27 @@
+---
+import type { CategoryStatus } from '../../data/catalog'
+
+interface Props {
+  name: string
+  intro: string
+  href: string
+  status: CategoryStatus
+  count: number
+  note?: string
+}
+
+const { name, intro, href, status, count, note } = Astro.props
+const soon = status === 'soon'
+---
+
+<a class="lg-card" data-status={status} href={href}>
+  <div class="lg-card-title">
+    <span>{name}</span>
+    {soon ? <span class="lg-badge">筹备中</span> : null}
+  </div>
+  <p class="lg-card-intro">{intro}</p>
+  <p class="lg-card-meta">
+    {count > 0 ? `${count} 个知识点` : '还没有知识点'}
+    {note ? ` · ${note}` : ''}
+  </p>
+</a>
