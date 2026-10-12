@@ -406,7 +406,7 @@
   }
 
   .lg-chat-fab[data-open='true'] {
-    right: calc(min(380px, 100vw) + 1.25rem);
+    right: calc(min(520px, 100vw) + 1.25rem);
     border-color: var(--line-strong);
     background: var(--surface);
     color: var(--ink);
@@ -420,7 +420,7 @@
     bottom: 0;
     z-index: 45;
     display: flex;
-    width: min(380px, 100vw);
+    width: min(520px, 100vw);
     flex-direction: column;
     border-left: 1px solid var(--line);
     background: color-mix(in srgb, var(--canvas) 94%, transparent);
@@ -501,10 +501,18 @@
   .lg-chat-list {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 1rem;
     display: grid;
+    /* 用 minmax(0, 1fr) 把列宽钉死在面板内,否则代码块的最小内容宽会把整列撑开,
+       所有正文跟着变宽、被面板裁掉,列表就冒出横向滚动条 */
+    grid-template-columns: minmax(0, 1fr);
     gap: 0.9rem;
     align-content: start;
+  }
+
+  .lg-chat-row {
+    min-width: 0;
   }
 
   .lg-chat-empty {
