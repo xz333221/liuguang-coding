@@ -737,6 +737,22 @@
     line-height: 1.65;
   }
 
+  .lg-chat-select {
+    width: 100%;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--canvas);
+    color: var(--ink);
+    font-size: 0.82rem;
+  }
+
+  .lg-chat-note {
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.7;
+  }
+
   .lg-chat-settings-actions {
     display: flex;
     gap: 0.5rem;

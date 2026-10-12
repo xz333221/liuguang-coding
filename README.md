@@ -68,31 +68,44 @@ sources:                                 # 可选，正文里说法的出处，�
 - 对话按文章存在浏览器里(每篇一份,最多 40 条),面板开合状态也记在本机。
 - 回答走 SSE 流式渲染,支持 Markdown(代码块、表格、加粗),回答过程中可以「停止」。
 
-### 怎么接模型:两种方式
+### 怎么接模型:三种方式
 
 **一、代理(推荐)**。密钥放在服务器上,浏览器里什么都不用填:
 
 ```bash
 UPSTREAM_BASE_URL=https://api.openai.com/v1 \
 UPSTREAM_API_KEY=sk-xxx \
+DEFAULT_MODEL=deepseek-chat \
 ALLOWED_ORIGIN=https://xz333221.github.io \
 node server/chat-proxy.mjs
 ```
 
-代理自带三道闸:来源白名单、每 IP 每小时限流(默认 30 次)、强制 `max_tokens` 上限。然后把站点构建时的 `PUBLIC_CHAT_PROXY` 指向它(GitHub Actions 里加一个变量,或在 `.env` 里写),也可以在面板的「设置」里临时填代理地址。
+代理自带三道闸:来源白名单、每 IP 每小时限流(默认 30 次)、强制 `max_tokens` 上限。把站点构建时的 `PUBLIC_CHAT_PROXY` 指向它(GitHub Actions 里加一个变量),或在面板「设置」里临时填代理地址。走了代理,读者连模型都不用选,`DEFAULT_MODEL` 会在浏览器没带模型名时兜底。
 
-**二、浏览器直连(BYOK)**。设置里填 Base URL、API Key、模型名,密钥只写进本机浏览器的 localStorage。注意:**大多数官方接口不允许网页直接调用(没有 CORS 头)**,这条路只在支持跨域的接口上可行,不然会看到面板给出"被跨域拦下"的提示。
+**二、模型配置表单 + 直连(BYOK)**。面板的「设置 → 添加模型」打开的是 **ai-model-form** 的表单(内置 OpenAI、DeepSeek、Moonshot、智谱、Qwen、MiniMax、Ollama、火山方舟等各种预设,自带 logo 与中英文),填好保存,回到面板从上方的下拉里挑一个用。密钥只写进这台浏览器的 localStorage。
 
-不管哪种方式,**仓库里都不放任何密钥**;面板只发送当前文章和你的问题,不发别的站点数据。
+表单原本依赖 `ai-model-form` 的 Express 中间件(拉模型列表、测连接、保存)。**没部署中间件时,站点会在浏览器里顶掉这三条路由**(见 `src/lib/chat-models.ts`),所以表单照样能用:模型列表能不能自动拉取取决于对方是否允许跨域,拉不到就手填;「测试连接」多半会因跨域失败,提示里会说明原因。
+
+**三、部署中间件,把上面那条升满级**。在服务器上:
+
+```js
+import express from 'express'
+import { createAiModelMiddleware } from 'ai-model-form/server'
+app.use('/api', createAiModelMiddleware())
+```
+
+然后把构建变量 `PUBLIC_MODEL_API` 指到 `/api/ai-model`(或完整域名),表单就有实时模型列表、真实连接测试与服务端保存。
+
+不管哪种方式,**仓库里都不放任何密钥**;面板只发送当前文章和你的问题。
 
 ### 本地怎么验
 
 ```bash
 node scripts/mock-llm.mjs            # 假接口,按 OpenAI 的 SSE 格式回放
-# 在面板设置里把 Base URL 填成 http://localhost:4399,Key 随便填,模型填 mock
+# 在面板里「设置 → 添加模型」,接口地址填 http://localhost:4399,模型名随便填
 ```
 
-这个假接口会把收到的请求记到 `tmp/mock-llm.log`,方便确认"文章确实被带上了"。
+这个假接口会把收到的请求记到 `tmp/mock-llm.log`,方便确认"文章确实被带上了""用的是哪个模型"。
 
 ## 加一个知识点
 
@@ -130,10 +143,11 @@ src/
   data/resources.ts         各分类的站外权威资料索引
   lib/content.ts            取数据与拼地址的公共函数(含 withBase)
   lib/chat.ts               问答面板的配置、提示词与 SSE 流式读取
+  lib/chat-models.ts        模型配置的存取 + 没部署中间件时的本地兜底后端
   lib/softmax.ts            温度讲解用的计算,SSR 与浏览器共用
   demos/*.astro             动手讲解
   components/kb/            知识库界面(Sidebar / MindMapPanel / Toc / Breadcrumb …)
-  components/chat/          常驻问答面板(React island)
+  components/chat/          常驻问答面板(React)+ 模型配置弹窗(Vue,内嵌 ai-model-form)
   components/ui/, data/, lib/motion.ts, App.tsx   落地页那套(只在 /about 用)
   layouts/Base.astro        页面外壳(主题预置、颗粒层、跳转链接)
   layouts/DocsLayout.astro  知识库外壳(头部、侧栏、页脚、问答面板)
@@ -169,6 +183,7 @@ node scripts/check-live.mjs   # 检查线上 Pages 是否正常
 ## 已知边界
 
 - **问答面板默认没有配置模型**：不填接口就用不了，站点里不放密钥。公开站点直接用代理时要自己加限流(代理脚本里带了默认值)。
+- **模型配置在浏览器本地**（除非部署了 ai-model-form 的中间件）：换设备不同步；中间件与代理都还没上线，见 FlowDash 的「服务端任务」清单。
 - **还没有搜索**，只有分类导航 + 目录。
 - 只有 2 个知识点，Java 与其余分类都还是空的。
 - 讲解目前只有两个，都是手写的 `.astro`；还没有沉淀出"讲解模板"。

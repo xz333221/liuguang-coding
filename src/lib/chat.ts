@@ -1,13 +1,17 @@
 // 知识库问答面板的服务端无关部分:配置、提示词、SSE 流式读取。
 // 这里不碰 DOM,方便单独推逻辑;面板组件只负责界面。
 
+import { loadCurrentId, loadModels, pickModel, saveCurrentId } from './chat-models'
+
 export interface ChatSettings {
   /** 代理地址。填了就走它,浏览器里不需要 API Key(推荐,见 README 的 chat-proxy) */
   proxyUrl: string
-  /** OpenAI 兼容接口的根地址,例如 https://api.openai.com/v1 */
+  /** 下面三项来自「模型配置」里选中的那条,由 ai-model-form 负责编辑 */
   baseUrl: string
   apiKey: string
   model: string
+  /** 选中模型的 id,存 localStorage 用 */
+  modelId: string
 }
 
 export interface ChatMessage {
@@ -25,35 +29,44 @@ export interface ArticleContext {
   body: string
 }
 
-export const SETTINGS_KEY = 'lg-chat-settings'
+const PROXY_KEY = 'lg-chat-proxy'
 /** 构建时注入的代理地址(Astro 的 PUBLIC_ 前缀会带到浏览器) */
 export const BUILD_PROXY: string = import.meta.env.PUBLIC_CHAT_PROXY ?? ''
-
-const DEFAULT_SETTINGS: ChatSettings = {
-  proxyUrl: '',
-  baseUrl: 'https://api.openai.com/v1',
-  apiKey: '',
-  model: '',
-}
 
 /** 正文太长就截断,别把上下文撑爆 */
 const MAX_BODY_CHARS = 12000
 
+const EMPTY_SETTINGS: ChatSettings = {
+  proxyUrl: '',
+  baseUrl: '',
+  apiKey: '',
+  model: '',
+  modelId: '',
+}
+
+/** 代理地址 + 选中的模型,合成这一轮要用的配置 */
 export function loadSettings(): ChatSettings {
-  if (typeof localStorage === 'undefined') return DEFAULT_SETTINGS
+  if (typeof localStorage === 'undefined') return EMPTY_SETTINGS
   try {
-    const raw = localStorage.getItem(SETTINGS_KEY)
-    if (!raw) return DEFAULT_SETTINGS
-    const parsed = JSON.parse(raw) as Partial<ChatSettings>
-    return { ...DEFAULT_SETTINGS, ...parsed }
+    const proxyUrl = localStorage.getItem(PROXY_KEY) ?? ''
+    const models = loadModels()
+    const selected = pickModel(models, loadCurrentId())
+    return {
+      proxyUrl,
+      baseUrl: selected?.endpoint ?? '',
+      apiKey: selected?.apiKey ?? '',
+      model: selected?.modelName ?? '',
+      modelId: selected?.id ?? '',
+    }
   } catch {
-    return DEFAULT_SETTINGS
+    return EMPTY_SETTINGS
   }
 }
 
 export function saveSettings(settings: ChatSettings): void {
   try {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))
+    localStorage.setItem(PROXY_KEY, settings.proxyUrl)
+    if (settings.modelId) saveCurrentId(settings.modelId)
   } catch {
     // 隐私模式下写不了,忽略
   }
@@ -70,8 +83,9 @@ export function usesProxy(settings: ChatSettings): boolean {
 }
 
 export function isConfigured(settings: ChatSettings): boolean {
-  if (usesProxy(settings)) return Boolean(settings.model.trim())
-  return Boolean(settings.baseUrl.trim() && settings.apiKey.trim() && settings.model.trim())
+  // 走代理时模型名可以由代理兜底,浏览器这边不强制填
+  if (usesProxy(settings)) return true
+  return Boolean(settings.baseUrl.trim() && settings.model.trim())
 }
 
 function trimBody(body: string): string {

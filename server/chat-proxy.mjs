@@ -26,6 +26,8 @@ const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? '*'
 const SITE_TOKEN = process.env.SITE_TOKEN ?? ''
 const RATE_LIMIT = Number(process.env.RATE_LIMIT ?? 30)
 const MAX_TOKENS = Number(process.env.MAX_TOKENS ?? 1024)
+/** 浏览器没带模型名时用它兜底(走代理的读者不需要自己配模型) */
+const DEFAULT_MODEL = process.env.DEFAULT_MODEL ?? ''
 const MAX_BODY_BYTES = 256 * 1024
 
 if (!UPSTREAM_BASE_URL || !UPSTREAM_API_KEY) {
@@ -115,7 +117,7 @@ const server = createServer(async (req, res) => {
       Accept: 'text/event-stream',
     },
     body: JSON.stringify({
-      model: payload.model,
+      model: payload.model || DEFAULT_MODEL,
       messages: payload.messages,
       stream: true,
       max_tokens: Math.min(Number(payload.max_tokens) || MAX_TOKENS, MAX_TOKENS),

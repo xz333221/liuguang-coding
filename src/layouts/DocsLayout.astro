@@ -1,5 +1,6 @@
 ---
 import { ChatPanel } from '../components/chat/ChatPanel.tsx'
+import ModelConfigDialog from '../components/chat/ModelConfigDialog.vue'
 import { Mark } from '../components/ui/Mark'
 import Sidebar from '../components/kb/Sidebar.astro'
 import ThemeToggle from '../components/kb/ThemeToggle.astro'
@@ -71,6 +72,7 @@ const year = new Date().getFullYear()
   </footer>
 
   <ChatPanel client:only="react" article={article} />
+  <ModelConfigDialog client:only="vue" />
 
   <script>
     // 页头与文章里的按钮只负责派发事件,面板自己决定怎么开
