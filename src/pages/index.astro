@@ -8,7 +8,7 @@ import DocsLayout from '../layouts/DocsLayout.astro'
 const topics = await getTopics()
 const counts = countByCategory(topics)
 const roots = catalog.filter((item) => item.status !== 'hidden')
-// 有内容的做卡片,筹备中的收成一行胶囊 —— 免得网格末尾留空格子
+// 有内容的做卡片,筹备中的收成一行胶囊,免得网格末尾留空格子
 const featured = roots.filter((item) => item.status === 'active')
 const upcoming = roots.filter((item) => item.status === 'soon')
 const recent = [...topics].sort((a, b) => b.data.updated.getTime() - a.data.updated.getTime()).slice(0, 6)

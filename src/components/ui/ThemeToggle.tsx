@@ -1,7 +1,7 @@
 import { MoonStars, SunDim } from '@phosphor-icons/react'
 
 /**
- * 深浅主题切换。图标用 CSS 跟着 html[data-theme] 走,组件本身不持状态 ——
+ * 深浅主题切换。图标用 CSS 跟着 html[data-theme] 走,组件本身不持状态,
  * 这样服务端渲染和客户端首次渲染完全一致,不会有水合不匹配。
  */
 export function ThemeToggle() {
