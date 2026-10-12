@@ -60,6 +60,40 @@ sources:                                 # 可选，正文里说法的出处，�
 - **站外资料只做索引**：每个分类的「站外权威资料」列在 `src/data/resources.ts`，是一组链接加一句"适合解决什么问题"，不转载内容。各家许可不同(MDN 正文是 CC-BY-SA，官方文档各有条款)，要复用请以原站声明为准。
 - 页面里出现的**示例数据都标注了**：温度那篇的 logits 是演示用的样例，不是某个模型的真实输出;而正文里那张概率对照表是我们按公式实算的，可以自己复算。
 
+## 常驻问答面板
+
+右下角常驻一个「问一问」。打开后是从右侧滑出的窄栏(移动端整屏),页头的「问答」和文章标题下的「问这篇」都能把它拉出来。
+
+- **文章跟着问题一起发出去**:当前文章的标题、摘要、正文原文作为请求级上下文注入 system 提示，不进对话历史。输入框里有个附件片子(X)可以摘掉,和 zen-gitsync 文件空间里那个文件片子一个意思。
+- 对话按文章存在浏览器里(每篇一份,最多 40 条),面板开合状态也记在本机。
+- 回答走 SSE 流式渲染,支持 Markdown(代码块、表格、加粗),回答过程中可以「停止」。
+
+### 怎么接模型:两种方式
+
+**一、代理(推荐)**。密钥放在服务器上,浏览器里什么都不用填:
+
+```bash
+UPSTREAM_BASE_URL=https://api.openai.com/v1 \
+UPSTREAM_API_KEY=sk-xxx \
+ALLOWED_ORIGIN=https://xz333221.github.io \
+node server/chat-proxy.mjs
+```
+
+代理自带三道闸:来源白名单、每 IP 每小时限流(默认 30 次)、强制 `max_tokens` 上限。然后把站点构建时的 `PUBLIC_CHAT_PROXY` 指向它(GitHub Actions 里加一个变量,或在 `.env` 里写),也可以在面板的「设置」里临时填代理地址。
+
+**二、浏览器直连(BYOK)**。设置里填 Base URL、API Key、模型名,密钥只写进本机浏览器的 localStorage。注意:**大多数官方接口不允许网页直接调用(没有 CORS 头)**,这条路只在支持跨域的接口上可行,不然会看到面板给出"被跨域拦下"的提示。
+
+不管哪种方式,**仓库里都不放任何密钥**;面板只发送当前文章和你的问题,不发别的站点数据。
+
+### 本地怎么验
+
+```bash
+node scripts/mock-llm.mjs            # 假接口,按 OpenAI 的 SSE 格式回放
+# 在面板设置里把 Base URL 填成 http://localhost:4399,Key 随便填,模型填 mock
+```
+
+这个假接口会把收到的请求记到 `tmp/mock-llm.log`,方便确认"文章确实被带上了"。
+
 ## 加一个知识点
 
 1. **写正文**：在 `src/content/knowledge/<分类>/` 下新建 `<文件名>.md`，填好 frontmatter。文件名就是地址的最后一段(`/python/<文件名>/`)，所以要在全站唯一。
@@ -95,15 +129,18 @@ src/
   data/catalog.ts           分类树(顺序 / 状态 / 说明)
   data/resources.ts         各分类的站外权威资料索引
   lib/content.ts            取数据与拼地址的公共函数(含 withBase)
+  lib/chat.ts               问答面板的配置、提示词与 SSE 流式读取
   lib/softmax.ts            温度讲解用的计算,SSR 与浏览器共用
   demos/*.astro             动手讲解
   components/kb/            知识库界面(Sidebar / MindMapPanel / Toc / Breadcrumb …)
+  components/chat/          常驻问答面板(React island)
   components/ui/, data/, lib/motion.ts, App.tsx   落地页那套(只在 /about 用)
   layouts/Base.astro        页面外壳(主题预置、颗粒层、跳转链接)
-  layouts/DocsLayout.astro  知识库外壳(头部、侧栏、页脚)
+  layouts/DocsLayout.astro  知识库外壳(头部、侧栏、页脚、问答面板)
   pages/                    路由:/、/[category]/、/[category]/[slug]/、/about、/404
   styles/global.css         设计令牌 + 全局基础样式
-  styles/kb.css             知识库界面与正文排版
+  styles/kb.css             知识库界面、正文排版与问答面板样式
+server/chat-proxy.mjs       可选的模型代理(密钥放服务器,见「常驻问答面板」)
 public/mindmaps/            导图 JSON
 public/photos/              落地页照片(来源见下)
 ```
@@ -131,11 +168,13 @@ node scripts/check-live.mjs   # 检查线上 Pages 是否正常
 
 ## 已知边界
 
+- **问答面板默认没有配置模型**：不填接口就用不了，站点里不放密钥。公开站点直接用代理时要自己加限流(代理脚本里带了默认值)。
 - **还没有搜索**，只有分类导航 + 目录。
 - 只有 2 个知识点，Java 与其余分类都还是空的。
 - 讲解目前只有两个，都是手写的 `.astro`；还没有沉淀出"讲解模板"。
 - 导图是构建前的静态 JSON，站内不能改图(要改用 flow-mindmap 编辑，再重新导出)。
 - 站外资料是**人工挑选的索引**，不是自动抓取，也没有做链接存活检查。
+- 手动切换主题/追加问答历史都只存本机浏览器，换设备不同步。
 - `/about` 那版落地页用的课程、价格、学员信息都是演示数据，邮箱表单没有后端。
 
 ## 素材说明

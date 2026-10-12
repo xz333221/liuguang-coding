@@ -4,6 +4,7 @@ import MindMapPanel from '../../components/kb/MindMapPanel.vue'
 import SourceList from '../../components/kb/SourceList.astro'
 import Toc from '../../components/kb/Toc.astro'
 import { findCategory } from '../../data/catalog'
+import type { ArticleContext } from '../../lib/chat'
 import { formatDate, getTopics, neighboursOf, render, topicPath, withBase } from '../../lib/content'
 import DocsLayout from '../../layouts/DocsLayout.astro'
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js'
@@ -29,6 +30,15 @@ const Demo = topic.data.demo
   ? (await demoModules[`../../demos/${topic.data.demo}.astro`]())?.default
   : undefined
 const mindmapSrc = topic.data.mindmap ? withBase(`mindmaps/${topic.data.mindmap}`) : null
+
+// 问答面板要的上下文:标题、摘要、正文原文
+const article: ArticleContext = {
+  id: topic.id,
+  title: topic.data.title,
+  summary: topic.data.summary,
+  categoryName: meta?.name ?? topic.data.category,
+  body: topic.body ?? '',
+}
 ---
 
 <DocsLayout
@@ -36,6 +46,7 @@ const mindmapSrc = topic.data.mindmap ? withBase(`mindmaps/${topic.data.mindmap}
   description={topic.data.summary}
   category={topic.data.category}
   topic={topic.id}
+  article={article}
 >
   <Breadcrumbs
     categoryId={topic.data.category}
@@ -49,9 +60,12 @@ const mindmapSrc = topic.data.mindmap ? withBase(`mindmaps/${topic.data.mindmap}
         {topic.data.title}
       </h1>
       <p class="mt-4 max-w-[34em] text-[0.98rem] leading-relaxed text-muted">{topic.data.summary}</p>
-      <p class="lg-meta mt-4">
-        {meta?.name} · {topic.data.level} · {formatDate(topic.data.updated)} 更新
-      </p>
+      <div class="mt-4 flex flex-wrap items-center gap-3">
+        <p class="lg-meta">
+          {meta?.name} · {topic.data.level} · {formatDate(topic.data.updated)} 更新
+        </p>
+        <button type="button" class="lg-chip" data-chat-open>问这篇</button>
+      </div>
 
       {
         mindmapSrc ? (

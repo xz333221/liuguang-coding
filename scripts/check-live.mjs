@@ -16,6 +16,11 @@ for (const [label, url] of targets) {
     const text = await response.text()
     const title = text.match(/<title>([\s\S]*?)<\/title>/)
     console.log(`${label}: ${response.status} · ${title ? title[1].trim() : '(no title)'} · ${text.length}B`)
+    if (label === '知识点页') {
+      console.log('   问这篇按钮:', text.includes('问这篇'))
+      console.log('   问答岛:', /ChatPanel/.test(text))
+      console.log('   页头问答入口:', text.includes('data-chat-open'))
+    }
   } catch (error) {
     console.log(`${label}: ERR ${error.message}`)
   }

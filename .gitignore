@@ -30,3 +30,4 @@ dist-ssr
 shots/
 tmp/
 .preview.pid
+.mock.pid

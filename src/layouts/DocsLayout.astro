@@ -1,8 +1,10 @@
 ---
+import { ChatPanel } from '../components/chat/ChatPanel.tsx'
 import { Mark } from '../components/ui/Mark'
 import Sidebar from '../components/kb/Sidebar.astro'
 import ThemeToggle from '../components/kb/ThemeToggle.astro'
 import Base from './Base.astro'
+import type { ArticleContext } from '../lib/chat'
 import { withBase } from '../lib/content'
 
 interface Props {
@@ -12,9 +14,11 @@ interface Props {
   category?: string
   /** 当前知识点 id */
   topic?: string
+  /** 当前文章:问答面板会把它作为上下文一起发出去 */
+  article?: ArticleContext | null
 }
 
-const { title, description, category, topic } = Astro.props
+const { title, description, category, topic, article = null } = Astro.props
 const year = new Date().getFullYear()
 ---
 
@@ -28,6 +32,7 @@ const year = new Date().getFullYear()
       </a>
 
       <div class="ml-auto flex items-center gap-4">
+        <button type="button" class="lg-header-link" data-chat-open>问答</button>
         <a href={withBase('about/')} class="lg-header-link hidden sm:inline">关于</a>
         <ThemeToggle />
       </div>
@@ -64,4 +69,15 @@ const year = new Date().getFullYear()
       </p>
     </div>
   </footer>
+
+  <ChatPanel client:only="react" article={article} />
+
+  <script>
+    // 页头与文章里的按钮只负责派发事件,面板自己决定怎么开
+    for (const trigger of document.querySelectorAll('[data-chat-open]')) {
+      trigger.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('lg-chat:open'))
+      })
+    }
+  </script>
 </Base>
