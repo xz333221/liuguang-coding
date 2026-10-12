@@ -20,6 +20,8 @@
 | AI | 可用 | 温度到底在调什么 |
 | 前端 / 后端 / 运维 / UI 设计 / 产品设计 | 筹备中 | 还没开始写，不要点进去找内容 |
 
+每个分类页下面都挂着**站外权威资料**(一手文档、教材、课程)，出处集中在 `src/data/resources.ts`。
+
 分类的开关、顺序、说明都写在 `src/data/catalog.ts` 一个文件里。每个分类有 `active`(正常)、`soon`(置灰，点进去是"还在整理"的空状态)、`hidden`(完全不出现)三种状态。
 
 ## 一个知识点由什么组成
@@ -43,10 +45,20 @@ tags: [内存模型, 引用]
 updated: 2026-10-11
 mindmap: python-variables.mindmap.json   # 可选
 demo: python-variables                   # 可选，指向 src/demos/<名字>.astro
+sources:                                 # 可选，正文里说法的出处，会渲染成一节「参考资料」
+  - title: Python 语言参考 · 数据模型
+    url: https://docs.python.org/zh-cn/3/reference/datamodel.html
+    note: 对象的身份、类型、值与可变性的准确定义。
 ---
 ```
 
 正文写普通的 markdown 就行：标题会自动生成右侧目录，代码块由 Astro 的 Shiki 做双主题高亮(深浅各一套 token 颜色)。
+
+## 内容来源与版权
+
+- **正文都是自己写的**，依据是每篇末尾「参考资料」里列的一手文档(语言规范、官方 FAQ、库文档、原始论文)。事实与结论可以引用，成段的文字不搬。
+- **站外资料只做索引**：每个分类的「站外权威资料」列在 `src/data/resources.ts`，是一组链接加一句"适合解决什么问题"，不转载内容。各家许可不同(MDN 正文是 CC-BY-SA，官方文档各有条款)，要复用请以原站声明为准。
+- 页面里出现的**示例数据都标注了**：温度那篇的 logits 是演示用的样例，不是某个模型的真实输出;而正文里那张概率对照表是我们按公式实算的，可以自己复算。
 
 ## 加一个知识点
 
@@ -81,6 +93,7 @@ src/
   content.config.ts         内容集合定义(frontmatter 校验 + id 规则)
   content/knowledge/        正文 markdown,按分类分目录
   data/catalog.ts           分类树(顺序 / 状态 / 说明)
+  data/resources.ts         各分类的站外权威资料索引
   lib/content.ts            取数据与拼地址的公共函数(含 withBase)
   lib/softmax.ts            温度讲解用的计算,SSR 与浏览器共用
   demos/*.astro             动手讲解
@@ -122,6 +135,7 @@ node scripts/check-live.mjs   # 检查线上 Pages 是否正常
 - 只有 2 个知识点，Java 与其余分类都还是空的。
 - 讲解目前只有两个，都是手写的 `.astro`；还没有沉淀出"讲解模板"。
 - 导图是构建前的静态 JSON，站内不能改图(要改用 flow-mindmap 编辑，再重新导出)。
+- 站外资料是**人工挑选的索引**，不是自动抓取，也没有做链接存活检查。
 - `/about` 那版落地页用的课程、价格、学员信息都是演示数据，邮箱表单没有后端。
 
 ## 素材说明

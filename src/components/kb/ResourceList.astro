@@ -1,0 +1,37 @@
+---
+import type { ResourceGroup } from '../../data/resources'
+
+interface Props {
+  group: ResourceGroup
+}
+
+const { group } = Astro.props
+---
+
+<section class="mt-12">
+  <h2 class="text-sm text-muted">站外权威资料</h2>
+  <p class="mt-3 max-w-[36em] text-[0.85rem] leading-relaxed text-muted">{group.intro}</p>
+
+  <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+    {
+      group.items.map((item) => (
+        <li class="lg-card">
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noreferrer noopener"
+            class="lg-card-title w-fit transition-colors hover:text-highlight"
+          >
+            {item.title}
+          </a>
+          <p class="lg-card-intro">{item.note}</p>
+          <p class="lg-card-meta">
+            {item.lang} · {item.free ? '可免费阅读' : '需付费'}
+          </p>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="mt-4 text-[0.78rem] text-muted">只做索引与链接，不转载内容；各家许可不同，引用请以原站声明为准。</p>
+</section>

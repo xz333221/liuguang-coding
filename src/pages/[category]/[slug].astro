@@ -1,6 +1,7 @@
 ---
 import Breadcrumbs from '../../components/kb/Breadcrumbs.astro'
 import MindMapPanel from '../../components/kb/MindMapPanel.vue'
+import SourceList from '../../components/kb/SourceList.astro'
 import Toc from '../../components/kb/Toc.astro'
 import { findCategory } from '../../data/catalog'
 import { formatDate, getTopics, neighboursOf, render, topicPath, withBase } from '../../lib/content'
@@ -80,6 +81,8 @@ const mindmapSrc = topic.data.mindmap ? withBase(`mindmaps/${topic.data.mindmap}
         </div>
       </section>
 
+      <SourceList sources={topic.data.sources} />
+
       <nav aria-label="相邻知识点" class="mt-16 grid gap-4 border-t border-line pt-8 sm:grid-cols-2">
         {
           prev ? (
@@ -114,6 +117,9 @@ const mindmapSrc = topic.data.mindmap ? withBase(`mindmaps/${topic.data.mindmap}
             {mindmapSrc ? <li><a href="#map" class="text-muted transition-colors hover:text-ink">知识地图</a></li> : null}
             {Demo ? <li><a href="#demo" class="text-muted transition-colors hover:text-ink">动手看一遍</a></li> : null}
             <li><a href="#read" class="text-muted transition-colors hover:text-ink">正文</a></li>
+            {topic.data.sources.length > 0 ? (
+              <li><a href="#sources" class="text-muted transition-colors hover:text-ink">参考资料</a></li>
+            ) : null}
           </ul>
         </nav>
         <Toc headings={headings} />

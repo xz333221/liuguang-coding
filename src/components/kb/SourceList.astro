@@ -1,0 +1,35 @@
+---
+interface Props {
+  sources: { title: string; url: string; note?: string }[]
+}
+
+const { sources } = Astro.props
+---
+
+{
+  sources.length > 0 ? (
+    <section id="sources" class="mt-14 scroll-mt-24 border-t border-line pt-8">
+      <h2 class="text-sm text-muted">参考资料</h2>
+      <p class="mt-3 max-w-[34em] text-[0.82rem] leading-relaxed text-muted">
+        下面是一手资料。正文里的说法以它们为准；本页只做引用与链接，不转载内容。
+      </p>
+      <ul class="mt-5 grid gap-4">
+        {sources.map((source) => (
+          <li class="grid gap-1">
+            <a
+              href={source.url}
+              target="_blank"
+              rel="noreferrer noopener"
+              class="w-fit text-[0.88rem] text-highlight underline underline-offset-4 hover:no-underline"
+            >
+              {source.title}
+            </a>
+            {source.note ? (
+              <span class="max-w-[38em] text-[0.8rem] leading-relaxed text-muted">{source.note}</span>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </section>
+  ) : null
+}

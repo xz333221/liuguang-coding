@@ -29,6 +29,16 @@ const knowledge = defineCollection({
     mindmap: z.string().optional(),
     /** src/demos/ 下的 astro 组件名(不含扩展名) */
     demo: z.string().optional(),
+    /** 正文里哪些说法来自哪里,页脚会列出来 */
+    sources: z
+      .array(
+        z.object({
+          title: z.string(),
+          url: z.string().url(),
+          note: z.string().optional(),
+        }),
+      )
+      .default([]),
     /** true 则不出现在列表里,但页面仍可访问 */
     draft: z.boolean().default(false),
   }),

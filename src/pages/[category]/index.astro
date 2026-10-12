@@ -1,8 +1,10 @@
 ---
 import Breadcrumbs from '../../components/kb/Breadcrumbs.astro'
 import CategoryCard from '../../components/kb/CategoryCard.astro'
+import ResourceList from '../../components/kb/ResourceList.astro'
 import TopicRow from '../../components/kb/TopicRow.astro'
 import { findCategory, visibleCategories } from '../../data/catalog'
+import { resourcesOf } from '../../data/resources'
 import {
   categoryPath,
   countByCategory,
@@ -28,6 +30,7 @@ const children = (meta.children ?? []).filter((child) => child.status !== 'hidde
 
 // 空分类时给一个去处:已经有内容的第一个分类
 const suggested = topics[0]
+const resourceGroup = resourcesOf(meta.id)
 ---
 
 <DocsLayout
@@ -96,4 +99,6 @@ const suggested = topics[0]
       </section>
     )
   }
+
+  {resourceGroup ? <ResourceList group={resourceGroup} /> : null}
 </DocsLayout>
