@@ -14,6 +14,8 @@ export interface SavedModel {
   displayName: string
   apiKey: string
   savedAt?: number
+  /** true 表示这条来自服务端(密钥在服务端,浏览器只拿得到掩码) */
+  server?: boolean
 }
 
 const MODELS_KEY = 'lg-chat-models'
@@ -83,6 +85,33 @@ export function resolveModelApiBase(override: string): string {
   const configured = override.trim() || BUILD_MODEL_API
   // 没配真实中间件时,用本地兜底(相对路径,拦截器认得)
   return configured || LOCAL_API_BASE
+}
+
+/** 是否接了真正的服务端(服务端存的模型,密钥不下发到浏览器) */
+export function hasServerModelApi(): boolean {
+  return Boolean(BUILD_MODEL_API)
+}
+
+/** 拉服务端存的模型列表;拉不到就返回空数组(本地兜底时属于正常) */
+export async function fetchServerModels(signal?: AbortSignal): Promise<SavedModel[]> {
+  if (!BUILD_MODEL_API) return []
+  try {
+    const response = await fetch(`${BUILD_MODEL_API.replace(/\/+$/, '')}/models/saved`, { signal })
+    if (!response.ok) return []
+    const data = (await response.json()) as { models?: Partial<SavedModel>[] }
+    return (data.models ?? [])
+      .filter((item) => item?.id && item.modelName)
+      .map((item) => ({
+        id: String(item.id),
+        endpoint: item.endpoint ?? '',
+        modelName: item.modelName ?? '',
+        displayName: item.displayName || item.modelName || '',
+        apiKey: '',
+        server: true,
+      }))
+  } catch {
+    return []
+  }
 }
 
 /**

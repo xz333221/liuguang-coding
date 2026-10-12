@@ -8,9 +8,10 @@ import {
   loadSettings,
   saveSettings,
   streamChat,
+  usesProxy,
 } from '../../lib/chat'
 import type { SavedModel } from '../../lib/chat-models'
-import { loadModels, pickModel, removeModel } from '../../lib/chat-models'
+import { fetchServerModels, loadModels, removeModel } from '../../lib/chat-models'
 
 const SUGGESTIONS = ['用一句话总结这篇', '给我一个最小可运行的例子', '这里最容易搞错的是什么']
 
@@ -70,6 +71,8 @@ export function ChatPanel({ article }: { article: ArticleContext | null }) {
   const [settings, setSettings] = useState<ChatSettings>(loadSettings)
   const [draft, setDraft] = useState<ChatSettings>(loadSettings)
   const [models, setModels] = useState<SavedModel[]>(() => loadModels())
+  const [serverModels, setServerModels] = useState<SavedModel[]>([])
+  const [modelsVersion, setModelsVersion] = useState(0)
   const [messages, setMessages] = useState<ChatMessage[]>(() => loadMessages(logKey))
   const [input, setInput] = useState('')
   const [attached, setAttached] = useState(true)
@@ -81,14 +84,22 @@ export function ChatPanel({ article }: { article: ArticleContext | null }) {
   const inputRef = useRef<HTMLTextAreaElement | null>(null)
 
   const configured = isConfigured(settings)
-  const selectedModel = useMemo(() => pickModel(models, settings.modelId), [models, settings.modelId])
-  const modelLabel = selectedModel ? selectedModel.displayName || selectedModel.modelName : ''
+  const allModels = useMemo(() => [...serverModels, ...models], [serverModels, models])
+  const selectedModel = useMemo(
+    () => allModels.find((item) => item.id === settings.modelId) ?? null,
+    [allModels, settings.modelId],
+  )
+  const modelLabel = selectedModel
+    ? selectedModel.displayName || selectedModel.modelName
+    : usesProxy(settings)
+      ? '服务端模型'
+      : ''
 
   // 模型配置弹窗(Vue 岛)保存后同步过来:它只管派发事件,这边重新读一遍本机存储
   useEffect(() => {
     const sync = () => {
-      const list = loadModels()
-      setModels(list)
+      setModels(loadModels())
+      setModelsVersion((value) => value + 1)
       const next = loadSettings()
       setSettings(next)
       setDraft(next)
@@ -98,6 +109,19 @@ export function ChatPanel({ article }: { article: ArticleContext | null }) {
     document.addEventListener('lg-chat:models-changed', sync)
     return () => document.removeEventListener('lg-chat:models-changed', sync)
   }, [])
+
+  // 服务端存的模型(部署在同源服务上时才有):密钥在服务端,浏览器只拿到名字
+  useEffect(() => {
+    let alive = true
+    const controller = new AbortController()
+    void fetchServerModels(controller.signal).then((list) => {
+      if (alive) setServerModels(list)
+    })
+    return () => {
+      alive = false
+      controller.abort()
+    }
+  }, [modelsVersion])
 
   // 打开/关闭状态记在本机,翻页回来还是开着
   useEffect(() => {
@@ -279,24 +303,40 @@ export function ChatPanel({ article }: { article: ArticleContext | null }) {
           >
             <div className="lg-chat-field">
               <span>用哪个模型</span>
-              {models.length > 0 ? (
+              {allModels.length > 0 ? (
                 <select
                   className="lg-chat-select"
                   value={draft.modelId}
                   onChange={(event) => setDraft({ ...draft, modelId: event.target.value })}
                 >
-                  {models.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.displayName || item.modelName}
-                    </option>
-                  ))}
+                  <option value="">（不指定，由服务端决定）</option>
+                  {serverModels.length > 0 ? (
+                    <optgroup label="服务端（密钥不在浏览器）">
+                      {serverModels.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.displayName || item.modelName}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ) : null}
+                  {models.length > 0 ? (
+                    <optgroup label="本机（浏览器直连用）">
+                      {models.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.displayName || item.modelName}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ) : null}
                 </select>
               ) : (
                 <p className="lg-chat-note">还没有配置模型，点下面的「添加模型」。</p>
               )}
               {selectedModel ? (
                 <small>
-                  {selectedModel.modelName} · {selectedModel.endpoint}
+                  {selectedModel.modelName}
+                  {selectedModel.endpoint ? ` · ${selectedModel.endpoint}` : ''}
+                  {selectedModel.server ? ' · 来自服务端' : ''}
                 </small>
               ) : null}
             </div>

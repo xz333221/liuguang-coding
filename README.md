@@ -1,9 +1,9 @@
 # 流光 coding 知识库
 
 按主题整理的编程知识库。每个知识点由三部分组成:**一张知识地图**、**一段可以动手的讲解**、**完整的正文**。
+仓库里同时包含**前端站点**与**服务端**(站点托管、问答接口、模型配置)，部署目标是 <https://coding.flowdash.cn>。
 
-线上地址:<https://xz333221.github.io/liuguang-coding/>(推送到 `main` 后由 GitHub Actions 自动部署)
-早先做的那版课程落地页留档在 [/about/](https://xz333221.github.io/liuguang-coding/about/)。
+早先那版课程落地页留档在 `/about`。
 
 ![知识库首页](docs/kb-home.png)
 
@@ -68,44 +68,32 @@ sources:                                 # 可选，正文里说法的出处，�
 - 对话按文章存在浏览器里(每篇一份,最多 40 条),面板开合状态也记在本机。
 - 回答走 SSE 流式渲染,支持 Markdown(代码块、表格、加粗),回答过程中可以「停止」。
 
-### 怎么接模型:三种方式
+### 模型从哪儿来
 
-**一、代理(推荐)**。密钥放在服务器上,浏览器里什么都不用填:
+面板「设置」里有一个下拉,分两组:
 
-```bash
-UPSTREAM_BASE_URL=https://api.openai.com/v1 \
-UPSTREAM_API_KEY=sk-xxx \
-DEFAULT_MODEL=deepseek-chat \
-ALLOWED_ORIGIN=https://xz333221.github.io \
-node server/chat-proxy.mjs
-```
+- **服务端（密钥不在浏览器）**：列出服务器上存着的模型(`GET /api/ai-model/models/saved`)。选中后请求只带一个 `modelId`,服务端自己去取密钥调模型 —— 这是部署后的正常用法,读者什么都不用配。
+- **本机（浏览器直连用）**：本地兜底存的配置,带密钥直连模型接口。只在没接服务端时用得上(大多数官方接口会因跨域被拦)。
 
-代理自带三道闸:来源白名单、每 IP 每小时限流(默认 30 次)、强制 `max_tokens` 上限。把站点构建时的 `PUBLIC_CHAT_PROXY` 指向它(GitHub Actions 里加一个变量),或在面板「设置」里临时填代理地址。走了代理,读者连模型都不用选,`DEFAULT_MODEL` 会在浏览器没带模型名时兜底。
+两条路都通过 **ai-model-form** 的 `<AddModelForm>` 来配置:供应商预设(OpenAI、DeepSeek、Moonshot、智谱、Qwen、MiniMax、Ollama、火山方舟等 22 个,带 logo 与中文)、模型列表自动拉取、连接测试、保存。表单原来依赖它的 Express 中间件,这里:
 
-**二、模型配置表单 + 直连(BYOK)**。面板的「设置 → 添加模型」打开的是 **ai-model-form** 的表单(内置 OpenAI、DeepSeek、Moonshot、智谱、Qwen、MiniMax、Ollama、火山方舟等各种预设,自带 logo 与中英文),填好保存,回到面板从上方的下拉里挑一个用。密钥只写进这台浏览器的 localStorage。
+| 表单要的路由 | 部署后(同源服务) | 纯静态时(浏览器兜底) |
+| --- | --- | --- |
+| `GET /providers`、`GET /models?endpoint=`、`POST /test` | 走 `ai-model-form/server` 中间件 | 浏览器本地实现(列表与测连接受跨域限制) |
+| `POST /models`、`GET /models/saved`、`DELETE /models/:id` | 走 `server/store.mjs`,落盘 + 只回掩码 | 存 localStorage |
 
-表单原本依赖 `ai-model-form` 的 Express 中间件(拉模型列表、测连接、保存)。**没部署中间件时,站点会在浏览器里顶掉这三条路由**(见 `src/lib/chat-models.ts`),所以表单照样能用:模型列表能不能自动拉取取决于对方是否允许跨域,拉不到就手填;「测试连接」多半会因跨域失败,提示里会说明原因。
-
-**三、部署中间件,把上面那条升满级**。在服务器上:
-
-```js
-import express from 'express'
-import { createAiModelMiddleware } from 'ai-model-form/server'
-app.use('/api', createAiModelMiddleware())
-```
-
-然后把构建变量 `PUBLIC_MODEL_API` 指到 `/api/ai-model`(或完整域名),表单就有实时模型列表、真实连接测试与服务端保存。
-
-不管哪种方式,**仓库里都不放任何密钥**;面板只发送当前文章和你的问题。
+不管哪条路,**仓库里都不放密钥**;面板只发送当前文章和你的问题。
 
 ### 本地怎么验
 
 ```bash
-node scripts/mock-llm.mjs            # 假接口,按 OpenAI 的 SSE 格式回放
-# 在面板里「设置 → 添加模型」,接口地址填 http://localhost:4399,模型名随便填
+node scripts/mock-llm.mjs    # 假模型接口:http://localhost:4399
 ```
 
-这个假接口会把收到的请求记到 `tmp/mock-llm.log`,方便确认"文章确实被带上了""用的是哪个模型"。
+- 只跑前端(`npm run dev`)时:面板「设置 → 添加模型」里接口地址填 `http://localhost:4399`,模型名随便填,走浏览器直连。
+- 前后端一起跑(`npm run build && npm run dev:server`)时:访问 `http://127.0.0.1:8787`,在弹窗里存模型 —— 它落到 `server/data/models.json`,面板下拉里会出现在「服务端」那组。
+
+假接口会把收到的请求记到 `tmp/mock-llm.log`,方便确认"文章被带上了""用的是哪个模型""密钥是谁加的"。
 
 ## 加一个知识点
 
@@ -154,7 +142,18 @@ src/
   pages/                    路由:/、/[category]/、/[category]/[slug]/、/about、/404
   styles/global.css         设计令牌 + 全局基础样式
   styles/kb.css             知识库界面、正文排版与问答面板样式
-server/chat-proxy.mjs       可选的模型代理(密钥放服务器,见「常驻问答面板」)
+server/
+  index.mjs                 Express 服务:静态站点 + /api/chat + /api/ai-model
+  chat.mjs                  问答接口(SSE 透传、限流、模型解析)
+  store.mjs                 模型配置落盘(0600,只给浏览器回掩码)
+deploy/
+  liuguang-coding.service   systemd 单元示例
+  nginx.conf.sample         coding.flowdash.cn 反代示例(SSE 关缓冲)
+scripts/
+  deploy-on-server.sh       服务器上的一键发布
+  mock-llm.mjs              假模型接口,本地验收
+  check-live.mjs            线上/本地健康检查
+  fetch-photos.mjs          拉落地页照片
 public/mindmaps/            导图 JSON
 public/photos/              落地页照片(来源见下)
 ```
@@ -170,20 +169,70 @@ public/photos/              落地页照片(来源见下)
 
 ```bash
 npm install
-npm run dev        # http://localhost:4321
-npm run build      # 构建到 dist/
-npm run check      # astro check:类型 + 模板检查
-npm run lint       # oxlint
-npm run preview    # 预览 dist
-node scripts/check-live.mjs   # 检查线上 Pages 是否正常
+npm run dev          # 只跑前端:http://localhost:4321
+npm run build        # 构建站点到 dist/
+npm run dev:server   # 只跑服务端:http://127.0.0.1:8787(先 build,否则没有静态站点)
+npm run start        # 服务端:发 dist 静态站 + /api/* 接口
+npm run check        # astro check:类型 + 模板检查
+npm run lint         # oxlint
+node scripts/mock-llm.mjs   # 假模型接口(监听 4399),本地验收用
 ```
 
-部署走 `.github/workflows/deploy.yml`：推 `main` 触发，构建时用 `BASE_PATH=/<仓库名>/` 注入 Vite 的 `base`，所以站内链接统一走 `withBase()`。
+前端与服务端分开跑时,在面板「设置」里把代理地址填成 `http://127.0.0.1:8787/api/chat`;
+同源部署时用构建变量写死,读者什么都不用配。假接口会把收到的请求记到 `tmp/mock-llm.log`,方便确认"文章被带上了""用的是哪个模型"。
+
+## 部署(coding.flowdash.cn)
+
+一个 Node 进程同时负责两件事:发静态站点、发接口。nginx 只做反代。
+
+```
+coding.flowdash.cn ──nginx──> 127.0.0.1:8787  server/index.mjs
+                                              ├── /*               站点(dist,带缓存头)
+                                              ├── POST /api/chat   问答,SSE 透传
+                                              └── /api/ai-model/*  模型配置与预设
+```
+
+各路由归属:
+
+| 路由 | 实现 | 说明 |
+| --- | --- | --- |
+| `POST /api/chat` | `server/chat.mjs` | 从模型仓库取端点与密钥去调模型,SSE 原样转发。**密钥不出服务端**;带来源白名单、每 IP 每小时限流(默认 60)、`max_tokens` 上限 |
+| `POST/GET/DELETE /api/ai-model/models[/saved]` | `server/store.mjs` | 模型配置落盘(`server/data/models.json`,权限 0600,已 gitignore),给浏览器只回掩码 |
+| `GET /providers`、`GET /models?endpoint=`、`POST /test` | `ai-model-form/server` | 供应商预设、实时模型列表、连接测试,直接复用你那个中间件 |
+
+首次部署:
+
+```bash
+# 服务器上
+git clone git@github.com:xz333221/liuguang-coding.git /opt/liuguang-coding
+cd /opt/liuguang-coding
+sudo cp deploy/liuguang-coding.service /etc/systemd/system/
+sudo systemctl daemon-reload && sudo systemctl enable --now liuguang-coding
+sudo cp deploy/nginx.conf.sample /etc/nginx/sites-enabled/coding.flowdash.cn.conf  # 按需改证书路径
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+以后每次发布:
+
+```bash
+APP_DIR=/opt/liuguang-coding bash scripts/deploy-on-server.sh
+```
+
+这个脚本做四件事:拉 `main`、`npm ci`、用 `PUBLIC_CHAT_PROXY=/api/chat PUBLIC_MODEL_API=/api/ai-model` 构建站点、重启服务并做健康检查。
+
+可选环境变量(`deploy/liuguang-coding.service` 里已指到 `/opt/liuguang-coding/.env.server`,该文件不进仓库):
+
+| 变量 | 用途 |
+| --- | --- |
+| `PORT` / `DATA_DIR` | 端口(默认 8787)、模型配置目录(默认 `server/data`) |
+| `ALLOWED_ORIGIN` | 只有跨域部署才需要;同源留空 |
+| `RATE_LIMIT` / `MAX_TOKENS` | 限流条数与单次回答上限 |
+| `UPSTREAM_BASE_URL` / `UPSTREAM_API_KEY` / `DEFAULT_MODEL` | 仓库里一条模型都没有时的兜底 |
 
 ## 已知边界
 
-- **问答面板默认没有配置模型**：不填接口就用不了，站点里不放密钥。公开站点直接用代理时要自己加限流(代理脚本里带了默认值)。
-- **模型配置在浏览器本地**（除非部署了 ai-model-form 的中间件）：换设备不同步；中间件与代理都还没上线，见 FlowDash 的「服务端任务」清单。
+- **问答要服务端在跑**：接口与站点同源,`/api/chat` 由 `server/index.mjs` 提供;纯静态托管(比如 GitHub Pages)只能用浏览器直连那一路,大多数官方接口会被 CORS 拦下。
+- 模型配置存在服务器上(`server/data/models.json`)或浏览器里,取决于你从哪条路径添加;**服务端那份含明文密钥,别提交、别备份到公开位置**。
 - **还没有搜索**，只有分类导航 + 目录。
 - 只有 2 个知识点，Java 与其余分类都还是空的。
 - 讲解目前只有两个，都是手写的 `.astro`；还没有沉淀出"讲解模板"。

@@ -1,7 +1,7 @@
 // 知识库问答面板的服务端无关部分:配置、提示词、SSE 流式读取。
 // 这里不碰 DOM,方便单独推逻辑;面板组件只负责界面。
 
-import { loadCurrentId, loadModels, pickModel, saveCurrentId } from './chat-models'
+import { loadCurrentId, loadModels, saveCurrentId } from './chat-models'
 
 export interface ChatSettings {
   /** 代理地址。填了就走它,浏览器里不需要 API Key(推荐,见 README 的 chat-proxy) */
@@ -49,14 +49,15 @@ export function loadSettings(): ChatSettings {
   if (typeof localStorage === 'undefined') return EMPTY_SETTINGS
   try {
     const proxyUrl = localStorage.getItem(PROXY_KEY) ?? ''
-    const models = loadModels()
-    const selected = pickModel(models, loadCurrentId())
+    const currentId = loadCurrentId()
+    // 选中的可能是服务端存的模型:那种情况本地没有它的配置,只用 id(服务端自己解析密钥)
+    const selected = loadModels().find((item) => item.id === currentId)
     return {
       proxyUrl,
       baseUrl: selected?.endpoint ?? '',
       apiKey: selected?.apiKey ?? '',
       model: selected?.modelName ?? '',
-      modelId: selected?.id ?? '',
+      modelId: currentId,
     }
   } catch {
     return EMPTY_SETTINGS
@@ -172,7 +173,13 @@ export async function streamChat({ settings, messages, signal, onDelta }: Stream
     response = await fetch(endpoint, {
       method: 'POST',
       headers,
-      body: JSON.stringify({ model: settings.model.trim(), messages, stream: true }),
+      body: JSON.stringify({
+        model: settings.model.trim(),
+        // 走代理时把选中的服务端模型 id 带上,让服务端决定用哪个模型和密钥
+        ...(usesProxy(settings) && settings.modelId ? { modelId: settings.modelId } : {}),
+        messages,
+        stream: true,
+      }),
       signal,
     })
   } catch (error) {
@@ -181,7 +188,15 @@ export async function streamChat({ settings, messages, signal, onDelta }: Stream
 
   if (!response.ok || !response.body) {
     const detail = await response.text().catch(() => '')
-    throw new Error(explainHttpError(response.status, detail))
+    // 服务端出错时返回的是 JSON,取出里面的 message,别把整段 JSON 甩给读者
+    let message = detail
+    try {
+      const parsed = JSON.parse(detail) as { error?: { message?: string }; message?: string }
+      message = parsed.error?.message ?? parsed.message ?? detail
+    } catch {
+      // 不是 JSON 就用原文
+    }
+    throw new Error(explainHttpError(response.status, message))
   }
 
   const reader = response.body.getReader()

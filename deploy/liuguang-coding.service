@@ -1,0 +1,25 @@
+[Unit]
+Description=liuguang-coding 知识库(站点 + 问答接口)
+Documentation=https://github.com/xz333221/liuguang-coding
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# 按服务器实际情况改成拥有该目录的用户
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/liuguang-coding
+Environment=NODE_ENV=production
+Environment=PORT=8787
+Environment=DATA_DIR=/opt/liuguang-coding/server/data
+# 模型密钥这类东西写在这里,别进仓库
+EnvironmentFile=-/opt/liuguang-coding/.env.server
+ExecStart=/usr/bin/node server/index.mjs
+Restart=always
+RestartSec=3
+# 只监听本机,外网由 nginx 进来
+Environment=HOST=127.0.0.1
+
+[Install]
+WantedBy=multi-user.target

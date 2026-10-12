@@ -31,3 +31,6 @@ shots/
 tmp/
 .preview.pid
 .mock.pid
+
+# 服务端数据(模型配置里有明文密钥)
+server/data/
