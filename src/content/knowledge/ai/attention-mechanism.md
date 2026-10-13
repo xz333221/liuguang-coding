@@ -8,6 +8,7 @@ tags: [Transformer, 注意力, 上下文, 机制]
 updated: 2026-10-13
 mindmap: ai-attention.mindmap.json
 demo: ai-attention
+terms: ["attention", "query-key-value", "dot-product", "normalization", "softmax", "multi-head-attention", "transformer", "positional-encoding", "causal-mask", "autoregressive", "context-window"]
 sources:
   - title: Attention Is All You Need
     url: https://arxiv.org/abs/1706.03762

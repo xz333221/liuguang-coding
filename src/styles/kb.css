@@ -389,6 +389,262 @@
     background: var(--line);
   }
 
+  /* ---------- 术语表 ---------- */
+  /* 正文里的名词:虚线加下划线,悬停/聚焦时弹出一句人话解释。
+     绝对定位的浮层会被父级 a 的下划线波及吗?不会 —— 脱离常规流的盒子不继承祖先的装饰线。 */
+  .lg-prose .lg-term {
+    position: relative;
+    color: var(--highlight);
+    text-decoration: underline dotted;
+    text-decoration-color: color-mix(in srgb, var(--accent) 60%, transparent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    cursor: help;
+  }
+
+  .lg-prose .lg-term:hover {
+    text-decoration-style: solid;
+  }
+
+  .lg-term-tip {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    z-index: 30;
+    width: max-content;
+    max-width: min(20rem, 64vw);
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    background: var(--panel);
+    color: var(--ink);
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.7;
+    text-align: left;
+    box-shadow: 0 18px 40px -22px rgb(0 0 0 / 0.65);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(-2px);
+    transition: opacity 0.16s, transform 0.16s, visibility 0.16s;
+  }
+
+  .lg-prose .lg-term:hover .lg-term-tip,
+  .lg-prose .lg-term:focus-visible .lg-term-tip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%);
+  }
+
+  /* 没有悬停能力的设备(触摸屏)上浮层只会挡路,直接不显示 */
+  @media (hover: none) {
+    .lg-term-tip {
+      display: none;
+    }
+  }
+
+  /* 文章开头那一节 */
+  .lg-term-intro {
+    max-width: 38em;
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.8;
+  }
+
+  .lg-term-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.9rem;
+    margin-top: 1.25rem;
+  }
+
+  @media (min-width: 720px) {
+    .lg-term-grid {
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    }
+  }
+
+  .lg-term-card {
+    display: grid;
+    gap: 0.55rem;
+    align-content: start;
+    padding: 1.05rem 1.15rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+    scroll-margin-top: 6rem;
+  }
+
+  /* 从正文点进来时,让落点这一张自己亮一下 */
+  .lg-term-card:target {
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    background: var(--accent-soft);
+  }
+
+  .lg-term-card[hidden],
+  [data-term-section][hidden] {
+    display: none;
+  }
+
+  .lg-term-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .lg-term-name {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    font-size: 0.98rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .lg-term-en {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 400;
+  }
+
+  .lg-term-anchor {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 0.72rem;
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+
+  .lg-term-anchor:hover {
+    color: var(--highlight);
+  }
+
+  .lg-term-row {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .lg-term-label {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+  }
+
+  .lg-term-plain {
+    color: color-mix(in srgb, var(--ink) 92%, transparent);
+    font-size: 0.86rem;
+    line-height: 1.75;
+  }
+
+  .lg-term-formal {
+    color: var(--muted);
+    font-size: 0.82rem;
+    line-height: 1.75;
+  }
+
+  .lg-term-misread {
+    padding: 0.5rem 0.65rem;
+    border-radius: 12px;
+    background: var(--accent-soft);
+    color: var(--highlight);
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+
+  .lg-term-misread span {
+    margin-right: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+  }
+
+  .lg-term-foot {
+    display: grid;
+    gap: 0.3rem;
+    margin-top: 0.1rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.78rem;
+  }
+
+  .lg-term-related {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    color: var(--muted);
+  }
+
+  .lg-term-related span {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+  }
+
+  .lg-term-related a {
+    color: var(--highlight);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .lg-term-see,
+  .lg-term-source {
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+
+  .lg-term-see:hover,
+  .lg-term-source:hover {
+    color: var(--highlight);
+  }
+
+  /* 术语表页的搜索与筛选 */
+  .lg-term-tools {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .lg-term-search input {
+    width: 100%;
+    max-width: 26rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 0.85rem;
+  }
+
+  .lg-term-search input::placeholder {
+    color: var(--muted);
+  }
+
+  .lg-term-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .lg-term-filters .lg-chip[aria-pressed='true'] {
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    background: var(--accent-soft);
+    color: var(--highlight);
+  }
+
+  .lg-term-count {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lg-term-tip {
+      transition: none;
+    }
+  }
+
   /* ---------- 知识库问答面板 ---------- */
   .lg-chat-fab {
     position: fixed;

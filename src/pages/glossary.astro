@@ -1,0 +1,123 @@
+---
+import TermCard from '../components/kb/TermCard.astro'
+import { groups, terms, termsOfGroup } from '../data/glossary'
+import { withBase } from '../lib/content'
+import DocsLayout from '../layouts/DocsLayout.astro'
+
+const total = terms.length
+---
+
+<DocsLayout
+  title="术语表 · 流光 coding 知识库"
+  description="把知识点里出现的名词先讲清楚:每个词一句人话、一句准确定义。看正文卡在某个词上时，来这里查。"
+  page="glossary"
+>
+  <nav aria-label="面包屑" class="mb-6 flex flex-wrap items-center gap-2 text-[0.78rem] text-muted">
+    <a href={withBase()} class="hover:text-ink">知识库</a>
+    <span aria-hidden="true" class="text-line-strong">/</span>
+    <span class="text-ink">术语表</span>
+  </nav>
+
+  <h1 class="text-[1.75rem] leading-[1.3] font-medium tracking-tight md:text-[2rem]">术语表</h1>
+  <p class="mt-4 max-w-[36em] text-[0.95rem] leading-relaxed text-muted">
+    这里不写"什么是什么"就完事。每个名词都给两段:先一句人话，说清它大概是个什么东西;
+    再一句准确定义，跟一手文档对齐。看不懂正文里的某个词，从这里查。
+  </p>
+  <p class="mt-3 max-w-[36em] text-[0.88rem] leading-relaxed text-muted">
+    目前收了 <span class="font-mono">{total}</span> 个名词，按主题分五组。文章页开头也会把本篇要用的词单独列一遍。
+  </p>
+
+  <div class="lg-term-tools mt-8">
+    <label class="lg-term-search">
+      <span class="sr-only">搜索名词</span>
+      <input
+        id="term-search"
+        type="search"
+        autocomplete="off"
+        placeholder="搜名词、英文，或者解释里的任意一个词…"
+      />
+    </label>
+    <div class="lg-term-filters" role="group" aria-label="按主题筛选">
+      <button type="button" class="lg-chip" data-group-filter="all" aria-pressed="true">
+        全部 <span class="lg-term-count">{total}</span>
+      </button>
+      {
+        groups.map((group) => (
+          <button type="button" class="lg-chip" data-group-filter={group.id} aria-pressed="false">
+            {group.name} <span class="lg-term-count">{termsOfGroup(group.id).length}</span>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <p id="term-empty" class="mt-6 hidden rounded-[18px] border border-line bg-surface px-5 py-4 text-[0.88rem] text-muted">
+    没找到匹配的名词。换个说法试试，或者直接问右下角的问答面板。
+  </p>
+
+  {
+    groups.map((group) => (
+      <section class="mt-12" data-term-section data-group={group.id}>
+        <h2 class="text-sm text-muted">
+          {group.name} <span class="font-mono" data-section-count>{termsOfGroup(group.id).length}</span>
+        </h2>
+        <p class="mt-2 max-w-[36em] text-[0.85rem] leading-relaxed text-muted">{group.intro}</p>
+        <div class="lg-term-grid mt-5">
+          {termsOfGroup(group.id).map((term) => (
+            <TermCard term={term} />
+          ))}
+        </div>
+      </section>
+    ))
+  }
+
+  <script>
+    // 纯前端过滤:名词数量还小,一次全渲染出来,筛选只切 hidden,不做二次请求
+    const input = document.querySelector<HTMLInputElement>('#term-search')
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-term-card]'))
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-term-section]'))
+    const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-group-filter]'))
+    const empty = document.querySelector<HTMLElement>('#term-empty')
+
+    let activeGroup = 'all'
+
+    function apply() {
+      const query = (input?.value ?? '').trim().toLowerCase()
+      let shown = 0
+
+      for (const card of cards) {
+        const matchGroup = activeGroup === 'all' || card.dataset.group === activeGroup
+        const matchQuery = query === '' || (card.dataset.search ?? '').includes(query)
+        const visible = matchGroup && matchQuery
+        card.hidden = !visible
+        if (visible) shown += 1
+      }
+
+      for (const section of sections) {
+        const visible = section.querySelectorAll('[data-term-card]:not([hidden])').length
+        section.hidden = visible === 0
+        // 分组标题上的数字跟着筛选结果走,免得筛完还写着 18 却只显示 3 张
+        const counter = section.querySelector<HTMLElement>('[data-section-count]')
+        if (counter) counter.textContent = String(visible)
+      }
+
+      if (empty) empty.hidden = shown > 0
+
+      for (const button of buttons) {
+        button.setAttribute('aria-pressed', String(button.dataset.groupFilter === activeGroup))
+      }
+    }
+
+    input?.addEventListener('input', apply)
+
+    for (const button of buttons) {
+      button.addEventListener('click', () => {
+        activeGroup = button.dataset.groupFilter ?? 'all'
+        apply()
+      })
+    }
+
+    // 带锚点进来时(比如正文里点了某个名词),别让筛选把它藏起来
+    apply()
+  </script>
+</DocsLayout>

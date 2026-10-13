@@ -17,6 +17,21 @@ export function categoryPath(id: string): string {
   return withBase(`${id}/`)
 }
 
+/** 术语表页地址 */
+export function glossaryPath(): string {
+  return withBase('glossary/')
+}
+
+/** 术语表里某个名词的锚点 */
+export function termHref(id: string): string {
+  return `${glossaryPath()}#${id}`
+}
+
+/** 知识点地址,传 'python/variables-are-not-boxes' 这种形式 */
+export function topicHref(path: string): string {
+  return withBase(`${path}/`)
+}
+
 export function formatDate(date: Date): string {
   return new Intl.DateTimeFormat('zh-CN', {
     year: 'numeric',

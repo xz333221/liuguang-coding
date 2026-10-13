@@ -8,6 +8,7 @@ tags: [内存模型, 引用, 拷贝, 面试高频]
 updated: 2026-10-12
 mindmap: python-variables.mindmap.json
 demo: python-variables
+terms: ["variable", "object", "identity", "reference", "binding", "mutable-immutable", "namespace", "shallow-copy", "deep-copy", "default-argument", "pass-by-value", "augmented-assignment", "view-and-copy"]
 sources:
   - title: Python 语言参考 · 数据模型
     url: https://docs.python.org/zh-cn/3/reference/datamodel.html

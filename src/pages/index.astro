@@ -2,7 +2,16 @@
 import CategoryCard from '../components/kb/CategoryCard.astro'
 import TopicRow from '../components/kb/TopicRow.astro'
 import { catalog } from '../data/catalog'
-import { categoryPath, countByCategory, countFor, formatDate, getTopics, topicPath } from '../lib/content'
+import { terms } from '../data/glossary'
+import {
+  categoryPath,
+  countByCategory,
+  countFor,
+  formatDate,
+  getTopics,
+  glossaryPath,
+  topicPath,
+} from '../lib/content'
 import DocsLayout from '../layouts/DocsLayout.astro'
 
 const topics = await getTopics()
@@ -42,6 +51,19 @@ const recent = [...topics].sort((a, b) => b.data.updated.getTime() - a.data.upda
         ))
       }
     </div>
+  </section>
+
+  <section class="mt-10">
+    <a href={glossaryPath()} class="lg-card">
+      <span class="lg-card-title">
+        术语表
+        <span class="lg-badge">{terms.length} 个名词</span>
+      </span>
+      <span class="lg-card-intro">
+        看正文卡在某个词上时来这里查。每个名词都给两段:先一句人话讲清它大概是什么，再一句准确定义跟一手文档对齐。
+        文章页开头也会把本篇要用的词单独列一遍，正文里这些词第一次出现时带下划线，悬停就能看到那句人话。
+      </span>
+    </a>
   </section>
 
   <section class="mt-10">

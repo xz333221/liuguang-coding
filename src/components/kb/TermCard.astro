@@ -1,0 +1,96 @@
+---
+// 一个名词的两段解释。术语表页和文章开头的「先弄清这几个词」共用这一个组件,
+// 区别只在密度:page 带锚点、出处和相关词,panel 只留最必要的部分。
+import { relatedTerms, type Term } from '../../data/glossary'
+import { termHref, topicHref, getTopics } from '../../lib/content'
+
+interface Props {
+  term: Term
+  variant?: 'page' | 'panel'
+}
+
+const { term, variant = 'page' } = Astro.props
+const related = variant === 'page' ? relatedTerms(term) : []
+// 文章里点「想深入看」会跳回自己,没意义
+const see = variant === 'page' ? term.see : undefined
+const seeTitle = see ? (await getTopics()).find((topic) => `${topic.data.category}/${topic.id}` === see)?.data.title : undefined
+
+// 搜索用的检索串:词名、英文、别名、两段解释都算上
+const haystack = [term.term, term.en, ...(term.aliases ?? []), term.plain, term.formal]
+  .filter(Boolean)
+  .join(' ')
+  .toLowerCase()
+---
+
+<article
+  id={variant === 'page' ? term.id : undefined}
+  class:list={['lg-term-card', variant === 'panel' && 'lg-term-card--panel']}
+  data-term-card
+  data-group={term.group}
+  data-search={haystack}
+>
+  <div class="lg-term-head">
+    <h3 class="lg-term-name">
+      {term.term}
+      {term.en ? <span class="lg-term-en">{term.en}</span> : null}
+    </h3>
+    {
+      variant === 'page' ? (
+        <a href={`#${term.id}`} class="lg-term-anchor" aria-label={`${term.term} 的锚点`}>
+          #
+        </a>
+      ) : (
+        <a href={termHref(term.id)} class="lg-term-anchor" aria-label={`在术语表里看 ${term.term}`}>
+          术语表
+        </a>
+      )
+    }
+  </div>
+
+  <div class="lg-term-row">
+    <span class="lg-term-label">说人话</span>
+    <p class="lg-term-plain">{term.plain}</p>
+  </div>
+
+  <div class="lg-term-row lg-term-row--formal">
+    <span class="lg-term-label">准确地说</span>
+    <p class="lg-term-formal">{term.formal}</p>
+  </div>
+
+  {
+    term.misread ? (
+      <p class="lg-term-misread">
+        <span>容易误解</span>
+        {term.misread}
+      </p>
+    ) : null
+  }
+
+  {
+    (related.length > 0 || see || term.source) && (
+      <div class="lg-term-foot">
+        {related.length > 0 && (
+          <p class="lg-term-related">
+            <span>相关</span>
+            {related.map((item, index) => (
+              <>
+                {index > 0 ? <span aria-hidden="true"> · </span> : null}
+                <a href={termHref(item.id)}>{item.term}</a>
+              </>
+            ))}
+          </p>
+        )}
+        {see ? (
+          <a href={topicHref(see)} class="lg-term-see">
+            想深入看:{seeTitle ?? '对应知识点'} →
+          </a>
+        ) : null}
+        {term.source ? (
+          <a href={term.source.url} target="_blank" rel="noreferrer noopener" class="lg-term-source">
+            定义出处:{term.source.title}
+          </a>
+        ) : null}
+      </div>
+    )
+  }
+</article>

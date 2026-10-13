@@ -8,6 +8,7 @@ tags: [迭代器, 生成器, 协议, 惰性求值]
 updated: 2026-10-13
 mindmap: python-iterators.mindmap.json
 demo: python-iterators
+terms: ["iterable", "iterator", "iteration-protocol", "generator", "yield", "stop-iteration", "lazy-evaluation", "list-comprehension", "generator-expression", "coroutine", "magic-method"]
 sources:
   - title: Python 教程 · 迭代器
     url: https://docs.python.org/zh-cn/3/tutorial/classes.html#iterators

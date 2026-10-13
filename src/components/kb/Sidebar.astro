@@ -1,15 +1,18 @@
 ---
 import { catalog } from '../../data/catalog'
-import { categoryPath, countByCategory, countFor, getTopics } from '../../lib/content'
+import { terms } from '../../data/glossary'
+import { categoryPath, countByCategory, countFor, getTopics, glossaryPath } from '../../lib/content'
 
 interface Props {
   /** 当前分类 id,用于高亮 */
   current?: string
   /** 当前知识点 id,列在分类下面 */
   currentTopic?: string
+  /** 不在分类树里的独立页面(目前只有 glossary) */
+  page?: string
 }
 
-const { current, currentTopic } = Astro.props
+const { current, currentTopic, page } = Astro.props
 const topics = await getTopics()
 const counts = countByCategory(topics)
 const roots = catalog.filter((item) => item.status !== 'hidden')
@@ -79,4 +82,14 @@ function topicsIn(id: string) {
       </>
     ))
   }
+
+  <!-- 术语表不属于任何分类,单独挂在导航末尾 -->
+  <a
+    href={glossaryPath()}
+    class="lg-nav-item mt-3 border-t border-line pt-3"
+    data-active={page === 'glossary'}
+  >
+    <span>术语表</span>
+    <span class="lg-nav-count">{terms.length}</span>
+  </a>
 </nav>

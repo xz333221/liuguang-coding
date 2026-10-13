@@ -8,6 +8,7 @@ tags: [采样, 解码, 参数, 实践]
 updated: 2026-10-12
 mindmap: ai-temperature.mindmap.json
 demo: ai-temperature
+terms: ["language-model", "token", "logit", "softmax", "probability-distribution", "sampling", "temperature", "decoding", "greedy-decoding", "beam-search", "top-k", "top-p", "seed"]
 sources:
   - title: Hugging Face · How to generate text
     url: https://huggingface.co/blog/how-to-generate

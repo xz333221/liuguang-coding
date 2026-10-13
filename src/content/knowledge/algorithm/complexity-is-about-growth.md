@@ -8,6 +8,7 @@ tags: [复杂度, 大O, 性能, 面试高频]
 updated: 2026-10-13
 mindmap: algorithm-complexity.mindmap.json
 demo: algorithm-complexity
+terms: ["time-complexity", "space-complexity", "big-o", "big-omega", "big-theta", "growth-rate", "input-size", "basic-operation", "worst-average-case", "constant-factor", "binary-search", "recursion", "call-stack"]
 sources:
   - title: 算法导论(CLRS)· 第 3 章:函数的增长
     url: https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/

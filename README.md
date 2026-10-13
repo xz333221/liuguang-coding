@@ -20,6 +20,7 @@
 | AI | 可用 | 温度到底在调什么 · 注意力:模型怎么决定该看哪儿 |
 | 算法 | 可用 | 复杂度:O 记号在数什么 |
 | 前端 / 后端 / 运维 / UI 设计 / 产品设计 | 筹备中 | 还没开始写，不要点进去找内容 |
+| 术语表 | 可用 | 基础名词单独收在一处，每个一句人话 + 一句准确定义，见下 |
 
 每个分类页下面都挂着**站外权威资料**(一手文档、教材、课程)，出处集中在 `src/data/resources.ts`。
 
@@ -46,6 +47,7 @@ tags: [内存模型, 引用]
 updated: 2026-10-11
 mindmap: python-variables.mindmap.json   # 可选
 demo: python-variables                   # 可选，指向 src/demos/<名字>.astro
+terms: ["variable", "object", "identity"] # 可选，本篇要先交代清楚的名词，见「术语表」一节
 sources:                                 # 可选，正文里说法的出处，会渲染成一节「参考资料」
   - title: Python 语言参考 · 数据模型
     url: https://docs.python.org/zh-cn/3/reference/datamodel.html
@@ -54,6 +56,58 @@ sources:                                 # 可选，正文里说法的出处，�
 ```
 
 正文写普通的 markdown 就行：标题会自动生成右侧目录，代码块由 Astro 的 Shiki 做双主题高亮(深浅各一套 token 颜色)。
+
+## 术语表
+
+站点有一张 **术语表**(`/glossary/`)，把知识点里出现的名词单独收在一处。每个名词都给两段解释，这是刻意的：
+
+- **说人话** —— 一句话讲清它大概是个什么东西，允许用类比。读者卡住时看这段。
+- **准确地说** —— 定义式的说法，跟一手文档对齐。读者要查准的时候看这段。
+
+只写通俗会失真，只写专业就是这套内容原本的问题，所以两段都不能省。
+
+![术语表](docs/kb-glossary.png)
+
+![文章开头的「先弄清这几个词」](docs/kb-terms.png)
+
+![正文里的名词悬浮解释](docs/kb-term-tooltip.png)
+
+名词数据在 `src/data/glossary/`，一个分组一个文件(`common` / `python` / `java` / `ai` / `algorithm`)，类型与汇总在 `index.ts`。一条记录长这样：
+
+```ts
+{
+  id: 'sampling',              // 锚点 id，也是文章 frontmatter 里引用的 key，全站唯一
+  term: '采样',
+  en: 'sampling',
+  aliases: ['抽样'],           // 正文里可能出现的其他写法，自动标注会一起匹配
+  group: 'ai',
+  plain: '按概率"抽签"决定这一步到底输出哪个词……',
+  formal: '依概率分布随机抽取一个候选作为输出……',
+  misread: '以为模型输出的就是概率最高那个词。',   // 可选
+  related: ['temperature', 'decoding'],          // 可选
+  see: 'ai/temperature-and-sampling',            // 可选，想深入看哪篇
+  source: { title: '…', url: '…' },              // 可选，只用仓库里已在用的一手链接
+  linkable: false,                                // 可选，太通用的词设成 false，不参与正文标注
+}
+```
+
+### 文章里怎么用
+
+frontmatter 写 `terms: ["采样对应的 id", ...]`(id 一律加引号，否则 YAML 会把 `null` 这类词解析成非字符串)，然后有两件事自动发生：
+
+1. **页头多一节「先弄清这几个词」** —— 按 `terms` 的顺序把这些名词的卡片铺在正文之前，读者还没进正文就已经见过一遍。
+2. **正文自动标注** —— 这些词在正文里**第一次**出现时变成带虚线底线的链接，悬停弹出那句「说人话」，点进去是术语表里的完整条目。
+
+自动标注由 `src/lib/markdown-terms.ts` 实现，在构建期完成，产物里直接就是带链接的 HTML，不依赖客户端 JS。几条规则：
+
+- 只标注 frontmatter 里声明过的名词，不在正文里瞎猜；
+- 每个名词整篇只标第一次出现；
+- 逐文本节点处理并**往上检查祖先**，行内代码、代码块、链接、标题底下的一律不碰（只看父节点是不够的，`**加粗**` 会把文本再包一层）；
+- 拉丁字母开头的词要求词边界，免得 `token` 命中 `tokens`。
+
+> Astro 7 默认的 markdown 引擎是 Sätteri，`markdown.remarkPlugins` 已经废弃(要用得额外装 `@astrojs/markdown-remark`)。所以这里的插件是 Sätteri 的 hast 插件，通过 `markdown.processor: satteri({ hastPlugins: [...] })` 注册，见 `astro.config.mjs`。
+
+**改术语表后必须清构建缓存**：Astro 把渲染好的 markdown 缓存在 `node_modules/.astro/data-store.json`，只改插件或 `astro.config.mjs` 不会让它失效，页面看着像没生效。改完删掉这个文件再构建。
 
 ## 内容来源与版权
 
@@ -105,6 +159,9 @@ node scripts/mock-llm.mjs    # 假模型接口:http://localhost:4399
    - 讲解里的样式请用站内令牌(`var(--ink)` / `var(--line)` / `var(--accent)` 等)，这样深浅两套主题自动跟着变。
    - 动效记得在 `prefers-reduced-motion: reduce` 下关掉。
    - 参考现成的两个：`python-variables.astro`(用 `data-step` 驱动 CSS 逐帧讲解)、`ai-temperature.astro`(真算 softmax，滑块实时重画)。
+4. **补名词**：正文里凡是"上来就说它是什么"的词，先在 `src/data/glossary/` 对应分组的文件里补一条(两段解释都要写)，再把 id 填进这篇的 `terms:`。
+   - 写 id 时打错字会让构建直接失败 —— 这是故意的，术语表漏一个词比页面静默少一节更容易发现。
+   - 一个名词只写一次，多篇文章可以共用；`see` 指向最能讲清它的那篇。
 
 ## 加一个分类
 
@@ -117,6 +174,7 @@ node scripts/mock-llm.mjs    # 假模型接口:http://localhost:4399
 | 站点框架 | Astro 7(static) | 一篇文章一页静态 HTML，正文不用等 JS |
 | 知识地图 | flow-mindmap(Vue 3 island) | 现成的导图组件，`client:only="vue"` 挂载，只读预览模式 |
 | 动手讲解 | 原生 HTML/CSS/JS(每个讲解一个 `.astro`) | 不引入框架，能继承站内令牌，浅色深色自动适配 |
+| 正文名词标注 | Sätteri hast 插件(`src/lib/markdown-terms.ts`) | 构建期完成，产物直接是带链接的 HTML，不依赖客户端 JS |
 | 落地页 `/about` | React island(早先那版) | 直接复用，只在这一页加载 |
 | 样式 | Tailwind v4 + CSS 变量令牌 | 深浅两套主题共用一批语义变量 |
 | 正文高亮 | Astro 内置 Shiki(双主题) | 代码块跟随主题切换 |

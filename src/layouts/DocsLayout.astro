@@ -15,11 +15,13 @@ interface Props {
   category?: string
   /** 当前知识点 id */
   topic?: string
+  /** 不在分类树里的独立页面(目前只有 glossary),同样给侧栏高亮用 */
+  page?: string
   /** 当前文章:问答面板会把它作为上下文一起发出去 */
   article?: ArticleContext | null
 }
 
-const { title, description, category, topic, article = null } = Astro.props
+const { title, description, category, topic, page, article = null } = Astro.props
 const year = new Date().getFullYear()
 ---
 
@@ -33,6 +35,7 @@ const year = new Date().getFullYear()
       </a>
 
       <div class="ml-auto flex items-center gap-4">
+        <a href={withBase('glossary/')} class="lg-header-link hidden sm:inline">术语</a>
         <button type="button" class="lg-header-link" data-chat-open>问答</button>
         <a href={withBase('about/')} class="lg-header-link hidden sm:inline">关于</a>
         <ThemeToggle />
@@ -44,7 +47,7 @@ const year = new Date().getFullYear()
     <aside class="hidden w-[240px] shrink-0 lg:block">
       <div class="sticky top-16 max-h-[calc(100dvh-4rem)] overflow-x-hidden overflow-y-auto py-8">
         <p class="mb-3 px-3 text-[0.72rem] tracking-[0.08em] text-muted">知识分类</p>
-        <Sidebar current={category} currentTopic={topic} />
+        <Sidebar current={category} currentTopic={topic} page={page} />
       </div>
     </aside>
 
@@ -52,7 +55,7 @@ const year = new Date().getFullYear()
       <details class="mb-8 rounded-[18px] border border-line bg-surface lg:hidden">
         <summary class="cursor-pointer px-4 py-3 text-sm text-muted">分类导航</summary>
         <div class="overflow-x-hidden border-t border-line px-2 py-2">
-          <Sidebar current={category} currentTopic={topic} />
+          <Sidebar current={category} currentTopic={topic} page={page} />
         </div>
       </details>
 

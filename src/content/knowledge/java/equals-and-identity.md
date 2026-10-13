@@ -8,6 +8,7 @@ tags: [equals, hashCode, 常量池, 面试高频]
 updated: 2026-10-13
 mindmap: java-equality.mindmap.json
 demo: java-equality
+terms: ["identity", "primitive-type", "reference-type", "equals", "hashcode", "autoboxing", "wrapper-class", "string-pool", "constant-folding", "hash-collision", "bigdecimal", "null"]
 sources:
   - title: Java 语言规范 · 15.21 相等运算符
     url: https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.21
