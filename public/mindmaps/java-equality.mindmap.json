@@ -1,0 +1,60 @@
+{
+  "id": "root",
+  "text": "== 与 equals",
+  "children": [
+    {
+      "id": "op",
+      "text": "== 比什么",
+      "children": [
+        { "id": "op-1", "text": "基本类型比值", "children": [] },
+        { "id": "op-2", "text": "引用类型比身份", "children": [] },
+        { "id": "op-3", "text": "身份 = 同一个对象", "children": [] }
+      ]
+    },
+    {
+      "id": "default",
+      "text": "equals 默认实现",
+      "children": [
+        { "id": "def-1", "text": "Object 里就是 this == obj", "children": [] },
+        { "id": "def-2", "text": "重写后才比内容", "children": [] }
+      ]
+    },
+    {
+      "id": "special",
+      "text": "两个特例",
+      "children": [
+        { "id": "sp-1", "text": "String 常量池", "children": [] },
+        { "id": "sp-2", "text": "常量拼接会折叠", "children": [] },
+        { "id": "sp-3", "text": "Integer 缓存 -128~127", "children": [] }
+      ]
+    },
+    {
+      "id": "contract",
+      "text": "equals 的约定",
+      "children": [
+        { "id": "ct-1", "text": "自反 / 对称 / 传递", "children": [] },
+        { "id": "ct-2", "text": "多次调用结果一致", "children": [] },
+        { "id": "ct-3", "text": "对 null 返回 false", "children": [] }
+      ]
+    },
+    {
+      "id": "hash",
+      "text": "hashCode 一起重写",
+      "children": [
+        { "id": "hash-1", "text": "相等则哈希必须相等", "children": [] },
+        { "id": "hash-2", "text": "HashMap 靠它找桶", "children": [] },
+        { "id": "hash-3", "text": "record 自动生成", "children": [] }
+      ]
+    },
+    {
+      "id": "traps",
+      "text": "容易踩的点",
+      "children": [
+        { "id": "tr-1", "text": "Objects.equals 防 NPE", "children": [] },
+        { "id": "tr-2", "text": "BigDecimal 比刻度", "children": [] },
+        { "id": "tr-3", "text": "枚举用 ==", "children": [] },
+        { "id": "tr-4", "text": "数组用 Arrays.equals", "children": [] }
+      ]
+    }
+  ]
+}

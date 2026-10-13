@@ -1,0 +1,165 @@
+---
+// 一段代码的多语言版本,用标签页切换。
+// 高亮走 Shiki,和正文里的代码块同一套双主题(CSS 变量由 html[data-theme] 决定)。
+//
+// 用法:
+//   <CodeTabs caption="线性查一遍" snippets={[
+//     { lang: 'python', label: 'Python', code: `...` },
+//     { lang: 'java', label: 'Java', code: `...` },
+//   ]} />
+import { codeToHtml } from 'shiki'
+
+export interface CodeSnippet {
+  /** Shiki 的语言 id,如 python / java / javascript / cpp / go */
+  lang: string
+  /** 标签上显示的名字,默认用 lang */
+  label?: string
+  code: string
+}
+
+interface Props {
+  snippets: CodeSnippet[]
+  /** 这组代码在讲什么,显示在标签栏上方 */
+  caption?: string
+}
+
+const { snippets, caption } = Astro.props
+
+const rendered = await Promise.all(
+  snippets.map(async (snippet) => ({
+    label: snippet.label ?? snippet.lang,
+    html: await codeToHtml(snippet.code.trim(), {
+      lang: snippet.lang,
+      themes: { light: 'github-light-default', dark: 'github-dark-default' },
+      defaultColor: false,
+    }),
+  })),
+)
+---
+
+<div class="ct" data-code-tabs>
+  {caption ? <p class="ct-caption">{caption}</p> : null}
+
+  <div class="ct-bar" role="tablist" aria-label={caption ?? '代码语言'}>
+    {
+      rendered.map((item, index) => (
+        <button
+          type="button"
+          role="tab"
+          class="ct-tab"
+          data-tab={index}
+          data-active={String(index === 0)}
+          aria-selected={index === 0}
+        >
+          {item.label}
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="ct-panels">
+    {
+      rendered.map((item, index) => (
+        <div class="ct-panel" data-panel={index} data-show={String(index === 0)} set:html={item.html} />
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-code-tabs]')) {
+    const tabs = Array.from(root.querySelectorAll<HTMLElement>('[data-tab]'))
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-panel]'))
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const index = tab.dataset.tab
+        tabs.forEach((item) => {
+          const active = item.dataset.tab === index
+          item.dataset.active = String(active)
+          item.setAttribute('aria-selected', String(active))
+        })
+        panels.forEach((panel) => {
+          panel.dataset.show = String(panel.dataset.panel === index)
+        })
+      })
+    })
+  }
+</script>
+
+<style>
+  .ct {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--panel);
+  }
+
+  .ct-caption {
+    padding: 0.9rem 1.1rem 0;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  .ct-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding: 0.65rem 0.8rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .ct-tab {
+    padding: 0.28rem 0.8rem;
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.76rem;
+    transition: color 0.2s, background-color 0.2s;
+  }
+
+  .ct-tab:hover {
+    color: var(--ink);
+  }
+
+  .ct-tab[data-active='true'] {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .ct-panel {
+    display: none;
+  }
+
+  .ct-panel[data-show='true'] {
+    display: block;
+  }
+
+  /* Shiki 注入的 DOM 不在模板里，样式要显式放到全局作用域 */
+  .ct-panel :global(pre) {
+    overflow-x: auto;
+    margin: 0;
+    padding: 1rem 1.15rem;
+    background: transparent !important;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.75;
+  }
+
+  .ct-panel :global(pre code) {
+    font-family: inherit;
+  }
+
+  [data-theme='light'] .ct-panel :global(pre span) {
+    color: var(--shiki-light) !important;
+  }
+
+  [data-theme='dark'] .ct-panel :global(pre span) {
+    color: var(--shiki-dark) !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ct-tab {
+      transition: none;
+    }
+  }
+</style>

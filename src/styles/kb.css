@@ -94,6 +94,7 @@
   /* ---------- 侧边导航 ---------- */
   .lg-nav-item {
     display: flex;
+    min-width: 0;
     align-items: center;
     gap: 0.5rem;
     padding: 0.45rem 0.75rem;

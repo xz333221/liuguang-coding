@@ -1,6 +1,8 @@
 ---
-// 讲解:复杂度增长对比。
+// 讲解:复杂度增长对比 + 两种查找的多语言代码。
 // 五条曲线共用同一个 n,条形按最慢的 O(n²) 等比缩放,首屏直接算好,交互时在浏览器里重算。
+import CodeTabs from '../components/kb/CodeTabs.astro'
+
 const n0 = 32
 const logN0 = Math.round(Math.log2(n0))
 
@@ -14,6 +16,128 @@ const rows = [
 
 const max0 = n0 * n0
 const fmt = (value: number) => value.toLocaleString('zh-CN')
+
+// 同一个问题,四种语言。算法本身与语言无关,读自己熟的那版,对照着看别家怎么写。
+const linearSnippets = [
+  {
+    lang: 'python',
+    label: 'Python',
+    code: `
+def index_of(nums, target):
+    for i, x in enumerate(nums):
+        if x == target:
+            return i
+    return -1
+`,
+  },
+  {
+    lang: 'java',
+    label: 'Java',
+    code: `
+static int indexOf(int[] nums, int target) {
+    for (int i = 0; i < nums.length; i++) {
+        if (nums[i] == target) {
+            return i;
+        }
+    }
+    return -1;
+}
+`,
+  },
+  {
+    lang: 'javascript',
+    label: 'JavaScript',
+    code: `
+function indexOf(nums, target) {
+  for (let i = 0; i < nums.length; i += 1) {
+    if (nums[i] === target) return i
+  }
+  return -1
+}
+`,
+  },
+  {
+    lang: 'cpp',
+    label: 'C++',
+    code: `
+int indexOf(const std::vector<int>& nums, int target) {
+    for (int i = 0; i < static_cast<int>(nums.size()); ++i) {
+        if (nums[i] == target) return i;
+    }
+    return -1;
+}
+`,
+  },
+]
+
+const binarySnippets = [
+  {
+    lang: 'python',
+    label: 'Python',
+    code: `
+def bisect(nums, target):
+    lo, hi = 0, len(nums) - 1
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        if nums[mid] == target:
+            return mid
+        if nums[mid] < target:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return -1
+`,
+  },
+  {
+    lang: 'java',
+    label: 'Java',
+    code: `
+static int bisect(int[] nums, int target) {
+    int lo = 0, hi = nums.length - 1;
+    while (lo <= hi) {
+        int mid = (lo + hi) >>> 1;   // 无符号右移，避免相加溢出
+        if (nums[mid] == target) return mid;
+        if (nums[mid] < target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}
+`,
+  },
+  {
+    lang: 'javascript',
+    label: 'JavaScript',
+    code: `
+function bisect(nums, target) {
+  let lo = 0
+  let hi = nums.length - 1
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1
+    if (nums[mid] === target) return mid
+    if (nums[mid] < target) lo = mid + 1
+    else hi = mid - 1
+  }
+  return -1
+}
+`,
+  },
+  {
+    lang: 'cpp',
+    label: 'C++',
+    code: `
+int bisect(const std::vector<int>& nums, int target) {
+    int lo = 0, hi = static_cast<int>(nums.size()) - 1;
+    while (lo <= hi) {
+        int mid = lo + (hi - lo) / 2;   // 这样写不会溢出
+        if (nums[mid] == target) return mid;
+        if (nums[mid] < target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+    return -1;
+}
+`,
+  },
+]
 ---
 
 <div class="cx-demo" data-demo="complexity" data-n={n0}>
@@ -61,6 +185,17 @@ const fmt = (value: number) => value.toLocaleString('zh-CN')
   <p class="cx-foot">
     n 翻倍的时候，O(n) 也翻倍，O(n²) 翻四倍，而 O(log n) 只多一步。增长率差一级，数据一大就是几小时和几毫秒的差距。
   </p>
+
+  <div class="cx-codes">
+    <CodeTabs
+      caption="在数组里找一个数：从头扫到尾，最坏要看 n 个。这里写了四种语言，逻辑是同一个循环。"
+      snippets={linearSnippets}
+    />
+    <CodeTabs
+      caption="同样的任务，前提是数组已经排好序：每比较一次砍掉一半候选，最多比 log₂n 次。"
+      snippets={binarySnippets}
+    />
+  </div>
 </div>
 
 <script>
@@ -221,6 +356,14 @@ const fmt = (value: number) => value.toLocaleString('zh-CN')
     color: color-mix(in srgb, var(--ink) 88%, transparent);
     font-size: 0.78rem;
     line-height: 1.75;
+  }
+
+  .cx-codes {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.15rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -38,7 +38,7 @@ function topicsIn(id: string) {
                   class="lg-nav-item lg-nav-item--topic"
                   data-active={currentTopic === topic.id}
                 >
-                  <span class="truncate">{topic.data.title}</span>
+                  <span class="min-w-0 flex-1 truncate">{topic.data.title}</span>
                 </a>
               </li>
             ))}
@@ -68,7 +68,7 @@ function topicsIn(id: string) {
                         class="lg-nav-item lg-nav-item--topic"
                         data-active={currentTopic === topic.id}
                       >
-                        <span class="truncate">{topic.data.title}</span>
+                        <span class="min-w-0 flex-1 truncate">{topic.data.title}</span>
                       </a>
                     </li>
                   ))}

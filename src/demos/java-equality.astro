@@ -1,0 +1,336 @@
+---
+// 讲解:== 与 equals。
+// 五个场景都只在做同一件事:看两个引用是不是指向同一个对象。
+// 首屏渲染第一个场景,交互时在浏览器里换数据。
+interface Scene {
+  title: string
+  code: string
+  /** 两个变量是否指向同一个对象 */
+  same: boolean
+  identity: string
+  content: string
+  note: string
+}
+
+const scenes: Scene[] = [
+  {
+    title: '两个相同的字面量',
+    code: 'String a = "hello";\nString b = "hello";',
+    same: true,
+    identity: 'true',
+    content: 'true',
+    note: '字面量会驻留进常量池，两个名字拿到的是同一个对象。所以 == 也是 true。',
+  },
+  {
+    title: '一个是 new 出来的',
+    code: 'String a = "hello";\nString b = new String("hello");',
+    same: false,
+    identity: 'false',
+    content: 'true',
+    note: 'new 总是造新对象。引用不同、内容相同，这是 == 和 equals 分家的典型场面。',
+  },
+  {
+    title: '运行期拼接字符串',
+    code: 'String a = "hello";\nString b = "hel";\nb = b + "lo";',
+    same: false,
+    identity: 'false',
+    content: 'true',
+    note: '拼接里出现了变量，只能在运行期做，结果是新对象。若两边都是字面量，编译期就拼好了，== 会是 true。',
+  },
+  {
+    title: '装箱，值在缓存区间内',
+    code: 'Integer a = 127;\nInteger b = 127;',
+    same: true,
+    identity: 'true',
+    content: 'true',
+    note: '自动装箱走 Integer.valueOf，-128 到 127 会复用同一个缓存对象。',
+  },
+  {
+    title: '装箱，值超出缓存区间',
+    code: 'Integer a = 128;\nInteger b = 128;',
+    same: false,
+    identity: 'false',
+    content: 'true',
+    note: '超出缓存范围就是两次装箱、两个对象。这就是"包装类型一律用 equals"的原因。',
+  },
+]
+
+const first = scenes[0]
+---
+
+<div class="je-demo" data-demo="java-eq" data-scenes={JSON.stringify(scenes)} data-index="0">
+  <div class="je-scenes">
+    {
+      scenes.map((scene, index) => (
+        <button type="button" class="je-scene" data-scene={index} data-active={String(index === 0)}>
+          {scene.title}
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="je-body">
+    <section class="je-pane">
+      <p class="je-pane-title">代码</p>
+      <pre class="je-code" data-code>{first.code}</pre>
+    </section>
+
+    <section class="je-pane">
+      <p class="je-pane-title">内存里</p>
+      <div class="je-mem" data-same={String(first.same)}>
+        <div class="je-ref">
+          <span class="je-name">a</span>
+          <span class="je-arrow">→</span>
+          <span class="je-obj" data-obj-a>对象 1</span>
+        </div>
+        <div class="je-ref">
+          <span class="je-name">b</span>
+          <span class="je-arrow">→</span>
+          <span class="je-obj" data-obj-b>对象 1</span>
+        </div>
+        <p class="je-same-text" data-same-text>两个变量指向同一个对象</p>
+      </div>
+
+      <div class="je-results">
+        <p class="je-result">
+          <span class="je-op">a == b</span>
+          <span class="je-badge" data-identity data-value="true">true</span>
+        </p>
+        <p class="je-result">
+          <span class="je-op">a.equals(b)</span>
+          <span class="je-badge" data-content data-value="true">true</span>
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <p class="je-note" data-note>{first.note}</p>
+  <p class="je-tip">场景里的对象编号只是示意:编号相同表示同一个对象，不同表示各是各的。</p>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-demo="java-eq"]')
+
+  if (root) {
+    interface Scene {
+      title: string
+      code: string
+      same: boolean
+      identity: string
+      content: string
+      note: string
+    }
+
+    const scenes = JSON.parse(root.dataset.scenes ?? '[]') as Scene[]
+    const sceneBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-scene]'))
+    const code = root.querySelector<HTMLElement>('[data-code]')
+    const mem = root.querySelector<HTMLElement>('.je-mem')
+    const objA = root.querySelector<HTMLElement>('[data-obj-a]')
+    const objB = root.querySelector<HTMLElement>('[data-obj-b]')
+    const sameText = root.querySelector<HTMLElement>('[data-same-text]')
+    const identity = root.querySelector<HTMLElement>('[data-identity]')
+    const content = root.querySelector<HTMLElement>('[data-content]')
+    const note = root.querySelector<HTMLElement>('[data-note]')
+
+    const render = (index: number) => {
+      const scene = scenes[index]
+      if (!scene) return
+
+      root.dataset.index = String(index)
+      sceneBtns.forEach((btn, i) => {
+        btn.dataset.active = String(i === index)
+      })
+
+      if (code) code.textContent = scene.code
+      if (mem) mem.dataset.same = String(scene.same)
+      if (objA) objA.textContent = '对象 1'
+      if (objB) objB.textContent = scene.same ? '对象 1' : '对象 2'
+      if (sameText) sameText.textContent = scene.same ? '两个变量指向同一个对象' : '两个变量指向各自的对象'
+      if (identity) {
+        identity.textContent = scene.identity
+        identity.dataset.value = scene.identity
+      }
+      if (content) {
+        content.textContent = scene.content
+        content.dataset.value = scene.content
+      }
+      if (note) note.textContent = scene.note
+    }
+
+    sceneBtns.forEach((btn) => {
+      btn.addEventListener('click', () => render(Number(btn.dataset.scene ?? 0)))
+    })
+
+    render(0)
+  }
+</script>
+
+<style>
+  .je-demo {
+    padding: 1.15rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+  }
+
+  .je-scenes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .je-scene {
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.76rem;
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+  }
+
+  .je-scene:hover {
+    border-color: var(--line-strong);
+    color: var(--ink);
+  }
+
+  .je-scene[data-active='true'] {
+    border-color: transparent;
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .je-body {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1.1rem;
+  }
+
+  @media (min-width: 720px) {
+    .je-body {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+
+  .je-pane-title {
+    margin-bottom: 0.6rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+  }
+
+  .je-code {
+    overflow-x: auto;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.8;
+    white-space: pre;
+  }
+
+  .je-mem {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .je-ref {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel);
+  }
+
+  .je-name {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+
+  .je-arrow {
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  .je-obj {
+    margin-left: auto;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--muted);
+    font-size: 0.74rem;
+    transition: color 0.25s;
+  }
+
+  .je-mem[data-same='true'] .je-obj {
+    color: var(--highlight);
+  }
+
+  .je-same-text {
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .je-results {
+    display: grid;
+    gap: 0.45rem;
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .je-result {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .je-op {
+    font-family: var(--font-mono);
+    color: var(--muted);
+  }
+
+  .je-badge {
+    margin-left: auto;
+    padding: 0.1rem 0.6rem;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .je-badge[data-value='true'] {
+    background: var(--accent-soft);
+    color: var(--highlight);
+  }
+
+  .je-badge[data-value='false'] {
+    border: 1px solid var(--line);
+    color: var(--muted);
+  }
+
+  .je-note {
+    margin-top: 1.1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    color: color-mix(in srgb, var(--ink) 88%, transparent);
+    font-size: 0.82rem;
+    line-height: 1.75;
+  }
+
+  .je-tip {
+    margin-top: 0.45rem;
+    color: var(--muted);
+    font-size: 0.74rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .je-scene,
+    .je-obj {
+      transition: none;
+    }
+  }
+</style>

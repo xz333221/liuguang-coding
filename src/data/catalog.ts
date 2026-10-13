@@ -37,9 +37,8 @@ export const catalog: Category[] = [
       {
         id: 'java',
         name: 'Java',
-        intro: '类型系统、JVM 内存、集合与并发。',
-        status: 'soon',
-        note: '紧随 Python 之后开始整理',
+        intro: '从对象与引用的比较规则开始,再到集合、JVM 内存与并发。',
+        status: 'active',
       },
     ],
   },

@@ -42,7 +42,7 @@ const year = new Date().getFullYear()
 
   <div class="mx-auto flex max-w-[1240px] gap-10 px-5 md:px-8">
     <aside class="hidden w-[240px] shrink-0 lg:block">
-      <div class="sticky top-16 max-h-[calc(100dvh-4rem)] overflow-y-auto py-8">
+      <div class="sticky top-16 max-h-[calc(100dvh-4rem)] overflow-x-hidden overflow-y-auto py-8">
         <p class="mb-3 px-3 text-[0.72rem] tracking-[0.08em] text-muted">知识分类</p>
         <Sidebar current={category} currentTopic={topic} />
       </div>
@@ -51,7 +51,7 @@ const year = new Date().getFullYear()
     <main id="main" class="min-w-0 flex-1 py-8 lg:py-10">
       <details class="mb-8 rounded-[18px] border border-line bg-surface lg:hidden">
         <summary class="cursor-pointer px-4 py-3 text-sm text-muted">分类导航</summary>
-        <div class="border-t border-line px-2 py-2">
+        <div class="overflow-x-hidden border-t border-line px-2 py-2">
           <Sidebar current={category} currentTopic={topic} />
         </div>
       </details>
