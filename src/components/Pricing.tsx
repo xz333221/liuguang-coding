@@ -1,6 +1,6 @@
 import { Check } from '@phosphor-icons/react'
 import { plans } from '../data/site'
-import { ActionLink } from './ui/Actions'
+import { ActionButton, ActionLink } from './ui/Actions'
 import { Reveal } from './ui/Reveal'
 import { SectionHeader } from './ui/SectionHeader'
 
@@ -44,13 +44,23 @@ export function Pricing() {
                 </ul>
 
                 <div className="mt-auto pt-8">
-                  <ActionLink
-                    href="#preview"
-                    variant={plan.emphasis ? 'primary' : 'ghost'}
-                    className="w-full sm:w-auto"
-                  >
-                    {plan.cta}
-                  </ActionLink>
+                  {plan.soldOut ? (
+                    <ActionButton
+                      variant={plan.emphasis ? 'primary' : 'ghost'}
+                      disabled
+                      className="w-full sm:w-auto"
+                    >
+                      {plan.cta}
+                    </ActionButton>
+                  ) : (
+                    <ActionLink
+                      href="#preview"
+                      variant={plan.emphasis ? 'primary' : 'ghost'}
+                      className="w-full sm:w-auto"
+                    >
+                      {plan.cta}
+                    </ActionLink>
+                  )}
                 </div>
               </article>
             </Reveal>

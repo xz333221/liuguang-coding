@@ -74,6 +74,7 @@ export function PreviewRequest() {
                   autoComplete="email"
                   inputMode="email"
                   value={email}
+                  disabled={previewRequest.soldOut}
                   onChange={(event) => {
                     setEmail(event.target.value)
                     if (invalid) setStatus('idle')
@@ -81,11 +82,15 @@ export function PreviewRequest() {
                   placeholder={previewRequest.placeholder}
                   aria-invalid={invalid}
                   aria-describedby={invalid ? 'preview-email-error' : 'preview-email-hint'}
-                  className={`w-full rounded-full border bg-canvas px-5 py-3 text-sm text-ink placeholder:text-muted ${
+                  className={`w-full rounded-full border bg-canvas px-5 py-3 text-sm text-ink placeholder:text-muted disabled:cursor-not-allowed disabled:opacity-60 ${
                     invalid ? 'border-highlight' : 'border-line'
                   }`}
                 />
-                <ActionButton type="submit" disabled={sending} className="shrink-0">
+                <ActionButton
+                  type="submit"
+                  disabled={sending || previewRequest.soldOut}
+                  className="shrink-0"
+                >
                   {sending ? (
                     <>
                       <CircleNotch size={16} className="animate-spin" />

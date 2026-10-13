@@ -164,6 +164,7 @@ export const plans = [
     items: ['全部基础课程', '每门课的项目代码', '社区提问'],
     cta: '免费开始学习',
     emphasis: false,
+    soldOut: false,
   },
   {
     name: '会员',
@@ -176,8 +177,10 @@ export const plans = [
       '一对一答疑，每月两次',
       '结课后的项目复盘',
     ],
-    cta: '加入会员',
+    cta: '已售罄',
     emphasis: true,
+    // 课程还没做出来,先不让下单
+    soldOut: true,
   },
 ]
 
@@ -188,7 +191,9 @@ export const previewRequest = {
   label: '邮箱地址',
   hint: '只用来发这节课，不会转给第三方。',
   placeholder: 'you@example.com',
-  submit: '发到我邮箱',
+  submit: '已售罄',
+  // 还没有课程内容可发,先关掉这个入口
+  soldOut: true,
   success: '已收到。当前是演示站点，不会真的发信。',
 }
 
