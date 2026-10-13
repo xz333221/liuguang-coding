@@ -99,6 +99,8 @@ export function linkEntries(ids: string[]): LinkEntry[] {
   for (const term of resolveTerms(ids)) {
     if (term.linkable === false) continue
     for (const name of [term.term, ...(term.aliases ?? [])]) {
+      // 空串会匹配在任意位置且长度为 0,正文标注那边会原地打转,这里先挡掉
+      if (!name) continue
       entries.push({ name, id: term.id, plain: term.plain })
     }
   }
