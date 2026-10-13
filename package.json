@@ -23,7 +23,7 @@
     "astro": "^7.3.8",
     "dompurify": "^3.4.16",
     "express": "^5.3.0",
-    "flow-mindmap": "^0.6.4",
+    "flow-mindmap": "^0.6.5",
     "marked": "^18.1.0",
     "motion": "^14.1.0",
     "react": "^19.2.8",

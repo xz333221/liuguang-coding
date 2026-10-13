@@ -63,7 +63,13 @@ onBeforeUnmount(() => observer?.disconnect())
       {{ state === 'loading' ? '导图加载中…' : '导图没能加载出来，正文里有完整内容。' }}
     </p>
     <template v-else-if="data">
-      <MindMap :data="data" :theme="theme" :preview-mode="true" class="lg-mindmap-canvas" />
+      <MindMap
+        :data="data"
+        :theme="theme"
+        :preview-mode="true"
+        :hide-canvas-actions="true"
+        class="lg-mindmap-canvas"
+      />
     </template>
   </div>
 </template>
@@ -93,8 +99,6 @@ onBeforeUnmount(() => observer?.disconnect())
   text-align: center;
 }
 
-/* 预览模式里留了一个"退出预览模式"按钮。嵌在知识库里不需要它,隐藏掉。 */
-.lg-mindmap :deep(button[aria-label='退出预览模式']) {
-  display: none;
-}
+/* 画布上的操作按钮(退出预览 / 大纲视图)由 flow-mindmap 的 hide-canvas-actions
+   关掉:只读嵌入不需要它们——预览模式下大纲抽屉是强制关闭的,那两个按钮点了没反应。 */
 </style>
