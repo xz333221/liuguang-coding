@@ -38,7 +38,7 @@ export interface Term {
   misread?: string
   /** 相关名词 id,页面底部会互相跳 */
   related?: string[]
-  /** 想深入看哪篇知识点,写成 <分类>/<文件名>,例如 python/variables-are-not-boxes */
+  /** 想深入看哪篇知识点,写成 <分类>/<文件名>,例如 python/variable-is-a-name */
   see?: string
   /** 定义出处,只用仓库里已经在用的一手链接 */
   source?: TermSource

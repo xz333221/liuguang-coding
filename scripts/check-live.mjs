@@ -3,7 +3,7 @@ const base = process.argv[2] ?? 'https://coding.flowdash.cn'
 
 const targets = [
   ['首页', `${base}/`],
-  ['知识点页', `${base}/python/variables-are-not-boxes/`],
+  ['知识点页', `${base}/python/variable-is-a-name/`],
   ['AI 知识点页', `${base}/ai/temperature-and-sampling/`],
   ['导图 JSON', `${base}/mindmaps/python-variables.mindmap.json`],
   ['健康检查', `${base}/api/health`],

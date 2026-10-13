@@ -11,7 +11,7 @@ export const aiTerms: Term[] = [
     aliases: ['词元'],
     group: 'ai',
     plain:
-      '模型眼里的"最小一块文字"。它既不按字切也不按词切:常见的词可能占一块，不常见的长词会被切成好几块。',
+      '模型眼里的"最小一块文字"。常见的词可能占一块，不常见的长词会被切成好几块 —— 切法跟着词表走，与汉字或单词的边界无关。',
     formal:
       '文本经分词器切分后得到的最小输入输出单位，在词表中对应一个整数 id。上下文长度、生成步数与计费都以 token 计。',
     related: ['vocabulary', 'context-window'],
@@ -50,7 +50,7 @@ export const aiTerms: Term[] = [
       '模型给每个候选打的"原始分"。可以是 4.2，也可以是 -7.3，越大表示模型越觉得下一个词应该是它。',
     formal:
       '神经网络最后一层输出的未归一化实数分数。经 softmax（可含温度缩放）后成为概率分布。',
-    misread: '把 logit 当概率。它既不在 0 到 1 之间，加起来也不等于 1。',
+    misread: '把 logit 当概率。它描述的是相对偏好，要经 softmax 之后才成为概率。',
     related: ['softmax', 'probability-distribution', 'vocabulary'],
     see: 'ai/temperature-and-sampling',
   },
@@ -83,10 +83,10 @@ export const aiTerms: Term[] = [
     aliases: ['抽样'],
     group: 'ai',
     plain:
-      '按概率"抽签"决定这一步到底输出哪个词。概率大的更容易被抽中，但不是必然被抽中 —— 所以同一个问题问两遍，答案可能不一样。',
+      '按概率"抽签"决定这一步到底输出哪个词。概率大的更容易被抽中，概率小的也留着机会 —— 所以同一个问题问两遍，答案可能不一样。',
     formal:
       '依概率分布随机抽取一个候选作为输出。它引入随机性，因此同一输入两次结果可能不同;固定随机种子可复现。',
-    misread: '以为模型输出的就是概率最高那个词。只有在贪心解码下才是，开了采样就不是了。',
+    misread: '以为模型输出的就是概率最高那个词。贪心解码下确实如此;开了采样，抽中的是随机的一个。',
     related: ['temperature', 'decoding', 'seed'],
     see: 'ai/temperature-and-sampling',
     source: {
@@ -100,10 +100,10 @@ export const aiTerms: Term[] = [
     en: 'temperature',
     group: 'ai',
     plain:
-      '采样时的一个"胆子旋钮"。调低更保守，调高更发散。它不改模型的判断，只改你从判断里抽签的方式。',
+      '采样时的一个"胆子旋钮"。调低更保守，调高更发散。它调的是"怎么从模型的判断里抽签"。',
     formal:
       'softmax 中的缩放因子 T:p_i ∝ exp(z_i / T)。T 趋近 0 退化为贪心，T = 1 使用原始分布，T > 1 使分布更平坦。仅在采样时生效。',
-    misread: '以为温度高等于更有创造力。它只是把长尾抬起来，并不区分"有创意"和"跑题"。',
+    misread: '以为温度高等于更有创造力。它只是把长尾抬起来，"有创意"和"跑题"会一起被抬高。',
     related: ['sampling', 'softmax', 'top-p'],
     see: 'ai/temperature-and-sampling',
   },
@@ -198,7 +198,7 @@ export const aiTerms: Term[] = [
     en: 'prompt',
     aliases: ['提示'],
     group: 'ai',
-    plain: '你给模型的输入。它决定了模型是在什么前提下开始猜下一个词 —— 但它不改模型本身。',
+    plain: '你给模型的输入。它决定了模型是在什么前提下开始猜下一个词，模型的参数保持原样。',
     formal:
       '送入模型的输入文本（含 system 等角色划分）。提示词不改变模型参数，只改变条件分布。',
     related: ['context-window', 'language-model'],
@@ -209,7 +209,7 @@ export const aiTerms: Term[] = [
     term: '上下文窗口',
     en: 'context window',
     group: 'ai',
-    plain: '模型一次能"看见"的文字总量上限。超出去的部分它根本看不到，不是"记性差"。',
+    plain: '模型一次能"看见"的文字总量上限。超出去的部分它根本看不到。',
     formal:
       '单次前向计算可处理的 token 上限，由位置编码与注意力开销决定。注意力对序列长度是 O(n²)，这是窗口有限且昂贵的根源。',
     related: ['token', 'attention'],

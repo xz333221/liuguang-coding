@@ -7,7 +7,7 @@ export const algorithmTerms: Term[] = [
     term: '时间复杂度',
     en: 'time complexity',
     group: 'algorithm',
-    plain: '输入变大时，工作量涨得多快。它回答的不是"跑几秒"，而是"规模翻倍会怎样"。',
+    plain: '输入变大时，工作量涨得多快。它回答的是"规模翻倍会怎样"。',
     formal:
       '描述算法执行的基本操作次数随输入规模增长的量级，用渐进记号表示，忽略常数因子与低阶项。',
     related: ['big-o', 'space-complexity', 'growth-rate'],
@@ -30,7 +30,7 @@ export const algorithmTerms: Term[] = [
     en: 'Big-O notation',
     aliases: ['大 O', '大O'],
     group: 'algorithm',
-    plain: '一个"上界":不管输入怎么变，工作量再糟也不会超过这个量级。它是个承诺，不是精确值。',
+    plain: '一个"上界":不管输入怎么变，工作量再糟也不会超过这个量级。它给的是承诺，实际次数可以更少。',
     formal:
       'f(n) = O(g(n)) 表示存在常数 c 与 n₀，使 n ≥ n₀ 时 f(n) ≤ c·g(n)。只给上界，不保证紧。',
     related: ['big-omega', 'big-theta', 'asymptotic-analysis'],
@@ -81,7 +81,7 @@ export const algorithmTerms: Term[] = [
     en: 'growth rate',
     group: 'algorithm',
     plain: '输入翻倍，工作量涨几倍 —— 这个"倍数的规律"就是增长率，也是复杂度真正在比的东西。',
-    formal: '函数随自变量增大而变化的相对速度。复杂度比较的是增长率，不是某个规模下的具体取值。',
+    formal: '函数随自变量增大而变化的相对速度。复杂度比较的是增长率，也就是两个规模之间取值的相对变化。',
     related: ['time-complexity', 'asymptotic-analysis'],
     see: 'algorithm/complexity-is-about-growth',
   },
@@ -136,7 +136,7 @@ export const algorithmTerms: Term[] = [
     term: '二分查找',
     en: 'binary search',
     group: 'algorithm',
-    plain: '每次砍一半。100 万个数最多看 20 次 —— 不是"比线性的快一点"，而是每多一倍数据才多花一步。',
+    plain: '每次砍一半。100 万个数最多看 20 次 —— 数据每多一倍，才多花一步。',
     formal:
       '在有序序列上每次将候选区间减半的查找算法，时间复杂度 O(log n)，要求随机访问与有序性。',
     related: ['big-o', 'input-size'],

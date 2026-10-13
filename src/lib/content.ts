@@ -27,7 +27,7 @@ export function termHref(id: string): string {
   return `${glossaryPath()}#${id}`
 }
 
-/** 知识点地址,传 'python/variables-are-not-boxes' 这种形式 */
+/** 知识点地址,传 'python/variable-is-a-name' 这种形式 */
 export function topicHref(path: string): string {
   return withBase(`${path}/`)
 }

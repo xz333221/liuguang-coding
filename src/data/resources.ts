@@ -37,7 +37,7 @@ export const resources: ResourceGroup[] = [
       {
         title: 'Python 语言参考',
         url: 'https://docs.python.org/zh-cn/3/reference/index.html',
-        note: '讲"语言怎么定义"而不是"怎么用"。数据模型那一章是理解变量与对象的权威依据。',
+        note: '讲的是"语言怎么定义"。数据模型那一章是理解变量与对象的权威依据。',
         lang: '中文',
         free: true,
       },

@@ -1,6 +1,6 @@
 {
   "id": "root",
-  "text": "变量不是盒子",
+  "text": "变量是一个名字",
   "children": [
     {
       "id": "names",

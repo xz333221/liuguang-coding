@@ -8,7 +8,7 @@ export const javaTerms: Term[] = [
     en: 'primitive type',
     group: 'java',
     plain:
-      'Java 里八个"不是对象"的类型。变量里直接装着值本身，没有引用可指 —— 所以 == 比的就是值。',
+      'Java 里八种直接装着值本身的类型。变量里没有引用可指 —— 所以 == 比的就是值。',
     formal:
       'byte / short / int / long / float / double / char / boolean 八种内置类型，直接持有值，== 比较值本身。',
     related: ['reference-type', 'wrapper-class'],
@@ -20,7 +20,7 @@ export const javaTerms: Term[] = [
     en: 'reference type',
     group: 'java',
     plain:
-      '除那八个之外的一切:类、接口、数组、枚举。变量里装的不是对象本身，而是指向对象的引用。',
+      '除那八个之外的一切:类、接口、数组、枚举。变量里装着指向对象的引用。',
     formal:
       '类、接口、数组、枚举等类型，其变量持有对对象的引用;== 比较两个引用是否指向同一对象，即语言规范 15.21 的引用相等。',
     related: ['primitive-type', 'identity'],
@@ -93,7 +93,7 @@ export const javaTerms: Term[] = [
     term: '哈希冲突',
     en: 'hash collision',
     group: 'java',
-    plain: '两个不同的东西算出了同一个哈希值。这很正常，不是错，集合会在桶里再用 equals 认一遍。',
+    plain: '两个不同的东西算出了同一个哈希值。这很正常，集合会在桶里再用 equals 认一遍。',
     formal:
       '不同对象产生相同哈希值的现象。哈希表用链地址法或开放寻址法处理，此时再逐个 equals 确认。',
     related: ['hashcode', 'hash-table'],
@@ -131,7 +131,7 @@ export const javaTerms: Term[] = [
     term: 'null',
     group: 'java',
     plain:
-      '"什么都没指"的那个特殊值。对着 null 调方法不会返回什么，而是当场抛 NullPointerException。',
+      '"什么都没指"的那个特殊值。对着 null 调方法，会当场抛 NullPointerException。',
     formal:
       '引用类型的默认值，表示不指向任何对象。对 null 调用实例方法抛 NullPointerException;Objects.equals / Objects.requireNonNull 用于规避。',
     related: ['reference-type'],

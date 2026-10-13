@@ -14,7 +14,7 @@ export const pythonTerms: Term[] = [
       '可变类型实现了就地修改操作;不可变对象的一切"修改"都返回新对象。注意不可变容器只保证它直接引用的那些对象不变，元组里装个列表，列表照样能改。',
     misread: '把"不可变"理解成"里面装的东西也冻结了"。元组只保证元素指向不变，不保证元素自身不变。',
     related: ['in-place', 'shallow-copy'],
-    see: 'python/variables-are-not-boxes',
+    see: 'python/variable-is-a-name',
   },
   {
     id: 'iterable',
@@ -25,7 +25,7 @@ export const pythonTerms: Term[] = [
       '"能被 for 走一遍的东西"。列表、字符串、字典、文件都是。它自己不记走到哪儿了，每次要遍历都现给一个游标。',
     formal:
       '实现了 __iter__() 并返回一个迭代器的对象，iter() 内置函数接受它。可迭代对象本身不一定是迭代器。',
-    misread: '以为"能下标访问就是可迭代"。真正的要求是有 __iter__，而不是 __getitem__。',
+    misread: '以为"能下标访问就是可迭代"。真正的要求是有 __iter__。',
     related: ['iterator', 'iteration-protocol'],
     see: 'python/iterators-and-generators',
     source: {
@@ -67,7 +67,7 @@ export const pythonTerms: Term[] = [
     en: 'generator',
     group: 'python',
     plain:
-      '用函数写的迭代器。函数体里出现 yield，调用它拿到的就不是结果，而是一个能一个一个往外吐值的对象，吐到哪儿就停在哪儿。',
+      '用函数写的迭代器。函数体里出现 yield，调用它拿到的是一个能一个一个往外吐值的对象，吐到哪儿就停在哪儿。',
     formal:
       '调用含 yield 的函数所返回的对象，自动实现迭代器协议。函数体在首次 next() 时才执行，yield 处挂起并保留全部局部状态。',
     misread: '以为 g = f() 会执行函数体。只要函数体里有 yield，这一行一行都不会跑。',
@@ -80,7 +80,7 @@ export const pythonTerms: Term[] = [
     term: 'yield',
     group: 'python',
     plain:
-      '不是"返回"，是"暂停"。暂停的时候把当前进度留在原地，下次从这儿接着跑 —— 这就是生成器"记得自己走到哪"的原因。',
+      '作用是"暂停"。暂停的时候把当前进度留在原地，下次从这儿接着跑 —— 这就是生成器"记得自己走到哪"的原因。',
     formal:
       '生成器函数内的表达式，求值后把值交给调用方并挂起当前帧，恢复时从挂起处继续。yield 表达式本身也有值，可由 send() 提供。',
     related: ['generator', 'coroutine'],
@@ -96,7 +96,7 @@ export const pythonTerms: Term[] = [
     en: 'lazy evaluation',
     group: 'python',
     plain:
-      '要一个算一个，不提前把整批算好。数据装不下、或者根本用不完的时候，这不是优化，是唯一可行的做法。',
+      '要一个算一个，不提前把整批算好。数据装不下、或者根本用不完的时候，它就成了唯一可行的做法。',
     formal:
       '把表达式的求值推迟到其值真正被需要时进行。生成器与生成器表达式是 Python 里最常见的惰性结构，能表示无限序列并压低峰值内存。',
     related: ['generator', 'generator-expression'],
@@ -106,10 +106,10 @@ export const pythonTerms: Term[] = [
     id: 'stop-iteration',
     term: 'StopIteration',
     group: 'python',
-    plain: '迭代器说"没有了"的那声招呼。它是正常流程的一部分，不是错误。',
+    plain: '迭代器说"没有了"的那声招呼。它是正常流程的一部分。',
     formal:
       '迭代器耗尽时由 __next__ 抛出的内置异常。for 捕获它并正常结束循环;生成器函数里显式 return 也会被转换成它。',
-    misread: '把它当异常到处捕。捕掉之后循环不会结束，而是直接跳出去，后面的元素全丢了。',
+    misread: '把它当异常到处捕。捕掉之后循环会直接跳出去，后面的元素全丢了。',
     related: ['iterator', 'iteration-protocol'],
     see: 'python/iterators-and-generators',
   },
@@ -130,7 +130,7 @@ export const pythonTerms: Term[] = [
     term: '生成器表达式',
     en: 'generator expression',
     group: 'python',
-    plain: '推导式的圆括号版本。不立刻算，而是边取边算，也不占一整块内存。',
+    plain: '推导式的圆括号版本。它边取边算，也不占一整块内存。',
     formal:
       '(expr for x in it) 形式，返回生成器而非列表，惰性求值，且只能遍历一次。',
     related: ['list-comprehension', 'generator'],
@@ -146,7 +146,7 @@ export const pythonTerms: Term[] = [
     formal:
       '新建复合对象，并把原对象各项的引用填进去。list(x)、x[:]、x.copy()、copy.copy() 都是浅拷贝。',
     related: ['deep-copy', 'reference'],
-    see: 'python/variables-are-not-boxes',
+    see: 'python/variable-is-a-name',
     source: { title: 'copy 模块', url: 'https://docs.python.org/zh-cn/3/library/copy.html' },
   },
   {
@@ -158,7 +158,7 @@ export const pythonTerms: Term[] = [
     formal:
       '递归复制对象及其包含的所有对象，内部用 memo 字典记录已复制过的对象，因此循环引用不会无限递归。copy.deepcopy()。',
     related: ['shallow-copy', 'view-and-copy'],
-    see: 'python/variables-are-not-boxes',
+    see: 'python/variable-is-a-name',
     source: { title: 'copy 模块', url: 'https://docs.python.org/zh-cn/3/library/copy.html' },
   },
   {
@@ -171,7 +171,7 @@ export const pythonTerms: Term[] = [
     formal:
       '视图与原对象共享底层存储，互相的修改彼此可见;副本拥有独立存储。pandas 切片、numpy 切片以及 inplace 参数都属于这一类。',
     related: ['shallow-copy', 'deep-copy'],
-    see: 'python/variables-are-not-boxes',
+    see: 'python/variable-is-a-name',
   },
   {
     id: 'default-argument',
@@ -184,7 +184,7 @@ export const pythonTerms: Term[] = [
       '默认值在函数定义执行时求值一次并保存在 __defaults__ 中，后续调用复用。可变默认值因此在调用间共享状态，惯用写法是用 None 占位。',
     misread: '以为每次调用都会重新创建默认值。只有定义那一次会。',
     related: ['mutable-immutable', 'binding'],
-    see: 'python/variables-are-not-boxes',
+    see: 'python/variable-is-a-name',
     source: {
       title: 'Python 官方 FAQ · 程序设计',
       url: 'https://docs.python.org/zh-cn/3/faq/programming.html',
@@ -199,7 +199,7 @@ export const pythonTerms: Term[] = [
     formal:
       'CPython 的主要内存管理机制，可用 sys.getrefcount() 读，但该函数自身会多算一次。循环引用需要额外的循环检测器兜底。',
     related: ['garbage-collection', 'reference'],
-    see: 'python/variables-are-not-boxes',
+    see: 'python/variable-is-a-name',
   },
   {
     id: 'magic-method',
@@ -212,7 +212,7 @@ export const pythonTerms: Term[] = [
     formal:
       '由语言在特定语法或内置操作下隐式调用的方法，如 __iter__、__next__、__eq__、__iadd__。它们构成对象与语言语法之间的接口。',
     related: ['protocol', 'iteration-protocol'],
-    see: 'python/variables-are-not-boxes',
+    see: 'python/variable-is-a-name',
   },
   {
     id: 'augmented-assignment',
@@ -225,7 +225,7 @@ export const pythonTerms: Term[] = [
     formal:
       '+=、*= 等先尝试 __iadd__ 等就地方法，不存在时退回 __add__ 再赋值。因此对列表是就地扩展（别名可见），对元组、字符串是新对象（别名不可见）。',
     related: ['in-place', 'magic-method', 'binding'],
-    see: 'python/variables-are-not-boxes',
+    see: 'python/variable-is-a-name',
   },
   {
     id: 'coroutine',

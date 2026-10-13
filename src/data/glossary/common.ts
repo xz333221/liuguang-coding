@@ -11,7 +11,7 @@ export const commonTerms: Term[] = [
     en: 'object',
     group: 'common',
     plain:
-      '程序里一个"有身份、有类型、有内容"的东西。数字 1、字符串 "hi"、一个列表、一个函数，全都是对象 —— 不是只有"类的实例"才配叫对象。',
+      '程序里一个"有身份、有类型、有内容"的东西。数字 1、字符串 "hi"、一个列表、一个函数，全都是对象。',
     formal:
       '运行期存在的一块数据实体，带三个属性:身份（identity，创建后不变）、类型（type，决定它能参与哪些操作）、值（value，可能变也可能不变）。',
     related: ['identity', 'type', 'value'],
@@ -28,7 +28,7 @@ export const commonTerms: Term[] = [
       '对象在内存中的唯一标识，在对象的整个存活期内保持不变。Python 里 id() 返回它、is 比较它;Java 里 == 对引用类型比较它。',
     misread: '以为身份和值是一回事。两个列表内容完全一样，值相等，但仍是两个对象、两个身份。',
     related: ['value', 'reference'],
-    see: 'python/variables-are-not-boxes',
+    see: 'python/variable-is-a-name',
   },
   {
     id: 'value',
@@ -57,12 +57,12 @@ export const commonTerms: Term[] = [
     aliases: ['变量盒子'],
     group: 'common',
     plain:
-      '变量不是"装东西的盒子"，而是一个名字。名字贴在某个对象上;赋值就是把这个名字挪到另一个对象上去，盒子里的东西一点没动。',
+      '一个名字，这个名字贴在某个对象上。赋值就是把这个名字挪到另一个对象上去，原来那个对象一点没动。',
     formal:
       '命名空间中的一个条目，其值为对某个对象的引用。重新赋值只改变这个条目的指向，不修改对象本身。',
-    misread: '把变量想成盒子，于是以为 b = a 是"把 a 的内容倒进 b"，进而推不出"改 b 会影响 a"。',
+    misread: '把变量想成"装东西的盒子"，于是以为 b = a 是"把 a 的内容倒进 b"，进而推不出"改 b 会影响 a"。',
     related: ['binding', 'reference', 'namespace'],
-    see: 'python/variables-are-not-boxes',
+    see: 'python/variable-is-a-name',
   },
   {
     id: 'binding',
@@ -72,14 +72,14 @@ export const commonTerms: Term[] = [
     plain: '名字和对象之间连的那根线。a = [1, 2] 做的事就是拉一根线，把名字 a 连到那个列表上。',
     formal: '名字与实体之间的关联。绑定可以被重新建立（重新赋值），也可以被作用域限制可见范围。',
     related: ['variable', 'namespace'],
-    see: 'python/variables-are-not-boxes',
+    see: 'python/variable-is-a-name',
   },
   {
     id: 'reference',
     term: '引用',
     en: 'reference',
     group: 'common',
-    plain: '不是对象本身，而是"指向对象的那根线"。把线复制一份，两个名字仍然指着同一个东西。',
+    plain: '一根指向对象的线。把线复制一份，两个名字仍然指着同一个东西。',
     formal:
       '指向对象的间接值，通过它访问目标对象。复制引用不复制对象，因此经任一引用做的就地修改，对另一方都可见。',
     related: ['identity', 'in-place', 'pass-by-value'],
@@ -93,7 +93,7 @@ export const commonTerms: Term[] = [
     formal:
       '名字到对象的映射表。Python 里模块级名字在 globals()、函数内名字在 locals();Java 里包名承担类似的分隔作用。',
     related: ['binding', 'variable'],
-    see: 'python/variables-are-not-boxes',
+    see: 'python/variable-is-a-name',
   },
   {
     id: 'protocol',
@@ -217,9 +217,9 @@ export const commonTerms: Term[] = [
       '函数调用时，参数是"抄一份递进去"还是"把原件直接递进去"。Python 和 Java 都是抄一份 —— 只不过抄的可能是那根指向对象的线。',
     formal:
       '值传递复制实参的值，引用传递传递实参本身。Java 与 Python 均为值传递;对引用类型而言复制的是引用，所以被调方就地修改对象调用方看得见，重新绑定形参则看不见。',
-    misread: '看到"函数里改了列表，外面也变了"就以为 Java / Python 是引用传递。改的是对象，不是那根线。',
+    misread: '看到"函数里改了列表，外面也变了"就以为 Java / Python 是引用传递。改的始终是对象，那根线一直没动。',
     related: ['reference', 'in-place'],
-    see: 'python/variables-are-not-boxes',
+    see: 'python/variable-is-a-name',
   },
   {
     id: 'in-place',
@@ -228,8 +228,8 @@ export const commonTerms: Term[] = [
     group: 'common',
     plain: '直接在原来那个东西上改，不另造一个。所以拿到它的其他名字，也会跟着变。',
     formal:
-      '在原对象上直接修改内容而不创建新对象的操作。这类方法通常返回 None / void，以免调用方误以为拿到了新对象。',
+      '在原对象上直接修改内容的操作，执行完对象还是原来那一个。这类方法通常返回 None / void，以免调用方误以为拿到了新对象。',
     related: ['reference', 'mutable-immutable'],
-    see: 'python/variables-are-not-boxes',
+    see: 'python/variable-is-a-name',
   },
 ]
