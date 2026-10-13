@@ -1,18 +1,15 @@
 ---
-// 一个名词的两段解释。术语表页和文章开头的「先弄清这几个词」共用这一个组件,
-// 区别只在密度:page 带锚点、出处和相关词,panel 只留最必要的部分。
+// 术语表页里的一张名词卡:一句人话、一句准确定义,再加出处、相关词和「想深入看」。
 import { relatedTerms, type Term } from '../../data/glossary'
 import { termHref, topicHref, getTopics } from '../../lib/content'
 
 interface Props {
   term: Term
-  variant?: 'page' | 'panel'
 }
 
-const { term, variant = 'page' } = Astro.props
-const related = variant === 'page' ? relatedTerms(term) : []
-// 文章里点「想深入看」会跳回自己,没意义
-const see = variant === 'page' ? term.see : undefined
+const { term } = Astro.props
+const related = relatedTerms(term)
+const see = term.see
 const seeTitle = see ? (await getTopics()).find((topic) => `${topic.data.category}/${topic.id}` === see)?.data.title : undefined
 
 // 搜索用的检索串:词名、英文、别名、两段解释都算上
@@ -23,8 +20,8 @@ const haystack = [term.term, term.en, ...(term.aliases ?? []), term.plain, term.
 ---
 
 <article
-  id={variant === 'page' ? term.id : undefined}
-  class:list={['lg-term-card', variant === 'panel' && 'lg-term-card--panel']}
+  id={term.id}
+  class="lg-term-card"
   data-term-card
   data-group={term.group}
   data-search={haystack}
@@ -34,17 +31,9 @@ const haystack = [term.term, term.en, ...(term.aliases ?? []), term.plain, term.
       {term.term}
       {term.en ? <span class="lg-term-en">{term.en}</span> : null}
     </h3>
-    {
-      variant === 'page' ? (
-        <a href={`#${term.id}`} class="lg-term-anchor" aria-label={`${term.term} 的锚点`}>
-          #
-        </a>
-      ) : (
-        <a href={termHref(term.id)} class="lg-term-anchor" aria-label={`在术语表里看 ${term.term}`}>
-          术语表
-        </a>
-      )
-    }
+    <a href={`#${term.id}`} class="lg-term-anchor" aria-label={`${term.term} 的锚点`}>
+      #
+    </a>
   </div>
 
   <div class="lg-term-row">

@@ -444,14 +444,7 @@
     }
   }
 
-  /* 文章开头那一节 */
-  .lg-term-intro {
-    max-width: 38em;
-    color: var(--muted);
-    font-size: 0.88rem;
-    line-height: 1.8;
-  }
-
+  /* 术语表页的卡片栅格 */
   .lg-term-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);

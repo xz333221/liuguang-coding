@@ -2,7 +2,6 @@
 import Breadcrumbs from '../../components/kb/Breadcrumbs.astro'
 import MindMapPanel from '../../components/kb/MindMapPanel.vue'
 import SourceList from '../../components/kb/SourceList.astro'
-import TermPanel from '../../components/kb/TermPanel.astro'
 import Toc from '../../components/kb/Toc.astro'
 import { findCategory } from '../../data/catalog'
 import type { ArticleContext } from '../../lib/chat'
@@ -68,8 +67,6 @@ const article: ArticleContext = {
         <button type="button" class="lg-chip" data-chat-open>问这篇</button>
       </div>
 
-      <TermPanel ids={topic.data.terms} />
-
       {
         mindmapSrc ? (
           <section id="map" class="mt-12 scroll-mt-24">
@@ -131,7 +128,6 @@ const article: ArticleContext = {
         <nav aria-label="本页结构" class="text-[0.82rem]">
           <p class="mb-3 text-[0.72rem] tracking-[0.08em] text-muted">本页结构</p>
           <ul class="grid gap-2">
-            {topic.data.terms.length > 0 ? <li><a href="#terms" class="text-muted transition-colors hover:text-ink">先弄清这几个词</a></li> : null}
             {mindmapSrc ? <li><a href="#map" class="text-muted transition-colors hover:text-ink">知识地图</a></li> : null}
             {Demo ? <li><a href="#demo" class="text-muted transition-colors hover:text-ink">动手看一遍</a></li> : null}
             <li><a href="#read" class="text-muted transition-colors hover:text-ink">正文</a></li>

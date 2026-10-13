@@ -31,8 +31,8 @@ const knowledge = defineCollection({
     demo: z.string().optional(),
     /**
      * 这篇文章要先交代清楚的名词,取 src/data/glossary/ 里的 id。
-     * 页头会按这个列表渲染一节「先弄清这几个词」,正文里这些词第一次出现时也会
-     * 自动标成带解释的链接。写错的 id 会让构建失败。
+     * 正文里这些词第一次出现时会被标成带下划线的链接,悬停弹出一句解释,点进术语表。
+     * 写错的 id 会让构建失败。
      */
     terms: z.array(z.string()).default([]),
     /** 正文里哪些说法来自哪里,页脚会列出来 */

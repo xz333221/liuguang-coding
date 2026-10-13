@@ -68,8 +68,6 @@ sources:                                 # 可选，正文里说法的出处，�
 
 ![术语表](docs/kb-glossary.png)
 
-![文章开头的「先弄清这几个词」](docs/kb-terms.png)
-
 ![正文里的名词悬浮解释](docs/kb-term-tooltip.png)
 
 名词数据在 `src/data/glossary/`，一个分组一个文件(`common` / `python` / `java` / `ai` / `algorithm`)，类型与汇总在 `index.ts`。一条记录长这样：
@@ -93,10 +91,9 @@ sources:                                 # 可选，正文里说法的出处，�
 
 ### 文章里怎么用
 
-frontmatter 写 `terms: ["采样对应的 id", ...]`(id 一律加引号，否则 YAML 会把 `null` 这类词解析成非字符串)，然后有两件事自动发生：
+frontmatter 写 `terms: ["采样对应的 id", ...]`(id 一律加引号，否则 YAML 会把 `null` 这类词解析成非字符串)，正文会自动标注：这些词在正文里**第一次**出现时变成带虚线底线的链接，悬停弹出那句「说人话」，点进去是术语表里的完整条目。
 
-1. **页头多一节「先弄清这几个词」** —— 按 `terms` 的顺序把这些名词的卡片铺在正文之前，读者还没进正文就已经见过一遍。
-2. **正文自动标注** —— 这些词在正文里**第一次**出现时变成带虚线底线的链接，悬停弹出那句「说人话」，点进去是术语表里的完整条目。
+名词就在正文里就地解释，读到哪讲到哪 —— 不在文章开头另铺一屏卡片。
 
 自动标注由 `src/lib/markdown-terms.ts` 实现，在构建期完成，产物里直接就是带链接的 HTML，不依赖客户端 JS。几条规则：
 
@@ -107,7 +104,7 @@ frontmatter 写 `terms: ["采样对应的 id", ...]`(id 一律加引号，否则
 
 > Astro 7 默认的 markdown 引擎是 Sätteri，`markdown.remarkPlugins` 已经废弃(要用得额外装 `@astrojs/markdown-remark`)。所以这里的插件是 Sätteri 的 hast 插件，通过 `markdown.processor: satteri({ hastPlugins: [...] })` 注册，见 `astro.config.mjs`。
 
-**改术语表后必须清构建缓存**：Astro 把渲染好的 markdown 缓存在 `node_modules/.astro/data-store.json`，只改插件或 `astro.config.mjs` 不会让它失效，页面看着像没生效。改完删掉这个文件再构建。
+**改术语表后必须清构建缓存**：Astro 把渲染好的 markdown 缓存了两处 —— `node_modules/.astro/data-store.json` 和仓库根的 `.astro/data-store.json`。改插件、改 `astro.config.mjs`、增删或改名文章都不会让它失效，页面看着像没生效(旧的文章地址也会一直留着)。改完删掉这两处再构建。
 
 ## 内容来源与版权
 
