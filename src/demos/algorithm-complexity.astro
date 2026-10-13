@@ -1,0 +1,231 @@
+---
+// 讲解:复杂度增长对比。
+// 五条曲线共用同一个 n,条形按最慢的 O(n²) 等比缩放,首屏直接算好,交互时在浏览器里重算。
+const n0 = 32
+const logN0 = Math.round(Math.log2(n0))
+
+const rows = [
+  { key: 'o1', label: 'O(1)', note: '跟 n 无关', value: 1 },
+  { key: 'olog', label: 'O(log n)', note: '每次折半', value: logN0 },
+  { key: 'on', label: 'O(n)', note: '扫一遍', value: n0 },
+  { key: 'onlog', label: 'O(n log n)', note: '不错的排序', value: n0 * logN0 },
+  { key: 'on2', label: 'O(n²)', note: '双重循环', value: n0 * n0 },
+]
+
+const max0 = n0 * n0
+const fmt = (value: number) => value.toLocaleString('zh-CN')
+---
+
+<div class="cx-demo" data-demo="complexity" data-n={n0}>
+  <div class="cx-head">
+    <label class="cx-label" for="cx-n">输入规模 n</label>
+    <input
+      id="cx-n"
+      class="cx-range"
+      type="range"
+      min="8"
+      max="64"
+      step="1"
+      value={n0}
+      data-n
+    />
+    <output class="cx-n-value" for="cx-n" data-n-value>n = {n0}</output>
+  </div>
+
+  <ul class="cx-rows">
+    {
+      rows.map((row) => (
+        <li class="cx-row" data-key={row.key}>
+          <span class="cx-name">
+            <span class="cx-formula">{row.label}</span>
+            <span class="cx-note">{row.note}</span>
+          </span>
+          <span class="cx-track">
+            <span
+              class="cx-fill"
+              style={{ width: `${Math.max((row.value / max0) * 100, 0.6)}%` }}
+              data-fill
+            />
+          </span>
+          <span class="cx-value" data-value>
+            {fmt(row.value)}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="cx-hint">
+    条形按最慢的 O(n²) 等比缩放，所以 O(1) 和 O(log n) 几乎贴着零。这正是它们的样子:输入涨一百倍，它们几乎不动。
+  </p>
+  <p class="cx-foot">
+    n 翻倍的时候，O(n) 也翻倍，O(n²) 翻四倍，而 O(log n) 只多一步。增长率差一级，数据一大就是几小时和几毫秒的差距。
+  </p>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-demo="complexity"]')
+
+  if (root) {
+    const slider = root.querySelector<HTMLInputElement>('[data-n]')
+    const nLabel = root.querySelector<HTMLElement>('[data-n-value]')
+    const rows = Array.from(root.querySelectorAll<HTMLElement>('.cx-row'))
+
+    // 五条量级的操作次数,和文章里那张表用的是同一套算法
+    const cost = (key: string, n: number): number => {
+      const logN = Math.round(Math.log2(n))
+      switch (key) {
+        case 'o1':
+          return 1
+        case 'olog':
+          return logN
+        case 'on':
+          return n
+        case 'onlog':
+          return n * logN
+        case 'on2':
+          return n * n
+        default:
+          return 0
+      }
+    }
+
+    const render = () => {
+      const n = Number(slider?.value ?? 32)
+      const max = n * n
+
+      if (nLabel) nLabel.textContent = `n = ${n}`
+
+      rows.forEach((row) => {
+        const key = row.dataset.key ?? ''
+        const value = cost(key, n)
+        const fill = row.querySelector<HTMLElement>('[data-fill]')
+        const label = row.querySelector<HTMLElement>('[data-value]')
+        if (fill) fill.style.width = `${Math.max((value / max) * 100, 0.6)}%`
+        if (label) label.textContent = value.toLocaleString('zh-CN')
+      })
+    }
+
+    slider?.addEventListener('input', render)
+    render()
+  }
+</script>
+
+<style>
+  .cx-demo {
+    padding: 1.15rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+  }
+
+  .cx-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .cx-label {
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+  }
+
+  .cx-range {
+    flex: 1;
+    min-width: 10rem;
+    accent-color: var(--accent);
+  }
+
+  .cx-n-value {
+    min-width: 4.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+
+  .cx-rows {
+    display: grid;
+    gap: 0.55rem;
+    margin: 1.1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cx-row {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr) 5rem;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 560px) {
+    .cx-row {
+      grid-template-columns: 6.5rem minmax(0, 1fr) 4rem;
+      gap: 0.5rem;
+    }
+  }
+
+  .cx-name {
+    display: grid;
+  }
+
+  .cx-formula {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+
+  .cx-note {
+    color: var(--muted);
+    font-size: 0.68rem;
+  }
+
+  .cx-track {
+    display: block;
+    overflow: hidden;
+    height: 10px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--line) 65%, transparent);
+  }
+
+  .cx-fill {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--accent);
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .cx-row[data-key='on2'] .cx-fill {
+    background: color-mix(in srgb, var(--accent) 72%, var(--highlight));
+  }
+
+  .cx-value {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-align: right;
+  }
+
+  .cx-hint {
+    margin-top: 1.1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.75;
+  }
+
+  .cx-foot {
+    margin-top: 0.5rem;
+    color: color-mix(in srgb, var(--ink) 88%, transparent);
+    font-size: 0.78rem;
+    line-height: 1.75;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cx-fill {
+      transition: none;
+    }
+  }
+</style>

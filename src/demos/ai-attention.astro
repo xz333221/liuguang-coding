@@ -1,0 +1,231 @@
+---
+// 讲解:注意力权重。
+// 点一个词当 query,看它把注意力分给了谁。权重是示例数据,用来演示"按相关性加权"这件事,
+// 真实模型里这些权重由 Q·K 点积再 softmax 得到。
+const tokens = ['小猫', '追着', '毛线球', '跑']
+
+const weights = [
+  [0.42, 0.28, 0.18, 0.12],
+  [0.5, 0.12, 0.28, 0.1],
+  [0.14, 0.32, 0.44, 0.1],
+  [0.46, 0.1, 0.18, 0.26],
+]
+
+const notes = [
+  '算「小猫」这个位置的表示时，它把最多的注意力留给自己，其次给动作「追着」。',
+  '「追着」最在意的是动作的发出者「小猫」，这是模型找主谓关系时常见的一类关注。',
+  '「毛线球」同时看向动作「追着」和自己，宾语与动词互相牵连。',
+  '「跑」把最多的注意力给了「小猫」，动作和它的主体绑在一起。',
+]
+
+const fmt = (value: number) => `${Math.round(value * 100)}%`
+const initial = 0
+---
+
+<div
+  class="aa-demo"
+  data-demo="attention"
+  data-query={initial}
+  data-weights={JSON.stringify(weights)}
+  data-notes={JSON.stringify(notes)}
+>
+  <p class="aa-lead">点一个词当 query，看它把注意力分给了谁。</p>
+
+  <div class="aa-tokens">
+    {
+      tokens.map((token, index) => (
+        <button type="button" class="aa-token" data-token={index} data-active={String(index === initial)}>
+          {token}
+        </button>
+      ))
+    }
+  </div>
+
+  <ul class="aa-rows">
+    {
+      tokens.map((token, index) => (
+        <li class="aa-row" data-key={index} data-top={String(index === 0)}>
+          <span class="aa-word">{token}</span>
+          <span class="aa-track">
+            <span class="aa-fill" style={{ width: fmt(weights[initial][index]) }} data-fill />
+          </span>
+          <span class="aa-pct" data-pct>
+            {fmt(weights[initial][index])}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="aa-note" data-note>{notes[initial]}</p>
+  <p class="aa-formula">weights = softmax( Q · Kᵀ / √d_k )</p>
+  <p class="aa-tip">这里的权重是示例数据，不代表任何真实模型的输出；真实权重由 query 与 key 做点积、缩放后归一化得到。</p>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-demo="attention"]')
+
+  if (root) {
+    const weights = JSON.parse(root.dataset.weights ?? '[]') as number[][]
+    const notes = JSON.parse(root.dataset.notes ?? '[]') as string[]
+    const tokenBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-token]'))
+    const rows = Array.from(root.querySelectorAll<HTMLElement>('.aa-row'))
+    const note = root.querySelector<HTMLElement>('[data-note]')
+
+    const render = (query: number) => {
+      const row = weights[query] ?? []
+      const top = row.indexOf(Math.max(...row))
+
+      root.dataset.query = String(query)
+
+      tokenBtns.forEach((btn, index) => {
+        btn.dataset.active = String(index === query)
+      })
+
+      rows.forEach((item, index) => {
+        const value = row[index] ?? 0
+        const fill = item.querySelector<HTMLElement>('[data-fill]')
+        const pct = item.querySelector<HTMLElement>('[data-pct]')
+        if (fill) fill.style.width = `${Math.round(value * 100)}%`
+        if (pct) pct.textContent = `${Math.round(value * 100)}%`
+        item.dataset.top = String(index === top)
+      })
+
+      if (note) note.textContent = notes[query] ?? ''
+    }
+
+    tokenBtns.forEach((btn) => {
+      btn.addEventListener('click', () => render(Number(btn.dataset.token ?? 0)))
+    })
+
+    render(Number(root.dataset.query ?? 0))
+  }
+</script>
+
+<style>
+  .aa-demo {
+    padding: 1.15rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+  }
+
+  .aa-lead {
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  .aa-tokens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.85rem;
+  }
+
+  .aa-token {
+    padding: 0.35rem 0.9rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.82rem;
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+  }
+
+  .aa-token:hover {
+    border-color: var(--highlight);
+    color: var(--highlight);
+  }
+
+  .aa-token[data-active='true'] {
+    border-color: transparent;
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .aa-rows {
+    display: grid;
+    gap: 0.55rem;
+    margin: 1.15rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .aa-row {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr) 3rem;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.28rem 0.45rem;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+  }
+
+  .aa-row[data-top='true'] {
+    background: var(--accent-soft);
+  }
+
+  .aa-word {
+    color: var(--muted);
+    font-size: 0.85rem;
+    transition: color 0.3s;
+  }
+
+  .aa-row[data-top='true'] .aa-word {
+    color: var(--ink);
+  }
+
+  .aa-track {
+    display: block;
+    overflow: hidden;
+    height: 9px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--line) 65%, transparent);
+  }
+
+  .aa-fill {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--accent);
+    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .aa-pct {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-align: right;
+  }
+
+  .aa-note {
+    margin-top: 1.05rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    color: color-mix(in srgb, var(--ink) 88%, transparent);
+    font-size: 0.82rem;
+    line-height: 1.75;
+  }
+
+  .aa-formula {
+    margin-top: 0.75rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+
+  .aa-tip {
+    margin-top: 0.4rem;
+    color: var(--muted);
+    font-size: 0.74rem;
+    line-height: 1.7;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aa-fill,
+    .aa-row,
+    .aa-word,
+    .aa-token {
+      transition: none;
+    }
+  }
+</style>

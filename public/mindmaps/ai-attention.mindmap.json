@@ -1,0 +1,61 @@
+{
+  "id": "root",
+  "text": "注意力:模型怎么决定看哪儿",
+  "children": [
+    {
+      "id": "why",
+      "text": "为什么不用循环",
+      "children": [
+        { "id": "why-1", "text": "循环要按顺序算", "children": [] },
+        { "id": "why-2", "text": "距离远了会遗忘", "children": [] },
+        { "id": "why-3", "text": "注意力可并行", "children": [] }
+      ]
+    },
+    {
+      "id": "qkv",
+      "text": "三个角色",
+      "children": [
+        { "id": "qkv-1", "text": "Query 提问", "children": [] },
+        { "id": "qkv-2", "text": "Key 标签", "children": [] },
+        { "id": "qkv-3", "text": "Value 内容", "children": [] },
+        { "id": "qkv-4", "text": "三个投影矩阵", "children": [] }
+      ]
+    },
+    {
+      "id": "steps",
+      "text": "四步计算",
+      "children": [
+        { "id": "step-1", "text": "点积打分", "children": [] },
+        { "id": "step-2", "text": "除以 √d_k", "children": [] },
+        { "id": "step-3", "text": "softmax 归一化", "children": [] },
+        { "id": "step-4", "text": "加权求和 V", "children": [] }
+      ]
+    },
+    {
+      "id": "multi",
+      "text": "多头注意力",
+      "children": [
+        { "id": "multi-1", "text": "多组投影", "children": [] },
+        { "id": "multi-2", "text": "每个头一个视角", "children": [] },
+        { "id": "multi-3", "text": "拼接再过线性层", "children": [] }
+      ]
+    },
+    {
+      "id": "extra",
+      "text": "两个必要的补丁",
+      "children": [
+        { "id": "extra-1", "text": "位置编码补顺序", "children": [] },
+        { "id": "extra-2", "text": "因果掩码堵住未来", "children": [] }
+      ]
+    },
+    {
+      "id": "cost",
+      "text": "代价与误解",
+      "children": [
+        { "id": "cost-1", "text": "n×n 分数矩阵", "children": [] },
+        { "id": "cost-2", "text": "窗口贵在 O(n²)", "children": [] },
+        { "id": "cost-3", "text": "权重不等于解释", "children": [] }
+      ]
+    }
+  ]
+}

@@ -5,7 +5,7 @@
 //    soon   置灰可见,点进去是"还在整理"的空状态
 //    hidden 完全不出现在导航与首页(预留给以后不想公开的方向)
 //
-// 知识点通过 frontmatter 的 category 指向叶子分类的 id(如 python / ai / frontend),
+// 知识点通过 frontmatter 的 category 指向叶子分类的 id(如 python / ai / algorithm),
 // 父分类(如 lang)只用来分组和做落地页。
 
 export type CategoryStatus = 'active' | 'soon' | 'hidden'
@@ -47,6 +47,12 @@ export const catalog: Category[] = [
     id: 'ai',
     name: 'AI',
     intro: '大模型怎么生成文字、怎么调参、怎么把模型接进真实系统。',
+    status: 'active',
+  },
+  {
+    id: 'algorithm',
+    name: '算法',
+    intro: '先学会衡量一段代码有多慢,再看经典结构与方法怎么把规模问题做小。',
     status: 'active',
   },
   {

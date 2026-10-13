@@ -1,0 +1,54 @@
+{
+  "id": "root",
+  "text": "for 循环背后",
+  "children": [
+    {
+      "id": "protocol",
+      "text": "迭代协议",
+      "children": [
+        { "id": "pro-1", "text": "iter() 拿迭代器", "children": [] },
+        { "id": "pro-2", "text": "next() 取下一个", "children": [] },
+        { "id": "pro-3", "text": "StopIteration 结束", "children": [] },
+        { "id": "pro-4", "text": "for 就是它的简写", "children": [] }
+      ]
+    },
+    {
+      "id": "two",
+      "text": "可迭代对象 vs 迭代器",
+      "children": [
+        { "id": "two-1", "text": "__iter__ 与 __next__", "children": [] },
+        { "id": "two-2", "text": "迭代器有状态", "children": [] },
+        { "id": "two-3", "text": "只能用一次", "children": [] }
+      ]
+    },
+    {
+      "id": "gen",
+      "text": "生成器",
+      "children": [
+        { "id": "gen-1", "text": "函数里有 yield", "children": [] },
+        { "id": "gen-2", "text": "调用时不执行", "children": [] },
+        { "id": "gen-3", "text": "yield 是暂停", "children": [] },
+        { "id": "gen-4", "text": "状态留在帧里", "children": [] }
+      ]
+    },
+    {
+      "id": "lazy",
+      "text": "惰性求值",
+      "children": [
+        { "id": "lazy-1", "text": "要一个算一个", "children": [] },
+        { "id": "lazy-2", "text": "能表示无穷序列", "children": [] },
+        { "id": "lazy-3", "text": "生成器表达式", "children": [] }
+      ]
+    },
+    {
+      "id": "traps",
+      "text": "常见的坑",
+      "children": [
+        { "id": "trap-1", "text": "迭代器走一次就空", "children": [] },
+        { "id": "trap-2", "text": "遍历中增删元素", "children": [] },
+        { "id": "trap-3", "text": "该返回列表却返回生成器", "children": [] },
+        { "id": "trap-4", "text": "异常发生在迭代时", "children": [] }
+      ]
+    }
+  ]
+}

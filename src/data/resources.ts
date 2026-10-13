@@ -351,6 +351,61 @@ export const resources: ResourceGroup[] = [
       },
     ],
   },
+  {
+    category: 'algorithm',
+    intro: '算法这块教材与课程都很多:想入门看图解,想严谨看教材,想刷题去题库,想查复杂度看速查表。',
+    items: [
+      {
+        title: 'Hello 算法',
+        url: 'https://www.hello-algo.com/',
+        note: '开源中文教程,每个数据结构与算法都配了动图和可运行代码,零基础最好上手。',
+        lang: '中文',
+        free: true,
+      },
+      {
+        title: 'VisuAlgo',
+        url: 'https://visualgo.net/zh',
+        note: '把排序、树、图算法一步步放给你看,有中文界面。想不出来它到底怎么动的时候看它。',
+        lang: '中文',
+        free: true,
+      },
+      {
+        title: '算法导论(CLRS)',
+        url: 'https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/',
+        note: '复杂度分析与证明的权威教材。想查 O 记号的严格定义,以它为准。',
+        lang: '英文',
+        free: false,
+      },
+      {
+        title: 'Big-O Cheat Sheet',
+        url: 'https://www.bigocheatsheet.com/',
+        note: '常见数据结构与排序算法的复杂度速查表,面试前扫一眼。',
+        lang: '英文',
+        free: true,
+      },
+      {
+        title: 'Python Wiki:TimeComplexity',
+        url: 'https://wiki.python.org/moin/TimeComplexity',
+        note: 'list、dict、set 各操作的平均与最坏复杂度。判断"这行贵不贵"就查它。',
+        lang: '英文',
+        free: true,
+      },
+      {
+        title: 'CP-Algorithms',
+        url: 'https://cp-algorithms.com/',
+        note: '竞赛向的算法模板与推导,需要具体实现时翻它比翻教材快。',
+        lang: '英文',
+        free: true,
+      },
+      {
+        title: '力扣(LeetCode)中文站',
+        url: 'https://leetcode.cn/',
+        note: '按标签刷题的题库,同一个知识点能从简单一路做到困难。',
+        lang: '中文',
+        free: true,
+      },
+    ],
+  },
 ]
 
 export function resourcesOf(categoryId: string): ResourceGroup | undefined {

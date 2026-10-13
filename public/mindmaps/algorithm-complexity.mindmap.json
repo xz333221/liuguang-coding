@@ -1,0 +1,64 @@
+{
+  "id": "root",
+  "text": "复杂度:O 记号在数什么",
+  "children": [
+    {
+      "id": "why",
+      "text": "为什么不计时",
+      "children": [
+        { "id": "why-1", "text": "机器与语言都在变", "children": [] },
+        { "id": "why-2", "text": "增长率跨环境可比", "children": [] }
+      ]
+    },
+    {
+      "id": "count",
+      "text": "怎么数",
+      "children": [
+        { "id": "count-1", "text": "数基本操作", "children": [] },
+        { "id": "count-2", "text": "丢常数因子", "children": [] },
+        { "id": "count-3", "text": "只留最高阶项", "children": [] },
+        { "id": "count-4", "text": "O 是上界", "children": [] }
+      ]
+    },
+    {
+      "id": "cases",
+      "text": "三种情况",
+      "children": [
+        { "id": "case-1", "text": "最好 O(1)", "children": [] },
+        { "id": "case-2", "text": "最坏 O(n)", "children": [] },
+        { "id": "case-3", "text": "平均 O(n)", "children": [] },
+        { "id": "case-4", "text": "默认指最坏", "children": [] }
+      ]
+    },
+    {
+      "id": "orders",
+      "text": "常见量级",
+      "children": [
+        { "id": "ord-1", "text": "O(1) 常量", "children": [] },
+        { "id": "ord-2", "text": "O(log n) 折半", "children": [] },
+        { "id": "ord-3", "text": "O(n) 线性", "children": [] },
+        { "id": "ord-4", "text": "O(n log n) 排序", "children": [] },
+        { "id": "ord-5", "text": "O(n²) 嵌套", "children": [] }
+      ]
+    },
+    {
+      "id": "axes",
+      "text": "两根轴",
+      "children": [
+        { "id": "axis-1", "text": "时间复杂度", "children": [] },
+        { "id": "axis-2", "text": "空间复杂度", "children": [] },
+        { "id": "axis-3", "text": "递归要算调用栈", "children": [] }
+      ]
+    },
+    {
+      "id": "traps",
+      "text": "容易想错的地方",
+      "children": [
+        { "id": "trap-1", "text": "O(1) 不等于快", "children": [] },
+        { "id": "trap-2", "text": "双重循环不一定 n²", "children": [] },
+        { "id": "trap-3", "text": "小规模别过度优化", "children": [] },
+        { "id": "trap-4", "text": "先看规模再选做法", "children": [] }
+      ]
+    }
+  ]
+}

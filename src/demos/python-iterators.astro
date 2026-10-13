@@ -1,0 +1,379 @@
+---
+// 讲解:for 循环背后。
+// 列表版和生成器版共用同一套步骤,切换数据源只换"内部状态"的说法,
+// 这样一眼能看出:for 拿到的是列表还是生成器,行为没有区别。
+const values = [10, 20, 30]
+
+const stateTexts: Record<string, string[]> = {
+  list: [
+    '迭代器刚建好，游标停在下标 0，一个值都还没取。',
+    '取走第 1 个元素，游标移到下标 1。',
+    '取走第 2 个元素，游标移到下标 2。',
+    '取走第 3 个元素，游标移到末尾。',
+    '列表里没有下一个了，再调 next 就抛 StopIteration。',
+  ],
+  gen: [
+    '生成器刚创建。它是调用 counter() 得到的，此时函数体一行都没执行。',
+    '第一次 next 才真正开始跑，停在第一个 yield 处，把 10 交出去。',
+    '从暂停处恢复，跑到第二个 yield，交出去 20。',
+    '再恢复一次，跑到第三个 yield，交出去 30。',
+    '函数体执行完了，没有更多 yield，抛 StopIteration。',
+  ],
+}
+
+const outTexts = [
+  '还没取。点「next()」往前走一步。',
+  'next(it) → 10',
+  'next(it) → 20',
+  'next(it) → 30',
+  'next(it) → StopIteration（for 会把它当成正常结束）',
+]
+---
+
+<div
+  class="pi-demo"
+  data-demo="py-iter"
+  data-step="0"
+  data-source="list"
+  data-states={JSON.stringify(stateTexts)}
+  data-outs={JSON.stringify(outTexts)}
+>
+  <div class="pi-head">
+    <div class="pi-tabs" role="tablist" aria-label="数据源">
+      <button type="button" class="pi-tab" data-source-btn="list" data-active="true">
+        列表
+      </button>
+      <button type="button" class="pi-tab" data-source-btn="gen" data-active="false">
+        生成器
+      </button>
+    </div>
+    <p class="pi-tip">两种数据源，同一套取数动作。</p>
+  </div>
+
+  <div class="pi-body">
+    <section class="pi-pane">
+      <p class="pi-pane-title">代码</p>
+      <pre class="pi-code" data-code="list" data-show="true"><code>it = iter([10, 20, 30])
+next(it)   # 10
+next(it)   # 20
+next(it)   # 30
+next(it)   # StopIteration</code></pre>
+      <pre class="pi-code" data-code="gen"><code>def counter():
+    yield 10
+    yield 20
+    yield 30
+
+it = counter()   # 什么都没发生
+next(it)         # 10 ...</code></pre>
+    </section>
+
+    <section class="pi-pane">
+      <p class="pi-pane-title">取数过程</p>
+      <ul class="pi-slots">
+        {
+          values.map((value, index) => (
+            <li class="pi-slot" data-slot={index}>
+              <span class="pi-value">{value}</span>
+              <span class="pi-marker" data-marker />
+            </li>
+          ))
+        }
+      </ul>
+      <p class="pi-state" data-state>{stateTexts.list[0]}</p>
+    </section>
+  </div>
+
+  <div class="pi-foot">
+    <p class="pi-out" data-out>{outTexts[0]}</p>
+    <div class="pi-actions">
+      <button type="button" class="pi-btn pi-btn--primary" data-next>next(it)</button>
+      <button type="button" class="pi-btn" data-reset>重来</button>
+    </div>
+  </div>
+
+  <noscript>
+    <p class="pi-noscript">这段讲解需要 JavaScript 才能逐步播放，正文里有同样的内容。</p>
+  </noscript>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-demo="py-iter"]')
+
+  if (root) {
+    const states = JSON.parse(root.dataset.states ?? '{}') as Record<string, string[]>
+    const outs = JSON.parse(root.dataset.outs ?? '[]') as string[]
+    const slots = Array.from(root.querySelectorAll<HTMLElement>('.pi-slot'))
+    const stateEl = root.querySelector<HTMLElement>('[data-state]')
+    const outEl = root.querySelector<HTMLElement>('[data-out]')
+    const nextBtn = root.querySelector<HTMLButtonElement>('[data-next]')
+    const resetBtn = root.querySelector<HTMLButtonElement>('[data-reset]')
+    const sourceBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-source-btn]'))
+    const codes = Array.from(root.querySelectorAll<HTMLElement>('.pi-code'))
+
+    const maxStep = slots.length + 1 // 3 个值 + 1 步 StopIteration
+    let step = 0
+    let source = 'list'
+
+    const render = () => {
+      root.dataset.step = String(step)
+      root.dataset.source = source
+
+      slots.forEach((slot, index) => {
+        slot.dataset.state = index < step ? 'taken' : index === step ? 'next' : 'idle'
+      })
+
+      if (stateEl) stateEl.textContent = states[source]?.[step] ?? ''
+      if (outEl) {
+        outEl.textContent = outs[step] ?? ''
+        outEl.dataset.done = String(step >= maxStep)
+      }
+      if (nextBtn) nextBtn.disabled = step >= maxStep
+
+      sourceBtns.forEach((btn) => {
+        btn.dataset.active = String(btn.dataset.sourceBtn === source)
+      })
+      codes.forEach((code) => {
+        code.dataset.show = String(code.dataset.code === source)
+      })
+    }
+
+    nextBtn?.addEventListener('click', () => {
+      if (step < maxStep) step += 1
+      render()
+    })
+
+    resetBtn?.addEventListener('click', () => {
+      step = 0
+      render()
+    })
+
+    sourceBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        source = btn.dataset.sourceBtn ?? 'list'
+        step = 0
+        render()
+      })
+    })
+
+    render()
+  }
+</script>
+
+<style>
+  .pi-demo {
+    padding: 1.15rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+  }
+
+  .pi-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .pi-tabs {
+    display: inline-flex;
+    padding: 0.2rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel);
+  }
+
+  .pi-tab {
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    transition: color 0.2s, background-color 0.2s;
+  }
+
+  .pi-tab[data-active='true'] {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .pi-tip {
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .pi-body {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1.1rem;
+  }
+
+  @media (min-width: 720px) {
+    .pi-body {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+
+  .pi-pane-title {
+    margin-bottom: 0.6rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+  }
+
+  .pi-code {
+    display: none;
+    overflow-x: auto;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.8;
+  }
+
+  .pi-code[data-show='true'] {
+    display: block;
+  }
+
+  .pi-slots {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pi-slot {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel);
+    transition: border-color 0.3s, opacity 0.3s, transform 0.3s;
+  }
+
+  .pi-value {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    transition: color 0.3s;
+  }
+
+  .pi-marker {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 0.72rem;
+  }
+
+  .pi-slot[data-state='idle'] {
+    opacity: 0.5;
+  }
+
+  .pi-slot[data-state='next'] {
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    transform: translateX(2px);
+  }
+
+  .pi-slot[data-state='next'] .pi-marker::before {
+    content: '下一个';
+  }
+
+  .pi-slot[data-state='taken'] {
+    border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    background: var(--accent-soft);
+  }
+
+  .pi-slot[data-state='taken'] .pi-value {
+    color: var(--highlight);
+    text-decoration: line-through;
+  }
+
+  .pi-slot[data-state='taken'] .pi-marker::before {
+    content: '已取走';
+  }
+
+  .pi-state {
+    margin-top: 0.9rem;
+    color: color-mix(in srgb, var(--ink) 88%, transparent);
+    font-size: 0.8rem;
+    line-height: 1.75;
+  }
+
+  .pi-foot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-top: 1.15rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (min-width: 720px) {
+    .pi-foot {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  .pi-out {
+    flex: 1;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.7;
+  }
+
+  .pi-out[data-done='true'] {
+    color: var(--highlight);
+  }
+
+  .pi-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .pi-btn {
+    padding: 0.42rem 0.95rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    transition: color 0.2s, border-color 0.2s, opacity 0.2s;
+  }
+
+  .pi-btn:hover:not(:disabled) {
+    border-color: var(--highlight);
+    color: var(--highlight);
+  }
+
+  .pi-btn--primary {
+    border-color: transparent;
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .pi-btn--primary:hover:not(:disabled) {
+    filter: brightness(1.05);
+    color: var(--on-accent);
+  }
+
+  .pi-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .pi-noscript {
+    margin-top: 0.75rem;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pi-slot {
+      transition: none;
+    }
+  }
+</style>
