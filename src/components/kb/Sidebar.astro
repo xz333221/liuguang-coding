@@ -1,7 +1,8 @@
 ---
 import { catalog } from '../../data/catalog'
+import { levels } from '../../data/game'
 import { terms } from '../../data/glossary'
-import { categoryPath, countByCategory, countFor, getTopics, glossaryPath } from '../../lib/content'
+import { categoryPath, countByCategory, countFor, getTopics, glossaryPath, withBase } from '../../lib/content'
 
 interface Props {
   /** 当前分类 id,用于高亮 */
@@ -91,5 +92,15 @@ function topicsIn(id: string) {
   >
     <span>术语表</span>
     <span class="lg-nav-count">{terms.length}</span>
+  </a>
+
+  <!-- 闯关游戏同样不属于分类树,跟在术语表后面 -->
+  <a
+    href={withBase('game/')}
+    class="lg-nav-item mt-1"
+    data-active={page === 'game'}
+  >
+    <span>闯关游戏</span>
+    <span class="lg-nav-count">{levels.length}</span>
   </a>
 </nav>

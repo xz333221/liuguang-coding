@@ -1,0 +1,512 @@
+/*
+  闯关游戏的界面样式(关卡地图、答题卡、结算、错题本)。
+  和 kb.css 一样放在 components 层,这样 Tailwind 的工具类还能在页面里覆盖它们。
+
+  配色继续走语义令牌,全站只有琥珀色一个强调色:
+    答对 = accent 描边 + accent-soft 底
+    答错 = 用一个固定的暗红变量(深浅两套主题各给一个),不用第二种亮色
+  圆角沿用全站规则:交互控件胶囊,容器 18px。
+*/
+
+@layer components {
+  /* ---------- 总览 ---------- */
+  .lg-game-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.75rem;
+  }
+
+  .lg-game-stat {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .lg-game-stat-value {
+    font-family: var(--font-mono);
+    font-size: 1.35rem;
+    line-height: 1.1;
+    color: var(--ink);
+  }
+
+  .lg-game-stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  /* ---------- 关卡地图 ---------- */
+  .lg-game-path {
+    position: relative;
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  /* 路径中间那道竖线:从第一个节点连到最后一个 */
+  .lg-game-path::before {
+    content: '';
+    position: absolute;
+    top: 1.4rem;
+    bottom: 1.4rem;
+    left: 1.35rem;
+    width: 1px;
+    background: var(--line);
+  }
+
+  .lg-game-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2.7rem minmax(0, 1fr);
+    gap: 0.9rem;
+    align-items: center;
+    text-align: left;
+    width: 100%;
+  }
+
+  .lg-game-row + .lg-game-row {
+    margin-top: 0.15rem;
+  }
+
+  /* 未解锁的行整块不可点 */
+  .lg-game-row[data-state='locked'] {
+    cursor: not-allowed;
+  }
+
+  .lg-game-node {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    height: 2.7rem;
+    width: 2.7rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+  }
+
+  .lg-game-row[data-state='cleared'] .lg-game-node {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .lg-game-row[data-state='current'] .lg-game-node {
+    border-color: var(--accent);
+    color: var(--ink);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+
+  .lg-game-row[data-state='locked'] .lg-game-node {
+    border-style: dashed;
+    color: var(--line-strong);
+  }
+
+  .lg-game-level {
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.85rem 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .lg-game-row[data-state='cleared'] .lg-game-level {
+    border-color: var(--line-strong);
+  }
+
+  .lg-game-row:not([data-state='locked']):hover .lg-game-level {
+    border-color: var(--accent);
+  }
+
+  .lg-game-level-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .lg-game-level-name {
+    font-size: 0.98rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .lg-game-level-meta {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .lg-game-level-intro {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .lg-game-row[data-state='locked'] .lg-game-level-name,
+  .lg-game-row[data-state='locked'] .lg-game-level-intro {
+    color: var(--muted);
+  }
+
+  /* ---------- 星星 ---------- */
+  .lg-game-stars {
+    display: inline-flex;
+    gap: 0.15rem;
+    color: var(--line-strong);
+  }
+
+  .lg-game-stars svg {
+    height: 0.95rem;
+    width: 0.95rem;
+  }
+
+  .lg-game-stars [data-lit='true'] {
+    color: var(--accent);
+  }
+
+  .lg-game-stars--lg svg {
+    height: 2.1rem;
+    width: 2.1rem;
+  }
+
+  /* ---------- 答题 ---------- */
+  .lg-game-play {
+    display: grid;
+    gap: 1.1rem;
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+  }
+
+  @media (min-width: 640px) {
+    .lg-game-play {
+      padding: 1.5rem;
+    }
+  }
+
+  .lg-game-play-top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .lg-game-kind {
+    display: inline-flex;
+    align-items: center;
+    height: 1.5rem;
+    padding: 0 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .lg-game-counter {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .lg-game-track {
+    height: 3px;
+    border-radius: 999px;
+    background: var(--line);
+    overflow: hidden;
+  }
+
+  .lg-game-track-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--accent);
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .lg-game-prompt {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  .lg-game-options {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .lg-game-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--canvas);
+    text-align: left;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--ink);
+    transition: border-color 0.18s, background-color 0.18s, opacity 0.18s;
+  }
+
+  .lg-game-option:not(:disabled):hover {
+    border-color: var(--line-strong);
+  }
+
+  .lg-game-option:disabled {
+    cursor: default;
+  }
+
+  .lg-game-option-key {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    height: 1.4rem;
+    width: 1.4rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  /* 判题之后:选错的划掉,正确的那项点亮 */
+  .lg-game-option[data-state='picked-wrong'] {
+    border-color: var(--wrong);
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--wrong);
+  }
+
+  .lg-game-option[data-state='picked-wrong'] .lg-game-option-key {
+    border-color: var(--wrong);
+    color: var(--wrong);
+  }
+
+  .lg-game-option[data-state='right'] {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .lg-game-option[data-state='right'] .lg-game-option-key {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  /* ---------- 解析 ---------- */
+  .lg-game-explain {
+    display: grid;
+    gap: 0.55rem;
+    padding: 0.95rem 1.1rem;
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--accent);
+    border-radius: 18px;
+    background: var(--panel);
+  }
+
+  .lg-game-verdict {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+    font-weight: 500;
+  }
+
+  .lg-game-verdict[data-ok='true'] {
+    color: var(--accent);
+  }
+
+  .lg-game-verdict[data-ok='false'] {
+    color: var(--wrong);
+  }
+
+  .lg-game-explain-body {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+
+  .lg-game-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.15rem;
+  }
+
+  .lg-game-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    height: 1.75rem;
+    padding: 0 0.7rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    transition: border-color 0.18s, color 0.18s;
+  }
+
+  .lg-game-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .lg-game-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  /* ---------- 按钮 ---------- */
+  /* 关卡行本身是个 button,先把浏览器默认样式抹掉,再由内部卡片说了算 */
+  .lg-game-row {
+    appearance: none;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .lg-game-row:disabled {
+    cursor: default;
+  }
+
+  .lg-game-row:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 18px;
+  }
+
+  .lg-game-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    height: 2.25rem;
+    padding: 0 1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--canvas);
+    font-size: 0.85rem;
+    color: var(--ink);
+    transition: border-color 0.18s, background-color 0.18s, color 0.18s, opacity 0.18s;
+  }
+
+  .lg-game-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .lg-game-btn:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  .lg-game-btn--primary {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--on-accent);
+    font-weight: 500;
+  }
+
+  .lg-game-btn--primary:hover:not(:disabled) {
+    background: var(--highlight);
+    border-color: var(--highlight);
+    color: var(--on-accent);
+  }
+
+  .lg-game-btn--ghost {
+    border-color: transparent;
+    background: none;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  /* ---------- 结算 ---------- */
+  .lg-game-result {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: center;
+    padding: 1.75rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+    text-align: center;
+  }
+
+  .lg-game-result-title {
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .lg-game-result-note {
+    max-width: 30em;
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+
+  /* ---------- 错题本 ---------- */
+  .lg-game-wrong-list {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .lg-game-wrong-item {
+    display: grid;
+    gap: 0.3rem;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+  }
+
+  .lg-game-wrong-level {
+    font-size: 0.72rem;
+    color: var(--accent);
+  }
+
+  .lg-game-wrong-prompt {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+
+  /* ---------- 动效 ---------- */
+  @keyframes lg-game-pop {
+    0% {
+      transform: scale(0.96);
+      opacity: 0.4;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .lg-game-explain,
+  .lg-game-result {
+    animation: lg-game-pop 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lg-game-explain,
+    .lg-game-result {
+      animation: none;
+    }
+
+    .lg-game-track-fill {
+      transition: none;
+    }
+  }
+}

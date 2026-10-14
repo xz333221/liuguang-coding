@@ -2,6 +2,7 @@
 @import '@fontsource-variable/jetbrains-mono';
 @import 'tailwindcss';
 @import './kb.css';
+@import './game.css';
 
 /*
   流光 coding · 设计令牌
@@ -48,6 +49,8 @@
   --on-accent: #1a1408;
   --highlight: #f2b75e;
   --accent-soft: rgb(233 162 59 / 0.12);
+  /* 闯关游戏里"答错"用的一次性颜色,和强调色分开,免得对错看着一样重 */
+  --wrong: #d9684d;
   --scrim: rgb(11 10 9 / 0.72);
 }
 
@@ -64,6 +67,7 @@
   --on-accent: #1a1408;
   --highlight: #8a5510;
   --accent-soft: rgb(233 162 59 / 0.16);
+  --wrong: #b8412c;
   --scrim: rgb(26 24 21 / 0.55);
 }
 

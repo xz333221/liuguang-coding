@@ -1,35 +1,16 @@
 import { getCollection, render } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 import { findCategory, isLeaf } from '../data/catalog'
+import { withBase } from './paths'
 
 export type Topic = CollectionEntry<'knowledge'>
 
-/** 带 /liuguang-coding/ 前缀的站内地址;传进来可以是 'python/x/' 或 '/python/x/' */
-export function withBase(path = ''): string {
-  return `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
-}
+// 地址拼接抽到 lib/paths.ts 了(那边不碰 astro:content,浏览器组件也能用),这里转出去,
+// 老调用方不用改。
+export { categoryPath, glossaryPath, termHref, topicHref, withBase } from './paths'
 
 export function topicPath(topic: Topic): string {
   return withBase(`${topic.data.category}/${topic.id}/`)
-}
-
-export function categoryPath(id: string): string {
-  return withBase(`${id}/`)
-}
-
-/** 术语表页地址 */
-export function glossaryPath(): string {
-  return withBase('glossary/')
-}
-
-/** 术语表里某个名词的锚点 */
-export function termHref(id: string): string {
-  return `${glossaryPath()}#${id}`
-}
-
-/** 知识点地址,传 'python/variable-is-a-name' 这种形式 */
-export function topicHref(path: string): string {
-  return withBase(`${path}/`)
 }
 
 export function formatDate(date: Date): string {

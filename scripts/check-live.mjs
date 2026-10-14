@@ -5,6 +5,7 @@ const targets = [
   ['首页', `${base}/`],
   ['知识点页', `${base}/python/variable-is-a-name/`],
   ['AI 知识点页', `${base}/ai/temperature-and-sampling/`],
+  ['闯关游戏页', `${base}/game/`],
   ['导图 JSON', `${base}/mindmaps/python-variables.mindmap.json`],
   ['健康检查', `${base}/api/health`],
   ['供应商预设', `${base}/api/ai-model/providers`],
@@ -23,6 +24,10 @@ for (const [label, url] of targets) {
 
     if (label === '知识点页') {
       console.log('   问答岛:', /ChatPanel/.test(text), '| 模型配置岛:', /ModelConfigDialog/.test(text))
+    }
+
+    if (label === '闯关游戏页') {
+      console.log('   闯关岛:', /GameApp/.test(text), '| 侧栏入口:', /href="[^"]*\/game\/"/.test(text))
     }
   } catch (error) {
     console.log(`${label}: ERR ${error.message}`)

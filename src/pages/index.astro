@@ -2,6 +2,7 @@
 import CategoryCard from '../components/kb/CategoryCard.astro'
 import TopicRow from '../components/kb/TopicRow.astro'
 import { catalog } from '../data/catalog'
+import { levels, totalQuestions } from '../data/game'
 import { terms } from '../data/glossary'
 import {
   categoryPath,
@@ -11,6 +12,7 @@ import {
   getTopics,
   glossaryPath,
   topicPath,
+  withBase,
 } from '../lib/content'
 import DocsLayout from '../layouts/DocsLayout.astro'
 
@@ -62,6 +64,19 @@ const recent = [...topics].sort((a, b) => b.data.updated.getTime() - a.data.upda
       <span class="lg-card-intro">
         看正文卡在某个词上时来这里查。每个名词都给两段:先一句人话讲清它大概是什么，再一句准确定义跟一手文档对齐。
         文章页开头也会把本篇要用的词单独列一遍，正文里这些词第一次出现时带下划线，悬停就能看到那句人话。
+      </span>
+    </a>
+  </section>
+
+  <section class="mt-10">
+    <a href={withBase('game/')} class="lg-card">
+      <span class="lg-card-title">
+        闯关游戏
+        <span class="lg-badge">{levels.length} 关 · {totalQuestions()} 题</span>
+      </span>
+      <span class="lg-card-intro">
+        把知识点当关卡刷。一关一个主题，选择题推进，答完给一段解析;答错的题收进错题本，刷完一轮再回来清。
+        目前只有 AI 应用开发这条线，进度存在本机浏览器里。
       </span>
     </a>
   </section>

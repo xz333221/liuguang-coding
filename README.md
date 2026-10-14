@@ -21,6 +21,7 @@
 | 算法 | 可用 | 复杂度:O 记号在数什么 |
 | 前端 / 后端 / 运维 / UI 设计 / 产品设计 | 筹备中 | 还没开始写，不要点进去找内容 |
 | 术语表 | 可用 | 基础名词单独收在一处，每个一句人话 + 一句准确定义，见下 |
+| 闯关游戏 | 可用 | AI 应用开发面试题，一关一个主题的选择题闯关，见下 |
 
 每个分类页下面都挂着**站外权威资料**(一手文档、教材、课程)，出处集中在 `src/data/resources.ts`。
 
@@ -106,6 +107,21 @@ frontmatter 写 `terms: ["采样对应的 id", ...]`(id 一律加引号，否则
 
 **改术语表后必须清构建缓存**：Astro 把渲染好的 markdown 缓存了两处 —— `node_modules/.astro/data-store.json` 和仓库根的 `.astro/data-store.json`。改插件、改 `astro.config.mjs`、增删或改名文章都不会让它失效，页面看着像没生效(旧的文章地址也会一直留着)。改完删掉这两处再构建。
 
+## 闯关游戏
+
+站点有一个 `/game/` 的闯关游戏，把知识点当关卡刷。首批只做 **AI 应用开发**这条线(面试准备用)，题目口径按面试写。
+
+- **一关一个主题**:提示词工程、上下文与记忆、RAG、工具调用与协议、任务规划、多智能体协作、技术框架、大模型微调、大模型能力演进、运维与部署、行业知识。
+- **题型都是选择题**:看术语选解释、看解释选术语、判断题、面试场景题。答完一题给一段解析，接得住追问的那种;能指回站内讲解的地方都挂了「查术语表 / 看讲解」。
+- **答错进错题本**:答错的题自动收进来，答对一次就移出去，可以只刷错题。
+- **逐关解锁 + 星级**:上一关过了才开下一关，按历史最好正确率给 1~3 星。
+- **进度只存本机**:`localStorage`(键 `lg-game:ai:v1`)，和主题、问答历史一个路子，换设备不同步。
+- **键盘能加速**:`1`–`4` 选选项，回车下一题。
+
+题目数据在 `src/data/game/`，一个题库一个文件(目前 `ai.ts`)，类型与取数函数在 `types.ts` / `index.ts`。
+界面是 React island(`src/components/game/GameApp.tsx`，`client:only` 挂载，进度读写都在浏览器侧)，样式在 `src/styles/game.css`。
+想加一关就在题库文件里加一条 `Level`，组件不用动。
+
 ## 内容来源与版权
 
 - **正文都是自己写的**，依据是每篇末尾「参考资料」里列的一手文档(语言规范、官方 FAQ、库文档、原始论文)。事实与结论可以引用，成段的文字不搬。
@@ -185,6 +201,7 @@ src/
   content/knowledge/        正文 markdown,按分类分目录
   data/catalog.ts           分类树(顺序 / 状态 / 说明)
   data/resources.ts         各分类的站外权威资料索引
+  data/game/                闯关题库(types / index / ai)
   lib/content.ts            取数据与拼地址的公共函数(含 withBase)
   lib/chat.ts               问答面板的配置、提示词与 SSE 流式读取
   lib/chat-models.ts        模型配置的存取 + 没部署中间件时的本地兜底后端
@@ -192,12 +209,14 @@ src/
   demos/*.astro             动手讲解
   components/kb/            知识库界面(Sidebar / MindMapPanel / Toc / Breadcrumb …)
   components/chat/          常驻问答面板(React)+ 模型配置弹窗(Vue,内嵌 ai-model-form)
+  components/game/          闯关游戏(React island)
   components/ui/, data/, lib/motion.ts, App.tsx   落地页那套(只在 /about 用)
   layouts/Base.astro        页面外壳(主题预置、颗粒层、跳转链接)
   layouts/DocsLayout.astro  知识库外壳(头部、侧栏、页脚、问答面板)
-  pages/                    路由:/、/[category]/、/[category]/[slug]/、/about、/404
+  pages/                    路由:/、/[category]/、/[category]/[slug]/、/game、/glossary、/about、/404
   styles/global.css         设计令牌 + 全局基础样式
   styles/kb.css             知识库界面、正文排版与问答面板样式
+  styles/game.css           闯关游戏界面
 server/
   index.mjs                 Express 服务:静态站点 + /api/chat + /api/ai-model
   chat.mjs                  问答接口(SSE 透传、限流、模型解析)
@@ -296,6 +315,7 @@ APP_DIR=/opt/liuguang-coding bash scripts/deploy-on-server.sh
 - 站外资料是**人工挑选的索引**，不是自动抓取，也没有做链接存活检查。
 - 手动切换主题/追加问答历史都只存本机浏览器，换设备不同步。
 - `/about` 那版落地页用的课程、价格、学员信息都是演示数据，邮箱表单没有后端。
+- 闯关游戏的进度与错题本只存在本机浏览器里，换设备不同步;题库目前只有 AI 一条线。
 
 ## 素材说明
 
