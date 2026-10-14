@@ -2,7 +2,7 @@
 import CategoryCard from '../components/kb/CategoryCard.astro'
 import TopicRow from '../components/kb/TopicRow.astro'
 import { catalog } from '../data/catalog'
-import { levels, totalQuestions } from '../data/game'
+import { decks, totalLevels, totalQuestions } from '../data/game'
 import { terms } from '../data/glossary'
 import {
   categoryPath,
@@ -72,11 +72,13 @@ const recent = [...topics].sort((a, b) => b.data.updated.getTime() - a.data.upda
     <a href={withBase('game/')} class="lg-card">
       <span class="lg-card-title">
         闯关游戏
-        <span class="lg-badge">{levels.length} 关 · {totalQuestions()} 题</span>
+        <span class="lg-badge">
+          {decks.length} 个题库 · {totalLevels()} 关 · {totalQuestions()} 题
+        </span>
       </span>
       <span class="lg-card-intro">
         把知识点当关卡刷。一关一个主题，选择题推进，答完给一段解析;答错的题收进错题本，刷完一轮再回来清。
-        目前只有 AI 应用开发这条线，进度存在本机浏览器里。
+        目前有 AI 应用开发与 Python 两个题库，进度存在本机浏览器里。
       </span>
     </a>
   </section>

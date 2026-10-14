@@ -33,6 +33,52 @@
     color: var(--muted);
   }
 
+  /* ---------- 题库切换 ---------- */
+  .lg-game-decks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .lg-game-deck {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    height: 2.4rem;
+    padding: 0 1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--muted);
+    transition: border-color 0.18s, color 0.18s, background-color 0.18s;
+  }
+
+  .lg-game-deck:hover {
+    border-color: var(--line-strong);
+    color: var(--ink);
+  }
+
+  .lg-game-deck[aria-pressed='true'] {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--ink);
+  }
+
+  .lg-game-deck-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .lg-game-deck-meta {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .lg-game-deck[aria-pressed='true'] .lg-game-deck-meta {
+    color: var(--accent);
+  }
+
   /* ---------- 关卡地图 ---------- */
   .lg-game-path {
     position: relative;

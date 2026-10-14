@@ -50,6 +50,19 @@ export interface Level {
   questions: Question[]
 }
 
+/**
+ * 一个题库(deck):一串围绕同一方向的关卡。
+ * AI 应用开发、Python 各是一个题库,在地图上并列成两个入口,互不锁定 ——
+ * 刷 Python 不用先把 AI 全通关。
+ */
+export interface Deck {
+  id: string
+  name: string
+  /** 题库的一句话说明,切换标签下面显示 */
+  intro: string
+  levels: Level[]
+}
+
 /** 一关的进度 */
 export interface LevelProgress {
   /** 1~3,按历史最好正确率算 */

@@ -1,10 +1,11 @@
 ---
 import { GameApp } from '../components/game/GameApp.tsx'
-import { levels, totalQuestions } from '../data/game'
+import { decks, totalLevels, totalQuestions } from '../data/game'
 import { withBase } from '../lib/content'
 import DocsLayout from '../layouts/DocsLayout.astro'
 
 const total = totalQuestions()
+const levelTotal = totalLevels()
 ---
 
 <DocsLayout
@@ -24,9 +25,21 @@ const total = totalQuestions()
     进度存在本机浏览器里,换设备不同步。
   </p>
   <p class="mt-3 max-w-[36em] text-[0.88rem] leading-relaxed text-muted">
-    目前有 <span class="font-mono">{levels.length}</span> 关、共{' '}
-    <span class="font-mono">{total}</span> 题,讲的是 AI 应用开发这条线:从提示词、上下文与记忆,到检索、工具调用、
-    多智能体与微调。题目口径按面试准备,解析里能指回站内讲解的地方都挂上了链接。
+    目前有 <span class="font-mono">{decks.length}</span> 个题库、共{' '}
+    <span class="font-mono">{levelTotal}</span> 关 <span class="font-mono">{total}</span> 题:
+    {
+      decks.map((deck, index) => (
+        <>
+          {index > 0 ? '、' : ''}
+          <span class="text-ink">{deck.name}</span>({deck.levels.length} 关)
+        </>
+      ))
+    }
+    。两个题库各走各的解锁线,刷 Python 不用先把 AI 通关。
+  </p>
+
+  <p class="mt-3 max-w-[36em] text-[0.88rem] leading-relaxed text-muted">
+    题目口径按面试准备,解析里能指回站内讲解的地方都挂上了链接。
   </p>
 
   <p class="mt-3 max-w-[36em] text-[0.82rem] leading-relaxed text-muted">

@@ -1,6 +1,6 @@
 ---
 import { catalog } from '../../data/catalog'
-import { levels } from '../../data/game'
+import { totalLevels } from '../../data/game'
 import { terms } from '../../data/glossary'
 import { categoryPath, countByCategory, countFor, getTopics, glossaryPath, withBase } from '../../lib/content'
 
@@ -101,6 +101,6 @@ function topicsIn(id: string) {
     data-active={page === 'game'}
   >
     <span>闯关游戏</span>
-    <span class="lg-nav-count">{levels.length}</span>
+    <span class="lg-nav-count">{totalLevels()}</span>
   </a>
 </nav>

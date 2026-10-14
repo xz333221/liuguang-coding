@@ -1,22 +1,37 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import type { GameProgress, Question } from '../../data/game'
 import {
+  deckOfLevel,
+  deckProgress,
+  decks,
+  findDeck,
   findLevel,
   findQuestion,
   isLevelUnlocked,
-  levels,
+  levelsOf,
   nextLevelId,
   passed,
   questionsOf,
   starsFor,
-  totalQuestions,
 } from '../../data/game'
 import { glossaryPath, topicHref } from '../../lib/paths'
 
-/** 这道题属于哪一关,错题本里标出来源用 */
+/** 这道题属于哪个题库的哪一关,错题本里标出来源用 */
 function levelNameOf(questionId: string): string {
-  for (const level of levels) {
-    if (level.questions.some((item) => item.id === questionId)) return level.name
+  for (const deck of decks) {
+    for (const level of deck.levels) {
+      if (level.questions.some((item) => item.id === questionId)) return level.name
+    }
+  }
+  return '错题'
+}
+
+/** 这道题属于哪个题库,错题本分组用 */
+function deckNameOf(questionId: string): string {
+  for (const deck of decks) {
+    if (deck.levels.some((level) => level.questions.some((item) => item.id === questionId))) {
+      return deck.name
+    }
   }
   return '错题'
 }
@@ -120,15 +135,16 @@ export function GameApp() {
   const [session, setSession] = useState<Session | null>(null)
   /** 地图 / 错题本 / 答题 / 结算,四者只出现一个 */
   const [tab, setTab] = useState<'map' | 'wrong'>('map')
+  /** 地图上当前选中的题库;两个题库并列,互不锁定 */
+  const [deckId, setDeckId] = useState(decks[0].id)
 
   useEffect(() => {
     saveProgress(progress)
   }, [progress])
 
-  const clearedCount = useMemo(
-    () => levels.filter((level) => progress.levels[level.id]?.cleared).length,
-    [progress.levels],
-  )
+  const deck = findDeck(deckId) ?? decks[0]
+  const deckLevels = levelsOf(deck.id)
+  const { cleared: clearedCount, total: levelTotal } = deckProgress(deck.id, progress.levels)
 
   const startLevel = useCallback((levelId: string) => {
     const questions = questionsOf(levelId)
@@ -309,6 +325,8 @@ export function GameApp() {
             ← {isReview ? '错题本' : '关卡地图'}
           </button>
           <span className="mx-2 text-line-strong">/</span>
+          {deckOfLevel(session.levelId)?.name ?? session.title}
+          <span className="mx-2 text-line-strong">/</span>
           {session.title}
         </p>
 
@@ -435,7 +453,9 @@ export function GameApp() {
             <div className="lg-game-wrong-list mt-5">
               {wrongQuestions.map((item) => (
                 <div className="lg-game-wrong-item" key={item.id}>
-                  <span className="lg-game-wrong-level">{levelNameOf(item.id)}</span>
+                  <span className="lg-game-wrong-level">
+                    {deckNameOf(item.id)} · {levelNameOf(item.id)}
+                  </span>
                   <span className="lg-game-wrong-prompt">{item.prompt}</span>
                 </div>
               ))}
@@ -458,16 +478,41 @@ export function GameApp() {
   // ---------------- 关卡地图 ----------------
   return (
     <div>
-      <div className="lg-game-stats">
+      {/* 题库切换:两个题库并列,刷哪个不受另一个进度影响 */}
+      <div className="lg-game-decks" role="group" aria-label="选择题库">
+        {decks.map((item) => {
+          const record = deckProgress(item.id, progress.levels)
+          return (
+            <button
+              type="button"
+              key={item.id}
+              className="lg-game-deck"
+              aria-pressed={item.id === deckId}
+              onClick={() => setDeckId(item.id)}
+            >
+              <span className="lg-game-deck-name">{item.name}</span>
+              <span className="lg-game-deck-meta">
+                {record.cleared}/{record.total} 关
+              </span>
+            </button>
+          )
+        })}
+      </div>
+
+      <p className="mt-3 max-w-[34em] text-[0.88rem] leading-relaxed text-muted">{deck.intro}</p>
+
+      <div className="lg-game-stats mt-8">
         <div className="lg-game-stat">
-          <span className="lg-game-stat-value">{totalQuestions()}</span>
-          <span className="lg-game-stat-label">题目总数</span>
+          <span className="lg-game-stat-value">
+            {clearedCount}/{levelTotal}
+          </span>
+          <span className="lg-game-stat-label">本库通关</span>
         </div>
         <div className="lg-game-stat">
           <span className="lg-game-stat-value">
-            {clearedCount}/{levels.length}
+            {deckLevels.reduce((sum, level) => sum + level.questions.length, 0)}
           </span>
-          <span className="lg-game-stat-label">已通关卡</span>
+          <span className="lg-game-stat-label">本库题目</span>
         </div>
         <div className="lg-game-stat">
           <span className="lg-game-stat-value">{progress.stats.correct}</span>
@@ -501,7 +546,7 @@ export function GameApp() {
       </div>
 
       <div className="lg-game-path mt-8">
-        {levels.map((level, index) => {
+        {deckLevels.map((level, index) => {
           const record = progress.levels[level.id]
           const unlocked = isLevelUnlocked(level.id, progress.levels)
           const state = !unlocked ? 'locked' : record?.cleared ? 'cleared' : 'current'
