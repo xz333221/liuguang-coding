@@ -32,7 +32,7 @@ export const groups: TermGroupMeta[] = [
   {
     id: 'ai',
     name: 'AI',
-    intro: '大模型从输入到输出这条链上的名词:token、logit、采样、注意力。',
+    intro: '从 token、logit、采样、注意力,到提示词、检索、工具调用与 Agent 这条应用链上的名词。',
   },
   {
     id: 'algorithm',
