@@ -133,6 +133,27 @@
     opacity: 0.75;
   }
 
+  /* 侧栏滚动条:浏览器默认那条太糙,收成细一条,颜色跟着线条令牌走。
+     右边再留 4px 的气,文字截断出省略号也不至于贴到滚动条上 */
+  .lg-scroll-slim {
+    padding-right: 0.25rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+
+  .lg-scroll-slim::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .lg-scroll-slim::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: var(--line-strong);
+  }
+
+  .lg-scroll-slim::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
   /* ---------- 徽标 ---------- */
   .lg-badge {
     padding: 0.1rem 0.45rem;

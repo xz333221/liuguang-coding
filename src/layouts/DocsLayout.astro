@@ -46,7 +46,9 @@ const year = new Date().getFullYear()
 
   <div class="mx-auto flex max-w-[1240px] gap-10 px-5 md:px-8">
     <aside class="hidden w-[240px] shrink-0 lg:block">
-      <div class="sticky top-16 max-h-[calc(100dvh-4rem)] overflow-x-hidden overflow-y-auto py-8">
+      <div
+        class="lg-scroll-slim sticky top-16 max-h-[calc(100dvh-4rem)] overflow-x-hidden overflow-y-auto py-8"
+      >
         <p class="mb-3 px-3 text-[0.72rem] tracking-[0.08em] text-muted">知识分类</p>
         <Sidebar current={category} currentTopic={topic} page={page} />
       </div>

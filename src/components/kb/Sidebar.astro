@@ -28,7 +28,7 @@ function topicsIn(id: string) {
     roots.map((root) => (
       <>
         <a href={categoryPath(root.id)} class="lg-nav-item" data-active={current === root.id}>
-          <span>{root.name}</span>
+          <span class="min-w-0 flex-1 truncate">{root.name}</span>
           {root.status === 'soon' ? <span class="lg-badge">筹备中</span> : null}
           <span class="lg-nav-count">{countFor(root.id, counts)}</span>
         </a>
@@ -58,7 +58,7 @@ function topicsIn(id: string) {
                 class="lg-nav-item lg-nav-item--child"
                 data-active={current === child.id}
               >
-                <span>{child.name}</span>
+                <span class="min-w-0 flex-1 truncate">{child.name}</span>
                 {child.status === 'soon' ? <span class="lg-badge">筹备中</span> : null}
                 <span class="lg-nav-count">{countFor(child.id, counts)}</span>
               </a>
@@ -90,7 +90,7 @@ function topicsIn(id: string) {
     class="lg-nav-item mt-3 border-t border-line pt-3"
     data-active={page === 'glossary'}
   >
-    <span>术语表</span>
+    <span class="min-w-0 flex-1 truncate">术语表</span>
     <span class="lg-nav-count">{terms.length}</span>
   </a>
 
@@ -100,7 +100,7 @@ function topicsIn(id: string) {
     class="lg-nav-item mt-1"
     data-active={page === 'game'}
   >
-    <span>闯关游戏</span>
+    <span class="min-w-0 flex-1 truncate">闯关游戏</span>
     <span class="lg-nav-count">{totalLevels()}</span>
   </a>
 </nav>

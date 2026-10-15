@@ -42,7 +42,8 @@
 
   .lg-game-deck {
     display: inline-flex;
-    align-items: baseline;
+    align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     height: 2.4rem;
     padding: 0 1rem;
@@ -86,7 +87,8 @@
     gap: 0.6rem;
   }
 
-  /* 路径中间那道竖线:从第一个节点连到最后一个 */
+  /* 路径中间那道竖线:从第一个节点连到最后一个。
+     压在圆圈上面(z-index 高于 .lg-game-node 的 1),像一根线把所有节点串起来 */
   .lg-game-path::before {
     content: '';
     position: absolute;
@@ -95,6 +97,7 @@
     left: 1.35rem;
     width: 1px;
     background: var(--line);
+    z-index: 2;
   }
 
   .lg-game-row {
