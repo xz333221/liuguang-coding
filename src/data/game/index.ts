@@ -5,15 +5,16 @@
 // 进度的读写放 src/components/game/GameApp.tsx 里。
 
 import { aiLevels } from './ai'
+import { algorithmLevels } from './algorithm'
+import { javaLevels } from './java'
 import { pythonLevels } from './python'
 import type { Deck, Level, LevelProgress, Question } from './types'
 
 export type { Deck, GameProgress, Level, LevelProgress, Question, QuestionKind } from './types'
 
 /**
- * 题库清单。AI 应用开发与 Python 各占一个,地图上并列,互不锁定 ——
- * 刷 Python 不用先把 AI 全通关。
- * 以后加 Java / 算法,在这里加一条、把 levels 指向新文件即可,组件不用动。
+ * 题库清单。四个题库在地图上并列,互不锁定 —— 刷 Python 不用先把 AI 通关。
+ * 再加题库:新建一个 <名字>.ts 导出 levels,在这里加一条指过去即可,组件不用动。
  */
 export const decks: Deck[] = [
   {
@@ -27,6 +28,18 @@ export const decks: Deck[] = [
     name: 'Python',
     intro: '数据模型与工程习惯:变量、迭代协议、装饰器、并发与内存。',
     levels: pythonLevels,
+  },
+  {
+    id: 'java',
+    name: 'Java',
+    intro: '相等性与基本类型这条最容易答错的线,再到集合、并发与 JVM。',
+    levels: javaLevels,
+  },
+  {
+    id: 'algorithm',
+    name: '算法',
+    intro: '先学会衡量工作量,再看排序、二分、动态规划这些常用范式。',
+    levels: algorithmLevels,
   },
 ]
 

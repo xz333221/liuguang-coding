@@ -26,16 +26,8 @@ const levelTotal = totalLevels()
   </p>
   <p class="mt-3 max-w-[36em] text-[0.88rem] leading-relaxed text-muted">
     目前有 <span class="font-mono">{decks.length}</span> 个题库、共{' '}
-    <span class="font-mono">{levelTotal}</span> 关 <span class="font-mono">{total}</span> 题:
-    {
-      decks.map((deck, index) => (
-        <>
-          {index > 0 ? '、' : ''}
-          <span class="text-ink">{deck.name}</span>({deck.levels.length} 关)
-        </>
-      ))
-    }
-    。两个题库各走各的解锁线,刷 Python 不用先把 AI 通关。
+    <span class="font-mono">{levelTotal}</span> 关 <span class="font-mono">{total}</span> 题。四个题库各走各的解锁线,
+    想先刷哪个都行。
   </p>
 
   <p class="mt-3 max-w-[36em] text-[0.88rem] leading-relaxed text-muted">
