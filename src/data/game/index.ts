@@ -6,10 +6,12 @@
 
 import { aiLevels } from './ai'
 import { algorithmLevels } from './algorithm'
+import { engineeringLevels } from './engineering'
 import { javaLevels } from './java'
 import { pythonLevels } from './python'
 import type { Deck, Level, LevelProgress, Question } from './types'
 
+export { correctOrderOf, prepareQuestions, verdictOf } from './prepare'
 export type { Deck, GameProgress, Level, LevelProgress, Question, QuestionKind } from './types'
 
 /**
@@ -40,6 +42,12 @@ export const decks: Deck[] = [
     name: '算法',
     intro: '先学会衡量工作量,再看排序、二分、动态规划这些常用范式。',
     levels: algorithmLevels,
+  },
+  {
+    id: 'engineering',
+    name: '工程实战',
+    intro: '读懂别人写的代码,再把手上的链路跑通:排序、多选、代码填空都在这条线上。',
+    levels: engineeringLevels,
   },
 ]
 

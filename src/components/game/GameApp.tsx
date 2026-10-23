@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { GameProgress, Question } from '../../data/game'
 import {
+  correctOrderOf,
   deckOfLevel,
   deckProgress,
   decks,
@@ -11,8 +12,10 @@ import {
   levelsOf,
   nextLevelId,
   passed,
+  prepareQuestions,
   questionsOf,
   starsFor,
+  verdictOf,
 } from '../../data/game'
 import { glossaryPath, topicHref } from '../../lib/paths'
 
@@ -52,18 +55,27 @@ const KIND_LABEL: Record<Question['kind'], string> = {
   def2term: '名词',
   judge: '判断',
   scenario: '场景',
+  multi: '多选',
+  order: '排序',
+  blank: '填空',
 }
 
-const LETTERS = ['A', 'B', 'C', 'D']
+/** 要点完整再交卷的题型 */
+const BATCH_KINDS = new Set<Question['kind']>(['multi', 'order'])
+
+const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F']
 
 interface Session {
   /** 关卡 id,错题复习时是 REVIEW_ID */
   levelId: string
   title: string
+  /** 每开一关都重新洗过顺序的题目 */
   questions: Question[]
   index: number
-  /** 已选的选项下标,没选是 null */
-  picked: number | null
+  /** 当前题的已选项:单选/填空一项,多选一组,排序题按点击先后 */
+  picked: number[]
+  /** 当前题的判定结果,null 表示还没交卷 */
+  verdict: boolean | null
   results: boolean[]
 }
 
@@ -130,12 +142,68 @@ function Stars({ count, size = 'sm' }: { count: number; size?: 'sm' | 'lg' }) {
   )
 }
 
+function CodeBlock({ code, lang }: { code: string; lang?: string }) {
+  return (
+    <div className="lg-game-code">
+      {lang ? <span className="lg-game-code-lang">{lang}</span> : null}
+      <pre>
+        <code>{code}</code>
+      </pre>
+    </div>
+  )
+}
+
+/** 答完之后把正确答案摊开:多选列选项,排序列顺序,填空把横线补上 */
+function AnswerKey({ question }: { question: Question }) {
+  if (question.kind === 'multi') {
+    const correct = question.choices.filter((choice) => choice.correct)
+    return (
+      <div className="lg-game-key">
+        <span className="lg-game-key-label">该选这 {correct.length} 项</span>
+        <ul className="lg-game-key-items">
+          {correct.map((choice) => (
+            <li key={choice.text}>{choice.text}</li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+
+  if (question.kind === 'order') {
+    return (
+      <div className="lg-game-key">
+        <span className="lg-game-key-label">正确顺序</span>
+        <ol className="lg-game-key-list">
+          {correctOrderOf(question).map((choice, index) => (
+            <li key={choice.text}>
+              <span className="lg-game-key-no">{index + 1}</span>
+              {choice.text}
+            </li>
+          ))}
+        </ol>
+      </div>
+    )
+  }
+
+  if (question.kind === 'blank' && question.code) {
+    const filled = question.choices.find((choice) => choice.correct)?.text ?? ''
+    return (
+      <div className="lg-game-key">
+        <span className="lg-game-key-label">填进去是这样</span>
+        <CodeBlock code={question.code.replace('____', filled)} lang={question.lang} />
+      </div>
+    )
+  }
+
+  return null
+}
+
 export function GameApp() {
   const [progress, setProgress] = useState<GameProgress>(loadProgress)
   const [session, setSession] = useState<Session | null>(null)
   /** 地图 / 错题本 / 答题 / 结算,四者只出现一个 */
   const [tab, setTab] = useState<'map' | 'wrong'>('map')
-  /** 地图上当前选中的题库;两个题库并列,互不锁定 */
+  /** 地图上当前选中的题库;各题库并列,互不锁定 */
   const [deckId, setDeckId] = useState(decks[0].id)
 
   useEffect(() => {
@@ -147,50 +215,80 @@ export function GameApp() {
   const { cleared: clearedCount, total: levelTotal } = deckProgress(deck.id, progress.levels)
 
   const startLevel = useCallback((levelId: string) => {
-    const questions = questionsOf(levelId)
+    const questions = prepareQuestions(questionsOf(levelId))
     if (questions.length === 0) return
     setSession({
       levelId,
       title: findLevel(levelId)?.name ?? levelId,
       questions,
       index: 0,
-      picked: null,
+      picked: [],
+      verdict: null,
       results: [],
     })
   }, [])
 
   const startReview = useCallback(() => {
-    const questions = progress.wrong
-      .map((id) => findQuestion(id))
-      .filter((item): item is Question => Boolean(item))
+    const questions = prepareQuestions(
+      progress.wrong
+        .map((id) => findQuestion(id))
+        .filter((item): item is Question => Boolean(item)),
+    )
     if (questions.length === 0) return
     setSession({
       levelId: REVIEW_ID,
       title: '错题复习',
       questions,
       index: 0,
-      picked: null,
+      picked: [],
+      verdict: null,
       results: [],
     })
   }, [progress.wrong])
 
   const question = session ? session.questions[session.index] : undefined
-  const answered = session?.picked ?? null
+  const picked = session?.picked ?? []
+  const verdict = session?.verdict ?? null
+  const answered = verdict !== null
 
-  const answer = useCallback(
-    (choiceIndex: number) => {
-      if (!session || session.picked !== null) return
+  /** 交卷:算对错、进错题本、记一次答题 */
+  const commit = useCallback(
+    (choices: number[]) => {
+      if (!session || session.verdict !== null) return
       const current = session.questions[session.index]
       if (!current) return
-      const ok = current.choices[choiceIndex].correct
-      setSession({ ...session, picked: choiceIndex, results: [...session.results, ok] })
+      const ok = verdictOf(current, choices)
+      setSession({ ...session, picked: choices, verdict: ok, results: [...session.results, ok] })
       setProgress((prev) => applyAnswer(prev, current.id, ok))
     },
     [session],
   )
 
+  /** 点一个选项:批量题型只是勾选/排位,单答题型点完即判 */
+  const pick = useCallback(
+    (choiceIndex: number) => {
+      if (!session || session.verdict !== null) return
+      const current = session.questions[session.index]
+      if (!current) return
+
+      if (BATCH_KINDS.has(current.kind)) {
+        const exists = session.picked.includes(choiceIndex)
+        setSession({
+          ...session,
+          picked: exists
+            ? session.picked.filter((index) => index !== choiceIndex)
+            : [...session.picked, choiceIndex],
+        })
+        return
+      }
+
+      commit([choiceIndex])
+    },
+    [session, commit],
+  )
+
   const advance = useCallback(() => {
-    if (!session) return
+    if (!session || session.verdict === null) return
     if (session.index + 1 >= session.questions.length) {
       // 收尾:算星、记通关
       const accuracy =
@@ -214,10 +312,10 @@ export function GameApp() {
       setSession({ ...session, index: -1 })
       return
     }
-    setSession({ ...session, index: session.index + 1, picked: null })
+    setSession({ ...session, index: session.index + 1, picked: [], verdict: null })
   }, [session])
 
-  // 键盘:1~4 选项,回车下一题。答过的题按回车也能往下走
+  // 键盘:1~6 选项,回车下一题。批量题型回车等于提交
   useEffect(() => {
     if (!question) return
     function onKeyDown(event: KeyboardEvent) {
@@ -231,19 +329,29 @@ export function GameApp() {
       const index = Number.parseInt(event.key, 10)
       if (!Number.isNaN(index) && index >= 1 && index <= (question?.choices.length ?? 0)) {
         event.preventDefault()
-        answer(index - 1)
+        pick(index - 1)
         return
       }
       if (event.key === 'Enter' || event.key === ' ') {
-        if (answered !== null && !onControl) {
-          event.preventDefault()
+        if (onControl) return
+        event.preventDefault()
+        if (session?.verdict !== null) {
           advance()
+          return
+        }
+        // 多选、排序:回车就是交卷;排序没排完不给交
+        if (question && BATCH_KINDS.has(question.kind) && session) {
+          const ready =
+            question.kind === 'multi'
+              ? session.picked.length > 0
+              : session.picked.length === question.choices.length
+          if (ready) commit(session.picked)
         }
       }
     }
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
-  }, [question, answered, session, answer, advance])
+  }, [question, session, pick, advance, commit])
 
   // ---------------- 结算 ----------------
   if (session && session.index === -1) {
@@ -308,8 +416,20 @@ export function GameApp() {
   // ---------------- 答题 ----------------
   if (session && question) {
     const isReview = session.levelId === REVIEW_ID
-    const pickedOk =
-      answered !== null ? question.choices[answered].correct : undefined
+    const isMulti = question.kind === 'multi'
+    const isOrder = question.kind === 'order'
+    const ready =
+      question.kind === 'multi'
+        ? picked.length > 0
+        : question.kind === 'order'
+          ? picked.length === question.choices.length
+          : false
+
+    /** 排序题在答完后,逐位标出对错 */
+    const seqState = (choiceIndex: number) => {
+      if (verdict === null) return 'placed'
+      return question.choices[choiceIndex].rank === picked.indexOf(choiceIndex) ? 'ok' : 'bad'
+    }
 
     return (
       <div>
@@ -332,7 +452,9 @@ export function GameApp() {
 
         <div className="lg-game-play">
           <div className="lg-game-play-top">
-            <span className="lg-game-kind">{KIND_LABEL[question.kind]}</span>
+            <span className="lg-game-kind" data-kind={question.kind}>
+              {KIND_LABEL[question.kind]}
+            </span>
             <span className="lg-game-counter">
               {session.index + 1} / {session.questions.length}
             </span>
@@ -341,60 +463,153 @@ export function GameApp() {
           <div
             className="lg-game-track"
             role="progressbar"
-            aria-valuenow={session.index + (answered !== null ? 1 : 0)}
+            aria-valuenow={session.index + (answered ? 1 : 0)}
             aria-valuemin={0}
             aria-valuemax={session.questions.length}
           >
             <div
               className="lg-game-track-fill"
               style={{
-                width: `${((session.index + (answered !== null ? 1 : 0)) / session.questions.length) * 100}%`,
+                width: `${((session.index + (answered ? 1 : 0)) / session.questions.length) * 100}%`,
               }}
             />
           </div>
 
           <p className="lg-game-prompt">{question.prompt}</p>
+          {question.code ? <CodeBlock code={question.code} lang={question.lang} /> : null}
 
-          <div className="lg-game-options">
-            {question.choices.map((choice, index) => {
-              const state =
-                answered === null
-                  ? 'idle'
-                  : index === answered
-                    ? choice.correct
-                      ? 'right'
-                      : 'picked-wrong'
-                    : choice.correct
-                      ? 'right'
-                      : 'idle'
-              return (
+          {isOrder ? (
+            <div className="lg-game-order">
+              <ol className="lg-game-seq">
+                {question.choices.map((choice, index) => {
+                  const position = picked.indexOf(index)
+                  const placed = position >= 0
+                  return (
+                    <li key={choice.text} data-state={placed ? seqState(index) : 'empty'}>
+                      <span className="lg-game-seq-no">{placed ? position + 1 : index + 1}</span>
+                      {placed ? (
+                        <button
+                          type="button"
+                          className="lg-game-seq-text"
+                          disabled={answered}
+                          onClick={() => pick(index)}
+                          title="点一下撤回"
+                        >
+                          {choice.text}
+                        </button>
+                      ) : (
+                        <span className="lg-game-seq-text lg-game-seq-hint" aria-hidden="true">
+                          待填
+                        </span>
+                      )}
+                    </li>
+                  )
+                })}
+              </ol>
+
+              {answered ? null : (
+                <div className="lg-game-pool">
+                  <p className="lg-game-pool-label">
+                    待排 {question.choices.length - picked.length} 项，按顺序点
+                  </p>
+                  <div className="lg-game-pool-list">
+                    {question.choices.map((choice, index) =>
+                      picked.includes(index) ? null : (
+                        <button
+                          key={choice.text}
+                          type="button"
+                          className="lg-game-chip"
+                          onClick={() => pick(index)}
+                        >
+                          {choice.text}
+                        </button>
+                      ),
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="lg-game-options" data-kind={question.kind}>
+              {question.choices.map((choice, index) => {
+                const on = picked.includes(index)
+                let state: string
+                if (isMulti) {
+                  if (verdict === null) state = on ? 'on' : 'idle'
+                  else if (choice.correct) state = on ? 'right' : 'missed'
+                  else state = on ? 'picked-wrong' : 'idle'
+                } else {
+                  state =
+                    verdict === null
+                      ? 'idle'
+                      : index === picked[0]
+                        ? choice.correct
+                          ? 'right'
+                          : 'picked-wrong'
+                        : choice.correct
+                          ? 'right'
+                          : 'idle'
+                }
+                return (
+                  <button
+                    type="button"
+                    key={choice.text}
+                    className="lg-game-option"
+                    data-state={state}
+                    aria-pressed={isMulti ? on : undefined}
+                    disabled={answered}
+                    onClick={() => pick(index)}
+                  >
+                    <span className="lg-game-option-key">{LETTERS[index] ?? index + 1}</span>
+                    <span className={question.kind === 'blank' ? 'font-mono' : undefined}>
+                      {choice.text}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          )}
+
+          {verdict === null && BATCH_KINDS.has(question.kind) ? (
+            <div className="lg-game-actions">
+              <button
+                type="button"
+                className="lg-game-btn lg-game-btn--primary"
+                disabled={!ready}
+                onClick={() => commit(picked)}
+              >
+                提交答案
+                <span className="text-[0.72rem] opacity-70">
+                  {isOrder
+                    ? picked.length === question.choices.length
+                      ? '(回车)'
+                      : `还差 ${question.choices.length - picked.length} 项`
+                    : '可多选'}
+                </span>
+              </button>
+              {picked.length > 0 ? (
                 <button
                   type="button"
-                  key={choice.text}
-                  className="lg-game-option"
-                  data-state={state}
-                  disabled={answered !== null}
-                  onClick={() => answer(index)}
+                  className="lg-game-btn lg-game-btn--ghost"
+                  onClick={() => setSession({ ...session, picked: [] })}
                 >
-                  <span className="lg-game-option-key">{LETTERS[index]}</span>
-                  <span>{choice.text}</span>
+                  清空重选
                 </button>
-              )
-            })}
-          </div>
+              ) : null}
+            </div>
+          ) : null}
 
-          {answered !== null ? (
+          {answered ? (
             <div className="lg-game-explain">
-              <p className="lg-game-verdict" data-ok={pickedOk}>
-                {pickedOk ? '答对了' : '答错了'}
-                <span className="text-muted">
-                  {question.kind === 'judge'
-                    ? pickedOk
-                      ? ''
-                      : `正确答案:${question.choices.find((item) => item.correct)?.text}`
-                    : ''}
-                </span>
+              <p className="lg-game-verdict" data-ok={verdict}>
+                {verdict ? '答对了' : '答错了'}
+                {!verdict && question.kind === 'judge' ? (
+                  <span className="text-muted">
+                    正确答案:{question.choices.find((item) => item.correct)?.text}
+                  </span>
+                ) : null}
               </p>
+              {!verdict ? <AnswerKey question={question} /> : null}
               <p className="lg-game-explain-body">{question.explain}</p>
               {question.link?.term || question.link?.see ? (
                 <div className="lg-game-links">
@@ -442,7 +657,7 @@ export function GameApp() {
         </div>
 
         {wrongQuestions.length === 0 ? (
-          <p className="mt-6 rounded-[18px] border border-line bg-surface px-5 py-4 text-[0.88rem] text-muted">
+          <p className="lg-game-empty mt-6">
             错题本空着。答错的题会自动收进来,答对一次就移出去。
           </p>
         ) : (
@@ -478,7 +693,7 @@ export function GameApp() {
   // ---------------- 关卡地图 ----------------
   return (
     <div>
-      {/* 题库切换:两个题库并列,刷哪个不受另一个进度影响 */}
+      {/* 题库切换:各题库并列,刷哪个不受其它题库进度影响 */}
       <div className="lg-game-decks" role="group" aria-label="选择题库">
         {decks.map((item) => {
           const record = deckProgress(item.id, progress.levels)

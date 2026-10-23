@@ -156,18 +156,19 @@
     display: grid;
     gap: 0.35rem;
     padding: 0.85rem 1.1rem;
-    border: 1px solid var(--line);
     border-radius: 18px;
     background: var(--surface);
-    transition: border-color 0.2s, transform 0.2s;
+    box-shadow: inset 2px 0 0 transparent;
+    transition: box-shadow 0.2s, background-color 0.2s;
   }
 
   .lg-game-row[data-state='cleared'] .lg-game-level {
-    border-color: var(--line-strong);
+    box-shadow: inset 2px 0 0 var(--line-strong);
   }
 
   .lg-game-row:not([data-state='locked']):hover .lg-game-level {
-    border-color: var(--accent);
+    background: var(--panel);
+    box-shadow: inset 2px 0 0 var(--accent);
   }
 
   .lg-game-level-head {
@@ -227,7 +228,6 @@
     display: grid;
     gap: 1.1rem;
     padding: 1.25rem;
-    border: 1px solid var(--line);
     border-radius: 18px;
     background: var(--surface);
   }
@@ -249,10 +249,49 @@
     align-items: center;
     height: 1.5rem;
     padding: 0 0.6rem;
-    border: 1px solid var(--line);
-    border-radius: 999px;
+    border-radius: 3px;
+    background: var(--panel);
     font-size: 0.72rem;
     color: var(--muted);
+  }
+
+  /* 新题型换个颜色,一眼看得出这关在换玩法 */
+  .lg-game-kind[data-kind='multi'],
+  .lg-game-kind[data-kind='order'],
+  .lg-game-kind[data-kind='blank'] {
+    color: var(--highlight);
+  }
+
+  /* ---------- 代码块 ---------- */
+  .lg-game-code {
+    position: relative;
+    padding: 0.9rem 1rem;
+    border-radius: 6px;
+    background: var(--canvas);
+    overflow-x: auto;
+  }
+
+  .lg-game-code pre {
+    margin: 0;
+  }
+
+  .lg-game-code code {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    line-height: 1.8;
+    color: var(--ink);
+    white-space: pre;
+  }
+
+  .lg-game-code-lang {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--line-strong);
   }
 
   .lg-game-counter {
@@ -285,27 +324,33 @@
 
   .lg-game-options {
     display: grid;
-    gap: 0.6rem;
+    gap: 0.2rem;
   }
 
+  /*
+    选项不做"圆角 + 一圈描边"的卡片:一排排平铺的行,左侧一条 2px 竖条当状态位。
+    状态全在这一条竖条和底色上,不再叠边框。
+  */
   .lg-game-option {
     display: flex;
     align-items: flex-start;
     gap: 0.7rem;
     width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    background: var(--canvas);
+    padding: 0.7rem 0.9rem;
+    border: 0;
+    border-radius: 3px;
+    background: transparent;
+    box-shadow: inset 2px 0 0 transparent;
     text-align: left;
     font-size: 0.92rem;
     line-height: 1.6;
     color: var(--ink);
-    transition: border-color 0.18s, background-color 0.18s, opacity 0.18s;
+    transition: background-color 0.16s, box-shadow 0.16s, color 0.16s;
   }
 
   .lg-game-option:not(:disabled):hover {
-    border-color: var(--line-strong);
+    background: var(--canvas);
+    box-shadow: inset 2px 0 0 var(--line-strong);
   }
 
   .lg-game-option:disabled {
@@ -314,50 +359,260 @@
 
   .lg-game-option-key {
     flex-shrink: 0;
+    width: 1rem;
+    padding-top: 0.05rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.6;
+    color: var(--line-strong);
+  }
+
+  /* 多选:勾上但还没交卷 */
+  .lg-game-option[data-state='on'] {
+    background: var(--panel);
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+
+  .lg-game-option[data-state='on'] .lg-game-option-key {
+    color: var(--accent);
+  }
+
+  /* 判题之后:选错的划掉,正确的那项点亮 */
+  .lg-game-option[data-state='picked-wrong'] {
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--wrong);
+    box-shadow: inset 2px 0 0 var(--wrong);
+  }
+
+  .lg-game-option[data-state='picked-wrong'] .lg-game-option-key {
+    color: var(--wrong);
+  }
+
+  .lg-game-option[data-state='right'] {
+    background: var(--accent-soft);
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+
+  .lg-game-option[data-state='right'] .lg-game-option-key {
+    color: var(--accent);
+  }
+
+  /* 多选里漏勾的正确项:左边给同样的强调色,只差底色,一眼看得出"这个该选" */
+  .lg-game-option[data-state='missed'] {
+    color: var(--muted);
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+
+  .lg-game-option[data-state='missed'] .lg-game-option-key {
+    color: var(--accent);
+  }
+
+  /* ---------- 排序题 ---------- */
+  .lg-game-order {
     display: grid;
-    place-items: center;
-    height: 1.4rem;
-    width: 1.4rem;
-    border: 1px solid var(--line-strong);
-    border-radius: 999px;
+    gap: 0.9rem;
+  }
+
+  .lg-game-seq {
+    display: grid;
+    gap: 0.25rem;
+    list-style: none;
+  }
+
+  .lg-game-seq li {
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.05rem;
+    padding: 0.2rem 0.8rem 0.2rem 0.5rem;
+    border-radius: 3px;
+  }
+
+  /* 空位:一条虚线,表示"这里还要放一项" */
+  .lg-game-seq li[data-state='empty'] {
+    border-bottom: 1px dashed var(--line);
+  }
+
+  .lg-game-seq li[data-state='placed'] {
+    background: var(--panel);
+  }
+
+  .lg-game-seq li[data-state='ok'] {
+    background: var(--accent-soft);
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+
+  .lg-game-seq li[data-state='bad'] {
+    box-shadow: inset 2px 0 0 var(--wrong);
+  }
+
+  .lg-game-seq-no {
     font-family: var(--font-mono);
     font-size: 0.72rem;
     color: var(--muted);
   }
 
-  /* 判题之后:选错的划掉,正确的那项点亮 */
-  .lg-game-option[data-state='picked-wrong'] {
-    border-color: var(--wrong);
-    color: var(--muted);
-    text-decoration: line-through;
-    text-decoration-color: var(--wrong);
+  .lg-game-seq li[data-state='ok'] .lg-game-seq-no {
+    color: var(--highlight);
   }
 
-  .lg-game-option[data-state='picked-wrong'] .lg-game-option-key {
-    border-color: var(--wrong);
+  .lg-game-seq li[data-state='bad'] .lg-game-seq-no {
     color: var(--wrong);
   }
 
-  .lg-game-option[data-state='right'] {
-    border-color: var(--accent);
-    background: var(--accent-soft);
+  .lg-game-seq-text {
+    display: block;
+    width: 100%;
+    padding: 0.45rem 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: inherit;
+    text-align: left;
   }
 
-  .lg-game-option[data-state='right'] .lg-game-option-key {
-    border-color: var(--accent);
-    background: var(--accent);
-    color: var(--on-accent);
+  /* 空位上的提示:告诉用户这一格等的是第几项 */
+  .lg-game-seq-hint {
+    font-size: 0.8rem;
+    color: var(--muted);
+    opacity: 0.6;
   }
+
+  button.lg-game-seq-text {
+    cursor: pointer;
+  }
+
+  button.lg-game-seq-text:not(:disabled):hover {
+    color: var(--accent);
+  }
+
+  button.lg-game-seq-text:disabled {
+    cursor: default;
+  }
+
+  /* 候选池:和上面一样一行一项,点一项就补到下一个空位 */
+  .lg-game-pool {
+    display: grid;
+    gap: 0.45rem;
+    padding-top: 0.85rem;
+    border-top: 1px dashed var(--line);
+  }
+
+  .lg-game-pool-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  .lg-game-pool-list {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .lg-game-chip {
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0.8rem 0.4rem 0.5rem;
+    border: 0;
+    border-radius: 3px;
+    background: transparent;
+    box-shadow: inset 2px 0 0 transparent;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: var(--ink);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.16s, color 0.16s, box-shadow 0.16s;
+  }
+
+  .lg-game-chip::before {
+    content: '+';
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .lg-game-chip:hover {
+    background: var(--panel);
+    box-shadow: inset 2px 0 0 var(--line-strong);
+  }
+
+  /* ---------- 答案解析里摊开的正确项 ---------- */
+  .lg-game-key {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .lg-game-key-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  .lg-game-key-items {
+    display: grid;
+    gap: 0.15rem;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--ink);
+    list-style: none;
+  }
+
+  .lg-game-key-items li {
+    position: relative;
+    padding-left: 0.9rem;
+  }
+
+  .lg-game-key-items li::before {
+    content: '';
+    position: absolute;
+    top: 0.72em;
+    left: 0.15rem;
+    height: 0.3rem;
+    width: 0.3rem;
+    border-radius: 999px;
+    background: var(--highlight);
+  }
+
+  .lg-game-key-list {
+    display: grid;
+    gap: 0.1rem;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--ink);
+    list-style: none;
+  }
+
+  .lg-game-key-list li {
+    display: grid;
+    grid-template-columns: 1.2rem minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+
+  .lg-game-key-no {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.95;
+    color: var(--highlight);
+  }
+
 
   /* ---------- 解析 ---------- */
+  /* 贴在选项下面,不再套一层描边盒子:左边一条竖条分出来就够了 */
   .lg-game-explain {
     display: grid;
     gap: 0.55rem;
-    padding: 0.95rem 1.1rem;
-    border: 1px solid var(--line);
-    border-left: 2px solid var(--accent);
-    border-radius: 18px;
+    padding: 0.9rem 1.1rem;
+    border-radius: 4px;
     background: var(--panel);
+    box-shadow: inset 2px 0 0 var(--accent);
   }
 
   .lg-game-verdict {
@@ -486,7 +741,6 @@
     gap: 1.1rem;
     justify-items: center;
     padding: 1.75rem 1.25rem;
-    border: 1px solid var(--line);
     border-radius: 18px;
     background: var(--surface);
     text-align: center;
@@ -506,18 +760,26 @@
   }
 
   /* ---------- 错题本 ---------- */
+  .lg-game-empty {
+    padding: 0.85rem 1rem;
+    border-radius: 4px;
+    background: var(--panel);
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
   .lg-game-wrong-list {
     display: grid;
-    gap: 0.5rem;
+    gap: 0.15rem;
   }
 
   .lg-game-wrong-item {
     display: grid;
-    gap: 0.3rem;
-    padding: 0.8rem 1rem;
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    background: var(--surface);
+    gap: 0.25rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: 3px;
+    background: var(--panel);
   }
 
   .lg-game-wrong-level {
