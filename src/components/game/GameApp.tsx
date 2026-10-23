@@ -510,7 +510,9 @@ export function GameApp() {
               {answered ? null : (
                 <div className="lg-game-pool">
                   <p className="lg-game-pool-label">
-                    待排 {question.choices.length - picked.length} 项，按顺序点
+                    {picked.length === question.choices.length
+                      ? '排满了，回车交卷'
+                      : `待排 ${question.choices.length - picked.length} 项，按顺序点`}
                   </p>
                   <div className="lg-game-pool-list">
                     {question.choices.map((choice, index) =>
