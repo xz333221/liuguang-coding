@@ -88,7 +88,8 @@
   }
 
   /* 路径中间那道竖线:从第一个节点连到最后一个。
-     压在圆圈上面(z-index 高于 .lg-game-node 的 1),像一根线把所有节点串起来 */
+     压在圆圈下面。节点自身有底色,线只在行与行之间的缝隙里露出来,
+     不会横穿圈面把序号切开 */
   .lg-game-path::before {
     content: '';
     position: absolute;
@@ -97,7 +98,7 @@
     left: 1.35rem;
     width: 1px;
     background: var(--line);
-    z-index: 2;
+    z-index: 0;
   }
 
   .lg-game-row {

@@ -23,7 +23,7 @@ function topicsIn(id: string) {
 }
 ---
 
-<nav aria-label="分类导航" class="grid gap-0.5">
+<nav aria-label="分类导航" class="flex flex-col gap-0.5">
   {
     roots.map((root) => (
       <>
@@ -34,7 +34,7 @@ function topicsIn(id: string) {
         </a>
 
         {topicsIn(root.id).length > 0 && (
-          <ul class="grid gap-0.5">
+          <ul class="flex flex-col gap-0.5">
             {topicsIn(root.id).map((topic) => (
               <li>
                 <a
@@ -64,7 +64,7 @@ function topicsIn(id: string) {
               </a>
 
               {topicsIn(child.id).length > 0 && (
-                <ul class="grid gap-0.5">
+                <ul class="flex flex-col gap-0.5">
                   {topicsIn(child.id).map((topic) => (
                     <li>
                       <a

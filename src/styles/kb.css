@@ -127,6 +127,7 @@
 
   .lg-nav-count {
     margin-left: auto;
+    flex-shrink: 0;
     color: var(--muted);
     font-family: var(--font-mono);
     font-size: 0.7rem;
@@ -156,6 +157,7 @@
 
   /* ---------- 徽标 ---------- */
   .lg-badge {
+    flex-shrink: 0;
     padding: 0.1rem 0.45rem;
     border: 1px solid var(--line-strong);
     border-radius: 999px;
