@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="流光 coding 知识库">
+  <defs>
+    <radialGradient id="glow" cx="0.86" cy="0.08" r="0.75">
+      <stop offset="0" stop-color="#e9a23b" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#e9a23b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0b0a09"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- 品牌标识:两道斜向光带(与 favicon / 页头 Mark 一致) -->
+  <g transform="translate(80, 88)">
+    <rect width="108" height="108" rx="24" fill="#141210"/>
+    <path d="M14 66 L84 30" stroke="#e9a23b" stroke-width="11" stroke-linecap="round"/>
+    <path d="M22 86 L92 50" stroke="#e9a23b" stroke-width="11" stroke-linecap="round" opacity="0.34"/>
+    <circle cx="30" cy="27" r="7" fill="#f5f2ee"/>
+  </g>
+
+  <!-- 站名 -->
+  <text x="224" y="156" font-family="'Geist Variable', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="76" font-weight="600" fill="#f5f2ee">流光 coding</text>
+  <g transform="translate(690, 112)">
+    <rect width="128" height="48" rx="24" fill="rgb(233 162 59 / 0.12)" stroke="#e9a23b" stroke-opacity="0.4"/>
+    <text x="64" y="32" text-anchor="middle" font-family="'Geist Variable', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="26" fill="#f2b75e">知识库</text>
+  </g>
+
+  <!-- 一句话说明 -->
+  <text x="224" y="238" font-family="'Geist Variable', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="30" fill="#a9a29a">按主题整理的编程知识库 · 知识地图 / 动手讲解 / 完整正文</text>
+
+  <!-- 底部:分隔线 + 域名 -->
+  <line x1="80" y1="522" x2="1120" y2="522" stroke="#2a2622"/>
+  <text x="80" y="566" font-family="'JetBrains Mono Variable', ui-monospace, monospace" font-size="26" fill="#e9a23b">coding.flowdash.cn</text>
+</svg>

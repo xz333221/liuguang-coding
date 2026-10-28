@@ -3,9 +3,17 @@ import Breadcrumbs from '../../components/kb/Breadcrumbs.astro'
 import MindMapPanel from '../../components/kb/MindMapPanel.vue'
 import SourceList from '../../components/kb/SourceList.astro'
 import Toc from '../../components/kb/Toc.astro'
-import { findCategory } from '../../data/catalog'
+import { findCategory, parentOf } from '../../data/catalog'
 import type { ArticleContext } from '../../lib/chat'
-import { formatDate, getTopics, neighboursOf, render, topicPath, withBase } from '../../lib/content'
+import {
+  categoryPath,
+  formatDate,
+  getTopics,
+  neighboursOf,
+  render,
+  topicPath,
+  withBase,
+} from '../../lib/content'
 import DocsLayout from '../../layouts/DocsLayout.astro'
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js'
 
@@ -39,6 +47,46 @@ const article: ArticleContext = {
   categoryName: meta?.name ?? topic.data.category,
   body: topic.body ?? '',
 }
+
+// 结构化数据(JSON-LD):文章信息 + 面包屑。
+// frontmatter 里只有 updated 一个时间字段,datePublished 与 dateModified 同用它。
+const pageUrl = new URL(topicPath(topic), Astro.site).href
+const parent = parentOf(topic.data.category)
+const crumbs = [
+  { name: '首页', url: new URL(withBase(), Astro.site).href },
+  // 叶子分类(如 python)上面还有父分类(编程语言),面包屑跟着可见导航的层级走
+  ...(parent ? [{ name: parent.name, url: new URL(categoryPath(parent.id), Astro.site).href }] : []),
+  {
+    name: meta?.name ?? topic.data.category,
+    url: new URL(categoryPath(topic.data.category), Astro.site).href,
+  },
+  { name: topic.data.title, url: pageUrl },
+]
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: topic.data.title,
+      description: topic.data.summary,
+      image: [new URL(withBase('og-cover.png'), Astro.site).href],
+      datePublished: topic.data.updated.toISOString(),
+      dateModified: topic.data.updated.toISOString(),
+      author: { '@type': 'Person', name: '徐泽', url: 'https://xuze.flowdash.cn/' },
+      publisher: { '@type': 'Organization', name: '流光 coding' },
+      mainEntityOfPage: pageUrl,
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: crumbs.map((crumb, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: crumb.name,
+        item: crumb.url,
+      })),
+    },
+  ],
+})
 ---
 
 <DocsLayout
@@ -47,6 +95,8 @@ const article: ArticleContext = {
   category={topic.data.category}
   topic={topic.id}
   article={article}
+  ogType="article"
+  jsonLd={jsonLd}
 >
   <Breadcrumbs
     categoryId={topic.data.category}

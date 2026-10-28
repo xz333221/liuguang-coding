@@ -19,13 +19,17 @@ interface Props {
   page?: string
   /** 当前文章:问答面板会把它作为上下文一起发出去 */
   article?: ArticleContext | null
+  /** og:type,文章页传 'article',其余默认 'website' */
+  ogType?: string
+  /** JSON-LD 结构化数据(序列化好的字符串),文章页传入 */
+  jsonLd?: string
 }
 
-const { title, description, category, topic, page, article = null } = Astro.props
+const { title, description, category, topic, page, article = null, ogType, jsonLd } = Astro.props
 const year = new Date().getFullYear()
 ---
 
-<Base title={title} description={description}>
+<Base title={title} description={description} ogType={ogType} jsonLd={jsonLd}>
   <header class="lg-header">
     <div class="lg-header-inner">
       <a href={withBase()} class="lg-brand">

@@ -1,5 +1,6 @@
 import { satteri } from '@astrojs/markdown-satteri'
 import react from '@astrojs/react'
+import sitemap from '@astrojs/sitemap'
 import vue from '@astrojs/vue'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
@@ -12,7 +13,15 @@ const base = '/'
 export default defineConfig({
   site: 'https://coding.flowdash.cn',
   base,
-  integrations: [react(), vue()],
+  integrations: [
+    react(),
+    vue(),
+    // 构建时自动生成 sitemap(首页 / 分类页 / 文章页 / glossary / about)。
+    // /game 是纯前端演示的闯关游戏,没有可索引的正文,排除掉。
+    sitemap({
+      filter: (page) => !new URL(page).pathname.startsWith('/game'),
+    }),
+  ],
   markdown: {
     // 正文里的名词自动标注:文章 frontmatter 的 terms 指向 src/data/glossary/
     processor: satteri({ hastPlugins: [glossaryTermsPlugin({ base })] }),

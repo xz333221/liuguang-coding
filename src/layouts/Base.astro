@@ -4,10 +4,19 @@ import '../styles/global.css'
 interface Props {
   title: string
   description?: string
+  /** og:type,文章页传 'article',其余页面默认 'website' */
+  ogType?: string
+  /** 社交封面图,默认全站统一的品牌封面(1200×630) */
+  ogImage?: string
+  /** JSON-LD 结构化数据(序列化好的字符串),文章页等按需传入 */
+  jsonLd?: string
 }
 
-const { title, description } = Astro.props
+const { title, description, ogType = 'website', ogImage, jsonLd } = Astro.props
 const base = import.meta.env.BASE_URL
+// canonical / og:url:站点域名 + 当前路径拼绝对地址;取 pathname 天然去掉 query 与 hash
+const canonical = new URL(Astro.url.pathname, Astro.site).href
+const cover = new URL(ogImage ?? `${base}og-cover.png`, Astro.site).href
 ---
 
 <!doctype html>
@@ -19,6 +28,19 @@ const base = import.meta.env.BASE_URL
     <meta name="theme-color" content="#0b0a09" />
     <title>{title}</title>
     {description ? <meta name="description" content={description} /> : null}
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    {description ? <meta property="og:description" content={description} /> : null}
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:image" content={cover} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="流光 coding 知识库" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={cover} />
+    {jsonLd ? <script type="application/ld+json" set:html={jsonLd} /> : null}
     <script is:inline>
       // 首屏前定主题,避免深色页面闪白。默认深色(品牌基调),读过手动切换后按读者的选择来。
       ;(function () {
