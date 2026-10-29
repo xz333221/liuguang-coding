@@ -136,9 +136,13 @@
     transition: border-color 0.2s, color 0.2s, background-color 0.2s;
   }
 
+  /* 已通关的圈是浅橙色底。这里不能只写半透明的 accent-soft ——
+     那样圆圈就不挡光了,后面那道竖线会从圈面里透出来,
+     看着像线画在圈上面。先用 surface 打底,再把 accent-soft 铺上去 */
   .lg-game-row[data-state='cleared'] .lg-game-node {
     border-color: var(--accent);
-    background: var(--accent-soft);
+    background-color: var(--surface);
+    background-image: linear-gradient(var(--accent-soft), var(--accent-soft));
     color: var(--accent);
   }
 
