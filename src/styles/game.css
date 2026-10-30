@@ -372,7 +372,7 @@
     color: var(--line-strong);
   }
 
-  /* 多选:勾上但还没交卷 */
+  /* 选中但还没按「确定」 */
   .lg-game-option[data-state='on'] {
     background: var(--panel);
     box-shadow: inset 2px 0 0 var(--accent);

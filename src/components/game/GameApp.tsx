@@ -264,27 +264,27 @@ export function GameApp() {
     [session],
   )
 
-  /** 点一个选项:批量题型只是勾选/排位,单答题型点完即判 */
+  /** 点一个选项:只改勾选状态,判题一律等「确定」 */
   const pick = useCallback(
     (choiceIndex: number) => {
       if (!session || session.verdict !== null) return
       const current = session.questions[session.index]
       if (!current) return
 
-      if (BATCH_KINDS.has(current.kind)) {
-        const exists = session.picked.includes(choiceIndex)
-        setSession({
-          ...session,
-          picked: exists
-            ? session.picked.filter((index) => index !== choiceIndex)
-            : [...session.picked, choiceIndex],
-        })
+      if (!BATCH_KINDS.has(current.kind)) {
+        setSession({ ...session, picked: [choiceIndex] })
         return
       }
 
-      commit([choiceIndex])
+      const exists = session.picked.includes(choiceIndex)
+      setSession({
+        ...session,
+        picked: exists
+          ? session.picked.filter((index) => index !== choiceIndex)
+          : [...session.picked, choiceIndex],
+      })
     },
-    [session, commit],
+    [session],
   )
 
   const advance = useCallback(() => {
@@ -339,12 +339,12 @@ export function GameApp() {
           advance()
           return
         }
-        // 多选、排序:回车就是交卷;排序没排完不给交
-        if (question && BATCH_KINDS.has(question.kind) && session) {
+        // 先选后交:回车等于点「确定」,排序没排完不给交
+        if (question && session) {
           const ready =
-            question.kind === 'multi'
-              ? session.picked.length > 0
-              : session.picked.length === question.choices.length
+            question.kind === 'order'
+              ? session.picked.length === question.choices.length
+              : session.picked.length > 0
           if (ready) commit(session.picked)
         }
       }
@@ -418,12 +418,11 @@ export function GameApp() {
     const isReview = session.levelId === REVIEW_ID
     const isMulti = question.kind === 'multi'
     const isOrder = question.kind === 'order'
+    /** 攒齐了才能交:排序要排满,其余题型至少选中一项 */
     const ready =
-      question.kind === 'multi'
-        ? picked.length > 0
-        : question.kind === 'order'
-          ? picked.length === question.choices.length
-          : false
+      question.kind === 'order'
+        ? picked.length === question.choices.length
+        : picked.length > 0
 
     /** 排序题在答完后,逐位标出对错 */
     const seqState = (choiceIndex: number) => {
@@ -536,21 +535,21 @@ export function GameApp() {
               {question.choices.map((choice, index) => {
                 const on = picked.includes(index)
                 let state: string
-                if (isMulti) {
-                  if (verdict === null) state = on ? 'on' : 'idle'
-                  else if (choice.correct) state = on ? 'right' : 'missed'
+                if (verdict === null) {
+                  state = on ? 'on' : 'idle'
+                } else if (isMulti) {
+                  if (choice.correct) state = on ? 'right' : 'missed'
                   else state = on ? 'picked-wrong' : 'idle'
                 } else {
+                  // 单选类:选中的那项标对错,正确答案那项跟着点亮
                   state =
-                    verdict === null
-                      ? 'idle'
-                      : index === picked[0]
-                        ? choice.correct
-                          ? 'right'
-                          : 'picked-wrong'
-                        : choice.correct
-                          ? 'right'
-                          : 'idle'
+                    index === picked[0]
+                      ? choice.correct
+                        ? 'right'
+                        : 'picked-wrong'
+                      : choice.correct
+                        ? 'right'
+                        : 'idle'
                 }
                 return (
                   <button
@@ -572,7 +571,7 @@ export function GameApp() {
             </div>
           )}
 
-          {verdict === null && BATCH_KINDS.has(question.kind) ? (
+          {verdict === null ? (
             <div className="lg-game-actions">
               <button
                 type="button"
@@ -580,13 +579,17 @@ export function GameApp() {
                 disabled={!ready}
                 onClick={() => commit(picked)}
               >
-                提交答案
+                确定
                 <span className="text-[0.72rem] opacity-70">
                   {isOrder
                     ? picked.length === question.choices.length
                       ? '(回车)'
                       : `还差 ${question.choices.length - picked.length} 项`
-                    : '可多选'}
+                    : isMulti
+                      ? '(回车)'
+                      : picked.length === 0
+                        ? '先选一项'
+                        : '(回车)'}
                 </span>
               </button>
               {picked.length > 0 ? (
