@@ -1,6 +1,7 @@
 import { List, X } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
 import { navLinks } from '../data/site'
+import { AuthButton } from './AuthButton'
 import { ActionLink } from './ui/Actions'
 import { Mark } from './ui/Mark'
 import { ThemeToggle } from './ui/ThemeToggle'
@@ -40,6 +41,7 @@ export function Nav() {
 
         <div className="ml-auto flex items-center gap-3">
           <ThemeToggle />
+          <AuthButton />
           {/* 用外层容器控制显隐:ActionLink 自身带 inline-flex,和 hidden 直接打架 */}
           <div className="hidden sm:block">
             <ActionLink href="#preview" className="px-5 py-2.5">

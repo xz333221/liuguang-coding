@@ -17,6 +17,8 @@ import {
   starsFor,
   verdictOf,
 } from '../../data/game'
+import { getUser, onAuthChange, openAuthDialog, type AuthUser } from '../../lib/auth'
+import { fetchGameProgress, mergeProgress, saveGameProgress } from '../../lib/game-sync'
 import { glossaryPath, topicHref } from '../../lib/paths'
 
 /** 这道题属于哪个题库的哪一关,错题本里标出来源用 */
@@ -42,8 +44,9 @@ function deckNameOf(questionId: string): string {
 /**
  * 闯关游戏。一屏三态:关卡地图 → 答题 → 结算,外加错题本复习。
  *
- * 进度只存浏览器本地(localStorage):本站不设账号体系,换设备不同步是已知边界,
- * 和主题、问答历史的做法保持一致。题目数据来自 src/data/game/,这里只管玩法。
+ * 进度双写:localStorage 常驻(没登录、隐私模式、断网都能玩),登录之后再加一份
+ * 到服务端(按用户存 MySQL)。登录那一刻两边合并,各取更优的记录;之后每次进度
+ * 变化防抖 800ms 推上去。游客玩法和从前完全一样,换设备不同步是已知边界。
  */
 
 const STORAGE_KEY = 'lg-game:ai:v1'
@@ -205,10 +208,49 @@ export function GameApp() {
   const [tab, setTab] = useState<'map' | 'wrong'>('map')
   /** 地图上当前选中的题库;各题库并列,互不锁定 */
   const [deckId, setDeckId] = useState(decks[0].id)
+  /** null = 没登录;云端同步状态,只在地图上有意义 */
+  const [user, setUser] = useState<AuthUser | null>(getUser)
+  const [sync, setSync] = useState<'local' | 'syncing' | 'synced' | 'error'>('local')
 
+  /** 把云端进度拉下来与本机合并;合并结果会触发保存副作用,顺手推回去 */
+  const pullFromServer = useCallback(() => {
+    setSync('syncing')
+    fetchGameProgress()
+      .then((remote) => {
+        setProgress((prev) => (remote ? mergeProgress(prev, remote) : prev))
+        if (!remote) setSync('synced')
+      })
+      .catch(() => setSync('error'))
+  }, [])
+
+  /** 登录/退出:登录就把云端进度拉下来合并,退出就回到纯本地 */
+  useEffect(
+    () =>
+      onAuthChange(() => {
+        const next = getUser()
+        setUser(next)
+        if (!next) {
+          setSync('local')
+          return
+        }
+        pullFromServer()
+      }),
+    [pullFromServer],
+  )
+
+  // 进度一变:先写本地;登录了再防抖推到云端(连着答几题只发最后一次)。
+  // 防抖这 800ms 里徽标还显示"已同步",推的过程中不额外闪"同步中"——
+  // 那个状态留给手动重拉,避免答题时徽标一直跳。
   useEffect(() => {
     saveProgress(progress)
-  }, [progress])
+    if (!user) return
+    const timer = setTimeout(() => {
+      saveGameProgress(progress)
+        .then(() => setSync('synced'))
+        .catch(() => setSync('error'))
+    }, 800)
+    return () => clearTimeout(timer)
+  }, [progress, user])
 
   const deck = findDeck(deckId) ?? decks[0]
   const deckLevels = levelsOf(deck.id)
@@ -745,6 +787,20 @@ export function GameApp() {
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-2">
+        {/* 同步状态:没登录时点它是去登录;登录了点它是手动重拉一次 */}
+        <button
+          type="button"
+          className="lg-game-btn lg-game-btn--ghost"
+          onClick={() => (user ? pullFromServer() : openAuthDialog())}
+        >
+          {user
+            ? sync === 'error'
+              ? '同步失败,点此重试'
+              : sync === 'syncing'
+                ? '同步中…'
+                : '云端已同步'
+            : '未登录 · 只存本机'}
+        </button>
         <button
           type="button"
           className="lg-game-btn"
@@ -758,7 +814,8 @@ export function GameApp() {
           type="button"
           className="lg-game-btn lg-game-btn--ghost ml-auto"
           onClick={() => {
-            if (confirm('清空全部闯关进度和错题本?')) setProgress(emptyProgress)
+            if (confirm(user ? '清空全部闯关进度和错题本?云端存档也会一起清掉。' : '清空全部闯关进度和错题本?'))
+              setProgress(emptyProgress)
           }}
         >
           清空进度

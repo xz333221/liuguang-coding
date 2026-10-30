@@ -115,7 +115,7 @@ frontmatter 写 `terms: ["采样对应的 id", ...]`(id 一律加引号，否则
 - **题型都是选择题**:看术语选解释、看解释选术语、判断题、面试场景题。答完一题给一段解析，接得住追问的那种;能指回站内讲解的地方都挂了「查术语表 / 看讲解」。
 - **答错进错题本**:答错的题自动收进来，答对一次就移出去，可以只刷错题。
 - **逐关解锁 + 星级**:同一题库里上一关过了才开下一关，按历史最好正确率给 1~3 星;两个题库之间不互相锁。
-- **进度只存本机**:`localStorage`(键 `lg-game:ai:v1`)，和主题、问答历史一个路子，换设备不同步。
+- **进度双写**:`localStorage`(键 `lg-game:ai:v1`)常驻;登录之后再加一份到服务端 MySQL(按用户存)，换设备接着刷。登录那一刻两边合并、各取更优记录，之后每次进度变化防抖 800ms 推上去。没登录玩法照旧，只是换设备不同步。
 - **键盘能加速**:`1`–`4` 选选项，回车下一题。
 
 题目数据在 `src/data/game/`，一个题库一个文件(`ai.ts` / `python.ts` / `java.ts` / `algorithm.ts`)，类型与取数函数在 `types.ts` / `index.ts`;
@@ -152,6 +152,10 @@ frontmatter 写 `terms: ["采样对应的 id", ...]`(id 一律加引号，否则
 
 不管哪条路,**仓库里都不放密钥**;面板只发送当前文章和你的问题。
 
+### 按用户存(登录后)
+
+登录用户在「设置 → 添加模型」里保存的配置进 MySQL 的 `model_configs` 表,按 `user_id` 隔离,密钥同样只放服务端;下拉里出现在「我的模型(云端)」组。匿名用户保存仍走全局落盘仓库,出现在「服务端公共」组 —— 两条路老行为都不变。问答时服务端按登录态解析:这个人自己的配置 > 全局仓库 > 环境变量兜底。
+
 ### 本地怎么验
 
 ```bash
@@ -162,6 +166,21 @@ node scripts/mock-llm.mjs    # 假模型接口:http://localhost:4399
 - 前后端一起跑(`npm run build && npm run dev:server`)时:访问 `http://127.0.0.1:8787`,在弹窗里存模型 —— 它落到 `server/data/models.json`,面板下拉里会出现在「服务端」那组。
 
 假接口会把收到的请求记到 `tmp/mock-llm.log`,方便确认"文章被带上了""用的是哪个模型""密钥是谁加的"。
+
+## 账号与数据存放
+
+页头右上角是登录入口(所有页共用,弹窗在 `src/components/AuthDialog.tsx`)。邮箱 + 密码注册,密码用 scrypt 哈希(参数编进哈希串),登录态是服务端会话表里的一条 token(`lg_<用户id>_<随机>`),浏览器存 localStorage、请求带 `Authorization: Bearer`。退出登录即删会话,可失效;`GET /api/auth/me` 每次进页面校验一次。
+
+MySQL 里四张表(`server/db.mjs` 启动时 `CREATE TABLE IF NOT EXISTS`,连不上后台每 5s 重试,站点照发):
+
+| 表 | 存什么 |
+| --- | --- |
+| `users` | 邮箱(唯一)、scrypt 密码哈希、昵称 |
+| `sessions` | 登录态 token → 用户 |
+| `game_progress` | 闯关进度(JSON 列,一人一行) |
+| `model_configs` | 按用户存的模型配置(含明文密钥,只服务端可见) |
+
+连不上数据库时:静态站点、`/api/chat`、匿名模型配置全都照常;需要登录的接口回 503,`/api/health` 里 `db` 字段显示 `mysql` / `connecting` / `error`。
 
 ## 加一个知识点
 
@@ -189,6 +208,7 @@ node scripts/mock-llm.mjs    # 假模型接口:http://localhost:4399
 | 动手讲解 | 原生 HTML/CSS/JS(每个讲解一个 `.astro`) | 不引入框架，能继承站内令牌，浅色深色自动适配 |
 | 正文名词标注 | Sätteri hast 插件(`src/lib/markdown-terms.ts`) | 构建期完成，产物直接是带链接的 HTML，不依赖客户端 JS |
 | 落地页 `/about` | React island(早先那版) | 直接复用，只在这一页加载 |
+| 账号 / 数据库 | Node 内置 crypto(scrypt)+ mysql2 | 不引 bcrypt/jsonwebtoken;会话落库可主动失效 |
 | 样式 | Tailwind v4 + CSS 变量令牌 | 深浅两套主题共用一批语义变量 |
 | 正文高亮 | Astro 内置 Shiki(双主题) | 代码块跟随主题切换 |
 
@@ -205,22 +225,31 @@ src/
   lib/content.ts            取数据与拼地址的公共函数(含 withBase)
   lib/chat.ts               问答面板的配置、提示词与 SSE 流式读取
   lib/chat-models.ts        模型配置的存取 + 没部署中间件时的本地兜底后端
+  lib/auth.ts               登录态:token 存取、/api/auth 封装、lg-auth 事件
+  lib/game-sync.ts          闯关进度的云端存取与合并规则
   lib/softmax.ts            温度讲解用的计算,SSR 与浏览器共用
   demos/*.astro             动手讲解
   components/kb/            知识库界面(Sidebar / MindMapPanel / Toc / Breadcrumb …)
   components/chat/          常驻问答面板(React)+ 模型配置弹窗(Vue,内嵌 ai-model-form)
   components/game/          闯关游戏(React island)
+  components/AuthButton.tsx 页头登录入口
+  components/AuthDialog.tsx 登录/注册弹窗(全站一份,在 Base.astro)
   components/ui/, data/, lib/motion.ts, App.tsx   落地页那套(只在 /about 用)
-  layouts/Base.astro        页面外壳(主题预置、颗粒层、跳转链接)
+  layouts/Base.astro        页面外壳(主题预置、颗粒层、跳转链接、登录弹窗)
   layouts/DocsLayout.astro  知识库外壳(头部、侧栏、页脚、问答面板)
   pages/                    路由:/、/[category]/、/[category]/[slug]/、/game、/glossary、/about、/404
   styles/global.css         设计令牌 + 全局基础样式
   styles/kb.css             知识库界面、正文排版与问答面板样式
   styles/game.css           闯关游戏界面
+  styles/auth.css           登录/注册弹窗(直角双线框)
 server/
-  index.mjs                 Express 服务:静态站点 + /api/chat + /api/ai-model
+  env.mjs                   入口第一个 import:把仓库根 .env 装进环境变量
+  index.mjs                 Express 服务:静态站点 + /api/auth + /api/game + /api/chat + /api/ai-model
+  db.mjs                    MySQL 连接池、建库建表、启动重试、DB_UNAVAILABLE
+  auth.mjs                  scrypt 哈希、会话 token、requireAuth 中间件
+  game.mjs                  闯关进度的服务端校验与合并
   chat.mjs                  问答接口(SSE 透传、限流、模型解析)
-  store.mjs                 模型配置落盘(0600,只给浏览器回掩码)
+  store.mjs                 模型配置:全局落盘(0600)+ 按用户的 MySQL 表
 deploy/
   liuguang-coding.service   systemd 单元示例
   nginx.conf.sample         coding.flowdash.cn 反代示例(SSE 关缓冲)
@@ -256,6 +285,8 @@ node scripts/mock-llm.mjs   # 假模型接口(监听 4399),本地验收用
 前端与服务端分开跑时,在面板「设置」里把代理地址填成 `http://127.0.0.1:8787/api/chat`;
 同源部署时用构建变量写死,读者什么都不用配。假接口会把收到的请求记到 `tmp/mock-llm.log`,方便确认"文章被带上了""用的是哪个模型"。
 
+数据库连接信息放仓库根 `.env`(已 gitignore,见「账号与数据存放」);不配也能起服务,只是登录、云同步、按用户模型配置不可用,`/api/health` 的 `db` 字段会显示 `connecting`。
+
 ## 部署(coding.flowdash.cn)
 
 一个 Node 进程同时负责两件事:发静态站点、发接口。nginx 只做反代。
@@ -263,6 +294,8 @@ node scripts/mock-llm.mjs   # 假模型接口(监听 4399),本地验收用
 ```
 coding.flowdash.cn ──nginx──> 127.0.0.1:8787  server/index.mjs
                                               ├── /*               站点(dist,带缓存头)
+                                              ├── /api/auth/*      注册/登录/登出/me
+                                              ├── /api/game/*      闯关进度(需登录)
                                               ├── POST /api/chat   问答,SSE 透传
                                               └── /api/ai-model/*  模型配置与预设
 ```
@@ -271,8 +304,10 @@ coding.flowdash.cn ──nginx──> 127.0.0.1:8787  server/index.mjs
 
 | 路由 | 实现 | 说明 |
 | --- | --- | --- |
+| `POST /api/auth/register|login`、`POST /api/auth/logout`、`GET /api/auth/me` | `server/auth.mjs` | 邮箱 + scrypt 密码;会话 token 存 `sessions` 表,退出即删 |
+| `GET/PUT /api/game/progress` | `server/auth.mjs` + `server/game.mjs` | 需登录;PUT 先按 `GameProgress` 形状校验再入库 |
 | `POST /api/chat` | `server/chat.mjs` | 从模型仓库取端点与密钥去调模型,SSE 原样转发。**密钥不出服务端**;带来源白名单、每 IP 每小时限流(默认 60)、`max_tokens` 上限 |
-| `POST/GET/DELETE /api/ai-model/models[/saved]` | `server/store.mjs` | 模型配置落盘(`server/data/models.json`,权限 0600,已 gitignore),给浏览器只回掩码 |
+| `POST/GET/DELETE /api/ai-model/models[/saved]` | `server/store.mjs` | 登录用户存 MySQL `model_configs`(按用户),匿名存全局落盘(`server/data/models.json`,权限 0600,已 gitignore),给浏览器只回掩码 |
 | `GET /providers`、`GET /models?endpoint=`、`POST /test` | `ai-model-form/server` | 供应商预设、实时模型列表、连接测试,直接复用你那个中间件 |
 
 首次部署:
@@ -303,11 +338,13 @@ APP_DIR=/opt/liuguang-coding bash scripts/deploy-on-server.sh
 | `ALLOWED_ORIGIN` | 只有跨域部署才需要;同源留空 |
 | `RATE_LIMIT` / `MAX_TOKENS` | 限流条数与单次回答上限 |
 | `UPSTREAM_BASE_URL` / `UPSTREAM_API_KEY` / `DEFAULT_MODEL` | 仓库里一条模型都没有时的兜底 |
+| `DB_HOST` / `DB_PORT` / `DB_USER` / `DB_PASSWORD` / `DB_NAME` | MySQL 连接(库默认 `liuguang_coding`,不存在会自动建)。本地开发放仓库根 `.env`(不进仓库),服务器放 `.env.server` |
 
 ## 已知边界
 
 - **问答要服务端在跑**：接口与站点同源,`/api/chat` 由 `server/index.mjs` 提供;纯静态托管(比如 GitHub Pages)只能用浏览器直连那一路,大多数官方接口会被 CORS 拦下。
-- 模型配置存在服务器上(`server/data/models.json`)或浏览器里,取决于你从哪条路径添加;**服务端那份含明文密钥,别提交、别备份到公开位置**。
+- 模型配置存在服务器上(全局 `server/data/models.json` 或登录用户的 MySQL 行)或浏览器里,取决于你从哪条路径添加;**服务端那份含明文密钥,别提交、别备份到公开位置**。
+- **登录态没有"记住我"之外的加固**:token 长期有效直到退出登录或删会话;没有双因素,没有密码找回(忘了密码目前只能重新注册一个邮箱)。会话表不会自动清理,量大之后需要定期删旧行。
 - **还没有搜索**，只有分类导航 + 目录。
 - 只有 16 个知识点，前端 / 后端 / 运维 / UI 设计 / 产品设计都还是空的。
 - 讲解目前只有六个，都是手写的 `.astro`；还没有沉淀出"讲解模板"。
@@ -315,7 +352,7 @@ APP_DIR=/opt/liuguang-coding bash scripts/deploy-on-server.sh
 - 站外资料是**人工挑选的索引**，不是自动抓取，也没有做链接存活检查。
 - 手动切换主题/追加问答历史都只存本机浏览器，换设备不同步。
 - `/about` 那版落地页用的课程、价格、学员信息都是演示数据，邮箱表单没有后端。
-- 闯关游戏的进度与错题本只存在本机浏览器里，换设备不同步;题库目前有 AI 应用开发、Python、Java、算法四个。
+- 闯关游戏登录后进度同步到云端，不登录就只存在本机浏览器里;题库目前有 AI 应用开发、Python、Java、算法四个。
 
 ## 素材说明
 

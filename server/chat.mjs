@@ -1,6 +1,7 @@
 // 问答接口:浏览器 -> 这里 -> 模型服务,SSE 透传。
 // 密钥只留在服务端(来自模型仓库或环境变量),浏览器从头到尾拿不到。
-import { findModel, listModels } from './store.mjs'
+import { optionalUser } from './auth.mjs'
+import { findModel, findUserModel, listModels } from './store.mjs'
 
 const UPSTREAM_BASE_URL = (process.env.UPSTREAM_BASE_URL ?? '').replace(/\/+$/, '')
 const UPSTREAM_API_KEY = process.env.UPSTREAM_API_KEY ?? ''
@@ -28,8 +29,21 @@ function fail(res, status, message) {
   res.status(status).json({ error: { message } })
 }
 
-/** 解析这一轮该用哪个模型:请求里点的 > 仓库里第一条 > 环境变量 */
-export function resolveModel(modelId) {
+/**
+ * 解析这一轮该用哪个模型:请求里点的(登录用户自己的配置优先)> 全局仓库 > 环境变量。
+ * userId 为空(没登录)时行为与从前完全一致。
+ */
+export async function resolveModel(modelId, userId = null) {
+  if (userId && modelId) {
+    try {
+      const own = await findUserModel(userId, modelId)
+      if (own) {
+        return { endpoint: own.endpoint, apiKey: own.api_key, model: own.model_name, from: 'user' }
+      }
+    } catch {
+      // 库没就绪就按老路子走,别让问答整个挂掉
+    }
+  }
   const stored = modelId ? findModel(modelId) : undefined
   const fallback = stored ?? listModels().find((item) => item.apiKey) ?? listModels()[0]
   if (fallback) {
@@ -66,10 +80,13 @@ export function createChatHandler() {
       .trim()
     if (rateLimited(ip)) return fail(res, 429, '请求太频繁，过一会儿再试')
 
+    // 带了登录态就按这个人解析模型;没带/库没就绪都按匿名走老逻辑
+    const user = await optionalUser(req)
+
     const messages = normalizeMessages(req.body?.messages)
     if (!messages) return fail(res, 400, 'messages 不合法或太长')
 
-    const config = resolveModel(req.body?.modelId)
+    const config = await resolveModel(req.body?.modelId, user?.id)
     if (!config.endpoint || !config.model) {
       return fail(res, 503, '服务端还没配置模型：先在站点的「设置 → 添加模型」里存一条，或给服务设 UPSTREAM_BASE_URL / DEFAULT_MODEL')
     }

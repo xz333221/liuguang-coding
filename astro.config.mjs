@@ -33,5 +33,15 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      // 开发时 astro dev 跑在 4321,接口在 8787:同源代理过去,
+      // 登录、闯关进度、模型配置这些 /api 请求才发得出去(生产是同域,不需要)
+      proxy: {
+        '/api': {
+          target: 'http://127.0.0.1:8787',
+          changeOrigin: true,
+        },
+      },
+    },
   },
 })

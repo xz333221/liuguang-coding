@@ -1,0 +1,182 @@
+/* 登录 / 注册弹窗。
+   刻意避开"圆角卡片 + 单 border"的样子:直角,双线框(一道实线 + 一圈错位描边),
+   配上等宽字体的标题栏,整体往终端窗口的气质上靠。控件仍按全站规则用胶囊。 */
+
+.lg-auth-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: var(--scrim);
+}
+
+.lg-auth-card {
+  width: min(25rem, 100%);
+  background: var(--surface);
+  /* 双线框:外圈错开 4px 的第二道线,直角 */
+  border: 1px solid var(--line-strong);
+  box-shadow:
+    0 0 0 4px var(--canvas),
+    0 0 0 5px var(--line),
+    0 24px 60px -24px rgb(0 0 0 / 0.6);
+}
+
+.lg-auth-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.lg-auth-dots {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.lg-auth-dots i {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--line-strong);
+}
+
+.lg-auth-dots i:first-child {
+  background: var(--accent);
+}
+
+.lg-auth-title {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.lg-auth-close {
+  margin-left: auto;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid transparent;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.lg-auth-close:hover {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.lg-auth-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--line);
+}
+
+.lg-auth-tab {
+  flex: 1;
+  padding: 0.7rem 0.5rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.lg-auth-tab[aria-selected='true'] {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
+.lg-auth-body {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.15rem 1rem 1.3rem;
+}
+
+.lg-auth-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.lg-auth-field span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.lg-auth-field input {
+  height: 2.4rem;
+  padding: 0 0.95rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--canvas);
+  color: var(--ink);
+  font-size: 0.88rem;
+}
+
+.lg-auth-field input::placeholder {
+  color: color-mix(in srgb, var(--muted) 65%, transparent);
+}
+
+.lg-auth-field input:focus-visible {
+  border-color: var(--accent);
+}
+
+.lg-auth-error {
+  padding: 0.5rem 0.75rem;
+  border-left: 2px solid var(--wrong);
+  background: color-mix(in srgb, var(--wrong) 10%, transparent);
+  color: var(--wrong);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.lg-auth-submit {
+  height: 2.4rem;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.lg-auth-submit:hover:not(:disabled) {
+  background: var(--highlight);
+  border-color: var(--highlight);
+}
+
+.lg-auth-submit:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.lg-auth-hint {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.lg-auth-hint button {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* 页头上的登录入口:和闯关/术语那些链接一个气质,只是它要点出弹窗 */
+.lg-auth-entry {
+  padding: 0.3rem 0.85rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.82rem;
+  max-width: 9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: border-color 0.18s, color 0.18s;
+}
+
+.lg-auth-entry:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}

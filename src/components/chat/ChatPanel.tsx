@@ -11,7 +11,7 @@ import {
   usesProxy,
 } from '../../lib/chat'
 import type { SavedModel } from '../../lib/chat-models'
-import { fetchServerModels, loadModels, removeModel } from '../../lib/chat-models'
+import { fetchServerModels, loadModels, removeModel, removeServerModel } from '../../lib/chat-models'
 
 const SUGGESTIONS = ['用一句话总结这篇', '给我一个最小可运行的例子', '这里最容易搞错的是什么']
 
@@ -85,6 +85,9 @@ export function ChatPanel({ article }: { article: ArticleContext | null }) {
 
   const configured = isConfigured(settings)
   const allModels = useMemo(() => [...serverModels, ...models], [serverModels, models])
+  // 服务端存的按归属分两组:登录用户自己存的 / 服务端公共仓库
+  const myServerModels = useMemo(() => serverModels.filter((item) => item.scope !== 'global'), [serverModels])
+  const globalServerModels = useMemo(() => serverModels.filter((item) => item.scope === 'global'), [serverModels])
   const selectedModel = useMemo(
     () => allModels.find((item) => item.id === settings.modelId) ?? null,
     [allModels, settings.modelId],
@@ -310,9 +313,18 @@ export function ChatPanel({ article }: { article: ArticleContext | null }) {
                   onChange={(event) => setDraft({ ...draft, modelId: event.target.value })}
                 >
                   <option value="">（不指定，由服务端决定）</option>
-                  {serverModels.length > 0 ? (
-                    <optgroup label="服务端（密钥不在浏览器）">
-                      {serverModels.map((item) => (
+                  {myServerModels.length > 0 ? (
+                    <optgroup label="我的模型（云端，密钥不在浏览器）">
+                      {myServerModels.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.displayName || item.modelName}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ) : null}
+                  {globalServerModels.length > 0 ? (
+                    <optgroup label="服务端公共（密钥不在浏览器）">
+                      {globalServerModels.map((item) => (
                         <option key={item.id} value={item.id}>
                           {item.displayName || item.modelName}
                         </option>
@@ -336,7 +348,11 @@ export function ChatPanel({ article }: { article: ArticleContext | null }) {
                 <small>
                   {selectedModel.modelName}
                   {selectedModel.endpoint ? ` · ${selectedModel.endpoint}` : ''}
-                  {selectedModel.server ? ' · 来自服务端' : ''}
+                  {selectedModel.server
+                    ? selectedModel.scope === 'global'
+                      ? ' · 来自服务端公共'
+                      : ' · 来自我的云端'
+                    : ''}
                 </small>
               ) : null}
             </div>
@@ -364,6 +380,17 @@ export function ChatPanel({ article }: { article: ArticleContext | null }) {
                     type="button"
                     className="lg-chat-ghost"
                     onClick={() => {
+                      if (selectedModel.server) {
+                        // 服务端存的:调接口删(自己名下的),再派发事件让两边列表都刷新
+                        removeServerModel(selectedModel.id)
+                          .then(() =>
+                            document.dispatchEvent(new CustomEvent('lg-chat:models-changed')),
+                          )
+                          .catch((error) =>
+                            setError(error instanceof Error ? error.message : '删除失败'),
+                          )
+                        return
+                      }
                       const next = removeModel(selectedModel.id)
                       setModels(next)
                       const fresh = loadSettings()

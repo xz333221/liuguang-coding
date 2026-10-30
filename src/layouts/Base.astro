@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css'
+import { AuthDialog } from '../components/AuthDialog'
 
 interface Props {
   title: string
@@ -63,5 +64,8 @@ const cover = new URL(ogImage ?? `${base}og-cover.png`, Astro.site).href
       跳到主要内容
     </a>
     <slot />
+
+    {/* 登录弹窗全站一份:页头、游戏里的"去登录"都派发 lg-auth:open 打开它 */}
+    <AuthDialog client:only="react" />
   </body>
 </html>

@@ -1,6 +1,7 @@
 // 知识库问答面板的服务端无关部分:配置、提示词、SSE 流式读取。
 // 这里不碰 DOM,方便单独推逻辑;面板组件只负责界面。
 
+import { authHeaders } from './auth'
 import { loadCurrentId, loadModels, saveCurrentId } from './chat-models'
 
 export interface ChatSettings {
@@ -166,7 +167,12 @@ export async function streamChat({ settings, messages, signal, onDelta }: Stream
     'Content-Type': 'application/json',
     Accept: 'text/event-stream',
   }
-  if (!usesProxy(settings)) headers.Authorization = `Bearer ${settings.apiKey.trim()}`
+  if (usesProxy(settings)) {
+    // 走代理:把登录态带给服务端,它好按这个人解析模型配置(匿名也能用,只是按全局走)
+    Object.assign(headers, authHeaders())
+  } else {
+    headers.Authorization = `Bearer ${settings.apiKey.trim()}`
+  }
 
   let response: Response
   try {

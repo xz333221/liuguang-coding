@@ -6,6 +6,11 @@
 //   POST {apiBase}/models             保存
 // 部署了 ai-model-form 的 Express 中间件就直接用它;没部署时用下面的本地实现顶掉,
 // 表单照样能用(模型列表拉不到就手填),配置存在浏览器里。
+//
+// 保存这条路分两种归属:登录用户存进服务端自己名下(MySQL,按用户隔离),
+// 匿名用户存全局仓库。两种都只回掩码,明文 Key 不下发。
+
+import { authHeaders } from './auth'
 
 export interface SavedModel {
   id: string
@@ -16,6 +21,8 @@ export interface SavedModel {
   savedAt?: number
   /** true 表示这条来自服务端(密钥在服务端,浏览器只拿得到掩码) */
   server?: boolean
+  /** 服务端配置的归属:user = 这位登录用户自己存的,global = 服务端公共仓库 */
+  scope?: 'user' | 'global'
 }
 
 const MODELS_KEY = 'lg-chat-models'
@@ -92,11 +99,14 @@ export function hasServerModelApi(): boolean {
   return Boolean(BUILD_MODEL_API)
 }
 
-/** 拉服务端存的模型列表;拉不到就返回空数组(本地兜底时属于正常) */
+/** 拉服务端存的模型列表(登录用户的 + 全局的);拉不到就返回空数组(本地兜底时属于正常) */
 export async function fetchServerModels(signal?: AbortSignal): Promise<SavedModel[]> {
   if (!BUILD_MODEL_API) return []
   try {
-    const response = await fetch(`${BUILD_MODEL_API.replace(/\/+$/, '')}/models/saved`, { signal })
+    const response = await fetch(`${BUILD_MODEL_API.replace(/\/+$/, '')}/models/saved`, {
+      signal,
+      headers: { ...authHeaders() },
+    })
     if (!response.ok) return []
     const data = (await response.json()) as { models?: Partial<SavedModel>[] }
     return (data.models ?? [])
@@ -108,14 +118,36 @@ export async function fetchServerModels(signal?: AbortSignal): Promise<SavedMode
         displayName: item.displayName || item.modelName || '',
         apiKey: '',
         server: true,
+        scope: item.scope === 'user' ? 'user' : 'global',
       }))
   } catch {
     return []
   }
 }
 
+/** 删一条服务端存的模型(自己名下的);失败会抛,调用方提示 */
+export async function removeServerModel(id: string): Promise<void> {
+  const response = await fetch(`${BUILD_MODEL_API.replace(/\/+$/, '')}/models/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    headers: { ...authHeaders() },
+  })
+  if (!response.ok) {
+    let message = `删除失败（${response.status}）`
+    try {
+      const data = (await response.json()) as { message?: string }
+      if (data.message) message = data.message
+    } catch {
+      // 不是 JSON 就用状态码
+    }
+    throw new Error(message)
+  }
+}
+
 /**
- * 装一个只认 LOCAL_API_BASE 的 fetch 拦截器,把三条路由在浏览器里实现掉。
+ * 装一个 fetch 拦截器,干两件事:
+ *   1. 把 LOCAL_API_BASE 的三条路由在浏览器里实现掉(本地兜底);
+ *   2. 给打向真实中间件(/api/ai-model/)的请求补上登录头 —— 模型配置按用户存,
+ *      服务端靠这个头认人;没登录就照旧存全局仓库。
  * 返回卸载函数。
  */
 export function installLocalModelBackend(): () => void {
@@ -130,6 +162,14 @@ export function installLocalModelBackend(): () => void {
 
   window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
     const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
+
+    // 真实中间件:只补登录头,别的不动
+    if (url.startsWith('/api/ai-model/') || url.startsWith(`${window.location.origin}/api/ai-model/`)) {
+      const headers = new Headers(init?.headers)
+      for (const [key, value] of Object.entries(authHeaders())) headers.set(key, value)
+      return original(input as RequestInfo, { ...init, headers })
+    }
+
     if (!url.includes(LOCAL_API_BASE)) return original(input as RequestInfo, init)
 
     const path = url.slice(url.indexOf(LOCAL_API_BASE) + LOCAL_API_BASE.length)

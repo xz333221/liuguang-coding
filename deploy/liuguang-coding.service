@@ -13,7 +13,7 @@ WorkingDirectory=/opt/liuguang-coding
 Environment=NODE_ENV=production
 Environment=PORT=8787
 Environment=DATA_DIR=/opt/liuguang-coding/server/data
-# 模型密钥这类东西写在这里,别进仓库
+# 模型密钥、数据库连接(DB_HOST/DB_PORT/DB_USER/DB_PASSWORD/DB_NAME)这类东西写在这里,别进仓库
 EnvironmentFile=-/opt/liuguang-coding/.env.server
 ExecStart=/usr/bin/node server/index.mjs
 Restart=always

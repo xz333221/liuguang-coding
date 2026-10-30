@@ -1,4 +1,5 @@
 ---
+import { AuthButton } from '../components/AuthButton'
 import { ChatPanel } from '../components/chat/ChatPanel.tsx'
 import ModelConfigDialog from '../components/chat/ModelConfigDialog.vue'
 import { Mark } from '../components/ui/Mark'
@@ -44,6 +45,7 @@ const year = new Date().getFullYear()
         <button type="button" class="lg-header-link" data-chat-open>问答</button>
         <a href={withBase('about/')} class="lg-header-link hidden sm:inline">关于</a>
         <ThemeToggle />
+        <AuthButton client:only="react" />
       </div>
     </div>
   </header>
