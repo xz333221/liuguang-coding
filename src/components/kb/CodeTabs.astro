@@ -7,7 +7,7 @@
 //     { lang: 'python', label: 'Python', code: `...` },
 //     { lang: 'java', label: 'Java', code: `...` },
 //   ]} />
-import { codeToHtml } from 'shiki'
+import { highlight } from '../../lib/highlight'
 
 export interface CodeSnippet {
   /** Shiki 的语言 id,如 python / java / javascript / cpp / go */
@@ -28,11 +28,7 @@ const { snippets, caption } = Astro.props
 const rendered = await Promise.all(
   snippets.map(async (snippet) => ({
     label: snippet.label ?? snippet.lang,
-    html: await codeToHtml(snippet.code.trim(), {
-      lang: snippet.lang,
-      themes: { light: 'github-light-default', dark: 'github-dark-default' },
-      defaultColor: false,
-    }),
+    html: await highlight(snippet.code, snippet.lang),
   })),
 )
 ---
@@ -147,14 +143,6 @@ const rendered = await Promise.all(
 
   .ct-panel :global(pre code) {
     font-family: inherit;
-  }
-
-  [data-theme='light'] .ct-panel :global(pre span) {
-    color: var(--shiki-light) !important;
-  }
-
-  [data-theme='dark'] .ct-panel :global(pre span) {
-    color: var(--shiki-dark) !important;
   }
 
   @media (prefers-reduced-motion: reduce) {

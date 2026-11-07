@@ -347,13 +347,23 @@
     background: var(--panel) !important;
   }
 
-  [data-theme='dark'] .lg-prose .astro-code,
-  [data-theme='dark'] .lg-prose .astro-code span {
+  /* Shiki 输出的是双主题:每个 token 只带 --shiki-light / --shiki-dark 两个变量,
+     不写死颜色。这里按当前主题挑一套。
+     正文由 Astro 的 markdown 管线渲染,pre 上是 .astro-code;
+     CodeTabs 与各 demo 直接调 shiki,pre 上是 .shiki-themes —— 两种都要覆盖。
+     必须写在全局作用域:组件里的 scoped 样式匹配不到 set:html 注入的 DOM,
+     而且带 [data-theme] 前缀的 :global() 会被 Astro 编译掉前缀,别那么写。 */
+  [data-theme='dark'] pre.astro-code,
+  [data-theme='dark'] pre.astro-code span,
+  [data-theme='dark'] pre.shiki-themes,
+  [data-theme='dark'] pre.shiki-themes span {
     color: var(--shiki-dark) !important;
   }
 
-  [data-theme='light'] .lg-prose .astro-code,
-  [data-theme='light'] .lg-prose .astro-code span {
+  [data-theme='light'] pre.astro-code,
+  [data-theme='light'] pre.astro-code span,
+  [data-theme='light'] pre.shiki-themes,
+  [data-theme='light'] pre.shiki-themes span {
     color: var(--shiki-light) !important;
   }
 

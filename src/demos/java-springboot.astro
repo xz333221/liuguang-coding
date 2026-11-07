@@ -2,6 +2,9 @@
 // 讲解:Spring Boot 项目的目录结构。
 // 左边是一棵树,点哪一项,右边就说清这块该放什么、不该放什么,并把对应文件的代码摆出来。
 // 数据全部在首屏渲染进 DOM(靠 data-items),交互时只换右侧内容,不发请求。
+// 每个节点的代码先走 Shiki 渲染好,切换只是显示/隐藏。
+import { highlight } from '../lib/highlight'
+
 interface Node {
   label: string
   /** 嵌套层级,0 是 project 下的第一层 */
@@ -264,6 +267,10 @@ class BookControllerTest {
 ]
 
 const data = JSON.stringify(nodes)
+
+const codeHtml = await Promise.all(
+  nodes.map((node) => (node.code ? highlight(node.code, node.lang ?? 'java') : Promise.resolve(''))),
+)
 ---
 
 <div class="sb-demo" data-demo="springboot-tree" data-items={data}>
@@ -306,7 +313,16 @@ const data = JSON.stringify(nodes)
       <p class="sb-label">不该放什么</p>
       <p class="sb-avoid" data-avoid>{nodes[0].avoid}</p>
       <div class="sb-code-wrap" data-code-wrap>
-        <pre class="sb-code" data-code>{nodes[0].code ?? ''}</pre>
+        {
+          codeHtml.map((html, index) => (
+            <div
+              class="sb-code"
+              data-code-panel={index}
+              data-active={String(index === 0)}
+              set:html={html}
+            />
+          ))
+        }
       </div>
     </section>
   </div>
@@ -333,7 +349,7 @@ const data = JSON.stringify(nodes)
     const role = root.querySelector<HTMLElement>('[data-role]')
     const avoid = root.querySelector<HTMLElement>('[data-avoid]')
     const codeWrap = root.querySelector<HTMLElement>('[data-code-wrap]')
-    const code = root.querySelector<HTMLElement>('[data-code]')
+    const codePanels = Array.from(root.querySelectorAll<HTMLElement>('[data-code-panel]'))
 
     const render = (index: number) => {
       const node = nodes[index]
@@ -350,7 +366,9 @@ const data = JSON.stringify(nodes)
       }
       if (role) role.textContent = node.role
       if (avoid) avoid.textContent = node.avoid
-      if (code) code.textContent = node.code ?? ''
+      codePanels.forEach((panel) => {
+        panel.dataset.active = String(panel.dataset.codePanel === String(index))
+      })
       if (codeWrap) codeWrap.dataset.show = String(Boolean(node.code))
     }
 
@@ -496,12 +514,31 @@ const data = JSON.stringify(nodes)
   }
 
   .sb-code {
+    display: none;
     overflow-x: auto;
     padding: 0.85rem 1rem;
     font-family: var(--font-mono);
     font-size: 0.76rem;
     line-height: 1.85;
-    white-space: pre;
+  }
+
+  .sb-code[data-active='true'] {
+    display: block;
+  }
+
+  /* Shiki 生成完整 <pre>,边距底色交给外层 */
+  .sb-code :global(pre) {
+    margin: 0;
+    padding: 0;
+    background: transparent !important;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    overflow: visible;
+  }
+
+  .sb-code :global(code) {
+    font-family: inherit;
   }
 
   @media (max-width: 640px) {

@@ -328,6 +328,7 @@ const codeHtml = await Promise.all(layers.map((layer) => highlight(layer.code, l
   }
 
   .ddd-code {
+    display: none;
     overflow-x: auto;
     margin-top: 1rem;
     padding: 0.8rem 0.9rem;
@@ -335,7 +336,25 @@ const codeHtml = await Promise.all(layers.map((layer) => highlight(layer.code, l
     font-family: var(--font-mono);
     font-size: 0.76rem;
     line-height: 1.8;
-    white-space: pre;
+  }
+
+  .ddd-code[data-active='true'] {
+    display: block;
+  }
+
+  /* Shiki 生成完整 <pre>,边距底色交给外层 */
+  .ddd-code :global(pre) {
+    margin: 0;
+    padding: 0;
+    background: transparent !important;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    overflow: visible;
+  }
+
+  .ddd-code :global(code) {
+    font-family: inherit;
   }
 
   @media (max-width: 640px) {

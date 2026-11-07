@@ -1,7 +1,9 @@
 ---
 // 讲解:== 与 equals。
 // 五个场景都只在做同一件事:看两个引用是不是指向同一个对象。
-// 首屏渲染第一个场景,交互时在浏览器里换数据。
+// 代码先走 Shiki 渲染,交互时只切显示,不在前端换文本。
+import { highlight } from '../lib/highlight'
+
 interface Scene {
   title: string
   code: string
@@ -56,6 +58,8 @@ const scenes: Scene[] = [
 ]
 
 const first = scenes[0]
+
+const codeHtml = await Promise.all(scenes.map((scene) => highlight(scene.code, 'java')))
 ---
 
 <div class="je-demo" data-demo="java-eq" data-scenes={JSON.stringify(scenes)} data-index="0">
@@ -72,7 +76,13 @@ const first = scenes[0]
   <div class="je-body">
     <section class="je-pane">
       <p class="je-pane-title">代码</p>
-      <pre class="je-code" data-code>{first.code}</pre>
+      <div class="je-code">
+        {
+          codeHtml.map((html, index) => (
+            <div class="je-code-panel" data-code-panel={index} data-active={String(index === 0)} set:html={html} />
+          ))
+        }
+      </div>
     </section>
 
     <section class="je-pane">
@@ -123,7 +133,7 @@ const first = scenes[0]
 
     const scenes = JSON.parse(root.dataset.scenes ?? '[]') as Scene[]
     const sceneBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-scene]'))
-    const code = root.querySelector<HTMLElement>('[data-code]')
+    const codePanels = Array.from(root.querySelectorAll<HTMLElement>('[data-code-panel]'))
     const mem = root.querySelector<HTMLElement>('.je-mem')
     const objA = root.querySelector<HTMLElement>('[data-obj-a]')
     const objB = root.querySelector<HTMLElement>('[data-obj-b]')
@@ -141,7 +151,11 @@ const first = scenes[0]
         btn.dataset.active = String(i === index)
       })
 
-      if (code) code.textContent = scene.code
+      if (codePanels.length) {
+        codePanels.forEach((panel) => {
+          panel.dataset.active = String(panel.dataset.codePanel === String(index))
+        })
+      }
       if (mem) mem.dataset.same = String(scene.same)
       if (objA) objA.textContent = '对象 1'
       if (objB) objB.textContent = scene.same ? '对象 1' : '对象 2'
@@ -227,7 +241,29 @@ const first = scenes[0]
     font-family: var(--font-mono);
     font-size: 0.78rem;
     line-height: 1.8;
-    white-space: pre;
+  }
+
+  .je-code-panel {
+    display: none;
+  }
+
+  .je-code-panel[data-active='true'] {
+    display: block;
+  }
+
+  /* Shiki 生成完整 <pre>,边距底色交给外层 */
+  .je-code-panel :global(pre) {
+    margin: 0;
+    padding: 0;
+    background: transparent !important;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    overflow: visible;
+  }
+
+  .je-code-panel :global(code) {
+    font-family: inherit;
   }
 
   .je-mem {

@@ -1,6 +1,9 @@
 ---
 // 讲解:同一件事,MyBatis 写与 MyBatis-Plus 写。
 // 选一个查询场景,左右两栏给出两种写法,下面一行是它最终落到数据库上的 SQL。
+// 三段代码都先走 Shiki 渲染好再塞进 DOM,切场景只是显示/隐藏,不在前端拼 HTML。
+import { highlight } from '../lib/highlight'
+
 interface Side {
   /** 这段代码放在哪个文件里 */
   where: string
@@ -138,18 +141,26 @@ where id = ? and deleted = 0`,
   },
 ]
 
-const first = scenes[0]
-const data = JSON.stringify(scenes)
+// 和正文里的代码块用同一套双主题,渲染在服务端,切换主题不用重跑
+const rendered = await Promise.all(
+  scenes.map(async (scene) => ({
+    title: scene.title,
+    point: scene.point,
+    mybatis: { where: scene.mybatis.where, html: await highlight(scene.mybatis.code, 'xml') },
+    plus: { where: scene.plus.where, html: await highlight(scene.plus.code, 'java') },
+    sql: await highlight(scene.sql, 'sql'),
+  })),
+)
 ---
 
-<div class="mbx-demo" data-demo="mybatis-versus" data-scenes={data} data-index="0">
+<div class="mbx-demo" data-demo="mybatis-versus" data-index="0">
   <p class="mbx-hint">
     同一个需求:先看 MyBatis 的手写 SQL,再看 MyBatis-Plus 的写法;最下面是它们最终落到数据库上执行的语句。
   </p>
 
   <div class="mbx-scenes">
     {
-      scenes.map((scene, index) => (
+      rendered.map((scene, index) => (
         <button type="button" class="mbx-scene" data-scene={index} data-active={String(index === 0)}>
           {scene.title}
         </button>
@@ -157,80 +168,57 @@ const data = JSON.stringify(scenes)
     }
   </div>
 
-  <p class="mbx-point" data-point>{first.point}</p>
+  {
+    rendered.map((scene, index) => (
+      <div class="mbx-panel" data-panel={index} data-active={String(index === 0)}>
+        <p class="mbx-point">{scene.point}</p>
 
-  <div class="mbx-pair">
-    <section class="mbx-side">
-      <header class="mbx-head">
-        <span class="mbx-tag">MyBatis</span>
-        <span class="mbx-where" data-mb-where>{first.mybatis.where}</span>
-      </header>
-      <pre class="mbx-code" data-mb-code>{first.mybatis.code}</pre>
-    </section>
+        <div class="mbx-pair">
+          <section class="mbx-side">
+            <header class="mbx-head">
+              <span class="mbx-tag">MyBatis</span>
+              <span class="mbx-where">{scene.mybatis.where}</span>
+            </header>
+            <div class="mbx-code" set:html={scene.mybatis.html} />
+          </section>
 
-    <section class="mbx-side mbx-side-plus">
-      <header class="mbx-head">
-        <span class="mbx-tag mbx-tag-plus">MyBatis-Plus</span>
-        <span class="mbx-where" data-plus-where>{first.plus.where}</span>
-      </header>
-      <pre class="mbx-code" data-plus-code>{first.plus.code}</pre>
-    </section>
-  </div>
+          <section class="mbx-side mbx-side-plus">
+            <header class="mbx-head">
+              <span class="mbx-tag mbx-tag-plus">MyBatis-Plus</span>
+              <span class="mbx-where">{scene.plus.where}</span>
+            </header>
+            <div class="mbx-code" set:html={scene.plus.html} />
+          </section>
+        </div>
 
-  <div class="mbx-sql">
-    <p class="mbx-label">落到数据库上,执行的是</p>
-    <pre class="mbx-sql-code" data-sql>{first.sql}</pre>
-  </div>
+        <div class="mbx-sql">
+          <p class="mbx-label">落到数据库上,执行的是</p>
+          <div class="mbx-sql-code" set:html={scene.sql} />
+        </div>
+      </div>
+    ))
+  }
 </div>
 
 <script>
   const root = document.querySelector<HTMLElement>('[data-demo="mybatis-versus"]')
 
   if (root) {
-    interface Side {
-      where: string
-      code: string
-    }
-
-    interface Scene {
-      title: string
-      point: string
-      mybatis: Side
-      plus: Side
-      sql: string
-    }
-
-    const scenes = JSON.parse(root.dataset.scenes ?? '[]') as Scene[]
-    const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-scene]'))
-    const point = root.querySelector<HTMLElement>('[data-point]')
-    const mbWhere = root.querySelector<HTMLElement>('[data-mb-where]')
-    const mbCode = root.querySelector<HTMLElement>('[data-mb-code]')
-    const plusWhere = root.querySelector<HTMLElement>('[data-plus-where]')
-    const plusCode = root.querySelector<HTMLElement>('[data-plus-code]')
-    const sql = root.querySelector<HTMLElement>('[data-sql]')
-
-    const render = (index: number) => {
-      const scene = scenes[index]
-      if (!scene) return
-
-      root.dataset.index = String(index)
-      buttons.forEach((button, i) => {
-        button.dataset.active = String(i === index)
-      })
-
-      if (point) point.textContent = scene.point
-      if (mbWhere) mbWhere.textContent = scene.mybatis.where
-      if (mbCode) mbCode.textContent = scene.mybatis.code
-      if (plusWhere) plusWhere.textContent = scene.plus.where
-      if (plusCode) plusCode.textContent = scene.plus.code
-      if (sql) sql.textContent = scene.sql
-    }
+    const buttons = Array.from(root.querySelectorAll<HTMLElement>('[data-scene]'))
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-panel]'))
 
     buttons.forEach((button) => {
-      button.addEventListener('click', () => render(Number(button.dataset.scene ?? 0)))
+      button.addEventListener('click', () => {
+        const index = button.dataset.scene
+        root.dataset.index = index ?? '0'
+        buttons.forEach((item) => {
+          item.dataset.active = String(item.dataset.scene === index)
+        })
+        panels.forEach((panel) => {
+          panel.dataset.active = String(panel.dataset.panel === index)
+        })
+      })
     })
-
-    render(0)
   }
 </script>
 
@@ -268,6 +256,14 @@ const data = JSON.stringify(scenes)
   .mbx-scene[data-active='true'] {
     background: var(--accent);
     color: var(--on-accent);
+  }
+
+  .mbx-panel {
+    display: none;
+  }
+
+  .mbx-panel[data-active='true'] {
+    display: block;
   }
 
   .mbx-point {
@@ -322,7 +318,23 @@ const data = JSON.stringify(scenes)
     font-family: var(--font-mono);
     font-size: 0.78rem;
     line-height: 1.8;
-    white-space: pre;
+  }
+
+  /* Shiki 生成的是完整 <pre>,边距底的交给外层容器 */
+  .mbx-code :global(pre),
+  .mbx-sql-code :global(pre) {
+    margin: 0;
+    padding: 0;
+    background: transparent !important;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    overflow: visible;
+  }
+
+  .mbx-code :global(code),
+  .mbx-sql-code :global(code) {
+    font-family: inherit;
   }
 
   .mbx-sql {
@@ -337,7 +349,6 @@ const data = JSON.stringify(scenes)
 
   .mbx-sql-code {
     background: var(--surface);
-    color: var(--highlight);
   }
 
   @media (max-width: 640px) {

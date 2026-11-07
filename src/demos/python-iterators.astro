@@ -2,7 +2,23 @@
 // 讲解:for 循环背后。
 // 列表版和生成器版共用同一套步骤,切换数据源只换"内部状态"的说法,
 // 这样一眼能看出:for 拿到的是列表还是生成器,行为没有区别。
+import { highlight } from '../lib/highlight'
+
 const values = [10, 20, 30]
+
+const codeList = `it = iter([10, 20, 30])
+next(it)   # 10
+next(it)   # 20
+next(it)   # 30
+next(it)   # StopIteration`
+
+const codeGen = `def counter():
+    yield 10
+    yield 20
+    yield 30
+
+it = counter()   # 什么都没发生
+next(it)         # 10 ...`
 
 const stateTexts: Record<string, string[]> = {
   list: [
@@ -28,6 +44,11 @@ const outTexts = [
   'next(it) → 30',
   'next(it) → StopIteration（for 会把它当成正常结束）',
 ]
+
+const codeHtml = {
+  list: await highlight(codeList, 'python'),
+  gen: await highlight(codeGen, 'python'),
+}
 ---
 
 <div
@@ -53,18 +74,8 @@ const outTexts = [
   <div class="pi-body">
     <section class="pi-pane">
       <p class="pi-pane-title">代码</p>
-      <pre class="pi-code" data-code="list" data-show="true"><code>it = iter([10, 20, 30])
-next(it)   # 10
-next(it)   # 20
-next(it)   # 30
-next(it)   # StopIteration</code></pre>
-      <pre class="pi-code" data-code="gen"><code>def counter():
-    yield 10
-    yield 20
-    yield 30
-
-it = counter()   # 什么都没发生
-next(it)         # 10 ...</code></pre>
+      <div class="pi-code" data-code="list" data-show="true" set:html={codeHtml.list} />
+      <div class="pi-code" data-code="gen" data-show="false" set:html={codeHtml.gen} />
     </section>
 
     <section class="pi-pane">
@@ -234,6 +245,21 @@ next(it)         # 10 ...</code></pre>
 
   .pi-code[data-show='true'] {
     display: block;
+  }
+
+  /* Shiki 生成完整 <pre>,边距底色交给外层 */
+  .pi-code :global(pre) {
+    margin: 0;
+    padding: 0;
+    background: transparent !important;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    overflow: visible;
+  }
+
+  .pi-code :global(code) {
+    font-family: inherit;
   }
 
   .pi-slots {
