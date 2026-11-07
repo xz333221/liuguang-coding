@@ -27,7 +27,7 @@ export const groups: TermGroupMeta[] = [
   {
     id: 'java',
     name: 'Java',
-    intro: '相等性这条线上的名词:身份、内容、常量池与哈希;再加上构建与工程结构这一线的 Maven、容器、Bean、自动配置与持久层。',
+    intro: '相等性这条线上的名词:身份、内容、常量池与哈希;再加上工程与建模这一线的 Maven、容器、持久层与领域模型。',
   },
   {
     id: 'ai',

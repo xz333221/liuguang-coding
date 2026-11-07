@@ -485,4 +485,110 @@ export const javaTerms: Term[] = [
     related: ['mybatis-plus'],
     see: 'java/mybatis-and-plus',
   },
+  {
+    id: 'ddd',
+    term: '领域驱动设计',
+    en: 'Domain-Driven Design',
+    aliases: ['DDD'],
+    group: 'java',
+    plain:
+      '先把业务语言和规则讲清楚,再让代码照着做。目录怎么分是结果,不是起点。',
+    formal:
+      '以领域模型为中心的组织方法:以通用语言界定限界上下文,以聚合维护一致性边界,并让领域层独立于基础设施与框架。',
+    related: ['bounded-context', 'aggregate', 'value-object'],
+    see: 'java/ddd-bounded-context',
+    source: {
+      title: 'Domain Language · DDD Reference',
+      url: 'https://domainlanguage.com/ddd/reference/',
+    },
+  },
+  {
+    id: 'bounded-context',
+    term: '限界上下文',
+    en: 'bounded context',
+    group: 'java',
+    plain:
+      '一套术语、一个模型、一条边界。边界内的"订单"只有一个意思,边界外是另一回事。',
+    formal:
+      '模型适用的显式边界:同一上下文内术语含义唯一,跨上下文通过领域事件或防腐层交互,不共享领域模型。',
+    related: ['ddd', 'anti-corruption-layer'],
+    see: 'java/ddd-bounded-context',
+    source: {
+      title: 'Martin Fowler · BoundedContext',
+      url: 'https://martinfowler.com/bliki/BoundedContext.html',
+    },
+  },
+  {
+    id: 'aggregate',
+    term: '聚合根',
+    en: 'aggregate root',
+    group: 'java',
+    plain:
+      '一组必须一起改的对象里的那个"主对象"。外部只能通过它改状态,所以规则只在一处守。',
+    formal:
+      '聚合的一致性边界:通过唯一入口方法与不变式维护内部实体与值对象的一致;一次事务只修改一个聚合。',
+    related: ['value-object', 'ddd'],
+    see: 'java/ddd-bounded-context',
+  },
+  {
+    id: 'value-object',
+    term: '值对象',
+    en: 'value object',
+    group: 'java',
+    plain:
+      '没有 id、只靠值区分的东西:金额、坐标、日期区间。不可变,所以能放心传、放心共享。',
+    formal:
+      '以属性值定义相等性的不可变对象,自身校验合法性;Java 里常用 record 表达。',
+    related: ['aggregate'],
+    see: 'java/ddd-bounded-context',
+  },
+  {
+    id: 'repository',
+    term: '仓储',
+    en: 'repository',
+    group: 'java',
+    plain:
+      '以聚合为单位的存取口。接口声明在领域层,实现在基础设施层 —— 换数据库只改实现。',
+    formal:
+      '面向聚合的持久化抽象:save / findById 等按聚合整体存取;接口属于领域层,实现属于基础设施层。',
+    related: ['aggregate', 'ddd'],
+    see: 'java/ddd-bounded-context',
+  },
+  {
+    id: 'application-service',
+    term: '应用服务',
+    en: 'application service',
+    group: 'java',
+    plain:
+      '一个方法一个用例:取参数、调领域对象、存、发事件。它不写业务规则,也不知道自己被谁调用。',
+    formal:
+      '应用层的用例编排者:负责事务边界、权限与流程,委托聚合完成规则判断,返回 DTO 而非聚合。',
+    related: ['ddd', 'domain-event'],
+    see: 'java/ddd-bounded-context',
+  },
+  {
+    id: 'domain-event',
+    term: '领域事件',
+    en: 'domain event',
+    group: 'java',
+    plain:
+      '"某件事已经发生了"的声明,用过去时命名。聚合只负责攒着,发到哪是基础设施层的事。',
+    formal:
+      '表达领域内已发生事实的对象;由聚合产生,经应用层取出并由发布器(内存、日志、消息队列)对外发布。',
+    related: ['application-service', 'bounded-context'],
+    see: 'java/ddd-bounded-context',
+  },
+  {
+    id: 'anti-corruption-layer',
+    term: '防腐层',
+    en: 'anticorruption layer',
+    aliases: ['ACL'],
+    group: 'java',
+    plain:
+      '跟外部系统之间的翻译官。它的职责是把外部模型挡在外面,不让它们渗进你的领域层。',
+    formal:
+      '上下文或系统边界的适配层:负责双向模型映射、单位与状态对齐,隔离外部模型的变更对领域模型的影响。',
+    related: ['bounded-context'],
+    see: 'java/ddd-bounded-context',
+  },
 ]

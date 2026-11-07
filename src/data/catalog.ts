@@ -37,7 +37,7 @@ export const catalog: Category[] = [
       {
         id: 'java',
         name: 'Java',
-        intro: '从对象与引用的比较规则开始,再到 Maven、Spring Boot 与 MyBatis 这些工程基础。',
+        intro: '从对象与引用的比较规则开始,再到 Maven、Spring Boot、MyBatis 这些工程基础,最后看 DDD 怎么组织模型。',
         status: 'active',
       },
     ],

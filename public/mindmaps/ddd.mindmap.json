@@ -1,0 +1,201 @@
+{
+  "root": {
+    "id": "root",
+    "text": "DDD",
+    "children": [
+      {
+        "id": "bounded",
+        "text": "限界上下文",
+        "children": [
+          {
+            "id": "b1",
+            "text": "一套术语",
+            "children": []
+          },
+          {
+            "id": "b2",
+            "text": "一个模型",
+            "children": []
+          },
+          {
+            "id": "b3",
+            "text": "一条边界",
+            "children": []
+          },
+          {
+            "id": "b4",
+            "text": "跨边界用事件或防腐层",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "layers",
+        "text": "四层与依赖方向",
+        "children": [
+          {
+            "id": "l1",
+            "text": "interfaces → application",
+            "children": []
+          },
+          {
+            "id": "l2",
+            "text": "application → domain",
+            "children": []
+          },
+          {
+            "id": "l3",
+            "text": "infrastructure → domain(实现)",
+            "children": []
+          },
+          {
+            "id": "l4",
+            "text": "domain 不依赖任何框架",
+            "children": []
+          },
+          {
+            "id": "l5",
+            "text": "所以领域层能单独测",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "value",
+        "text": "值对象",
+        "children": [
+          {
+            "id": "v1",
+            "text": "没有身份,只有值",
+            "children": []
+          },
+          {
+            "id": "v2",
+            "text": "校验只写一次",
+            "children": []
+          }
+        ],
+        "richContent": {
+          "kind": "code",
+          "lang": "java",
+          "raw": "```java\npublic record Money(\n        BigDecimal amount, String currency) {\n\n    public Money {\n        if (amount.signum() < 0) {\n            throw new IllegalArgumentException(\n                    \"金额不能为负\");\n        }\n    }\n}\n```"
+        }
+      },
+      {
+        "id": "aggregate",
+        "text": "聚合根",
+        "children": [
+          {
+            "id": "a1",
+            "text": "规则只在一处守",
+            "children": []
+          },
+          {
+            "id": "a2",
+            "text": "状态只能通过行为改",
+            "children": []
+          },
+          {
+            "id": "a3",
+            "text": "跨聚合的规则别硬塞",
+            "children": []
+          }
+        ],
+        "richContent": {
+          "kind": "code",
+          "lang": "java",
+          "raw": "```java\npublic void place() {\n    requireStatus(DRAFT, \"订单已提交或已取消\");\n    if (lines.isEmpty()) {\n        throw new IllegalStateException(\"空订单不能提交\");\n    }\n    status = PLACED;\n    pendingEvents.add(new OrderPlaced(id, ...));\n}\n```"
+        }
+      },
+      {
+        "id": "repo",
+        "text": "仓储接口在 domain",
+        "children": [
+          {
+            "id": "r1",
+            "text": "实现放 infrastructure",
+            "children": []
+          },
+          {
+            "id": "r2",
+            "text": "按聚合存取,不是 DAO",
+            "children": []
+          }
+        ],
+        "richContent": {
+          "kind": "code",
+          "lang": "java",
+          "raw": "```java\npublic interface OrderRepository {\n\n    void save(Order order);\n\n    Optional<Order> findById(OrderId id);\n}\n```"
+        }
+      },
+      {
+        "id": "app",
+        "text": "应用服务只编排",
+        "children": [
+          {
+            "id": "p1",
+            "text": "不写业务 if",
+            "children": []
+          },
+          {
+            "id": "p2",
+            "text": "出参用 OrderView",
+            "children": []
+          }
+        ],
+        "richContent": {
+          "kind": "code",
+          "lang": "java",
+          "raw": "```java\npublic OrderId place(\n        PlaceOrderCommand command) {\n    Order order = Order.draft(\n            OrderId.newId(), command.customerId());\n    command.lines().forEach(order::addLine);\n    order.place();\n    orders.save(order);\n    publishEventsOf(order);\n    return order.id();\n}\n```"
+        }
+      },
+      {
+        "id": "event",
+        "text": "领域事件",
+        "children": [
+          {
+            "id": "e1",
+            "text": "聚合攒着,应用层发出去",
+            "children": []
+          }
+        ],
+        "richContent": {
+          "kind": "code",
+          "lang": "java",
+          "raw": "```java\npublic record OrderPlaced(\n        OrderId orderId,\n        String customerId,\n        Money total,\n        Instant occurredAt) {\n}\n```"
+        }
+      },
+      {
+        "id": "traps",
+        "text": "误解与边界",
+        "children": [
+          {
+            "id": "x1",
+            "text": "贫血模型不是 DDD",
+            "children": []
+          },
+          {
+            "id": "x2",
+            "text": "一张表一个类 ≠ 实体",
+            "children": []
+          },
+          {
+            "id": "x3",
+            "text": "Service 不都叫领域服务",
+            "children": []
+          },
+          {
+            "id": "x4",
+            "text": "仓储 ≠ DAO",
+            "children": []
+          },
+          {
+            "id": "x5",
+            "text": "纯 CRUD 不必上 DDD",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+}
