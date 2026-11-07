@@ -393,6 +393,14 @@
     border-top: 1px solid var(--line);
   }
 
+  /* 320px 级别的小屏:正文里那些长标识符(如 mybatis-plus-spring-boot3-starter)
+     比一行还宽,允许在任意位置断行,别把整个页面撑出横向滚动 */
+  @media (max-width: 420px) {
+    .lg-prose {
+      overflow-wrap: anywhere;
+    }
+  }
+
   .lg-prose img {
     border-radius: 18px;
   }
