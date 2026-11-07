@@ -273,4 +273,126 @@ export const javaTerms: Term[] = [
       url: 'https://docs.spring.io/spring-boot/reference/web/servlet.html',
     },
   },
+  {
+    id: 'maven',
+    term: 'Maven',
+    group: 'java',
+    plain:
+      'Java 世界里最常见的构建工具:拿一份 pom.xml,按约定找代码、按坐标下依赖、按生命周期跑插件。',
+    formal:
+      'Apache Maven 是基于 POM(项目对象模型)的项目管理与构建工具,以约定优于配置的方式描述构建、依赖与发布过程。',
+    related: ['pom', 'project-coordinates', 'build-lifecycle'],
+    see: 'java/maven-build',
+    source: {
+      title: 'Maven 文档 · Introduction to the POM',
+      url: 'https://maven.apache.org/guides/introduction/introduction-to-the-pom.html',
+    },
+  },
+  {
+    id: 'pom',
+    term: 'pom.xml',
+    en: 'Project Object Model',
+    group: 'java',
+    plain:
+      'Maven 的工程描述文件:坐标、依赖、插件、模块都写在这里。它不是配置文件,而是"这个工程是什么、怎么构建"的声明。',
+    formal:
+      'Project Object Model:以 XML 描述项目坐标、依赖、构建插件、多模块关系与继承关系的模型文件,默认位于工程根目录。',
+    related: ['maven', 'project-coordinates'],
+    see: 'java/maven-build',
+  },
+  {
+    id: 'project-coordinates',
+    term: '坐标',
+    en: 'GAV',
+    aliases: ['groupId:artifactId:version'],
+    group: 'java',
+    plain:
+      'groupId + artifactId + version 这三项,是工程或依赖的唯一身份证;本地仓库的目录路径也是按它拼出来的。',
+    formal:
+      'Maven 用 groupId、artifactId、version 三元组唯一标识一个构件,辅以 packaging 与 classifier 区分同版本的不同产物。',
+    related: ['pom', 'local-repository'],
+    see: 'java/maven-build',
+    source: {
+      title: 'Maven · POM Reference',
+      url: 'https://maven.apache.org/pom.html',
+    },
+  },
+  {
+    id: 'build-lifecycle',
+    term: '生命周期',
+    en: 'build lifecycle',
+    group: 'java',
+    plain:
+      '一串有先后顺序的阶段(phase)。跑后面的阶段时,前面的会全部先跑一遍;阶段本身不干活,插件挂在上面干。',
+    formal:
+      'Maven 定义了 clean、default、site 三套相互独立的生命周期,每套由有序的阶段组成;执行某阶段时其前的阶段依次执行。',
+    related: ['plugin', 'maven'],
+    see: 'java/maven-build',
+    source: {
+      title: 'Maven 文档 · Introduction to the Build Lifecycle',
+      url: 'https://maven.apache.org/guides/introduction/introduction-to-the-build-lifecycle.html',
+    },
+  },
+  {
+    id: 'plugin',
+    term: '插件',
+    en: 'plugin',
+    aliases: ['goal'],
+    group: 'java',
+    plain:
+      '真正干活的东西。编译、跑测试、打包、发布都是某个插件的某个目标(goal),它被绑在生命周期的某个阶段上。',
+    formal:
+      'Maven 插件由一组 goal 组成,通过 executions 把 goal 绑定到 phase;packaging 为 jar 时各阶段已有默认绑定。',
+    related: ['build-lifecycle', 'pom'],
+    see: 'java/maven-build',
+  },
+  {
+    id: 'dependency-scope',
+    term: '依赖作用域',
+    en: 'dependency scope',
+    aliases: ['scope'],
+    group: 'java',
+    plain:
+      '一条依赖在哪些阶段可见、要不要传递给下游。选错了会多打包一份,或者编译时能用、运行时找不到。',
+    formal:
+      'scope 取值 compile(默认)、provided、runtime、test、system;决定该依赖参与哪些 classpath 以及是否传递。',
+    related: ['dependency-management'],
+    see: 'java/maven-build',
+  },
+  {
+    id: 'dependency-management',
+    term: 'dependencyManagement',
+    group: 'java',
+    plain:
+      '一张版本价目表:子模块写同名依赖时可以不写版本。但它本身不引入依赖 —— 只写在这里,代码里还是 import 不到。',
+    formal:
+      'POM 中声明依赖版本与作用域供子模块继承的区块,不参与实际依赖解析;子模块需在 dependencies 中声明同名依赖才生效。',
+    related: ['dependency-scope', 'pom'],
+    see: 'java/maven-build',
+  },
+  {
+    id: 'local-repository',
+    term: '本地仓库',
+    en: 'local repository',
+    group: 'java',
+    plain:
+      '依赖下载后缓存在本机的地方,默认在 ~/.m2/repository。装进去的包,别的工程才能按坐标引用。',
+    formal:
+      '默认位于 ~/.m2/repository 的构件缓存目录,由 install:install 写入,按 groupId/artifactId/version 分层存放。',
+    related: ['project-coordinates', 'maven'],
+    see: 'java/maven-build',
+  },
+  {
+    id: 'aggregation',
+    term: '聚合',
+    en: 'aggregation',
+    aliases: ['reactor'],
+    group: 'java',
+    plain:
+      '父工程用 modules 列出"包含哪些模块",一次构建就把它们按依赖顺序依次构建。和"继承"是两件不同的事。',
+    formal:
+      '在 packaging=pom 的工程中用 modules 声明子模块,构建时由 reactor 按模块间依赖关系排序并依次执行。',
+    related: ['maven', 'pom'],
+    see: 'java/maven-build',
+  },
 ]

@@ -2,7 +2,7 @@
 title: Spring Boot:一个项目从哪几个文件夹开始
 summary: 'Spring Boot 只规定两件事:代码放 src/main/java、配置放 src/main/resources。剩下的分包是按职责切的 —— 接口、业务、存取、数据形状各一层,谁也不越界。'
 category: java
-order: 2
+order: 3
 level: 入门
 tags: [Spring Boot, 工程结构, 分层, 自动配置, 面试高频]
 updated: 2026-11-07

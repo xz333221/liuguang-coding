@@ -1,0 +1,422 @@
+---
+// 讲解:Maven 的生命周期。
+// 上排是某套生命周期的阶段,点一个阶段,下面说明它做什么、产物落在哪、默认绑了哪个插件。
+// 数据首屏就渲染进 DOM,交互时只换面板内容,不发请求。
+interface Phase {
+  name: string
+  /** 这个阶段实际上干什么 */
+  what: string
+  /** 产物与落点 */
+  out: string
+  /** 默认绑定哪个插件的哪个目标 */
+  plugin: string
+  /** 值得记住的一句话 */
+  tip?: string
+}
+
+interface Lifecycle {
+  id: string
+  label: string
+  /** 这一套的生命周期的用途 */
+  intro: string
+  phases: Phase[]
+}
+
+const lifecycles: Lifecycle[] = [
+  {
+    id: 'clean',
+    label: 'clean',
+    intro: '清理构建产物,三套生命周期里最简单的一套。',
+    phases: [
+      { name: 'pre-clean', what: '清理前的准备动作,默认什么都不做。', out: '无', plugin: '无(核心阶段)' },
+      {
+        name: 'clean',
+        what: '删掉各模块的 target/ 目录。',
+        out: 'target/ 消失',
+        plugin: 'maven-clean-plugin:clean',
+        tip: 'target 是纯产物目录,删掉不会丢代码 —— 前提是它真的只在 .gitignore 里。',
+      },
+      { name: 'post-clean', what: '清理后的收尾动作,默认什么都不做。', out: '无', plugin: '无(核心阶段)' },
+    ],
+  },
+  {
+    id: 'default',
+    label: 'default(构建)',
+    intro: '真正干活的一套。执行某个阶段时,排在它前面的阶段会全部先跑一遍。',
+    phases: [
+      {
+        name: 'validate',
+        what: '检查工程信息是否完整、pom 能不能解析。',
+        out: '无',
+        plugin: '无(核心阶段)',
+        tip: '真正的"开始构建"是从这里算的,前面的阶段不会再跑。',
+      },
+      {
+        name: 'compile',
+        what: '编译 src/main/java。',
+        out: 'target/classes/*.class',
+        plugin: 'maven-compiler-plugin:compile',
+      },
+      {
+        name: 'test',
+        what: '编译并运行 src/test/java 里的单元测试。',
+        out: 'target/surefire-reports/',
+        plugin: 'maven-surefire-plugin:test',
+        tip: '测试失败会直接中断构建,后面的 package 不会执行。想跳过用 -DskipTests。',
+      },
+      {
+        name: 'package',
+        what: '把编译结果打成可分发的东西(jar / war / pom)。',
+        out: 'target/maven-demo-1.0.0.jar',
+        plugin: 'maven-jar-plugin:jar(加上自定义的 shade 等)',
+        tip: '普通 jar 不含依赖,要 java -jar 直接跑就得靠 shade / assembly 打胖包。',
+      },
+      {
+        name: 'verify',
+        what: '跑集成测试之后的校验(比如 checkstyle、集成测试结果判定)。',
+        out: '无固定产物',
+        plugin: 'maven-failsafe-plugin 等',
+      },
+      {
+        name: 'install',
+        what: '把包装进本地仓库,供别的工程引用。',
+        out: '~/.m2/repository/com/liuguang/...',
+        plugin: 'maven-install-plugin:install',
+        tip: '多模块内部靠 reactor 构建,不需要逐个 install;跨工程引用才需要。',
+      },
+      {
+        name: 'deploy',
+        what: '把包推到远程仓库或私服。',
+        out: 'Nexus / Artifactory 上的一个版本',
+        plugin: 'maven-deploy-plugin:deploy',
+        tip: '发布版本(非 SNAPSHOT)通常不允许覆盖,推错版本只能发新版本。',
+      },
+    ],
+  },
+  {
+    id: 'site',
+    label: 'site',
+    intro: '生成工程文档站点,日常构建里很少用,发布 API 文档时才碰。',
+    phases: [
+      { name: 'pre-site', what: '生成站点前的准备。', out: '无', plugin: '无(核心阶段)' },
+      {
+        name: 'site',
+        what: '按 pom 与源码生成 HTML 文档站点。',
+        out: 'target/site/',
+        plugin: 'maven-site-plugin:site',
+      },
+      { name: 'post-site', what: '生成后的收尾。', out: '无', plugin: '无(核心阶段)' },
+      {
+        name: 'site-deploy',
+        what: '把站点发布到配置的服务器。',
+        out: '远程站点目录',
+        plugin: 'maven-site-plugin:deploy',
+      },
+    ],
+  },
+]
+
+const first = lifecycles[1].phases[0]
+const data = JSON.stringify(lifecycles)
+---
+
+<div class="mv-demo" data-demo="maven-lifecycle" data-lifecycles={data} data-life="1" data-phase="0">
+  <p class="mv-hint">
+    选一套生命周期,再点一个阶段 —— 看它到底做什么、产物落在哪、默认是哪个插件在干活。
+  </p>
+
+  <div class="mv-tabs" role="tablist" aria-label="Maven 生命周期">
+    {
+      lifecycles.map((item, index) => (
+        <button
+          type="button"
+          role="tab"
+          class="mv-tab"
+          data-life-tab={index}
+          data-active={String(index === 1)}
+          aria-selected={index === 1}
+        >
+          {item.label}
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="mv-intro" data-intro>{lifecycles[1].intro}</div>
+
+  <div class="mv-tracks">
+    {
+      lifecycles.map((item, index) => (
+        <div class="mv-track" data-life-track={index} data-show={String(index === 1)}>
+          {item.phases.map((phase, phaseIndex) => (
+            <button
+              type="button"
+              class="mv-phase"
+              data-phase={phaseIndex}
+              data-active={String(index === 1 && phaseIndex === 0)}
+            >
+              {phase.name}
+            </button>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+
+  <p class="mv-note">这里只列了最常打交道的阶段:default 这套实际有 23 个,中间那些大多是给资源处理、代码生成留的位置。</p>
+
+  <div class="mv-panel" aria-live="polite">
+    <div class="mv-head">
+      <span class="mv-command" data-command>mvn validate</span>
+      <span class="mv-stage" data-stage>第 1 步</span>
+    </div>
+
+    <dl class="mv-rows">
+      <dt>做什么</dt>
+      <dd data-what>{first.what}</dd>
+      <dt>产物</dt>
+      <dd data-out>{first.out}</dd>
+      <dt>默认绑定</dt>
+      <dd data-plugin>{first.plugin}</dd>
+    </dl>
+    <p class="mv-tip" data-tip>{first.tip ?? '这个阶段没有额外要记的,记住它排在哪儿就够了。'}</p>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-demo="maven-lifecycle"]')
+
+  if (root) {
+    interface Phase {
+      name: string
+      what: string
+      out: string
+      plugin: string
+      tip?: string
+    }
+
+    interface Lifecycle {
+      id: string
+      label: string
+      intro: string
+      phases: Phase[]
+    }
+
+    const lifecycles = JSON.parse(root.dataset.lifecycles ?? '[]') as Lifecycle[]
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-life-tab]'))
+    const tracks = Array.from(root.querySelectorAll<HTMLElement>('[data-life-track]'))
+    const intro = root.querySelector<HTMLElement>('[data-intro]')
+    const command = root.querySelector<HTMLElement>('[data-command]')
+    const stage = root.querySelector<HTMLElement>('[data-stage]')
+    const what = root.querySelector<HTMLElement>('[data-what]')
+    const out = root.querySelector<HTMLElement>('[data-out]')
+    const plugin = root.querySelector<HTMLElement>('[data-plugin]')
+    const tip = root.querySelector<HTMLElement>('[data-tip]')
+
+    const renderPhase = (lifeIndex: number, phaseIndex: number, phases: Phase[]) => {
+      const phase = phases[phaseIndex]
+      if (!phase) return
+
+      root.dataset.phase = String(phaseIndex)
+
+      Array.from(tracks[lifeIndex].querySelectorAll<HTMLButtonElement>('.mv-phase')).forEach((btn, i) => {
+        btn.dataset.active = String(i === phaseIndex)
+      })
+
+      if (command) command.textContent = `mvn ${phase.name}`
+      if (stage) stage.textContent = `第 ${phaseIndex + 1} 步`
+      if (what) what.textContent = phase.what
+      if (out) out.textContent = phase.out
+      if (plugin) plugin.textContent = phase.plugin
+      if (tip) tip.textContent = phase.tip ?? '这个阶段没有额外要记的,记住它排在哪儿就够了。'
+    }
+
+    const renderLife = (lifeIndex: number) => {
+      const life = lifecycles[lifeIndex]
+      if (!life) return
+
+      root.dataset.life = String(lifeIndex)
+      tabs.forEach((tab, i) => {
+        tab.dataset.active = String(i === lifeIndex)
+        tab.setAttribute('aria-selected', String(i === lifeIndex))
+      })
+      tracks.forEach((track, i) => {
+        track.dataset.show = String(i === lifeIndex)
+      })
+      if (intro) intro.textContent = life.intro
+
+      renderPhase(lifeIndex, 0, life.phases)
+    }
+
+    tabs.forEach((tab, lifeIndex) => {
+      tab.addEventListener('click', () => renderLife(lifeIndex))
+    })
+
+    tracks.forEach((track, lifeIndex) => {
+      Array.from(track.querySelectorAll<HTMLButtonElement>('.mv-phase')).forEach((btn, phaseIndex) => {
+        btn.addEventListener('click', () => renderPhase(lifeIndex, phaseIndex, lifecycles[lifeIndex].phases))
+      })
+    })
+
+    renderLife(Number(root.dataset.life ?? 1))
+  }
+</script>
+
+<style>
+  .mv-demo {
+    background: transparent;
+  }
+
+  .mv-hint {
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.7;
+  }
+
+  .mv-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.9rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .mv-tab {
+    padding: 0.26rem 0.8rem;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    transition: color 0.18s, border-color 0.18s;
+  }
+
+  .mv-tab:hover {
+    color: var(--ink);
+  }
+
+  .mv-tab[data-active='true'] {
+    border-bottom-color: var(--accent);
+    color: var(--ink);
+  }
+
+  .mv-intro {
+    margin-top: 0.9rem;
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.75;
+  }
+
+  .mv-tracks {
+    margin-top: 0.9rem;
+  }
+
+  .mv-note {
+    margin-top: 0.7rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.7;
+  }
+
+  .mv-track {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .mv-track[data-show='false'] {
+    display: none;
+  }
+
+  .mv-phase {
+    position: relative;
+    padding: 0.3rem 0.7rem;
+    background: var(--panel);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    transition: color 0.18s, background-color 0.18s;
+  }
+
+  .mv-phase:hover {
+    color: var(--ink);
+  }
+
+  .mv-phase[data-active='true'] {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .mv-panel {
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .mv-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .mv-command {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+  }
+
+  .mv-stage {
+    color: var(--muted);
+    font-size: 0.72rem;
+  }
+
+  .mv-rows {
+    display: grid;
+    gap: 0.55rem 1.2rem;
+    margin-top: 0.9rem;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+  }
+
+  .mv-rows dt {
+    color: var(--muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    padding-top: 0.15rem;
+  }
+
+  .mv-rows dd {
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  .mv-rows dd[data-plugin] {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+  }
+
+  .mv-tip {
+    margin-top: 1rem;
+    color: color-mix(in srgb, var(--ink) 88%, transparent);
+    font-size: 0.8rem;
+    line-height: 1.75;
+  }
+
+  @media (max-width: 640px) {
+    .mv-rows {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.15rem 1rem;
+    }
+
+    .mv-rows dt {
+      margin-top: 0.45rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mv-tab,
+    .mv-phase {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,157 @@
+{
+  "root": {
+    "id": "root",
+    "text": "Maven",
+    "children": [
+      {
+        "id": "dirs",
+        "text": "目录约定",
+        "children": [
+          {
+            "id": "d1",
+            "text": "src/main/java → target/classes",
+            "children": []
+          },
+          {
+            "id": "d2",
+            "text": "src/main/resources → 原样拷进 jar",
+            "children": []
+          },
+          {
+            "id": "d3",
+            "text": "src/test/java → 只在 test 阶段用",
+            "children": []
+          },
+          {
+            "id": "d4",
+            "text": "target/ → 产物,不进仓库",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "gav",
+        "text": "工程坐标",
+        "children": [],
+        "richContent": {
+          "kind": "code",
+          "lang": "xml",
+          "raw": "```xml\n<groupId>com.liuguang</groupId>\n<artifactId>maven-demo</artifactId>\n<version>1.0.0</version>\n<packaging>pom</packaging>\n```"
+        }
+      },
+      {
+        "id": "lifecycle",
+        "text": "生命周期",
+        "children": [
+          {
+            "id": "l1",
+            "text": "clean: pre-clean → clean",
+            "children": []
+          },
+          {
+            "id": "l2",
+            "text": "default: validate → compile → test",
+            "children": []
+          },
+          {
+            "id": "l3",
+            "text": "default: package → verify → install → deploy",
+            "children": []
+          },
+          {
+            "id": "l4",
+            "text": "跑一个阶段,前面的都会先跑",
+            "children": []
+          },
+          {
+            "id": "l5",
+            "text": "阶段只是钩子,干活的是插件",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "deps",
+        "text": "依赖与作用域",
+        "children": [
+          {
+            "id": "dp1",
+            "text": "compile 默认,会传递",
+            "children": []
+          },
+          {
+            "id": "dp2",
+            "text": "provided 容器提供,不传递",
+            "children": []
+          },
+          {
+            "id": "dp3",
+            "text": "runtime 运行时才要(如 JDBC 驱动)",
+            "children": []
+          },
+          {
+            "id": "dp4",
+            "text": "test 只在测试,不进产物",
+            "children": []
+          }
+        ],
+        "richContent": {
+          "kind": "code",
+          "lang": "xml",
+          "raw": "```xml\n<dependency>\n  <groupId>org.junit.jupiter</groupId>\n  <artifactId>junit-jupiter</artifactId>\n  <version>5.10.2</version>\n  <scope>test</scope>\n</dependency>\n```"
+        }
+      },
+      {
+        "id": "depmgmt",
+        "text": "依赖管理只定价",
+        "children": [],
+        "richContent": {
+          "kind": "code",
+          "lang": "xml",
+          "raw": "```xml\n<dependencyManagement>\n  <dependencies>\n    <dependency>\n      <groupId>org.junit.jupiter</groupId>\n      <artifactId>junit-jupiter</artifactId>\n      <version>5.10.2</version>\n    </dependency>\n  </dependencies>\n</dependencyManagement>\n```"
+        }
+      },
+      {
+        "id": "plugin",
+        "text": "插件目标绑在阶段上",
+        "children": [],
+        "richContent": {
+          "kind": "code",
+          "lang": "xml",
+          "raw": "```xml\n<plugin>\n  <artifactId>maven-shade-plugin</artifactId>\n  <version>3.5.2</version>\n  <executions>\n    <execution>\n      <phase>package</phase>\n      <goals><goal>shade</goal></goals>\n    </execution>\n  </executions>\n</plugin>\n```"
+        }
+      },
+      {
+        "id": "modules",
+        "text": "多模块:聚合与继承",
+        "children": [],
+        "richContent": {
+          "kind": "code",
+          "lang": "xml",
+          "raw": "```xml\n<modules>\n  <module>common</module>\n  <module>app</module>\n</modules>\n\n<parent>\n  <groupId>com.liuguang</groupId>\n  <artifactId>maven-demo</artifactId>\n  <version>1.0.0</version>\n</parent>\n```"
+        }
+      },
+      {
+        "id": "repo",
+        "text": "仓库",
+        "children": [
+          {
+            "id": "r1",
+            "text": "本地 ~/.m2/repository",
+            "children": []
+          },
+          {
+            "id": "r2",
+            "text": "远程 Central,公司私服 Nexus",
+            "children": []
+          },
+          {
+            "id": "r3",
+            "text": "mvn -U 强制刷新快照",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+}

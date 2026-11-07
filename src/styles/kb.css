@@ -367,7 +367,10 @@
     color: var(--muted);
   }
 
+  /* 表格在窄屏上会被列内容撑宽:让它自己横向滚动,别把整个页面撑出一条横向滚动条 */
   .lg-prose table {
+    display: block;
+    overflow-x: auto;
     width: 100%;
     border-collapse: collapse;
     font-size: 0.9rem;
@@ -462,6 +465,13 @@
 
   /* 没有悬停能力的设备(触摸屏)上浮层只会挡路,直接不显示 */
   @media (hover: none) {
+    .lg-term-tip {
+      display: none;
+    }
+  }
+
+  /* 窄屏上一句话的浮层没有地方放,还会把页面撑出横向滚动条:同样不显示 */
+  @media (max-width: 720px) {
     .lg-term-tip {
       display: none;
     }

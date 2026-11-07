@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- 继承:父工程的 properties / dependencyManagement / pluginManagement 全部继承下来 -->
+  <parent>
+    <groupId>com.liuguang</groupId>
+    <artifactId>maven-demo</artifactId>
+    <version>1.0.0</version>
+    <!-- 相对路径;省略时默认也是 ../pom.xml,写出来是为了说明它从哪来 -->
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>common</artifactId>
+  <!-- 不写 groupId / version:继承父工程的。只声明自己独有的那一项 -->
+
+  <dependencies>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <!-- scope=test:只在编译测试、跑测试时可见,不会进运行时 classpath,也不会被打进产物 -->
+      <scope>test</scope>
+      <!-- 版本来自父工程的 dependencyManagement -->
+    </dependency>
+  </dependencies>
+</project>
