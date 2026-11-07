@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuguang.mybatis.mapper.BookMapper">
+
+    <!--
+      namespace 必须是 Mapper 接口的全限定名,下面每个 select 的 id 必须等于方法名。
+      对不上时启动不报错,调用才抛 "Invalid bound statement (not found)" —— 排查先看这两处。
+    -->
+    <resultMap id="bookMap" type="com.liuguang.mybatis.entity.Book">
+        <id column="id" property="id"/>
+        <result column="read_flag" property="read"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <select id="search" resultMap="bookMap">
+        select id, title, author, read_flag, created_at, updated_at, deleted
+        from book
+        <where>
+            deleted = 0
+            <if test="keyword != null and keyword != ''">
+                and (title like concat('%', #{keyword}, '%')
+                     or author like concat('%', #{keyword}, '%'))
+            </if>
+            <if test="readOnly">
+                and read_flag = true
+            </if>
+        </where>
+        order by created_at desc
+    </select>
+
+    <!--
+      #{} 会被编译成 PreparedStatement 的占位符 ?,参数走预编译;
+      ${} 是字符串拼接,能被注入,只在拼列名 / 表名这种没法用占位符的地方才用它。
+    -->
+    <select id="searchByColumn" resultMap="bookMap">
+        select id, title, author, read_flag, created_at, updated_at, deleted
+        from book
+        where deleted = 0
+        order by ${orderColumn} desc
+    </select>
+</mapper>

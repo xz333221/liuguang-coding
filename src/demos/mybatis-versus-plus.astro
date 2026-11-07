@@ -1,0 +1,355 @@
+---
+// 讲解:同一件事,MyBatis 写与 MyBatis-Plus 写。
+// 选一个查询场景,左右两栏给出两种写法,下面一行是它最终落到数据库上的 SQL。
+interface Side {
+  /** 这段代码放在哪个文件里 */
+  where: string
+  code: string
+}
+
+interface Scene {
+  title: string
+  /** 一句话说明这个场景的看点 */
+  point: string
+  mybatis: Side
+  plus: Side
+  /** 两种写法最终都落到这条 SQL */
+  sql: string
+}
+
+const scenes: Scene[] = [
+  {
+    title: '按 id 查一条',
+    point: '最基础的一次查询。注意手写 SQL 要自己带 deleted = 0,MP 的 selectById 会自动加。',
+    mybatis: {
+      where: 'BookMapper.xml + 接口方法',
+      code: `<select id="selectById" resultMap="bookMap">
+  select id, title, author, read_flag,
+         created_at, updated_at
+  from book
+  where id = #{id} and deleted = 0
+</select>`,
+    },
+    plus: {
+      where: 'BookMapper 继承 BaseMapper',
+      code: `Book book = mapper.selectById(1L);`,
+    },
+    sql: `select id, title, author, read_flag, created_at, updated_at, deleted
+from book
+where id = ? and deleted = 0`,
+  },
+  {
+    title: '按作者查列表',
+    point: '条件变一次就要改一次 XML;条件构造器把条件变成了对象上的方法调用。',
+    mybatis: {
+      where: 'BookMapper.xml',
+      code: `<select id="selectByAuthor" resultMap="bookMap">
+  select * from book
+  where author = #{author} and deleted = 0
+</select>`,
+    },
+    plus: {
+      where: 'Service / Controller',
+      code: `List<Book> books = mapper.selectList(
+        Wrappers.<Book>lambdaQuery()
+                .eq(Book::getAuthor, "周志明"));`,
+    },
+    sql: `select id, title, author, read_flag, created_at, updated_at, deleted
+from book
+where author = ? and deleted = 0`,
+  },
+  {
+    title: '关键字 + 只看已读',
+    point: '括号里的 or 是两个条件连成一组的典型场景:XML 用 <where> 包,MP 用 and(w -> ...) 包。',
+    mybatis: {
+      where: 'BookMapper.xml',
+      code: `<select id="search" resultMap="bookMap">
+  select * from book
+  <where>
+    deleted = 0
+    <if test="keyword != null and keyword != ''">
+      and (title like concat('%', #{keyword}, '%')
+           or author like concat('%', #{keyword}, '%'))
+    </if>
+    <if test="readOnly">and read_flag = true</if>
+  </where>
+</select>`,
+    },
+    plus: {
+      where: 'Service',
+      code: `var query = Wrappers.<Book>lambdaQuery();
+if (keyword != null && !keyword.isBlank()) {
+    query.and(w -> w.like(Book::getTitle, keyword)
+                    .or().like(Book::getAuthor, keyword));
+}
+query.eq(readOnly, Book::isRead, true);`,
+    },
+    sql: `select ... from book
+where deleted = 0
+  and (title like ? or author like ?)
+  and read_flag = ?`,
+  },
+  {
+    title: '分页查第 2 页',
+    point: '手写分页要自己发 count 语句、自己算 offset;MP 把 count 与 limit 交给分页插件。',
+    mybatis: {
+      where: 'BookMapper.xml(两条语句)',
+      code: `<select id="countAll" resultType="long">
+  select count(*) from book where deleted = 0
+</select>
+
+<select id="page" resultMap="bookMap">
+  select * from book where deleted = 0
+  order by created_at desc
+  limit #{offset}, #{size}
+</select>`,
+    },
+    plus: {
+      where: 'Service',
+      code: `Page<Book> page = mapper.selectPage(
+        new Page<>(2, 3),
+        Wrappers.<Book>lambdaQuery()
+                .orderByDesc(Book::getCreatedAt));`,
+    },
+    sql: `-- 插件先发 count
+select count(*) from book where deleted = 0
+-- 再改写 limit 拿当前页
+select ... from book where deleted = 0 order by created_at desc limit ?, ?`,
+  },
+  {
+    title: '逻辑删除一条',
+    point: 'deleteById 名字像删除,实际执行的是 update —— 数据还在,只是标记掉了。',
+    mybatis: {
+      where: 'BookMapper.xml',
+      code: `<update id="softDelete">
+  update book
+  set deleted = 1, updated_at = now()
+  where id = #{id} and deleted = 0
+</update>`,
+    },
+    plus: {
+      where: 'Service(注释在实体上)',
+      code: `// Book.deleted 标了 @TableLogic
+service.removeById(1L);`,
+    },
+    sql: `update book
+set deleted = 1
+where id = ? and deleted = 0`,
+  },
+]
+
+const first = scenes[0]
+const data = JSON.stringify(scenes)
+---
+
+<div class="mbx-demo" data-demo="mybatis-versus" data-scenes={data} data-index="0">
+  <p class="mbx-hint">
+    同一个需求:先看 MyBatis 的手写 SQL,再看 MyBatis-Plus 的写法;最下面是它们最终落到数据库上执行的语句。
+  </p>
+
+  <div class="mbx-scenes">
+    {
+      scenes.map((scene, index) => (
+        <button type="button" class="mbx-scene" data-scene={index} data-active={String(index === 0)}>
+          {scene.title}
+        </button>
+      ))
+    }
+  </div>
+
+  <p class="mbx-point" data-point>{first.point}</p>
+
+  <div class="mbx-pair">
+    <section class="mbx-side">
+      <header class="mbx-head">
+        <span class="mbx-tag">MyBatis</span>
+        <span class="mbx-where" data-mb-where>{first.mybatis.where}</span>
+      </header>
+      <pre class="mbx-code" data-mb-code>{first.mybatis.code}</pre>
+    </section>
+
+    <section class="mbx-side mbx-side-plus">
+      <header class="mbx-head">
+        <span class="mbx-tag mbx-tag-plus">MyBatis-Plus</span>
+        <span class="mbx-where" data-plus-where>{first.plus.where}</span>
+      </header>
+      <pre class="mbx-code" data-plus-code>{first.plus.code}</pre>
+    </section>
+  </div>
+
+  <div class="mbx-sql">
+    <p class="mbx-label">落到数据库上,执行的是</p>
+    <pre class="mbx-sql-code" data-sql>{first.sql}</pre>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-demo="mybatis-versus"]')
+
+  if (root) {
+    interface Side {
+      where: string
+      code: string
+    }
+
+    interface Scene {
+      title: string
+      point: string
+      mybatis: Side
+      plus: Side
+      sql: string
+    }
+
+    const scenes = JSON.parse(root.dataset.scenes ?? '[]') as Scene[]
+    const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-scene]'))
+    const point = root.querySelector<HTMLElement>('[data-point]')
+    const mbWhere = root.querySelector<HTMLElement>('[data-mb-where]')
+    const mbCode = root.querySelector<HTMLElement>('[data-mb-code]')
+    const plusWhere = root.querySelector<HTMLElement>('[data-plus-where]')
+    const plusCode = root.querySelector<HTMLElement>('[data-plus-code]')
+    const sql = root.querySelector<HTMLElement>('[data-sql]')
+
+    const render = (index: number) => {
+      const scene = scenes[index]
+      if (!scene) return
+
+      root.dataset.index = String(index)
+      buttons.forEach((button, i) => {
+        button.dataset.active = String(i === index)
+      })
+
+      if (point) point.textContent = scene.point
+      if (mbWhere) mbWhere.textContent = scene.mybatis.where
+      if (mbCode) mbCode.textContent = scene.mybatis.code
+      if (plusWhere) plusWhere.textContent = scene.plus.where
+      if (plusCode) plusCode.textContent = scene.plus.code
+      if (sql) sql.textContent = scene.sql
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => render(Number(button.dataset.scene ?? 0)))
+    })
+
+    render(0)
+  }
+</script>
+
+<style>
+  /* 没有圆角、没有整圈描边:靠背景与细线分区 */
+  .mbx-demo {
+    background: transparent;
+  }
+
+  .mbx-hint {
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.7;
+  }
+
+  .mbx-scenes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.9rem;
+  }
+
+  .mbx-scene {
+    padding: 0.28rem 0.8rem;
+    background: var(--panel);
+    color: var(--muted);
+    font-size: 0.75rem;
+    transition: color 0.18s, background-color 0.18s;
+  }
+
+  .mbx-scene:hover {
+    color: var(--ink);
+  }
+
+  .mbx-scene[data-active='true'] {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .mbx-point {
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.78rem;
+    line-height: 1.75;
+  }
+
+  .mbx-pair {
+    display: grid;
+    gap: 1.2rem;
+    margin-top: 1rem;
+  }
+
+  .mbx-side {
+    min-width: 0;
+  }
+
+  .mbx-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .mbx-tag {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+
+  .mbx-tag-plus {
+    color: var(--highlight);
+  }
+
+  .mbx-where {
+    color: var(--muted);
+    font-size: 0.68rem;
+  }
+
+  .mbx-code,
+  .mbx-sql-code {
+    overflow-x: auto;
+    margin-top: 0.55rem;
+    padding: 0.8rem 0.9rem;
+    background: var(--panel);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.8;
+    white-space: pre;
+  }
+
+  .mbx-sql {
+    margin-top: 1.1rem;
+  }
+
+  .mbx-label {
+    color: var(--muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+  }
+
+  .mbx-sql-code {
+    background: var(--surface);
+    color: var(--highlight);
+  }
+
+  @media (max-width: 640px) {
+    .mbx-code,
+    .mbx-sql-code {
+      font-size: 0.7rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mbx-scene {
+      transition: none;
+    }
+  }
+</style>

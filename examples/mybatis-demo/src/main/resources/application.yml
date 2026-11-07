@@ -1,0 +1,27 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: mybatis-demo
+
+  datasource:
+    url: jdbc:h2:mem:mybatis;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+
+  sql:
+    init:
+      mode: always # 启动时执行 resources/schema.sql 与 data.sql
+
+mybatis-plus:
+  # 手写 SQL 的位置;多个目录用逗号分隔,classpath*: 才能扫到 jar 里的
+  mapper-locations: classpath*:mapper/*.xml
+  # XML 里的 resultType 可以直接写 Book(别名)
+  type-aliases-package: com.liuguang.mybatis.entity
+  configuration:
+    # 数据库的 read_flag → Java 的 readFlag;对不上实体字段的列名仍然要写 resultMap
+    map-underscore-to-camel-case: true
+    # 把每条 SQL 打到控制台,排错时先看它
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

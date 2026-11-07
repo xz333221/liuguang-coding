@@ -37,7 +37,7 @@ export const catalog: Category[] = [
       {
         id: 'java',
         name: 'Java',
-        intro: '从对象与引用的比较规则开始,再到 Maven 与 Spring Boot 这些工程基础。',
+        intro: '从对象与引用的比较规则开始,再到 Maven、Spring Boot 与 MyBatis 这些工程基础。',
         status: 'active',
       },
     ],

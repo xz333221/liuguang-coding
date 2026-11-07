@@ -1,0 +1,220 @@
+{
+  "root": {
+    "id": "root",
+    "text": "MyBatis / Plus",
+    "children": [
+      {
+        "id": "three",
+        "text": "三件套",
+        "children": [
+          {
+            "id": "t1",
+            "text": "配置:mapper-locations",
+            "children": []
+          },
+          {
+            "id": "t2",
+            "text": "接口:只有方法签名",
+            "children": []
+          },
+          {
+            "id": "t3",
+            "text": "XML:namespace + id",
+            "children": []
+          },
+          {
+            "id": "t4",
+            "text": "BaseMapper 的 SQL 不用 XML",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "api",
+        "text": "接口怎么对上 XML",
+        "children": [
+          {
+            "id": "a1",
+            "text": "Mapper 接口",
+            "children": [],
+            "richContent": {
+              "kind": "code",
+              "lang": "java",
+              "raw": "```java\npublic interface BookMapper extends BaseMapper<Book> {\n\n    List<Book> search(\n            @Param(\"keyword\") String keyword,\n            @Param(\"readOnly\") boolean readOnly);\n}\n```"
+            }
+          },
+          {
+            "id": "a2",
+            "text": "XML 里的 namespace 与 id",
+            "children": [],
+            "richContent": {
+              "kind": "code",
+              "lang": "xml",
+              "raw": "```xml\n<mapper namespace=\"com.liuguang.mybatis.mapper.BookMapper\">\n    <!-- namespace = 接口全限定名 -->\n    <!-- id = 接口方法名 -->\n    <select id=\"search\" resultMap=\"bookMap\">\n        select ... from book\n    </select>\n</mapper>\n```"
+            }
+          },
+          {
+            "id": "a3",
+            "text": "对不上就 Invalid bound statement",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "mapping",
+        "text": "结果映射",
+        "children": [
+          {
+            "id": "m1",
+            "text": "resultMap 显式点名",
+            "children": [],
+            "richContent": {
+              "kind": "code",
+              "lang": "xml",
+              "raw": "```xml\n<resultMap id=\"bookMap\" type=\"...entity.Book\">\n    <id column=\"id\" property=\"id\"/>\n    <result column=\"read_flag\" property=\"read\"/>\n    <result column=\"created_at\" property=\"createdAt\"/>\n</resultMap>\n```"
+            }
+          },
+          {
+            "id": "m2",
+            "text": "列名能对上就用 resultType",
+            "children": []
+          },
+          {
+            "id": "m3",
+            "text": "驼峰映射 read_flag → readFlag",
+            "children": []
+          },
+          {
+            "id": "m4",
+            "text": "一对多用 collection",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "params",
+        "text": "#{} 与 ${}",
+        "children": [
+          {
+            "id": "p1",
+            "text": "值走预编译,不能注入",
+            "children": [],
+            "richContent": {
+              "kind": "code",
+              "lang": "xml",
+              "raw": "```xml\n<!-- #{} 编译成 ? -->\nwhere author = #{author}\n\n<!-- ${} 原样拼进 SQL -->\norder by ${orderColumn} desc\n```"
+            }
+          },
+          {
+            "id": "p2",
+            "text": "${} 只能接白名单",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "dynamic",
+        "text": "动态 SQL",
+        "children": [],
+        "richContent": {
+          "kind": "code",
+          "lang": "xml",
+          "raw": "```xml\n<where>\n    deleted = 0\n    <if test=\"keyword != null and keyword != ''\">\n        and title like concat('%', #{keyword}, '%')\n    </if>\n    <if test=\"readOnly\">and read_flag = true</if>\n</where>\n```"
+        }
+      },
+      {
+        "id": "cache",
+        "text": "缓存",
+        "children": [
+          {
+            "id": "c1",
+            "text": "一级:同一个 SqlSession,默认开",
+            "children": []
+          },
+          {
+            "id": "c2",
+            "text": "二级:默认关,跨会话",
+            "children": []
+          },
+          {
+            "id": "c3",
+            "text": "增删改会清空缓存",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "mp",
+        "text": "Plus 补的那一半",
+        "children": [
+          {
+            "id": "mp1",
+            "text": "条件构造器 + 分页",
+            "children": [],
+            "richContent": {
+              "kind": "code",
+              "lang": "java",
+              "raw": "```java\nvar query = Wrappers.<Book>lambdaQuery()\n        .eq(Book::getAuthor, \"周志明\")\n        .orderByDesc(Book::getCreatedAt);\n\nPage<Book> page =\n        mapper.selectPage(new Page<>(1, 3), query);\n```"
+            }
+          },
+          {
+            "id": "mp2",
+            "text": "BaseMapper:单表 CRUD 不写 SQL",
+            "children": []
+          },
+          {
+            "id": "mp3",
+            "text": "分页插件必须注册",
+            "children": []
+          },
+          {
+            "id": "mp4",
+            "text": "@TableField(fill) 自动填充",
+            "children": []
+          },
+          {
+            "id": "mp5",
+            "text": "@TableLogic 逻辑删除",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "traps",
+        "text": "六个坑",
+        "children": [
+          {
+            "id": "x1",
+            "text": "mapper-locations 没扫到 XML",
+            "children": []
+          },
+          {
+            "id": "x2",
+            "text": "改名了要用 resultMap",
+            "children": []
+          },
+          {
+            "id": "x3",
+            "text": "分页插件没装,total = -1",
+            "children": []
+          },
+          {
+            "id": "x4",
+            "text": "手写 SQL 忘了 deleted = 0",
+            "children": []
+          },
+          {
+            "id": "x5",
+            "text": "${} 拼用户输入",
+            "children": []
+          },
+          {
+            "id": "x6",
+            "text": "嵌套查询写出一堆 N+1",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+}

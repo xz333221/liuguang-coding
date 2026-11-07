@@ -395,4 +395,94 @@ export const javaTerms: Term[] = [
     related: ['maven', 'pom'],
     see: 'java/maven-build',
   },
+  {
+    id: 'mybatis',
+    term: 'MyBatis',
+    group: 'java',
+    plain:
+      '一个"SQL 归你写"的持久层框架:你给 SQL,它负责把参数塞进去、把结果映射成对象。',
+    formal:
+      '基于 Java 的持久层框架,以 Mapper 接口 + 映射文件(或注解)声明 SQL,负责参数绑定、结果映射与事务内的 SqlSession 管理,不做自动表结构映射。',
+    related: ['mybatis-plus', 'mapper', 'resultmap'],
+    see: 'java/mybatis-and-plus',
+    source: {
+      title: 'MyBatis 3 文档 · XML 映射器',
+      url: 'https://mybatis.org/mybatis-3/zh/sqlmap-xml.html',
+    },
+  },
+  {
+    id: 'mybatis-plus',
+    term: 'MyBatis-Plus',
+    group: 'java',
+    plain:
+      'MyBatis 的增强包,不是另一个框架。单表 CRUD、条件查询、分页这些不用写 SQL 的活它包了,复杂 SQL 还是回 MyBatis。',
+    formal:
+      '在 MyBatis 之上提供 BaseMapper、IService、条件构造器、分页插件、自动填充、逻辑删除与代码生成等能力的增强工具,不替换 MyBatis 的映射机制。',
+    related: ['mybatis', 'wrapper', 'logic-delete'],
+    see: 'java/mybatis-and-plus',
+    source: {
+      title: 'MyBatis-Plus 文档 · 快速开始',
+      url: 'https://baomidou.com/getting-started/',
+    },
+  },
+  {
+    id: 'mapper',
+    term: 'Mapper',
+    group: 'java',
+    plain:
+      '接口 + 映射文件这一对。接口里只写方法签名,SQL 写在 XML 里,靠 namespace 和方法名对上。',
+    formal:
+      'MyBatis 中与映射文件绑定的 Java 接口:XML 的 namespace 取其全限定名,语句 id 取方法名;MyBatis 为其生成代理实现。',
+    related: ['mybatis', 'resultmap', 'dynamic-sql'],
+    see: 'java/mybatis-and-plus',
+  },
+  {
+    id: 'resultmap',
+    term: 'resultMap',
+    group: 'java',
+    plain:
+      '手动指定"哪一列填哪个字段"。列名和字段名对不上、或者要拼一对多的时候用它。',
+    formal:
+      'MyBatis 的结果映射定义,逐条声明 column → property,并支持 association / collection 表达嵌套对象与集合。',
+    related: ['mapper', 'mybatis'],
+    see: 'java/mybatis-and-plus',
+  },
+  {
+    id: 'dynamic-sql',
+    term: '动态 SQL',
+    group: 'java',
+    plain:
+      'SQL 按参数变化:条件成立了才拼这一段。if / where / foreach / choose 就是干这个的。',
+    formal:
+      'MyBatis 映射文件中的条件化语句构件(if、choose、where、foreach、trim 等),在运行时按入参拼出最终 SQL。',
+    related: ['mapper', 'mybatis'],
+    see: 'java/mybatis-and-plus',
+  },
+  {
+    id: 'wrapper',
+    term: '条件构造器',
+    en: 'Wrapper',
+    group: 'java',
+    plain:
+      '用方法调用而不是字符串来表达查询条件:eq、like、in、orderBy。拼出来的还是一条 SQL。',
+    formal:
+      'MyBatis-Plus 中以 QueryWrapper / LambdaQueryWrapper 表达 where、order、group 等条件的构建器,Lambda 形式通过方法引用取得字段名。',
+    related: ['mybatis-plus', 'mybatis'],
+    see: 'java/mybatis-and-plus',
+    source: {
+      title: 'MyBatis-Plus 文档 · 核心功能',
+      url: 'https://baomidou.com/guides/',
+    },
+  },
+  {
+    id: 'logic-delete',
+    term: '逻辑删除',
+    group: 'java',
+    plain:
+      '不真删行,只把 deleted 改成 1。查的时候自动带上 deleted = 0 —— 除非这条 SQL 是你自己写的。',
+    formal:
+      '以标记字段代替物理删除的方案:MyBatis-Plus 通过 @TableLogic 在 delete 时改写为 update,并在查询中附加未删除条件。',
+    related: ['mybatis-plus'],
+    see: 'java/mybatis-and-plus',
+  },
 ]
