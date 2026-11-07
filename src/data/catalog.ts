@@ -37,7 +37,7 @@ export const catalog: Category[] = [
       {
         id: 'java',
         name: 'Java',
-        intro: '从对象与引用的比较规则开始,再到集合、JVM 内存与并发。',
+        intro: '从对象与引用的比较规则开始,再到工程结构与 Spring Boot。',
         status: 'active',
       },
     ],

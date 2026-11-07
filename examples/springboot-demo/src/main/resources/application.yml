@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: springboot-demo
+
+  # 内存库:进程一停数据就没了。示例项目用它省掉装数据库的步骤，
+  # 换成 MySQL 时只改这一段，代码一行不用动。
+  datasource:
+    url: jdbc:h2:mem:demo;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+
+  jpa:
+    hibernate:
+      # 生产环境别用 update/create，表结构交给迁移工具(schema.sql / Flyway)管
+      ddl-auto: none
+    open-in-view: false
+
+  sql:
+    init:
+      mode: always # 启动时执行 resources/schema.sql
+
+logging:
+  level:
+    com.liuguang.demo: debug

@@ -1,0 +1,5 @@
+# 构建产物与 IDE 文件不进仓库
+target/
+!.mvn/wrapper/maven-wrapper.jar
+*.iml
+.idea/

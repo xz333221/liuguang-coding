@@ -169,4 +169,108 @@ export const javaTerms: Term[] = [
     related: ['equals', 'hashcode'],
     see: 'java/equals-and-identity',
   },
+  {
+    id: 'spring-boot',
+    term: 'Spring Boot',
+    group: 'java',
+    plain:
+      'Spring 的一套脚手架:依赖版本、配置加载、内嵌服务器、自动装配都替你做好的那种。约定先写好，你只管往里放代码。',
+    formal:
+      '基于 Spring Framework 的自动配置框架，通过起步依赖与条件化自动配置提供可独立运行的应用，内置服务器，无需部署到外部容器。',
+    related: ['starter', 'auto-configuration', 'embedded-server', 'ioc'],
+    see: 'java/spring-boot-start',
+    source: {
+      title: 'Spring Boot 参考文档 · Developing with Spring Boot',
+      url: 'https://docs.spring.io/spring-boot/reference/using/index.html',
+    },
+  },
+  {
+    id: 'ioc',
+    term: 'IoC',
+    en: 'Inversion of Control',
+    aliases: ['控制反转'],
+    group: 'java',
+    plain:
+      '对象的创建与依赖关系不归你管，交给容器。你只声明"我需要什么"，容器负责造好、组装好再给你。',
+    formal:
+      '控制反转:对象的实例化、装配与生命周期由 IoC 容器负责，应用代码通过构造器或字段声明依赖，由容器注入。',
+    related: ['dependency-injection', 'bean', 'spring-boot'],
+    see: 'java/spring-boot-start',
+    source: {
+      title: 'Spring Framework 文档 · The IoC Container',
+      url: 'https://docs.spring.io/spring-framework/reference/core/beans.html',
+    },
+  },
+  {
+    id: 'dependency-injection',
+    term: '依赖注入',
+    en: 'dependency injection',
+    aliases: ['构造器注入'],
+    group: 'java',
+    plain:
+      '不在代码里 new 依赖，而是在构造器参数里写"我要个什么"，由容器把它递进来。测试时换一个假的递进去就行。',
+    formal:
+      'IoC 的具体实现方式:容器在创建 Bean 时按类型解析并传入其构造器参数、setter 或字段。构造器注入因可保持字段 final、依赖显式而首选。',
+    related: ['ioc', 'bean'],
+    see: 'java/spring-boot-start',
+  },
+  {
+    id: 'bean',
+    term: 'Bean',
+    group: 'java',
+    plain:
+      '被 IoC 容器接管的对象。注册成 Bean 之后，别处只要在构造器里声明类型就能拿到它，不用自己 new。',
+    formal:
+      '由 Spring 容器实例化、装配与管理的对象。来源包括组件扫描到的 @Component 及其派生注解，以及 @Configuration 类中用 @Bean 声明的方法。',
+    related: ['ioc', 'dependency-injection'],
+    see: 'java/spring-boot-start',
+  },
+  {
+    id: 'starter',
+    term: 'starter',
+    group: 'java',
+    aliases: ['起步依赖'],
+    plain:
+      '依赖的打包套餐。写 spring-boot-starter-web 一个条目，就把 web 需要的那些库连版本一起带进来。',
+    formal:
+      'Spring Boot 的依赖聚合模块:一个 starter 引入一组经过版本对齐的依赖，并触发对应的自动配置。',
+    related: ['spring-boot', 'auto-configuration'],
+    see: 'java/spring-boot-start',
+    source: {
+      title: 'Spring Boot 参考文档 · Build systems',
+      url: 'https://docs.spring.io/spring-boot/reference/using/build-systems.html',
+    },
+  },
+  {
+    id: 'auto-configuration',
+    term: '自动配置',
+    en: 'auto-configuration',
+    group: 'java',
+    plain:
+      'Spring Boot 看你的 classpath 上有什么，就猜你大概想用什么，然后把对应的 Bean 配好。猜错了可以覆盖，不用从头手写。',
+    formal:
+      '@EnableAutoConfiguration 触发的机制:按 classpath 条件(@ConditionalOnClass / OnMissingBean 等)加载候选配置类，用户自定义的 Bean 优先。',
+    related: ['spring-boot', 'starter', 'bean'],
+    see: 'java/spring-boot-start',
+    source: {
+      title: 'Spring Boot 参考文档 · Auto-configuration',
+      url: 'https://docs.spring.io/spring-boot/reference/using/auto-configuration.html',
+    },
+  },
+  {
+    id: 'embedded-server',
+    term: '内嵌服务器',
+    en: 'embedded server',
+    group: 'java',
+    plain:
+      '服务器不是外面装好的那一个，而是跟着应用一起打包、跟着应用一起启动的那一个。',
+    formal:
+      '以依赖形式随应用打包的 Servlet 容器(Tomcat、Jetty、Undertow)，由 Spring Boot 在启动时创建并监听端口，因此产物是可执行 jar 而非 war。',
+    related: ['spring-boot'],
+    see: 'java/spring-boot-start',
+    source: {
+      title: 'Spring Boot 参考文档 · Servlet web applications',
+      url: 'https://docs.spring.io/spring-boot/reference/web/servlet.html',
+    },
+  },
 ]
