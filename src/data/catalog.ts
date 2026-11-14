@@ -8,7 +8,7 @@
 // 知识点通过 frontmatter 的 category 指向叶子分类的 id(如 python / ai / algorithm),
 // 父分类(如 lang)只用来分组和做落地页。
 //
-// 章节树(numbered):java 的 children 是一棵 14 章的大纲(见 javaOutline.ts),文章再用
+// 章节树(numbered):java 的 children 是一棵 17 章的大纲(见 javaOutline.ts),文章再用
 // frontmatter 的 `node` 指到具体章节点。这类节点有两个特别之处:
 //   · 编号由树位置推导(outlineNumber),不写进数据;
 //   · 「筹备中」由子树里的文章数推导,不是看 status —— 所以大纲节点一律 active,
@@ -47,7 +47,7 @@ export const catalog: Category[] = [
       {
         id: 'java',
         name: 'Java',
-        intro: '按 14 章走完:环境与语法 → 面向对象 → 异常、泛型、集合 → 反射、IO、并发、JVM → Maven、Spring、MyBatis 与 DDD。',
+        intro: '按 17 章走完:环境与语法 → 面向对象 → 异常、泛型、集合 → 函数式、反射、IO、并发、JVM → Maven、Spring、MyBatis → 设计模式、DDD 与算法。',
         status: 'active',
         numbered: true,
         children: javaChapters,

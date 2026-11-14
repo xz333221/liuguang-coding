@@ -1,6 +1,6 @@
-// Java 的章节目录树(14 章)。
+// Java 的章节目录树(17 章)。
 //
-// 为什么单独一个文件:这棵树有 70 个节点,混进 catalog.ts 会把"有哪些方向"这件事埋掉。
+// 为什么单独一个文件:这棵树有 113 个节点,混进 catalog.ts 会把"有哪些方向"这件事埋掉。
 // catalog 只管方向与顺序,这里只管 Java 内部怎么分章。
 //
 // 两条约定:
@@ -90,6 +90,8 @@ const outline: OutlineNode[] = [
           { id: 'java-core-bean-enum', name: 'JavaBean 与枚举' },
           { id: 'java-core-bigdecimal', name: 'BigInteger / BigDecimal' },
           { id: 'java-core-utils', name: '常用工具类' },
+          { id: 'java-core-datetime', name: '日期时间：LocalDate / LocalDateTime 与时区' },
+          { id: 'java-core-regex', name: '正则表达式：Pattern / Matcher 与常用写法' },
         ],
       },
     ],
@@ -127,6 +129,17 @@ const outline: OutlineNode[] = [
     ],
   },
   {
+    id: 'java-functional',
+    name: '函数式编程与 Stream',
+    intro: 'Lambda 与方法引用、Stream 流水线与收集器 —— 集合之后最常用的一套写法。',
+    children: [
+      { id: 'java-functional-lambda', name: 'Lambda 与方法引用' },
+      { id: 'java-functional-interface', name: '函数式接口：Function / Consumer / Supplier' },
+      { id: 'java-functional-stream', name: 'Stream 流水线：map / filter / collect' },
+      { id: 'java-functional-optional', name: 'Optional 与空值处理' },
+    ],
+  },
+  {
     id: 'java-reflection',
     name: '反射与注解',
     intro: '框架能在运行时读你的类,靠的就是反射与注解这一套。',
@@ -144,6 +157,7 @@ const outline: OutlineNode[] = [
       { id: 'java-io-stream', name: '字节流与字符流' },
       { id: 'java-io-buffer-serialize', name: '缓冲与序列化' },
       { id: 'java-io-nio', name: 'NIO：Buffer / Channel / Selector' },
+      { id: 'java-io-socket', name: '网络编程：Socket 与 HTTP 客户端' },
     ],
   },
   {
@@ -190,6 +204,8 @@ const outline: OutlineNode[] = [
       { id: 'java-spring-autoconfig', name: '自动配置与 starter' },
       { id: 'java-spring-web', name: 'Web 层：Controller / 参数绑定 / 统一返回' },
       { id: 'java-spring-config', name: '配置管理与多环境' },
+      { id: 'java-spring-servlet', name: 'Servlet 与请求生命周期：Boot 底下那层' },
+      { id: 'java-spring-cloud', name: '微服务一览：Spring Cloud 与注册 / 配置 / 网关' },
     ],
   },
   {
@@ -201,6 +217,18 @@ const outline: OutlineNode[] = [
       { id: 'java-persistence-resultmap', name: 'ResultMap 与动态 SQL' },
       { id: 'java-persistence-wrapper', name: '条件构造器与分页' },
       { id: 'java-persistence-transaction', name: '事务与连接池' },
+      { id: 'java-persistence-jdbc', name: 'JDBC 与连接池：SQL 到对象的最短路径' },
+      { id: 'java-persistence-jpa', name: 'JPA / Hibernate 一览：与 MyBatis 的分工' },
+    ],
+  },
+  {
+    id: 'java-patterns',
+    name: '设计模式',
+    intro: '挑业务里真会用到的那几个:创建、结构、行为各一组,配 Java 示例。',
+    children: [
+      { id: 'java-patterns-creational', name: '创建型：工厂 / 单例 / 建造者' },
+      { id: 'java-patterns-structural', name: '结构型：代理 / 装饰器 / 适配器' },
+      { id: 'java-patterns-behavioral', name: '行为型：策略 / 观察者 / 模板方法' },
     ],
   },
   {
@@ -212,6 +240,18 @@ const outline: OutlineNode[] = [
       { id: 'java-ddd-aggregate', name: '聚合根与不变式' },
       { id: 'java-ddd-value-object', name: '值对象与领域事件' },
       { id: 'java-ddd-layering', name: '分层与防腐层' },
+    ],
+  },
+  {
+    id: 'java-algorithm',
+    name: '数据结构与算法',
+    intro: '复杂度、常见结构与排序,再到怎么用力扣 / 洛谷 / Exercism 练。',
+    children: [
+      { id: 'java-algorithm-complexity', name: '复杂度与 Big-O：怎么估一个写法贵不贵' },
+      { id: 'java-algorithm-linear', name: '线性结构：数组 / 链表 / 栈 / 队列' },
+      { id: 'java-algorithm-tree-heap', name: '树与堆：二叉树 / BST / 优先队列' },
+      { id: 'java-algorithm-hash-sort', name: '哈希与排序：从 HashMap 到快排 / 归并' },
+      { id: 'java-algorithm-practice', name: '刷题路线：力扣 / 洛谷 / Exercism 怎么用' },
     ],
   },
 ]
