@@ -12,7 +12,6 @@ export const javaTerms: Term[] = [
     formal:
       'byte / short / int / long / float / double / char / boolean 八种内置类型，直接持有值，== 比较值本身。',
     related: ['reference-type', 'wrapper-class'],
-    see: 'java/equals-and-identity',
   },
   {
     id: 'reference-type',
@@ -24,7 +23,6 @@ export const javaTerms: Term[] = [
     formal:
       '类、接口、数组、枚举等类型，其变量持有对对象的引用;== 比较两个引用是否指向同一对象，即语言规范 15.21 的引用相等。',
     related: ['primitive-type', 'identity'],
-    see: 'java/equals-and-identity',
     source: {
       title: 'Java 语言规范 · 15.21 相等运算符',
       url: 'https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.21',
@@ -40,7 +38,6 @@ export const javaTerms: Term[] = [
     formal:
       '编译器在基本类型与其包装类型之间自动插入 valueOf / xxxValue 调用的机制。装箱可能命中缓存而复用对象，导致 == 的结果与直觉不符。',
     related: ['wrapper-class', 'identity'],
-    see: 'java/equals-and-identity',
     source: {
       title: 'Java 教程 · 自动装箱与拆箱',
       url: 'https://docs.oracle.com/javase/tutorial/java/data/autoboxing.html',
@@ -55,7 +52,6 @@ export const javaTerms: Term[] = [
     formal:
       'Integer、Long、Double、Character、Boolean 等基本类型对应的不可变类。Integer.valueOf 缓存 -128 到 127 的实例，区间外每次新建。',
     related: ['autoboxing', 'primitive-type'],
-    see: 'java/equals-and-identity',
     source: {
       title: 'Integer.valueOf 的 javadoc',
       url: 'https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html#valueOf(int)',
@@ -71,7 +67,6 @@ export const javaTerms: Term[] = [
       'Object.equals(Object) 的默认实现为 this == obj。重写须满足自反、对称、传递、一致、对 null 返回 false 五条约定，并与 hashCode 保持一致。',
     misread: '以为 equals 天生就是比内容。不重写的话，它和 == 完全等价。',
     related: ['hashcode', 'identity'],
-    see: 'java/equals-and-identity',
     source: {
       title: 'Object.equals 的 javadoc',
       url: 'https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)',
@@ -86,7 +81,6 @@ export const javaTerms: Term[] = [
     formal:
       'Object.hashCode() 返回对象的哈希值。约定:equals 相等则 hashCode 必须相等;反过来不要求，不同对象哈希值相同是允许的。',
     related: ['equals', 'hash-collision', 'hash-table'],
-    see: 'java/equals-and-identity',
   },
   {
     id: 'hash-collision',
@@ -97,7 +91,6 @@ export const javaTerms: Term[] = [
     formal:
       '不同对象产生相同哈希值的现象。哈希表用链地址法或开放寻址法处理，此时再逐个 equals 确认。',
     related: ['hashcode', 'hash-table'],
-    see: 'java/equals-and-identity',
   },
   {
     id: 'string-pool',
@@ -110,7 +103,6 @@ export const javaTerms: Term[] = [
     formal:
       '存放字符串字面量与 intern() 结果的驻留区域。内容相同的字面量复用同一对象，new String(...) 强制新建。',
     related: ['intern', 'literal', 'constant-folding'],
-    see: 'java/equals-and-identity',
     source: {
       title: 'Java 语言规范 · 3.10.5 字符串字面量',
       url: 'https://docs.oracle.com/javase/specs/jls/se21/html/jls-3.html#jls-3.10.5',
@@ -124,7 +116,6 @@ export const javaTerms: Term[] = [
     formal:
       'String.intern() 返回常量池中与该字符串内容相同的对象，必要时先加入。有查找开销与内存驻留代价，日常代码里不常见。',
     related: ['string-pool'],
-    see: 'java/equals-and-identity',
   },
   {
     id: 'null',
@@ -135,7 +126,6 @@ export const javaTerms: Term[] = [
     formal:
       '引用类型的默认值，表示不指向任何对象。对 null 调用实例方法抛 NullPointerException;Objects.equals / Objects.requireNonNull 用于规避。',
     related: ['reference-type'],
-    see: 'java/equals-and-identity',
   },
   {
     id: 'enum',
@@ -146,7 +136,6 @@ export const javaTerms: Term[] = [
     formal:
       '由 enum 声明的特殊类，其常量在类加载时各创建唯一实例，因此引用相等与逻辑相等一致。',
     related: ['identity', 'equals'],
-    see: 'java/equals-and-identity',
   },
   {
     id: 'bigdecimal',
@@ -157,7 +146,6 @@ export const javaTerms: Term[] = [
     formal:
       '任意精度的十进制数类。equals 同时比较数值与 scale，因此 new BigDecimal("1.0") 与 "1.00" 不相等;按数值比较须用 compareTo(...) == 0。',
     related: ['equals'],
-    see: 'java/equals-and-identity',
   },
   {
     id: 'record',
@@ -167,7 +155,6 @@ export const javaTerms: Term[] = [
     formal:
       '由 record 声明的不可变数据载体，自动派生规范构造器、访问器，以及基于全部组件的 equals / hashCode / toString。',
     related: ['equals', 'hashcode'],
-    see: 'java/equals-and-identity',
   },
   {
     id: 'spring-boot',
@@ -178,7 +165,6 @@ export const javaTerms: Term[] = [
     formal:
       '基于 Spring Framework 的自动配置框架，通过起步依赖与条件化自动配置提供可独立运行的应用，内置服务器，无需部署到外部容器。',
     related: ['starter', 'auto-configuration', 'embedded-server', 'ioc'],
-    see: 'java/spring-boot-start',
     source: {
       title: 'Spring Boot 参考文档 · Developing with Spring Boot',
       url: 'https://docs.spring.io/spring-boot/reference/using/index.html',
@@ -195,7 +181,6 @@ export const javaTerms: Term[] = [
     formal:
       '控制反转:对象的实例化、装配与生命周期由 IoC 容器负责，应用代码通过构造器或字段声明依赖，由容器注入。',
     related: ['dependency-injection', 'bean', 'spring-boot'],
-    see: 'java/spring-boot-start',
     source: {
       title: 'Spring Framework 文档 · The IoC Container',
       url: 'https://docs.spring.io/spring-framework/reference/core/beans.html',
@@ -212,7 +197,6 @@ export const javaTerms: Term[] = [
     formal:
       'IoC 的具体实现方式:容器在创建 Bean 时按类型解析并传入其构造器参数、setter 或字段。构造器注入因可保持字段 final、依赖显式而首选。',
     related: ['ioc', 'bean'],
-    see: 'java/spring-boot-start',
   },
   {
     id: 'bean',
@@ -223,7 +207,6 @@ export const javaTerms: Term[] = [
     formal:
       '由 Spring 容器实例化、装配与管理的对象。来源包括组件扫描到的 @Component 及其派生注解，以及 @Configuration 类中用 @Bean 声明的方法。',
     related: ['ioc', 'dependency-injection'],
-    see: 'java/spring-boot-start',
   },
   {
     id: 'starter',
@@ -235,7 +218,6 @@ export const javaTerms: Term[] = [
     formal:
       'Spring Boot 的依赖聚合模块:一个 starter 引入一组经过版本对齐的依赖，并触发对应的自动配置。',
     related: ['spring-boot', 'auto-configuration'],
-    see: 'java/spring-boot-start',
     source: {
       title: 'Spring Boot 参考文档 · Build systems',
       url: 'https://docs.spring.io/spring-boot/reference/using/build-systems.html',
@@ -251,7 +233,6 @@ export const javaTerms: Term[] = [
     formal:
       '@EnableAutoConfiguration 触发的机制:按 classpath 条件(@ConditionalOnClass / OnMissingBean 等)加载候选配置类，用户自定义的 Bean 优先。',
     related: ['spring-boot', 'starter', 'bean'],
-    see: 'java/spring-boot-start',
     source: {
       title: 'Spring Boot 参考文档 · Auto-configuration',
       url: 'https://docs.spring.io/spring-boot/reference/using/auto-configuration.html',
@@ -267,7 +248,6 @@ export const javaTerms: Term[] = [
     formal:
       '以依赖形式随应用打包的 Servlet 容器(Tomcat、Jetty、Undertow)，由 Spring Boot 在启动时创建并监听端口，因此产物是可执行 jar 而非 war。',
     related: ['spring-boot'],
-    see: 'java/spring-boot-start',
     source: {
       title: 'Spring Boot 参考文档 · Servlet web applications',
       url: 'https://docs.spring.io/spring-boot/reference/web/servlet.html',
@@ -282,7 +262,6 @@ export const javaTerms: Term[] = [
     formal:
       'Apache Maven 是基于 POM(项目对象模型)的项目管理与构建工具,以约定优于配置的方式描述构建、依赖与发布过程。',
     related: ['pom', 'project-coordinates', 'build-lifecycle'],
-    see: 'java/maven-build',
     source: {
       title: 'Maven 文档 · Introduction to the POM',
       url: 'https://maven.apache.org/guides/introduction/introduction-to-the-pom.html',
@@ -298,7 +277,6 @@ export const javaTerms: Term[] = [
     formal:
       'Project Object Model:以 XML 描述项目坐标、依赖、构建插件、多模块关系与继承关系的模型文件,默认位于工程根目录。',
     related: ['maven', 'project-coordinates'],
-    see: 'java/maven-build',
   },
   {
     id: 'project-coordinates',
@@ -311,7 +289,6 @@ export const javaTerms: Term[] = [
     formal:
       'Maven 用 groupId、artifactId、version 三元组唯一标识一个构件,辅以 packaging 与 classifier 区分同版本的不同产物。',
     related: ['pom', 'local-repository'],
-    see: 'java/maven-build',
     source: {
       title: 'Maven · POM Reference',
       url: 'https://maven.apache.org/pom.html',
@@ -327,7 +304,6 @@ export const javaTerms: Term[] = [
     formal:
       'Maven 定义了 clean、default、site 三套相互独立的生命周期,每套由有序的阶段组成;执行某阶段时其前的阶段依次执行。',
     related: ['plugin', 'maven'],
-    see: 'java/maven-build',
     source: {
       title: 'Maven 文档 · Introduction to the Build Lifecycle',
       url: 'https://maven.apache.org/guides/introduction/introduction-to-the-build-lifecycle.html',
@@ -344,7 +320,6 @@ export const javaTerms: Term[] = [
     formal:
       'Maven 插件由一组 goal 组成,通过 executions 把 goal 绑定到 phase;packaging 为 jar 时各阶段已有默认绑定。',
     related: ['build-lifecycle', 'pom'],
-    see: 'java/maven-build',
   },
   {
     id: 'dependency-scope',
@@ -357,7 +332,6 @@ export const javaTerms: Term[] = [
     formal:
       'scope 取值 compile(默认)、provided、runtime、test、system;决定该依赖参与哪些 classpath 以及是否传递。',
     related: ['dependency-management'],
-    see: 'java/maven-build',
   },
   {
     id: 'dependency-management',
@@ -368,7 +342,6 @@ export const javaTerms: Term[] = [
     formal:
       'POM 中声明依赖版本与作用域供子模块继承的区块,不参与实际依赖解析;子模块需在 dependencies 中声明同名依赖才生效。',
     related: ['dependency-scope', 'pom'],
-    see: 'java/maven-build',
   },
   {
     id: 'local-repository',
@@ -380,7 +353,6 @@ export const javaTerms: Term[] = [
     formal:
       '默认位于 ~/.m2/repository 的构件缓存目录,由 install:install 写入,按 groupId/artifactId/version 分层存放。',
     related: ['project-coordinates', 'maven'],
-    see: 'java/maven-build',
   },
   {
     id: 'aggregation',
@@ -393,7 +365,6 @@ export const javaTerms: Term[] = [
     formal:
       '在 packaging=pom 的工程中用 modules 声明子模块,构建时由 reactor 按模块间依赖关系排序并依次执行。',
     related: ['maven', 'pom'],
-    see: 'java/maven-build',
   },
   {
     id: 'mybatis',
@@ -404,7 +375,6 @@ export const javaTerms: Term[] = [
     formal:
       '基于 Java 的持久层框架,以 Mapper 接口 + 映射文件(或注解)声明 SQL,负责参数绑定、结果映射与事务内的 SqlSession 管理,不做自动表结构映射。',
     related: ['mybatis-plus', 'mapper', 'resultmap'],
-    see: 'java/mybatis-and-plus',
     source: {
       title: 'MyBatis 3 文档 · XML 映射器',
       url: 'https://mybatis.org/mybatis-3/zh/sqlmap-xml.html',
@@ -419,7 +389,6 @@ export const javaTerms: Term[] = [
     formal:
       '在 MyBatis 之上提供 BaseMapper、IService、条件构造器、分页插件、自动填充、逻辑删除与代码生成等能力的增强工具,不替换 MyBatis 的映射机制。',
     related: ['mybatis', 'wrapper', 'logic-delete'],
-    see: 'java/mybatis-and-plus',
     source: {
       title: 'MyBatis-Plus 文档 · 快速开始',
       url: 'https://baomidou.com/getting-started/',
@@ -434,7 +403,6 @@ export const javaTerms: Term[] = [
     formal:
       'MyBatis 中与映射文件绑定的 Java 接口:XML 的 namespace 取其全限定名,语句 id 取方法名;MyBatis 为其生成代理实现。',
     related: ['mybatis', 'resultmap', 'dynamic-sql'],
-    see: 'java/mybatis-and-plus',
   },
   {
     id: 'resultmap',
@@ -445,7 +413,6 @@ export const javaTerms: Term[] = [
     formal:
       'MyBatis 的结果映射定义,逐条声明 column → property,并支持 association / collection 表达嵌套对象与集合。',
     related: ['mapper', 'mybatis'],
-    see: 'java/mybatis-and-plus',
   },
   {
     id: 'dynamic-sql',
@@ -456,7 +423,6 @@ export const javaTerms: Term[] = [
     formal:
       'MyBatis 映射文件中的条件化语句构件(if、choose、where、foreach、trim 等),在运行时按入参拼出最终 SQL。',
     related: ['mapper', 'mybatis'],
-    see: 'java/mybatis-and-plus',
   },
   {
     id: 'wrapper',
@@ -468,7 +434,6 @@ export const javaTerms: Term[] = [
     formal:
       'MyBatis-Plus 中以 QueryWrapper / LambdaQueryWrapper 表达 where、order、group 等条件的构建器,Lambda 形式通过方法引用取得字段名。',
     related: ['mybatis-plus', 'mybatis'],
-    see: 'java/mybatis-and-plus',
     source: {
       title: 'MyBatis-Plus 文档 · 核心功能',
       url: 'https://baomidou.com/guides/',
@@ -483,7 +448,6 @@ export const javaTerms: Term[] = [
     formal:
       '以标记字段代替物理删除的方案:MyBatis-Plus 通过 @TableLogic 在 delete 时改写为 update,并在查询中附加未删除条件。',
     related: ['mybatis-plus'],
-    see: 'java/mybatis-and-plus',
   },
   {
     id: 'ddd',
@@ -496,7 +460,6 @@ export const javaTerms: Term[] = [
     formal:
       '以领域模型为中心的组织方法:以通用语言界定限界上下文,以聚合维护一致性边界,并让领域层独立于基础设施与框架。',
     related: ['bounded-context', 'aggregate', 'value-object'],
-    see: 'java/ddd-bounded-context',
     source: {
       title: 'Domain Language · DDD Reference',
       url: 'https://domainlanguage.com/ddd/reference/',
@@ -512,7 +475,6 @@ export const javaTerms: Term[] = [
     formal:
       '模型适用的显式边界:同一上下文内术语含义唯一,跨上下文通过领域事件或防腐层交互,不共享领域模型。',
     related: ['ddd', 'anti-corruption-layer'],
-    see: 'java/ddd-bounded-context',
     source: {
       title: 'Martin Fowler · BoundedContext',
       url: 'https://martinfowler.com/bliki/BoundedContext.html',
@@ -528,7 +490,6 @@ export const javaTerms: Term[] = [
     formal:
       '聚合的一致性边界:通过唯一入口方法与不变式维护内部实体与值对象的一致;一次事务只修改一个聚合。',
     related: ['value-object', 'ddd'],
-    see: 'java/ddd-bounded-context',
   },
   {
     id: 'value-object',
@@ -540,7 +501,6 @@ export const javaTerms: Term[] = [
     formal:
       '以属性值定义相等性的不可变对象,自身校验合法性;Java 里常用 record 表达。',
     related: ['aggregate'],
-    see: 'java/ddd-bounded-context',
   },
   {
     id: 'repository',
@@ -552,7 +512,6 @@ export const javaTerms: Term[] = [
     formal:
       '面向聚合的持久化抽象:save / findById 等按聚合整体存取;接口属于领域层,实现属于基础设施层。',
     related: ['aggregate', 'ddd'],
-    see: 'java/ddd-bounded-context',
   },
   {
     id: 'application-service',
@@ -564,7 +523,6 @@ export const javaTerms: Term[] = [
     formal:
       '应用层的用例编排者:负责事务边界、权限与流程,委托聚合完成规则判断,返回 DTO 而非聚合。',
     related: ['ddd', 'domain-event'],
-    see: 'java/ddd-bounded-context',
   },
   {
     id: 'domain-event',
@@ -576,7 +534,6 @@ export const javaTerms: Term[] = [
     formal:
       '表达领域内已发生事实的对象;由聚合产生,经应用层取出并由发布器(内存、日志、消息队列)对外发布。',
     related: ['application-service', 'bounded-context'],
-    see: 'java/ddd-bounded-context',
   },
   {
     id: 'anti-corruption-layer',
@@ -589,6 +546,5 @@ export const javaTerms: Term[] = [
     formal:
       '上下文或系统边界的适配层:负责双向模型映射、单位与状态对齐,隔离外部模型的变更对领域模型的影响。',
     related: ['bounded-context'],
-    see: 'java/ddd-bounded-context',
   },
 ]

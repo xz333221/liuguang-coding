@@ -105,7 +105,6 @@ b.append(4)`,
         ],
         explain:
           'b = a 让两个名字指向同一个列表对象,谁 append 改的都是它。要一份独立副本得写 a[:] 或 list(a),赋值本身只多了一个名字。',
-        link: { see: 'python/variable-is-a-name' },
       },
       {
         id: 'eng-6',
@@ -147,7 +146,6 @@ const hit = ids.____((id) => id === target)`,
         ],
         explain:
           '前三步是离线建索引,后四步每次提问都要走一遍。重排放在检索之后:向量召回看的是"像不像",重排才看"能不能答这个问题"。',
-        link: { see: 'ai/rag-pipeline' },
       },
       {
         id: 'eng-8',
@@ -162,7 +160,6 @@ const hit = ids.____((id) => id === target)`,
         ],
         explain:
           '先确认材料有没有送到模型手里,再谈模型用得对不对。召回和切分决定效果下限;temperature 只改措辞的随机性,维度则是建索引时定死的常量。',
-        link: { see: 'ai/rag-pipeline' },
       },
       {
         id: 'eng-9',
@@ -190,7 +187,6 @@ const hit = ids.____((id) => id === target)`,
         ],
         explain:
           '模型只负责"决定调用"和"读懂结果",真正的执行永远在你这一侧的代码里。工具返回什么,模型下一步就只能看到什么。',
-        link: { see: 'ai/tool-calling' },
       },
       {
         id: 'eng-11',
@@ -240,7 +236,6 @@ const hit = ids.____((id) => id === target)`,
         ],
         explain:
           '微调改的是"怎么说"和"怎么判断",知识更新还是靠检索。文档每天都在变,权重不可能跟着重训,这是两条不同的路。',
-        link: { see: 'ai/fine-tuning' },
       },
       {
         id: 'eng-14',
@@ -252,7 +247,6 @@ const hit = ids.____((id) => id === target)`,
         ],
         explain:
           '微调把知识写进了权重,权重不会因为文档更新而变。新知识走检索进上下文,微调负责风格、格式和判断方式。',
-        link: { see: 'ai/fine-tuning' },
       },
       {
         id: 'eng-15',
@@ -272,7 +266,7 @@ const hit = ids.____((id) => id === target)`,
         ],
         explain:
           'temperature 越低分布越尖,越接近每次都挑概率最高的那个 token。要更稳还得固定模型版本和 seed,温度只是其中一环。',
-        link: { term: 'temperature', see: 'ai/temperature-and-sampling' },
+        link: { term: 'temperature' },
       },
       {
         id: 'eng-16',
@@ -287,7 +281,6 @@ const hit = ids.____((id) => id === target)`,
         ],
         explain:
           '拆角色的收益是每件事更专注,代价是多几道转述。工程上先问一句:单智能体加几个工具,是不是也能做到?',
-        link: { see: 'ai/multi-agent' },
       },
       {
         id: 'eng-17',

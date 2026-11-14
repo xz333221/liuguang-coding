@@ -19,9 +19,9 @@ import DocsLayout from '../layouts/DocsLayout.astro'
 const topics = await getTopics()
 const counts = countByCategory(topics)
 const roots = catalog.filter((item) => item.status !== 'hidden')
-// 有内容的做卡片,筹备中的收成一行胶囊,免得网格末尾留空格子
-const featured = roots.filter((item) => item.status === 'active')
-const upcoming = roots.filter((item) => item.status === 'soon')
+// 有内容的做卡片,没内容的收成一行胶囊,免得网格末尾留空格子
+const featured = roots.filter((item) => countFor(item.id, counts) > 0)
+const upcoming = roots.filter((item) => countFor(item.id, counts) === 0)
 const recent = [...topics].sort((a, b) => b.data.updated.getTime() - a.data.updated.getTime()).slice(0, 6)
 ---
 
@@ -39,20 +39,29 @@ const recent = [...topics].sort((a, b) => b.data.updated.getTime() - a.data.upda
 
   <section class="mt-12">
     <h2 class="text-sm text-muted">现在有内容的</h2>
-    <div class="mt-4 grid gap-4 sm:grid-cols-2">
-      {
-        featured.map((root) => (
-          <CategoryCard
-            name={root.name}
-            intro={root.intro}
-            href={categoryPath(root.id)}
-            status={root.status}
-            count={countFor(root.id, counts)}
-            note={root.note}
-          />
-        ))
-      }
-    </div>
+    {
+      featured.length > 0 ? (
+        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+          {featured.map((root) => (
+            <CategoryCard
+              name={root.name}
+              intro={root.intro}
+              href={categoryPath(root.id)}
+              status={root.status}
+              count={countFor(root.id, counts)}
+              note={root.note}
+            />
+          ))}
+        </div>
+      ) : (
+        <a href={categoryPath('java')} class="lg-card mt-4">
+          <span class="lg-card-title">知识点正在重写</span>
+          <span class="lg-card-intro">
+            旧稿已清空,目录骨架先就位:Java 17 章的编号树已经能逛,其余方向陆续排。点进去看每一章打算写什么。
+          </span>
+        </a>
+      )
+    }
   </section>
 
   <section class="mt-10">
@@ -84,7 +93,7 @@ const recent = [...topics].sort((a, b) => b.data.updated.getTime() - a.data.upda
   </section>
 
   <section class="mt-10">
-    <h2 class="text-sm text-muted">筹备中的方向</h2>
+    <h2 class="text-sm text-muted">整理中的方向</h2>
     <ul class="mt-4 flex flex-wrap gap-2">
       {
         upcoming.map((root) => (
@@ -96,23 +105,25 @@ const recent = [...topics].sort((a, b) => b.data.updated.getTime() - a.data.upda
         ))
       }
     </ul>
-    <p class="mt-3 text-[0.82rem] text-muted">这些方向还没开始整理，点进去能看到打算怎么写。</p>
+    <p class="mt-3 text-[0.82rem] text-muted">这些方向还没写内容,点进去能看到目录骨架与打算怎么写。</p>
   </section>
 
-  <section class="mt-14">
-    <h2 class="text-sm text-muted">最近更新</h2>
-    <div class="lg-divide mt-2">
-      {
-        recent.map((topic) => (
-          <TopicRow
-            href={topicPath(topic)}
-            title={topic.data.title}
-            summary={topic.data.summary}
-            level={topic.data.level}
-            updated={formatDate(topic.data.updated)}
-          />
-        ))
-      }
-    </div>
-  </section>
+  {
+    recent.length > 0 ? (
+      <section class="mt-14">
+        <h2 class="text-sm text-muted">最近更新</h2>
+        <div class="lg-divide mt-2">
+          {recent.map((topic) => (
+            <TopicRow
+              href={topicPath(topic)}
+              title={topic.data.title}
+              summary={topic.data.summary}
+              level={topic.data.level}
+              updated={formatDate(topic.data.updated)}
+            />
+          ))}
+        </div>
+      </section>
+    ) : null
+  }
 </DocsLayout>

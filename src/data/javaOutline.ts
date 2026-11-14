@@ -71,13 +71,13 @@ const outline: OutlineNode[] = [
       },
       {
         id: 'java-oop-compare',
-        name: '对象与引用的比较规则',
-        intro: '== 比身份、equals 比内容 —— 这条线不清,后面集合与缓存全会踩坑。',
+        name: '引用、相等与哈希',
+        intro: '引用比的是身份、equals 比的是内容;hashCode、常量池与装箱缓存都挂在这条线上。',
         children: [
-          { id: 'java-oop-equals', name: '== 与 equals：比身份还是比内容' },
+          { id: 'java-oop-equals', name: '引用相等与 equals 的分工' },
           { id: 'java-oop-hashcode', name: 'hashCode 与 equals 的契约' },
           { id: 'java-oop-string-pool', name: 'String 常量池与 Integer 缓存' },
-          { id: 'java-oop-boxing', name: '自动装箱与拆箱的坑' },
+          { id: 'java-oop-boxing', name: '自动装箱与拆箱' },
         ],
       },
       {
@@ -188,7 +188,7 @@ const outline: OutlineNode[] = [
     name: '工程化与构建',
     intro: 'Maven 把依赖、构建与测试串起来 —— 项目从一个人写变成一群人写的那一步。',
     children: [
-      { id: 'java-build-maven', name: 'Maven：一个 pom.xml 说清的三件事' },
+      { id: 'java-build-maven', name: 'Maven 与 pom.xml：坐标、依赖、生命周期' },
       { id: 'java-build-dependency', name: '依赖坐标、scope 与冲突仲裁' },
       { id: 'java-build-multimodule', name: '多模块与生命周期' },
       { id: 'java-build-test', name: '单元测试：JUnit 与 Mockito' },
@@ -199,7 +199,7 @@ const outline: OutlineNode[] = [
     name: 'Spring 生态',
     intro: 'Spring Boot 的目录结构、IoC 与自动配置,再到 Web 层与多环境配置。',
     children: [
-      { id: 'java-spring-boot', name: 'Spring Boot：一个项目从哪几个文件夹开始' },
+      { id: 'java-spring-boot', name: 'Spring Boot 项目结构与启动流程' },
       { id: 'java-spring-ioc', name: 'IoC 与依赖注入' },
       { id: 'java-spring-autoconfig', name: '自动配置与 starter' },
       { id: 'java-spring-web', name: 'Web 层：Controller / 参数绑定 / 统一返回' },
@@ -213,7 +213,7 @@ const outline: OutlineNode[] = [
     name: '持久层',
     intro: 'MyBatis 与 MyBatis-Plus 的分工:谁写 SQL、谁不写,以及事务与连接池。',
     children: [
-      { id: 'java-persistence-mybatis', name: 'MyBatis 与 MyBatis-Plus：谁写 SQL，谁不写' },
+      { id: 'java-persistence-mybatis', name: 'MyBatis 与 MyBatis-Plus 的分工' },
       { id: 'java-persistence-resultmap', name: 'ResultMap 与动态 SQL' },
       { id: 'java-persistence-wrapper', name: '条件构造器与分页' },
       { id: 'java-persistence-transaction', name: '事务与连接池' },
@@ -236,7 +236,7 @@ const outline: OutlineNode[] = [
     name: '领域建模与架构',
     intro: '把业务规则关进限界上下文:聚合根、值对象、领域事件与分层依赖方向。',
     children: [
-      { id: 'java-ddd-bounded-context', name: 'DDD：先把「下单」关进一个限界上下文里' },
+      { id: 'java-ddd-bounded-context', name: '限界上下文与统一语言' },
       { id: 'java-ddd-aggregate', name: '聚合根与不变式' },
       { id: 'java-ddd-value-object', name: '值对象与领域事件' },
       { id: 'java-ddd-layering', name: '分层与防腐层' },

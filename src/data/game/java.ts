@@ -2,7 +2,7 @@
 //
 // 顺序按"语言基础 → 怎么组织代码 → 怎么跑起来"排:先是相等性与基本类型这条
 // 最容易答错的线,再是 String、集合、面向对象,最后是异常、泛型、并发与 JVM。
-// 第一关和站内 java/equals-and-identity 讲的是同一条线,题目里能挂 link 的都挂上了。
+// 题目能挂术语 link 的都挂上了;知识点重写后再补 see 去处。
 
 import type { Level } from './types'
 
@@ -25,7 +25,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           '引用类型的 `==` 比身份。要比内容得用 equals,而 equals 的默认实现恰恰就是 `==`,不重写就白用。',
-        link: { term: 'reference-type', see: 'java/equals-and-identity' },
+        link: { term: 'reference-type' },
       },
       {
         id: 'j-eq-2',
@@ -37,7 +37,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           'Object.equals 的默认实现就是 `this == obj`。所以"equals 天生比内容"是最常见的误解。',
-        link: { term: 'equals', see: 'java/equals-and-identity' },
+        link: { term: 'equals' },
       },
       {
         id: 'j-eq-3',
@@ -51,7 +51,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           'Integer.valueOf 缓存 -128 到 127,区间内复用同一实例;区间外每次新建。所以包装类型的 `==` 结果没有保证,要比内容一律用 equals。',
-        link: { term: 'autoboxing', see: 'java/equals-and-identity' },
+        link: { term: 'autoboxing' },
       },
       {
         id: 'j-eq-4',
@@ -63,7 +63,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           '两边都是编译期常量,折叠成同一个字面量 "ab",共同驻留常量池。把 "a" 换成运行期得到的字符串,折叠就不成立了。',
-        link: { term: 'string-pool', see: 'java/equals-and-identity' },
+        link: { term: 'string-pool' },
       },
       {
         id: 'j-eq-5',
@@ -77,7 +77,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           'new String(...) 明确要求新对象,不走常量池复用。要比内容用 equals,或者显式 intern()。',
-        link: { term: 'intern', see: 'java/equals-and-identity' },
+        link: { term: 'intern' },
       },
       {
         id: 'j-eq-6',
@@ -91,7 +91,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           '哈希表先按哈希找桶,再在桶里用 equals 认人。哈希不同就落进不同桶,equals 根本没机会被调用。',
-        link: { term: 'hashcode', see: 'java/equals-and-identity' },
+        link: { term: 'hashcode' },
       },
       {
         id: 'j-eq-7',
@@ -103,7 +103,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           'BigDecimal.equals 连 scale(小数位数)一起比,1.0 与 1.00 不相等。按数值比较要用 compareTo(...) == 0。这是金额场景的经典坑。',
-        link: { term: 'bigdecimal', see: 'java/equals-and-identity' },
+        link: { term: 'bigdecimal' },
       },
       {
         id: 'j-eq-8',
@@ -117,7 +117,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           'enum 常量全局唯一,引用相等与逻辑相等天然一致,所以 `==` 又快又对。Effective Java 也建议这么写。',
-        link: { term: 'enum', see: 'java/equals-and-identity' },
+        link: { term: 'enum' },
       },
     ],
   },
@@ -166,7 +166,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           '拆箱会调用 xxxValue(),对 null 调用实例方法当场 NPE。包装类型默认值就是 null,别把它当 0 用。',
-        link: { term: 'null', see: 'java/equals-and-identity' },
+        link: { term: 'null' },
       },
       {
         id: 'j-pri-4',
@@ -192,7 +192,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           '二进制浮点表示不了大部分十进制小数,0.1 存进去就是近似值。要精确小数用 BigDecimal,比较也要用 compareTo。',
-        link: { term: 'bigdecimal', see: 'java/equals-and-identity' },
+        link: { term: 'bigdecimal' },
       },
       {
         id: 'j-pri-6',
@@ -250,7 +250,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           '只有两边都是编译期常量才折叠。掺了变量之后,JVM 多半会优化成 StringBuilder 的链式 append,但不会再回到常量池。',
-        link: { term: 'constant-folding', see: 'java/equals-and-identity' },
+        link: { term: 'constant-folding' },
       },
       {
         id: 'j-str-4',
@@ -264,7 +264,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           'intern() 让内容相同的字符串在常量池里只留一份,重复键的内存能省下来。代价是查找开销与驻留,只适合键这种高重复场景。',
-        link: { term: 'intern', see: 'java/equals-and-identity' },
+        link: { term: 'intern' },
       },
       {
         id: 'j-str-5',
@@ -276,7 +276,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           'String 把算过的哈希存在字段里,重复查找不用重算。不可变性正是这个缓存能成立的前提。',
-        link: { term: 'hashcode', see: 'java/equals-and-identity' },
+        link: { term: 'hashcode' },
       },
       {
         id: 'j-str-6',
@@ -337,7 +337,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           '链表长度到 8 转红黑树,退到 6 再转回链表。转树是为了把极端冲突下的 O(n) 查找压回 O(log n)。',
-        link: { term: 'hash-collision', see: 'java/equals-and-identity' },
+        link: { term: 'hash-collision' },
       },
       {
         id: 'j-col-4',
@@ -364,7 +364,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           'HashSet 内部就是个 HashMap,值放进 key。自定义对象要正确去重,equals 和 hashCode 必须成对重写。',
-        link: { term: 'hashcode', see: 'java/equals-and-identity' },
+        link: { term: 'hashcode' },
       },
       {
         id: 'j-col-6',
@@ -857,7 +857,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           'record 专为"只装数据"设计,全部字段都隐含 final,因此不可变。要校验参数可以写紧凑构造器。',
-        link: { term: 'record', see: 'java/equals-and-identity' },
+        link: { term: 'record' },
       },
       {
         id: 'j-mod-2',
@@ -882,7 +882,7 @@ export const javaLevels: Level[] = [
         ],
         explain:
           'Optional 设计初衷是返回值。当字段会让每个对象多包一层;当参数反而逼着调用方包起来。序列化也不支持它。',
-        link: { term: 'null', see: 'java/equals-and-identity' },
+        link: { term: 'null' },
       },
       {
         id: 'j-mod-4',

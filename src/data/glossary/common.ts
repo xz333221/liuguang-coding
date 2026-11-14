@@ -28,7 +28,6 @@ export const commonTerms: Term[] = [
       '对象在内存中的唯一标识，在对象的整个存活期内保持不变。Python 里 id() 返回它、is 比较它;Java 里 == 对引用类型比较它。',
     misread: '以为身份和值是一回事。两个列表内容完全一样，值相等，但仍是两个对象、两个身份。',
     related: ['value', 'reference'],
-    see: 'python/variable-is-a-name',
   },
   {
     id: 'value',
@@ -62,7 +61,6 @@ export const commonTerms: Term[] = [
       '命名空间中的一个条目，其值为对某个对象的引用。重新赋值只改变这个条目的指向，不修改对象本身。',
     misread: '把变量想成"装东西的盒子"，于是以为 b = a 是"把 a 的内容倒进 b"，进而推不出"改 b 会影响 a"。',
     related: ['binding', 'reference', 'namespace'],
-    see: 'python/variable-is-a-name',
   },
   {
     id: 'binding',
@@ -72,7 +70,6 @@ export const commonTerms: Term[] = [
     plain: '名字和对象之间连的那根线。a = [1, 2] 做的事就是拉一根线，把名字 a 连到那个列表上。',
     formal: '名字与实体之间的关联。绑定可以被重新建立（重新赋值），也可以被作用域限制可见范围。',
     related: ['variable', 'namespace'],
-    see: 'python/variable-is-a-name',
   },
   {
     id: 'reference',
@@ -93,7 +90,6 @@ export const commonTerms: Term[] = [
     formal:
       '名字到对象的映射表。Python 里模块级名字在 globals()、函数内名字在 locals();Java 里包名承担类似的分隔作用。',
     related: ['binding', 'variable'],
-    see: 'python/variable-is-a-name',
   },
   {
     id: 'protocol',
@@ -116,7 +112,6 @@ export const commonTerms: Term[] = [
       '不引入新语义、只提供更简洁书写的语法形式，展开后等价于更基础的结构。例如 for x in xs 展开为 iter() / next() 循环。',
     misread: '以为语法糖背后有额外机制。它只是简写，理解展开后的形式就够了。',
     related: ['protocol', 'runtime'],
-    see: 'python/iterators-and-generators',
   },
   {
     id: 'runtime',
@@ -150,7 +145,6 @@ export const commonTerms: Term[] = [
     formal:
       '编译期对由常量构成的表达式求值并替换为结果，属于常量传播的一种。折叠产生的是同一个常量对象，因此可能与运行期拼接的结果身份不同。',
     related: ['compile-time'],
-    see: 'java/equals-and-identity',
   },
   {
     id: 'literal',
@@ -172,7 +166,6 @@ export const commonTerms: Term[] = [
     formal:
       '把对象映射为固定长度整数（哈希值）的函数。约定:equals 相等则哈希值必须相等;不同对象哈希值相同称为哈希冲突，是允许的。',
     related: ['hash-table', 'hash-collision'],
-    see: 'java/equals-and-identity',
   },
   {
     id: 'hash-table',
@@ -219,7 +212,6 @@ export const commonTerms: Term[] = [
       '值传递复制实参的值，引用传递传递实参本身。Java 与 Python 均为值传递;对引用类型而言复制的是引用，所以被调方就地修改对象调用方看得见，重新绑定形参则看不见。',
     misread: '看到"函数里改了列表，外面也变了"就以为 Java / Python 是引用传递。改的始终是对象，那根线一直没动。',
     related: ['reference', 'in-place'],
-    see: 'python/variable-is-a-name',
   },
   {
     id: 'in-place',
@@ -230,6 +222,5 @@ export const commonTerms: Term[] = [
     formal:
       '在原对象上直接修改内容的操作，执行完对象还是原来那一个。这类方法通常返回 None / void，以免调用方误以为拿到了新对象。',
     related: ['reference', 'mutable-immutable'],
-    see: 'python/variable-is-a-name',
   },
 ]

@@ -15,7 +15,6 @@ export const aiTerms: Term[] = [
     formal:
       '文本经分词器切分后得到的最小输入输出单位，在词表中对应一个整数 id。上下文长度、生成步数与计费都以 token 计。',
     related: ['vocabulary', 'context-window'],
-    see: 'ai/temperature-and-sampling',
   },
   {
     id: 'vocabulary',
@@ -26,7 +25,6 @@ export const aiTerms: Term[] = [
     formal:
       '分词器定义的 token 到整数 id 的映射集合，规模通常在三万到二十万之间。模型输出层的维度等于词表大小。',
     related: ['token', 'logit'],
-    see: 'ai/temperature-and-sampling',
   },
   {
     id: 'language-model',
@@ -39,7 +37,6 @@ export const aiTerms: Term[] = [
     formal:
       '对 token 序列建模条件概率 P(x_t | x_<t) 的模型。大语言模型通常指基于 Transformer、参数量在十亿以上的自回归语言模型。',
     related: ['autoregressive', 'logit'],
-    see: 'ai/temperature-and-sampling',
   },
   {
     id: 'logit',
@@ -52,7 +49,6 @@ export const aiTerms: Term[] = [
       '神经网络最后一层输出的未归一化实数分数。经 softmax（可含温度缩放）后成为概率分布。',
     misread: '把 logit 当概率。它描述的是相对偏好，要经 softmax 之后才成为概率。',
     related: ['softmax', 'probability-distribution', 'vocabulary'],
-    see: 'ai/temperature-and-sampling',
   },
   {
     id: 'probability-distribution',
@@ -63,7 +59,6 @@ export const aiTerms: Term[] = [
     formal:
       '定义在离散候选集上、各分量非负且和为 1 的函数。softmax 的输出即词表上的一个离散概率分布。',
     related: ['softmax', 'sampling'],
-    see: 'ai/temperature-and-sampling',
   },
   {
     id: 'softmax',
@@ -74,7 +69,6 @@ export const aiTerms: Term[] = [
     formal:
       'softmax(z)_i = exp(z_i) / Σ exp(z_j)，把实数向量映射为概率分布。实现上先减去最大值再取指数以防溢出，结果不变。',
     related: ['logit', 'temperature', 'normalization'],
-    see: 'ai/temperature-and-sampling',
   },
   {
     id: 'sampling',
@@ -88,7 +82,6 @@ export const aiTerms: Term[] = [
       '依概率分布随机抽取一个候选作为输出。它引入随机性，因此同一输入两次结果可能不同;固定随机种子可复现。',
     misread: '以为模型输出的就是概率最高那个词。贪心解码下确实如此;开了采样，抽中的是随机的一个。',
     related: ['temperature', 'decoding', 'seed'],
-    see: 'ai/temperature-and-sampling',
     source: {
       title: 'Hugging Face · How to generate text',
       url: 'https://huggingface.co/blog/how-to-generate',
@@ -105,7 +98,6 @@ export const aiTerms: Term[] = [
       'softmax 中的缩放因子 T:p_i ∝ exp(z_i / T)。T 趋近 0 退化为贪心，T = 1 使用原始分布，T > 1 使分布更平坦。仅在采样时生效。',
     misread: '以为温度高等于更有创造力。它只是把长尾抬起来，"有创意"和"跑题"会一起被抬高。',
     related: ['sampling', 'softmax', 'top-p'],
-    see: 'ai/temperature-and-sampling',
   },
   {
     id: 'decoding',
@@ -118,7 +110,6 @@ export const aiTerms: Term[] = [
     formal:
       '把每步的输出分布转换成具体 token 的策略集合，包括贪心、beam search、采样，以及 top-k / top-p 等截断手段。',
     related: ['sampling', 'greedy-decoding', 'beam-search'],
-    see: 'ai/temperature-and-sampling',
   },
   {
     id: 'greedy-decoding',
@@ -130,7 +121,6 @@ export const aiTerms: Term[] = [
     formal:
       '每步取 argmax 的确定性解码策略，不涉及随机性，因此 temperature、top-k、top-p 都不参与。',
     related: ['decoding', 'sampling'],
-    see: 'ai/temperature-and-sampling',
   },
   {
     id: 'beam-search',
@@ -141,7 +131,6 @@ export const aiTerms: Term[] = [
     formal:
       '维护 k 条候选序列（beam），每步扩展并按累计对数概率剪枝的确定性搜索策略。质量常优于贪心，代价是 k 倍计算量。',
     related: ['decoding', 'greedy-decoding'],
-    see: 'ai/temperature-and-sampling',
   },
   {
     id: 'top-k',
@@ -151,7 +140,6 @@ export const aiTerms: Term[] = [
     formal:
       '保留概率最高的 k 个候选，其余置零后重新归一化再采样。k 为固定值，分布很尖时保留了不必要的噪音，很平时又砍得太狠。',
     related: ['sampling', 'top-p'],
-    see: 'ai/temperature-and-sampling',
   },
   {
     id: 'top-p',
@@ -163,7 +151,6 @@ export const aiTerms: Term[] = [
     formal:
       '又称 nucleus sampling，取累计概率达到 p 的最小候选集合，重新归一化后采样。分布尖时可能只留两三个，平时能留几十个。',
     related: ['top-k', 'sampling'],
-    see: 'ai/temperature-and-sampling',
     source: {
       title: 'The Curious Case of Neural Text Degeneration',
       url: 'https://arxiv.org/abs/1904.09751',
@@ -178,7 +165,6 @@ export const aiTerms: Term[] = [
     formal:
       '伪随机数生成器的初始状态。固定种子可使采样可复现，但线上批处理与浮点累加顺序仍可能带来残余不确定性。',
     related: ['sampling'],
-    see: 'ai/temperature-and-sampling',
   },
   {
     id: 'autoregressive',
@@ -190,7 +176,6 @@ export const aiTerms: Term[] = [
     formal:
       '把已生成序列作为条件逐步生成下一个 token 的建模方式，P(x) = Π P(x_t | x_<t)。因依赖自身输出，解码无法并行。',
     related: ['language-model', 'causal-mask'],
-    see: 'ai/attention-mechanism',
   },
   {
     id: 'prompt',
@@ -202,7 +187,6 @@ export const aiTerms: Term[] = [
     formal:
       '送入模型的输入文本（含 system 等角色划分）。提示词不改变模型参数，只改变条件分布。',
     related: ['context-window', 'language-model'],
-    see: 'ai/temperature-and-sampling',
   },
   {
     id: 'context-window',
@@ -213,7 +197,6 @@ export const aiTerms: Term[] = [
     formal:
       '单次前向计算可处理的 token 上限，由位置编码与注意力开销决定。注意力对序列长度是 O(n²)，这是窗口有限且昂贵的根源。',
     related: ['token', 'attention'],
-    see: 'ai/attention-mechanism',
   },
   {
     id: 'embedding',
@@ -226,7 +209,6 @@ export const aiTerms: Term[] = [
     formal:
       '把离散符号映射为稠密实数向量的表示。语义相近的符号在向量空间中距离更近，是模型处理文本的基础表示。',
     related: ['token', 'weight'],
-    see: 'ai/attention-mechanism',
   },
   {
     id: 'attention',
@@ -238,7 +220,6 @@ export const aiTerms: Term[] = [
     formal:
       '由 query 与 key 的点积经缩放、softmax 得到权重，再对 value 加权求和的机制，即 softmax(QKᵀ/√d_k)V。可并行、无距离衰减，代价 O(n²)。',
     related: ['query-key-value', 'softmax', 'multi-head-attention'],
-    see: 'ai/attention-mechanism',
     source: { title: 'Attention Is All You Need', url: 'https://arxiv.org/abs/1706.03762' },
   },
   {
@@ -252,7 +233,6 @@ export const aiTerms: Term[] = [
       '由同一输入分别乘三个可学习权重矩阵得到的投影。query 与 key 的点积决定权重，value 是按权重被混合的内容。',
     misread: '把 Q/K/V 当成人工设定的字段。它们是训练出来的投影，"相关性"未必对应人类语义。',
     related: ['attention', 'weight'],
-    see: 'ai/attention-mechanism',
     source: {
       title: 'The Illustrated Transformer（Jay Alammar）',
       url: 'https://jalammar.github.io/illustrated-transformer/',
@@ -267,7 +247,6 @@ export const aiTerms: Term[] = [
     formal:
       '并行运行多组独立的 Q/K/V 投影（每个头维度更低），拼接输出后过线性层。头之间参数独立，学到不同的关注模式。',
     related: ['attention', 'transformer'],
-    see: 'ai/attention-mechanism',
   },
   {
     id: 'transformer',
@@ -277,7 +256,6 @@ export const aiTerms: Term[] = [
     formal:
       '完全基于注意力与前馈网络、不含循环结构的序列建模架构。支持并行训练，是当代大语言模型的基础。',
     related: ['attention', 'multi-head-attention'],
-    see: 'ai/attention-mechanism',
   },
   {
     id: 'positional-encoding',
@@ -288,7 +266,6 @@ export const aiTerms: Term[] = [
     formal:
       '向输入注入序列位置信息的机制。早期用正弦函数编码，现在主流是旋转位置编码（RoPE），让点积天然带上相对距离。',
     related: ['attention', 'context-window'],
-    see: 'ai/attention-mechanism',
   },
   {
     id: 'causal-mask',
@@ -299,7 +276,6 @@ export const aiTerms: Term[] = [
     formal:
       '在 softmax 之前把未来位置的注意力分数置为 −∞ 的上三角掩码，使每个位置只能关注自身及之前的位置。',
     related: ['attention', 'autoregressive'],
-    see: 'ai/attention-mechanism',
   },
   {
     id: 'dot-product',
@@ -310,7 +286,6 @@ export const aiTerms: Term[] = [
     formal:
       'a·b = Σ a_i b_i。注意力用 query 与 key 的点积作为相关性分数;维度越高点积方差越大，因此要除以 √d_k 压住数值。',
     related: ['attention', 'normalization'],
-    see: 'ai/attention-mechanism',
   },
   {
     id: 'normalization',
@@ -321,7 +296,6 @@ export const aiTerms: Term[] = [
     formal:
       '把数值映射到统一尺度或使其满足特定约束的操作。softmax 是其中一种:把实数向量变成和为 1 的概率分布。',
     related: ['softmax', 'dot-product'],
-    see: 'ai/attention-mechanism',
   },
   {
     id: 'weight',
@@ -334,7 +308,6 @@ export const aiTerms: Term[] = [
     formal:
       '网络中可学习的参数张量，如 W_q / W_k / W_v 与线性层矩阵。参数量是模型规模的主要度量。',
     related: ['training-vs-inference', 'attention'],
-    see: 'ai/attention-mechanism',
   },
   {
     id: 'training-vs-inference',
@@ -346,7 +319,6 @@ export const aiTerms: Term[] = [
     formal:
       '训练通过反向传播与优化器更新参数;推理只做前向计算。解码策略（温度、top-p 等）只作用于推理阶段。',
     related: ['weight', 'decoding'],
-    see: 'ai/temperature-and-sampling',
   },
 
   // ----------------------------------------------------------------------
@@ -365,7 +337,6 @@ export const aiTerms: Term[] = [
     formal:
       '以 system 角色送入模型的指令段，在推理时作为上下文前缀生效，约束回答的口吻、范围与边界，不更新模型参数。',
     related: ['prompt', 'few-shot'],
-    see: 'ai/prompt-engineering',
   },
   {
     id: 'few-shot',
@@ -378,7 +349,6 @@ export const aiTerms: Term[] = [
     formal:
       '在提示中附少量标注示例，使模型按示例的输入输出模式作答的提示技术。示例不改变模型参数，只改变条件分布。',
     related: ['zero-shot', 'prompt'],
-    see: 'ai/prompt-engineering',
   },
   {
     id: 'zero-shot',
@@ -389,7 +359,6 @@ export const aiTerms: Term[] = [
     plain: '一个示例都不给，直接用自然语言把任务描述清楚，让模型按描述做。',
     formal: '不附任何示例、仅凭任务描述 instruct 模型完成任务的提示方式，依赖模型在预训练中获得的能力。',
     related: ['few-shot', 'prompt'],
-    see: 'ai/prompt-engineering',
   },
   {
     id: 'chain-of-thought',
@@ -402,7 +371,6 @@ export const aiTerms: Term[] = [
     formal:
       '引导模型显式生成中间推理步骤再给出答案的提示技术，用更多输出 token 换取更可靠的多步推理，属于提示层手段。',
     related: ['reasoning-model', 'prompt'],
-    see: 'ai/prompt-engineering',
   },
   {
     id: 'structured-output',
@@ -413,7 +381,6 @@ export const aiTerms: Term[] = [
     formal:
       '约束模型输出符合预定义 schema（如 JSON）的生成方式，实现手段包括示例提示、JSON mode 与工具调用参数 schema 强约束。',
     related: ['function-calling', 'few-shot'],
-    see: 'ai/prompt-engineering',
   },
   {
     id: 'hallucination',
@@ -425,7 +392,6 @@ export const aiTerms: Term[] = [
     formal:
       '语言模型生成与输入或事实不符的内容的现象。缓解手段包括检索增强、要求引用来源、提示中给出"不知道"的出口与结果校验。',
     related: ['rag', 'prompt'],
-    see: 'ai/rag-pipeline',
   },
 
   // —— 上下文与记忆 ——
@@ -439,7 +405,6 @@ export const aiTerms: Term[] = [
     formal:
       '对送入模型的上下文做检索、重排、摘要、裁剪与组织的工程实践。窗口由注意力的 O(n²) 开销限制，上下文质量直接决定输出质量。',
     related: ['context-window', 'rolling-summary', 'rag'],
-    see: 'ai/context-and-memory',
   },
   {
     id: 'rolling-summary',
@@ -451,7 +416,6 @@ export const aiTerms: Term[] = [
     formal:
       '在会话变长时，用模型把早期历史压缩为摘要、与近期原文拼接后送入上下文的管理策略，是上下文工程的常用手段。',
     related: ['context-engineering', 'context-window'],
-    see: 'ai/context-and-memory',
   },
   {
     id: 'agent-memory',
@@ -464,7 +428,6 @@ export const aiTerms: Term[] = [
     formal:
       'Agent 跨请求保持信息的机制总称。短期记忆指当前会话上下文，长期记忆指持久化存储中的事实、偏好与历史，按需检索注入。',
     related: ['context-engineering', 'vector-database'],
-    see: 'ai/context-and-memory',
   },
 
   // —— 检索增强生成 ——
@@ -479,7 +442,6 @@ export const aiTerms: Term[] = [
     formal:
       'Retrieval-Augmented Generation:检索与生成结合的架构。查询经嵌入检索召回相关文档片段，作为上下文注入提示，使模型基于给定资料作答。',
     related: ['embedding', 'vector-search', 'chunking', 'hallucination'],
-    see: 'ai/rag-pipeline',
   },
   {
     id: 'chunking',
@@ -492,7 +454,6 @@ export const aiTerms: Term[] = [
     formal:
       'RAG 入库前将文档分割为检索单元的策略，决定最小检索单位。切分粒度直接影响召回精度与上下文完整性，常按结构、语义或固定窗口切分并保留重叠区。',
     related: ['rag', 'vector-search'],
-    see: 'ai/rag-pipeline',
   },
   {
     id: 'vector-search',
@@ -505,7 +466,6 @@ export const aiTerms: Term[] = [
     formal:
       '基于嵌入向量相似度（余弦、点积等）的检索方式，通常用近似最近邻索引加速。语义泛化能力强，对专有名词、编号的精确匹配偏弱。',
     related: ['embedding', 'vector-database', 'hybrid-search'],
-    see: 'ai/rag-pipeline',
   },
   {
     id: 'vector-database',
@@ -517,7 +477,6 @@ export const aiTerms: Term[] = [
     formal:
       '为高维向量存储与近似最近邻检索优化的数据库，如 Milvus、pgvector、Qdrant 等，是 RAG 链路召回侧的基础设施。',
     related: ['vector-search', 'embedding'],
-    see: 'ai/rag-pipeline',
   },
   {
     id: 'hybrid-search',
@@ -529,7 +488,6 @@ export const aiTerms: Term[] = [
     formal:
       '融合向量检索与关键词检索（如 BM25）的召回策略，两路结果按加权或 RRF 等方式合并，兼顾语义泛化与精确匹配。',
     related: ['vector-search', 'rerank'],
-    see: 'ai/rag-pipeline',
   },
   {
     id: 'rerank',
@@ -542,7 +500,6 @@ export const aiTerms: Term[] = [
     formal:
       '对初步召回结果用交叉编码器等模型精细打分、重排后截断的检索环节，用于弥补近似最近邻排序粗、精度不足的问题。',
     related: ['vector-search', 'hybrid-search'],
-    see: 'ai/rag-pipeline',
   },
   {
     id: 'ocr',
@@ -553,7 +510,6 @@ export const aiTerms: Term[] = [
     plain: '把图片、扫描件里的文字识别成可检索的文本。扫描资料不过这一关，后面的检索做得再好也召不回内容。',
     formal: '光学字符识别:将图像中的印刷或手写文字转换为机器可读文本的技术，是扫描件、图片类语料进入 RAG 链路的前置步骤。',
     related: ['rag'],
-    see: 'ai/rag-pipeline',
   },
 
   // —— 工具调用 ——
@@ -567,7 +523,6 @@ export const aiTerms: Term[] = [
     formal:
       '模型依据工具 schema 生成结构化调用意图（工具名与参数），由外部程序执行并回传结果的机制。执行、鉴权、容错均在应用侧完成。',
     related: ['mcp', 'idempotent', 'agent'],
-    see: 'ai/tool-calling',
   },
   {
     id: 'mcp',
@@ -579,7 +534,6 @@ export const aiTerms: Term[] = [
     formal:
       'Anthropic 发起的开放协议，定义模型客户端与外部工具、数据源之间的接口规范，使工具接入与客户端解耦、多方复用。',
     related: ['function-calling'],
-    see: 'ai/tool-calling',
     source: { title: 'Model Context Protocol', url: 'https://modelcontextprotocol.io/' },
   },
   {
@@ -593,7 +547,6 @@ export const aiTerms: Term[] = [
     formal:
       '操作重复执行产生相同结果的性质。工程上以幂等键（业务单号）去重，是超时重试、消息重投场景下数据一致性的基础。',
     related: ['function-calling'],
-    see: 'ai/tool-calling',
   },
 
   // —— 任务规划与 Agent ——
@@ -608,7 +561,6 @@ export const aiTerms: Term[] = [
     formal:
       '以大模型为决策核心，自主完成"规划—调用工具—观察—修正"循环的软件系统。可靠性依赖终止条件、检查点与人工兜底等工程约束。',
     related: ['react', 'function-calling', 'planning'],
-    see: 'ai/task-planning',
   },
   {
     id: 'react',
@@ -620,7 +572,6 @@ export const aiTerms: Term[] = [
     formal:
       'Thought-Action-Observation 交替进行的 Agent 范式:每步的观察成为下一步推理的输入，把推理与工具使用交织成循环。',
     related: ['agent', 'reflection', 'planning'],
-    see: 'ai/task-planning',
   },
   {
     id: 'reflection',
@@ -631,7 +582,6 @@ export const aiTerms: Term[] = [
     formal:
       'Agent 流程中由模型对中间结果自评并驱动修正的机制，以额外调用量换取输出质量，常与重试上限配合使用。',
     related: ['react', 'agent'],
-    see: 'ai/task-planning',
   },
   {
     id: 'planning',
@@ -644,7 +594,6 @@ export const aiTerms: Term[] = [
     formal:
       'Agent 将目标分解为可执行步骤序列的过程，分为先出完整计划再执行与边观察边规划两类。粒度过细会带来上下文增长与误差累积。',
     related: ['agent', 'react'],
-    see: 'ai/task-planning',
   },
 
   // —— 多智能体 ——
@@ -659,7 +608,6 @@ export const aiTerms: Term[] = [
     formal:
       '由多个各司其职的 Agent 通过消息传递协作完成任务的系统。常见模式有中心编排与自主协商两类，需要终止条件与责任边界防失控。',
     related: ['agent', 'orchestration'],
-    see: 'ai/multi-agent',
   },
   {
     id: 'orchestration',
@@ -671,7 +619,6 @@ export const aiTerms: Term[] = [
     formal:
       '多 Agent 系统中由中枢统一调度任务分派、结果汇总与流程终止的协作模式，与各角色自主协商的去中心化模式相对。',
     related: ['multi-agent'],
-    see: 'ai/multi-agent',
   },
 
   // —— 技术框架 ——
@@ -682,7 +629,6 @@ export const aiTerms: Term[] = [
     plain: '一套把模型调用、提示、工具、检索拼成链路的开发框架，组件全，抽象层数也多。',
     formal: '用于构建大模型应用的开发框架，提供模型 I/O、链、代理与检索等组件抽象，生态庞大，复杂流程的可控性依赖上层封装。',
     related: ['langgraph', 'llamaindex'],
-    see: 'ai/ai-frameworks',
   },
   {
     id: 'langgraph',
@@ -692,7 +638,6 @@ export const aiTerms: Term[] = [
     formal:
       'LangChain 生态的图编排框架，以节点、边与共享状态描述流程，支持循环与条件分支，适合需要持久化与人工介入的 Agent。',
     related: ['langchain'],
-    see: 'ai/ai-frameworks',
   },
   {
     id: 'llamaindex',
@@ -701,7 +646,6 @@ export const aiTerms: Term[] = [
     plain: '主战场在数据侧:加载、切分、建索引、做检索，把私有资料变成模型能查的知识。',
     formal: '面向 RAG 的数据框架，提供文档加载、索引构建、检索与查询引擎能力，常与 LangChain 等编排框架配合使用。',
     related: ['rag', 'langchain'],
-    see: 'ai/ai-frameworks',
   },
   {
     id: 'autogpt',
@@ -711,7 +655,6 @@ export const aiTerms: Term[] = [
     formal:
       '基于 GPT 的自主 Agent 实验项目，以目标驱动循环调用工具完成任务。其可靠性问题推动了生产环境对检查点、约束与人工兜底的重视。',
     related: ['agent'],
-    see: 'ai/ai-frameworks',
   },
   {
     id: 'autogen',
@@ -720,7 +663,6 @@ export const aiTerms: Term[] = [
     plain: '微软的多 Agent 框架，核心抽象是"多个角色之间怎么对话"，用对话协议把分工协作跑起来。',
     formal: '以多 Agent 对话为核心抽象的开源框架，通过可定制的对话协议协调多个模型实例分工完成任务。',
     related: ['metagpt', 'multi-agent'],
-    see: 'ai/ai-frameworks',
   },
   {
     id: 'metagpt',
@@ -729,7 +671,6 @@ export const aiTerms: Term[] = [
     plain: '把软件公司的角色分工搬进多 Agent:产品经理写文档，架构师出设计，工程师写代码，按流程交接。',
     formal: '以角色化软件流程为抽象的多 Agent 框架，将需求文档、设计、编码等环节分配给不同角色的 Agent 顺序协作完成。',
     related: ['autogen', 'multi-agent'],
-    see: 'ai/ai-frameworks',
   },
   {
     id: 'dify',
@@ -738,7 +679,6 @@ export const aiTerms: Term[] = [
     plain: '低代码搭 AI 应用的平台:提示、知识库、工具、工作流都能可视化配置，适合快速验证。',
     formal: '开源 LLM 应用开发平台，提供提示编排、知识库、工具与工作流的可视化配置与部署能力，深度定制仍需写代码。',
     related: ['coze'],
-    see: 'ai/ai-frameworks',
   },
   {
     id: 'coze',
@@ -747,7 +687,6 @@ export const aiTerms: Term[] = [
     plain: '扣子，字节的低代码 Agent 搭建平台，插件与发布渠道多，适合做对话机器人的快速验证。',
     formal: '低代码 AI 应用搭建平台，以插件、知识库与工作流配置对话机器人，可一键发布到多个渠道。',
     related: ['dify'],
-    see: 'ai/ai-frameworks',
   },
 
   // —— 微调 ——
@@ -762,7 +701,6 @@ export const aiTerms: Term[] = [
     formal:
       'Supervised Fine-Tuning:在预训练模型上用标注的指令-回复样本继续训练，使模型遵循特定格式、口吻与行为边界。',
     related: ['lora', 'full-fine-tuning', 'training-vs-inference'],
-    see: 'ai/fine-tuning',
   },
   {
     id: 'full-fine-tuning',
@@ -772,7 +710,6 @@ export const aiTerms: Term[] = [
     plain: '模型所有参数都参与训练。上限高，显存和存储代价也大，回滚得整份模型一起换。',
     formal: '更新模型全部参数的微调方式，效果上限高但需要完整的优化器状态与副本显存，迭代与回滚成本高。',
     related: ['sft', 'lora'],
-    see: 'ai/fine-tuning',
   },
   {
     id: 'lora',
@@ -785,7 +722,6 @@ export const aiTerms: Term[] = [
     formal:
       '低秩适配:以低秩矩阵近似权重更新量 ΔW，仅训练增量部分的高效微调方法，多个任务可共享同一基座各自挂载。',
     related: ['sft', 'full-fine-tuning'],
-    see: 'ai/fine-tuning',
   },
   {
     id: 'catastrophic-forgetting',
@@ -796,7 +732,6 @@ export const aiTerms: Term[] = [
     formal:
       '继续训练导致模型在原有分布上性能显著下降的现象。微调注入易变知识时需混入通用数据缓解，这也是知识优先放检索层的原因之一。',
     related: ['sft', 'rag'],
-    see: 'ai/fine-tuning',
   },
 
   // —— 能力演进与运维 ——
@@ -809,7 +744,6 @@ export const aiTerms: Term[] = [
     formal:
       '通过稀疏/线性注意力、RoPE 外推与 KV 缓存压缩等架构与工程优化扩展的上下文窗口能力，成本随长度超线性增长。',
     related: ['context-window', 'kv-cache'],
-    see: 'ai/model-capability-evolution',
   },
   {
     id: 'reasoning-model',
@@ -821,7 +755,6 @@ export const aiTerms: Term[] = [
     formal:
       '经训练获得显式中间推理能力（长思维链）的模型，在推理阶段生成思考 token 后再作答，与仅调节采样参数的普通模型有本质区别。',
     related: ['chain-of-thought'],
-    see: 'ai/model-capability-evolution',
   },
   {
     id: 'multimodal',
@@ -831,7 +764,6 @@ export const aiTerms: Term[] = [
     plain: '模型能处理文本之外的输入:图片、音频、视频。不同输入被编码到同一个表示空间里，统一做理解与生成。',
     formal: '支持文本以外模态（图像、音频等）输入或输出的模型能力，通过跨模态编码器将不同输入映射到统一表示空间。',
     related: ['embedding'],
-    see: 'ai/model-capability-evolution',
   },
   {
     id: 'quantization',
@@ -841,7 +773,6 @@ export const aiTerms: Term[] = [
     plain: '把权重从高精度压到低比特，显存和带宽都省，多数场景精度损失可控。部署降本最常用的一招。',
     formal: '以更低比特（如 INT8、INT4）表示模型权重与激活的压缩技术，降低显存占用与推理成本，常与推理引擎配合使用。',
     related: ['weight'],
-    see: 'ai/model-capability-evolution',
   },
   {
     id: 'kv-cache',
@@ -853,7 +784,6 @@ export const aiTerms: Term[] = [
     formal:
       '推理时缓存历史 token 的 key/value 投影以避免重复计算的优化，将每步注意力计算从 O(n²) 降为 O(n)，代价是显存随长度线性增长。',
     related: ['attention', 'long-context'],
-    see: 'ai/model-capability-evolution',
   },
   {
     id: 'docker',
@@ -862,7 +792,6 @@ export const aiTerms: Term[] = [
     plain: '把应用连同依赖打成一个镜像，环境一致、随时拉起来。部署与扩容都从它开始。',
     formal: '基于容器镜像的打包与运行标准，使应用及其依赖在任意环境一致运行，是服务化部署与横向扩容的前提。',
     related: ['kubernetes'],
-    see: 'ai/ai-serving-ops',
   },
   {
     id: 'kubernetes',
@@ -872,7 +801,6 @@ export const aiTerms: Term[] = [
     plain: '容器编排系统:副本扩缩、故障自愈、滚动发布都归它管。资源请求与上限要显式声明，它不替你做决定。',
     formal: '容器编排平台，负责调度、扩缩容、服务发现与故障恢复。推理部署需显式声明资源请求、GPU 分配与健康检查策略。',
     related: ['docker'],
-    see: 'ai/ai-serving-ops',
   },
   {
     id: 'observability',
@@ -884,6 +812,5 @@ export const aiTerms: Term[] = [
     formal:
       '通过日志、指标与追踪理解系统内部状态的能力。推理服务的关键指标包括首 token 延迟、吐字速率、P99 延迟、错误率与资源利用率。',
     related: ['kubernetes'],
-    see: 'ai/ai-serving-ops',
   },
 ]

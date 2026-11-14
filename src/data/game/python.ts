@@ -2,8 +2,7 @@
 //
 // 顺序顺着"数据模型 → 怎么写 → 怎么跑"排:先变量与对象,再相等性、迭代、函数、
 // 装饰器、类、异常,最后是并发、内存与工程习惯。
-// 前两关和站内两篇文章(python/variable-is-a-name、python/iterators-and-generators)
-// 讲的是同一条线,题目里能挂 link 的都挂上了,答完可以顺着回去看讲解。
+// 题目能挂术语 link 的都挂上了;知识点重写后再补 see 去处。
 
 import type { Level } from './types'
 
@@ -26,7 +25,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           '对象是实体,变量是贴在对象上的名字。赋值语句只做"绑定"这一件事,不理解这条,传参和深浅拷贝都推不出来。',
-        link: { term: 'variable', see: 'python/variable-is-a-name' },
+        link: { term: 'variable' },
       },
       {
         id: 'py-var-2',
@@ -38,7 +37,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           '`b = a` 让 b 和 a 指向同一个对象,两个名字指着同一份数据。要副本得显式拷贝。',
-        link: { term: 'binding', see: 'python/variable-is-a-name' },
+        link: { term: 'binding' },
       },
       {
         id: 'py-var-3',
@@ -65,7 +64,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           '数字、字符串、元组都不可变。注意元组只保证元素指向不变,元组里装个列表,列表照样能改。',
-        link: { term: 'mutable-immutable', see: 'python/variable-is-a-name' },
+        link: { term: 'mutable-immutable' },
       },
       {
         id: 'py-var-5',
@@ -211,7 +210,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           '列表是可迭代对象,`iter(列表)` 才拿到迭代器。迭代器每 next() 一次前进一格,耗尽后保持耗尽状态。',
-        link: { term: 'iterable', see: 'python/iterators-and-generators' },
+        link: { term: 'iterable' },
       },
       {
         id: 'py-it-2',
@@ -223,7 +222,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           '旧式迭代协议就是靠 `__getitem__` 传递增下标、抛 IndexError 实现的,所以序列类型天然可迭代。新写法推荐实现 `__iter__`。',
-        link: { term: 'iteration-protocol', see: 'python/iterators-and-generators' },
+        link: { term: 'iteration-protocol' },
       },
       {
         id: 'py-it-3',
@@ -237,7 +236,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           '函数体要等第一次 next() 才启动。这是生成器最容易被答错的一点。',
-        link: { term: 'generator', see: 'python/iterators-and-generators' },
+        link: { term: 'generator' },
       },
       {
         id: 'py-it-4',
@@ -262,7 +261,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           '生成器表达式要一个算一个,峰值内存与数据量脱钩,还能表示无限序列。代价是只能遍历一次、不能下标。',
-        link: { term: 'lazy-evaluation', see: 'python/iterators-and-generators' },
+        link: { term: 'lazy-evaluation' },
       },
       {
         id: 'py-it-6',
@@ -287,7 +286,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           '迭代器耗尽时抛 StopIteration,for 捕获它并正常结束循环。它是正常流程的一部分,不该在业务代码里到处捕。',
-        link: { term: 'stop-iteration', see: 'python/iterators-and-generators' },
+        link: { term: 'stop-iteration' },
       },
     ],
   },
@@ -310,7 +309,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           '传的是引用,但重新绑定参数名只影响函数内的那个名字。改对象内容双方可见,把参数指向新对象则互不影响。',
-        link: { term: 'pass-by-value', see: 'python/variable-is-a-name' },
+        link: { term: 'pass-by-value' },
       },
       {
         id: 'py-fn-2',
@@ -324,7 +323,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           '默认值在函数定义时求值一次,之后所有调用共用同一个列表。惯用写法是用 None 占位,函数体内再新建。',
-        link: { term: 'default-argument', see: 'python/variable-is-a-name' },
+        link: { term: 'default-argument' },
       },
       {
         id: 'py-fn-3',
@@ -698,7 +697,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           '协程在单线程内靠 await 让出执行权,省掉线程上下文切换。遇到 CPU 密集或阻塞的系统调用,它一样帮不上忙。',
-        link: { term: 'coroutine', see: 'python/iterators-and-generators' },
+        link: { term: 'coroutine' },
       },
       {
         id: 'py-con-4',
@@ -758,7 +757,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           '引用计数是主力,所以对象失效即刻释放;分代 gc 只是兜底,专门收拾引用计数搞不定的循环引用。',
-        link: { term: 'reference-counting', see: 'python/variable-is-a-name' },
+        link: { term: 'reference-counting' },
       },
       {
         id: 'py-mem-2',
@@ -784,7 +783,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           '浅拷贝只复制外层容器,内层元素照搬引用。要彻底独立用 `copy.deepcopy`。',
-        link: { term: 'shallow-copy', see: 'python/variable-is-a-name' },
+        link: { term: 'shallow-copy' },
       },
       {
         id: 'py-mem-4',
@@ -798,7 +797,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           'memo 保证每个对象只复制一次,既避免无限递归,也让复制结果里的共享关系与原对象一致。',
-        link: { term: 'deep-copy', see: 'python/variable-is-a-name' },
+        link: { term: 'deep-copy' },
       },
       {
         id: 'py-mem-5',
@@ -810,7 +809,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           '传的是引用,函数内的原地修改(inplace)对调用方可见。不想被改就显式传副本,并在文档里写清楚。',
-        link: { term: 'in-place', see: 'python/variable-is-a-name' },
+        link: { term: 'in-place' },
       },
       {
         id: 'py-mem-6',
@@ -824,7 +823,7 @@ export const pythonLevels: Level[] = [
         ],
         explain:
           'Python 没有所有权机制,边界上的契约靠文档和显式拷贝建立。这也是"视图与副本"那类事故的根源。',
-        link: { term: 'view-and-copy', see: 'python/variable-is-a-name' },
+        link: { term: 'view-and-copy' },
       },
     ],
   },

@@ -73,7 +73,7 @@ export const aiLevels: Level[] = [
         ],
         explain:
           '温度压低后分布更尖,高概率候选更容易被选中,输出更稳定;代价是多样性下降、容易套路化。',
-        link: { term: 'temperature', see: 'ai/temperature-and-sampling' },
+        link: { term: 'temperature' },
       },
       {
         id: 'pe-6',
@@ -133,7 +133,7 @@ export const aiLevels: Level[] = [
         ],
         explain:
           '窗口由位置编码与注意力开销决定。注意力对序列长度是 O(n²),窗口越长成本越高,这是窗口有限的根源。',
-        link: { term: 'context-window', see: 'ai/attention-mechanism' },
+        link: { term: 'context-window' },
       },
       {
         id: 'cm-2',

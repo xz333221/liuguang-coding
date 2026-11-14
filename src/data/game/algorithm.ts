@@ -25,7 +25,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           'O 是上界承诺,实际可以更少;要"恰好是这个量级"得用 Θ。日常口语说 O,心里想的常是 Θ。',
-        link: { term: 'big-o', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'big-o' },
       },
       {
         id: 'a-cx-2',
@@ -37,7 +37,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '渐进记号说的是 n 很大时的趋势。n 很小的时候,常数因子说了算,O(n²) 完全可能更快。',
-        link: { term: 'constant-factor', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'constant-factor' },
       },
       {
         id: 'a-cx-3',
@@ -51,7 +51,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '这类"每次把范围砍一半"的结构是对数级的。二分查找正是这个形状,所以一百万个数最多看 20 次。',
-        link: { term: 'binary-search', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'binary-search' },
       },
       {
         id: 'a-cx-4',
@@ -65,7 +65,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '每层调用压一个栈帧,深度 n 的递归栈空间就是 O(n)。尾递归优化能把它压成 O(1),但要看语言与编译器的支持。',
-        link: { term: 'call-stack', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'call-stack' },
       },
       {
         id: 'a-cx-5',
@@ -77,7 +77,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '最坏情况是对使用者的保证,不依赖输入分布假设。平均情况更接近日常体验,但得先说清"平均"是哪种分布下的平均。',
-        link: { term: 'worst-average-case', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'worst-average-case' },
       },
       {
         id: 'a-cx-6',
@@ -91,7 +91,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '同量级比的是工程实现:比较开销、内存访问模式、分支预测。数据量小时这 3 倍比量级更值得关注。',
-        link: { term: 'growth-rate', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'growth-rate' },
       },
     ],
   },
@@ -114,7 +114,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           'n 个元素有 n! 种排列,比较排序每次二分决策,最少要 log(n!) ≈ n log n 次。要更快得跳出比较模型,比如计数排序。',
-        link: { term: 'big-omega', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'big-omega' },
       },
       {
         id: 'a-so-2',
@@ -126,7 +126,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '每次划分都极度不均(比如已有序又取端点做 pivot)时会退化。随机化 pivot 或三数取中能把最坏变成概率上极 rare。',
-        link: { term: 'worst-average-case', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'worst-average-case' },
       },
       {
         id: 'a-so-3',
@@ -164,7 +164,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '归并要一块临时数组做合并;堆排直接在原数组上建堆、交换,额外空间 O(1)。所以内存敏感又要求稳定最坏 O(n log n) 时,归并与堆排各有取舍。',
-        link: { term: 'in-place-algorithm', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'in-place-algorithm' },
       },
       {
         id: 'a-so-6',
@@ -178,7 +178,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '小规模下常数因子主导,插入排序的简单循环往往最快。工业实现(如 TimSort)也会在小分段上切插入排序。',
-        link: { term: 'constant-factor', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'constant-factor' },
       },
     ],
   },
@@ -199,7 +199,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '砍一半的前提是"知道目标在哪一侧",这需要有序。链表做不到随机访问,二分也就失去意义。',
-        link: { term: 'binary-search', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'binary-search' },
       },
       {
         id: 'a-bs-2',
@@ -213,7 +213,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           'log₂(1000) ≈ 10。数据每翻一倍才多一次比较,这正是它值钱的地方。',
-        link: { term: 'binary-search', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'binary-search' },
       },
       {
         id: 'a-bs-3',
@@ -273,7 +273,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '少了终止条件就是无限递归,最后栈溢出。写递归先写"什么时候停",再写"怎么变小"。',
-        link: { term: 'recursion', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'recursion' },
       },
       {
         id: 'a-re-2',
@@ -298,7 +298,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '把状态压进自己管理的堆结构,内存上限从线程栈变成堆空间。代价是代码可读性下降,要确有必要才做。',
-        link: { term: 'call-stack', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'call-stack' },
       },
       {
         id: 'a-re-4',
@@ -369,7 +369,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '维护每个长度下的最小结尾值,新元素二分找位置。这体现了"DP 状态定义得当,转移就能更快"。',
-        link: { term: 'binary-search', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'binary-search' },
       },
       {
         id: 'a-dp-4',
@@ -394,7 +394,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '自底向上按状态依赖顺序填表,不需要调用栈,也更容易做空间压缩(如滚动数组把二维降到一维)。',
-        link: { term: 'call-stack', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'call-stack' },
       },
       {
         id: 'a-dp-6',
@@ -668,7 +668,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '先定位是输入规模还是常数因子变了。数据量跨过量级时,O(n log n) 与 O(n²) 的差距会突然显形。',
-        link: { term: 'growth-rate', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'growth-rate' },
       },
       {
         id: 'a-eg-2',
@@ -694,7 +694,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '反过来"空间换时间"也常见:把中间结果存下来。两者都要先看哪个是瓶颈,别默认省内存就是好。',
-        link: { term: 'space-complexity', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'space-complexity' },
       },
       {
         id: 'a-eg-4',
@@ -708,7 +708,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '这正是要先算复杂度的理由:量级决定了扩容时会发生什么。O(n²) 在数据量上去之后是最常见的性能悬崖。',
-        link: { term: 'time-complexity', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'time-complexity' },
       },
       {
         id: 'a-eg-5',
@@ -720,7 +720,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '树的分层遍历、分治这类问题递归更贴近问题结构。确认深度可控(不会爆栈)即可,不必一律改循环。',
-        link: { term: 'recursion', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'recursion' },
       },
       {
         id: 'a-eg-6',
@@ -734,7 +734,7 @@ export const algorithmLevels: Level[] = [
         ],
         explain:
           '扩容复制的代价被此前若干次廉价插入摊薄。判断这类复杂度要看"一段操作的总代价",不是单次最坏。',
-        link: { term: 'worst-average-case', see: 'algorithm/complexity-is-about-growth' },
+        link: { term: 'worst-average-case' },
       },
     ],
   },

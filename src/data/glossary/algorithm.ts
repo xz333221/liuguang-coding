@@ -11,7 +11,6 @@ export const algorithmTerms: Term[] = [
     formal:
       '描述算法执行的基本操作次数随输入规模增长的量级，用渐进记号表示，忽略常数因子与低阶项。',
     related: ['big-o', 'space-complexity', 'growth-rate'],
-    see: 'algorithm/complexity-is-about-growth',
   },
   {
     id: 'space-complexity',
@@ -22,7 +21,6 @@ export const algorithmTerms: Term[] = [
     formal:
       '算法除输入本身外所需的额外存储随输入规模增长的量级。递归深度为 n 的写法，栈空间就是 O(n)。',
     related: ['time-complexity', 'call-stack'],
-    see: 'algorithm/complexity-is-about-growth',
   },
   {
     id: 'big-o',
@@ -34,7 +32,6 @@ export const algorithmTerms: Term[] = [
     formal:
       'f(n) = O(g(n)) 表示存在常数 c 与 n₀，使 n ≥ n₀ 时 f(n) ≤ c·g(n)。只给上界，不保证紧。',
     related: ['big-omega', 'big-theta', 'asymptotic-analysis'],
-    see: 'algorithm/complexity-is-about-growth',
     source: {
       title: '算法导论（CLRS）· 第 3 章:函数的增长',
       url: 'https://mitpress.mit.edu/9780262046305/introduction-to-algorithms/',
@@ -50,7 +47,6 @@ export const algorithmTerms: Term[] = [
     formal:
       'f(n) = Ω(g(n)) 表示存在常数 c 与 n₀，使 n ≥ n₀ 时 f(n) ≥ c·g(n)。',
     related: ['big-o', 'big-theta'],
-    see: 'algorithm/complexity-is-about-growth',
   },
   {
     id: 'big-theta',
@@ -62,7 +58,6 @@ export const algorithmTerms: Term[] = [
     formal:
       '同时满足 O 与 Ω，即存在常数 c₁、c₂ 使 c₁·g(n) ≤ f(n) ≤ c₂·g(n)。',
     related: ['big-o', 'big-omega'],
-    see: 'algorithm/complexity-is-about-growth',
   },
   {
     id: 'asymptotic-analysis',
@@ -73,7 +68,6 @@ export const algorithmTerms: Term[] = [
     formal:
       '研究函数在自变量趋于无穷时的增长行为，是复杂度分析的理论基础。',
     related: ['big-o', 'growth-rate'],
-    see: 'algorithm/complexity-is-about-growth',
   },
   {
     id: 'growth-rate',
@@ -83,7 +77,6 @@ export const algorithmTerms: Term[] = [
     plain: '输入翻倍，工作量涨几倍 —— 这个"倍数的规律"就是增长率，也是复杂度真正在比的东西。',
     formal: '函数随自变量增大而变化的相对速度。复杂度比较的是增长率，也就是两个规模之间取值的相对变化。',
     related: ['time-complexity', 'asymptotic-analysis'],
-    see: 'algorithm/complexity-is-about-growth',
   },
   {
     id: 'input-size',
@@ -94,7 +87,6 @@ export const algorithmTerms: Term[] = [
     formal:
       '衡量输入大小的量，取法视问题而定（元素个数、位数、顶点与边数），选择不同会得到不同结论。',
     related: ['time-complexity', 'growth-rate'],
-    see: 'algorithm/complexity-is-about-growth',
   },
   {
     id: 'basic-operation',
@@ -104,7 +96,6 @@ export const algorithmTerms: Term[] = [
     plain: '挑一个"最能代表耗时"的动作来数，比如比较、赋值、交换。数它就等于数工作量。',
     formal: '复杂度分析中被计数的原子操作，要求与具体实现无关，且能反映算法的主要开销。',
     related: ['time-complexity', 'input-size'],
-    see: 'algorithm/complexity-is-about-growth',
   },
   {
     id: 'worst-average-case',
@@ -117,7 +108,6 @@ export const algorithmTerms: Term[] = [
     formal:
       '分别对应给定输入分布下操作次数的上确界与期望值。最坏情况是保证，平均情况依赖对输入分布的假设。',
     related: ['time-complexity', 'basic-operation'],
-    see: 'algorithm/complexity-is-about-growth',
   },
   {
     id: 'constant-factor',
@@ -129,7 +119,6 @@ export const algorithmTerms: Term[] = [
     formal:
       '渐进记号中被忽略的乘法与加法常数。在实际数据规模下，它可能主导真实耗时，因此 O(1) 未必比 O(n) 快。',
     related: ['big-o', 'asymptotic-analysis'],
-    see: 'algorithm/complexity-is-about-growth',
   },
   {
     id: 'binary-search',
@@ -140,7 +129,6 @@ export const algorithmTerms: Term[] = [
     formal:
       '在有序序列上每次将候选区间减半的查找算法，时间复杂度 O(log n)，要求随机访问与有序性。',
     related: ['big-o', 'input-size'],
-    see: 'algorithm/complexity-is-about-growth',
   },
   {
     id: 'recursion',
@@ -151,7 +139,6 @@ export const algorithmTerms: Term[] = [
     formal:
       '通过函数自调用求解问题的方法，须有基准情形终止。每次调用占用一个栈帧，深度受栈空间限制。',
     related: ['call-stack', 'space-complexity'],
-    see: 'algorithm/complexity-is-about-growth',
   },
   {
     id: 'call-stack',
@@ -162,7 +149,6 @@ export const algorithmTerms: Term[] = [
     formal:
       '存放活动函数调用帧的后进先出结构。递归深度即为栈帧数量，是递归算法空间复杂度的来源。',
     related: ['recursion', 'space-complexity', 'stack-and-heap'],
-    see: 'algorithm/complexity-is-about-growth',
   },
   {
     id: 'in-place-algorithm',
@@ -172,6 +158,5 @@ export const algorithmTerms: Term[] = [
     plain: '不额外开一大块内存，就在原数据上折腾，输出直接盖在输入上。',
     formal: '只用 O(1)（或 O(log n)）额外空间的算法，输出通常覆盖输入。堆排序是典型例子。',
     related: ['space-complexity', 'in-place'],
-    see: 'algorithm/complexity-is-about-growth',
   },
 ]
