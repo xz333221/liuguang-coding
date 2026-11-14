@@ -449,6 +449,27 @@
     font-family: inherit;
   }
 
+  /* mermaid 流程图:渲染成功后源码块隐藏但留在 DOM 里,无 JS 或渲染失败时它就是正文 */
+  .lg-prose pre[hidden] {
+    display: none;
+  }
+
+  .lg-mermaid {
+    margin: 1.25rem 0;
+    padding: 1.1rem 1.25rem;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--panel);
+  }
+
+  .lg-mermaid svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+  }
+
   .lg-prose blockquote {
     padding: 0.25rem 0 0.25rem 1.1rem;
     border-left: 2px solid var(--accent);

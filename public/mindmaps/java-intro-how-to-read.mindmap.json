@@ -1,0 +1,165 @@
+{
+  "id": "root",
+  "text": "怎么读:选路线,按编号走",
+  "children": [
+    {
+      "id": "tree",
+      "text": "目录树四层",
+      "children": [
+        {
+          "id": "tree-layers",
+          "text": "方向 → 章 → 节 → 小节",
+          "children": []
+        },
+        {
+          "id": "tree-num",
+          "text": "编号即阅读顺序(1 / 3.1 / 3.1.1)",
+          "children": []
+        },
+        {
+          "id": "tree-fold",
+          "text": "箭头折叠,状态记住,当前路径自动展开",
+          "children": []
+        },
+        {
+          "id": "tree-wip",
+          "text": "筹备中 = 还没写到,补文自动消失",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "routes",
+      "text": "三条路线",
+      "children": [
+        {
+          "id": "route-zero",
+          "text": "零基础:1→6,跳 12/13,7/8/9 回头补",
+          "children": []
+        },
+        {
+          "id": "route-exp",
+          "text": "有基础:3 读差异,5/6/7 → 10 → 11",
+          "children": []
+        },
+        {
+          "id": "route-interview",
+          "text": "面试:3.2 / 6 / 10 / 11,哪虚读哪",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "map",
+      "text": "17 章地图",
+      "children": [
+        {
+          "id": "map-core",
+          "text": "第 3 章面向对象:花时间最多",
+          "children": []
+        },
+        {
+          "id": "map-job",
+          "text": "12/13:写出接口、找后端工作",
+          "children": []
+        },
+        {
+          "id": "map-hot",
+          "text": "10/11:面试高频,主线之后读",
+          "children": []
+        },
+        {
+          "id": "map-late",
+          "text": "15 设计模式:半年代码量后再读",
+          "children": []
+        },
+        {
+          "id": "map-algo",
+          "text": "17 算法:贯穿始终的副线",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "read",
+      "text": "每篇怎么读",
+      "children": [
+        {
+          "id": "read-concl",
+          "text": "先读开头结论段",
+          "children": []
+        },
+        {
+          "id": "read-type",
+          "text": "代码敲一遍:jshell / 单文件直跑",
+          "children": []
+        },
+        {
+          "id": "read-terms",
+          "text": "术语点开,参考资料别跳过",
+          "children": []
+        },
+        {
+          "id": "read-game",
+          "text": "读完去闯关,卡住回小节",
+          "children": []
+        },
+        {
+          "id": "read-reread",
+          "text": "第一遍不懂正常,两周后再来看",
+          "note": {
+            "text": "how2j 在难懂的课后面写的回读建议。"
+          },
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "parts",
+      "text": "每篇的配置",
+      "children": [
+        {
+          "id": "parts-three",
+          "text": "正文 + 术语标注 + 参考资料",
+          "children": []
+        },
+        {
+          "id": "parts-extra",
+          "text": "知识地图 + 动手看一遍,有则显示",
+          "children": []
+        },
+        {
+          "id": "parts-ask",
+          "text": "「问这篇」就着当前文章提问",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "dont",
+      "text": "四个不要",
+      "children": [
+        {
+          "id": "dont-api",
+          "text": "不背 API,记「这类问题找哪个类」",
+          "children": []
+        },
+        {
+          "id": "dont-jvm",
+          "text": "不一开始啃 JVM 与并发",
+          "children": []
+        },
+        {
+          "id": "dont-watch",
+          "text": "不只看不敲",
+          "children": []
+        },
+        {
+          "id": "dont-new",
+          "text": "不追新特性当主线",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

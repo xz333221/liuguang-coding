@@ -1,0 +1,154 @@
+{
+  "id": "root",
+  "text": "Java:一门语言 + 一个运行平台",
+  "children": [
+    {
+      "id": "pkg",
+      "text": "三层包含,不是并列",
+      "children": [
+        {
+          "id": "pkg-jdk",
+          "text": "JDK = JRE + 开发工具",
+          "richContent": {
+            "kind": "code",
+            "lang": "text",
+            "raw": "javac / jar / javadoc\njshell / jlink"
+          },
+          "children": []
+        },
+        {
+          "id": "pkg-jre",
+          "text": "JRE = JVM + 核心类库",
+          "note": {
+            "text": "JDK 11 起不再单独发布 JRE。只要运行时的产物用 jlink 按模块裁。"
+          },
+          "children": []
+        },
+        {
+          "id": "pkg-jvm",
+          "text": "JVM:加载、校验、执行字节码",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "run",
+      "text": "源码到输出",
+      "children": [
+        {
+          "id": "run-src",
+          "text": "编译:源码 → 字节码",
+          "richContent": {
+            "kind": "code",
+            "lang": "bash",
+            "raw": "javac Hello.java"
+          },
+          "children": []
+        },
+        {
+          "id": "run-bc",
+          "text": "跨平台的是字节码,不是 JVM",
+          "children": []
+        },
+        {
+          "id": "run-load",
+          "text": "JVM 加载 + 校验",
+          "children": []
+        },
+        {
+          "id": "run-exec",
+          "text": "解释执行,热点交给 JIT",
+          "richContent": {
+            "kind": "code",
+            "lang": "bash",
+            "raw": "java Hello"
+          },
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "impl",
+      "text": "规范与实现分开",
+      "children": [
+        {
+          "id": "impl-spec",
+          "text": "JVM 规范:字节码格式、指令语义、类加载",
+          "children": []
+        },
+        {
+          "id": "impl-hotspot",
+          "text": "HotSpot:OpenJDK / Oracle JDK 默认",
+          "children": []
+        },
+        {
+          "id": "impl-j9",
+          "text": "OpenJ9:Eclipse 基金会维护",
+          "children": []
+        },
+        {
+          "id": "impl-graal",
+          "text": "GraalVM:带 AOT,可编原生可执行文件",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "ver",
+      "text": "版本节奏",
+      "children": [
+        {
+          "id": "ver-cadence",
+          "text": "6 个月一特性版,2 年一 LTS",
+          "children": []
+        },
+        {
+          "id": "ver-now",
+          "text": "2026-11:特性版 27,LTS 25",
+          "children": []
+        },
+        {
+          "id": "ver-next",
+          "text": "下一个 LTS:29(2027-09)",
+          "children": []
+        },
+        {
+          "id": "ver-release",
+          "text": "--release 锁语法 + API + 字节码",
+          "richContent": {
+            "kind": "code",
+            "lang": "bash",
+            "raw": "javac --release 21 Hello.java"
+          },
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "sugar",
+      "text": "JDK 25 的入门糖",
+      "children": [
+        {
+          "id": "sugar-jep",
+          "text": "JEP 512:紧凑源文件 + 实例 main",
+          "children": []
+        },
+        {
+          "id": "sugar-code",
+          "text": "不写 class 也能跑",
+          "richContent": {
+            "kind": "code",
+            "lang": "java",
+            "raw": "void main() {\n    IO.println(\"Hello, Java\");\n}"
+          },
+          "children": []
+        },
+        {
+          "id": "sugar-limit",
+          "text": "隐式类没有名字,工程里仍写 class",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

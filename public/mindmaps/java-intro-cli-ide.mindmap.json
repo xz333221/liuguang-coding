@@ -1,0 +1,199 @@
+{
+  "id": "root",
+  "text": "命令行与 IDE:编译运行两步",
+  "children": [
+    {
+      "id": "two",
+      "text": "两步走",
+      "children": [
+        {
+          "id": "two-javac",
+          "text": "编译:产出字节码",
+          "richContent": {
+            "kind": "code",
+            "lang": "bash",
+            "raw": "javac -d out Hello.java"
+          },
+          "children": []
+        },
+        {
+          "id": "two-java",
+          "text": "运行:按类名加载",
+          "richContent": {
+            "kind": "code",
+            "lang": "bash",
+            "raw": "java -cp out Hello"
+          },
+          "children": []
+        },
+        {
+          "id": "two-cp",
+          "text": "-cp 是「去哪儿找类」的清单",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pkg",
+      "text": "包名就是目录名",
+      "children": [
+        {
+          "id": "pkg-rule",
+          "text": "demo.Hello → out/demo/Hello.class",
+          "richContent": {
+            "kind": "code",
+            "lang": "bash",
+            "raw": "javac -d out src/demo/Hello.java\njava -cp out demo.Hello"
+          },
+          "children": []
+        },
+        {
+          "id": "pkg-cnf",
+          "text": "ClassNotFoundException 先查目录结构",
+          "children": []
+        },
+        {
+          "id": "pkg-name",
+          "text": "java 后跟类名,不是文件名",
+          "note": {
+            "text": "源码直跑是唯一例外,且要求 .java 在当前目录。"
+          },
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "direct",
+      "text": "源码直跑",
+      "children": [
+        {
+          "id": "direct-330",
+          "text": "JEP 330:JDK 11 单文件,内存编译",
+          "children": []
+        },
+        {
+          "id": "direct-458",
+          "text": "JEP 458:JDK 22 多文件",
+          "children": []
+        },
+        {
+          "id": "direct-limit",
+          "text": "练习用直跑,理解用两步,交付打 jar",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "jar",
+      "text": "打包与 -jar 的坑",
+      "children": [
+        {
+          "id": "jar-cmd",
+          "text": "打可执行 jar",
+          "richContent": {
+            "kind": "code",
+            "lang": "bash",
+            "raw": "jar --create --file app.jar --main-class demo.Hello -C out .\njava -jar app.jar"
+          },
+          "children": []
+        },
+        {
+          "id": "jar-cp",
+          "text": "-jar 忽略命令行 -cp,看 manifest Class-Path",
+          "children": []
+        },
+        {
+          "id": "jar-sep",
+          "text": "分隔符:Windows ; / Linux macOS :",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "flags",
+      "text": "值得记住的旗标",
+      "children": [
+        {
+          "id": "flags-release",
+          "text": "--release 锁语法 + 类库 + 字节码",
+          "children": []
+        },
+        {
+          "id": "flags-enc",
+          "text": "-encoding UTF-8 防 GBK 乱码",
+          "children": []
+        },
+        {
+          "id": "flags-preview",
+          "text": "--enable-preview 编译运行都要加",
+          "children": []
+        },
+        {
+          "id": "flags-rest",
+          "text": "-Xlint:all / -g / -Xmx512m",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "ide",
+      "text": "IDE 只是包了两步",
+      "children": [
+        {
+          "id": "ide-idea",
+          "text": "IDEA 2025.3 统一发行版,核心免费",
+          "children": []
+        },
+        {
+          "id": "ide-vscode",
+          "text": "VS Code + Extension Pack for Java",
+          "children": []
+        },
+        {
+          "id": "ide-eclipse",
+          "text": "Eclipse:老牌免费,存量不少",
+          "children": []
+        },
+        {
+          "id": "ide-jobs",
+          "text": "增量编译 / 索引 / 调试 / 重构",
+          "children": []
+        },
+        {
+          "id": "ide-10min",
+          "text": "how2j:仍值得花 10 分钟走命令行",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pitfalls",
+      "text": "四个坑",
+      "children": [
+        {
+          "id": "pit-gbk",
+          "text": "中文乱码:统一 UTF-8",
+          "children": []
+        },
+        {
+          "id": "pit-build",
+          "text": "没重编:查 Build Automatically 与 problems",
+          "note": {
+            "text": "how2j「Eclipse 找不到类」给的两个排查方向。"
+          },
+          "children": []
+        },
+        {
+          "id": "pit-cp",
+          "text": "IDE 与命令行 classpath 不一致",
+          "children": []
+        },
+        {
+          "id": "pit-preview",
+          "text": "预览旗标少一步就报错",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

@@ -7,6 +7,7 @@ order: 3
 level: 入门
 tags: [javac, classpath, jar, jshell, IDE]
 updated: 2026-11-14
+mindmap: java-intro-cli-ide.mindmap.json
 terms: ["classpath", "bytecode", "compile-time", "jdk"]
 sources:
   - title: javac · The Java Development Kit tool reference
@@ -33,9 +34,15 @@ sources:
   - title: Extension Pack for Java · VS Code Marketplace
     url: https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack
     note: VS Code 写 Java 的官方扩展包。
+  - title: how2j · 命令行编译运行
+    url: https://how2j.cn/k/helloworld/helloworld-commandline/168.html
+    note: 「工作中都用 IDE,仍值得花 10 分钟学命令行编译执行」的出处。
+  - title: how2j · Eclipse 找不到类
+    url: https://how2j.cn/k/helloworld/helloworld-class-not-found/1366.html
+    note: 自动构建(Build Automatically)与 problems 视图两个排查方向。
 ---
 
-结论先说:**命令行把「编译」和「运行」拆成两步,IDE 只是把这两步自动化了。** 先在命令行把这两步走通,你才会知道 IDE 的绿三角背后发生了什么,报错时也才知道该查哪一步。
+工作中大家基本都住在 IDE 里,how2j 在命令行一课里还是建议花十分钟,把最原始的命令行编译和执行学一遍。理由很直接:IDE 的绿三角只是把 `javac` 和 `java` 两步自动化了,亲手走一遍,报错时才知道该查哪一步。
 
 ## 编译和运行是两步
 
@@ -58,7 +65,16 @@ javac -d out src/demo/Hello.java   # 产出 out/demo/Hello.class
 java -cp out demo.Hello            # 包名 + 类名,一个都不能少
 ```
 
-**包名就是目录名**,这不是约定而是规则:`demo.Hello` 这个类,JVM 一定去 classpath 下的 `demo/Hello.class` 找。理解了这条,后面看到 `ClassNotFoundException` 就知道先查目录结构。
+包名就是目录名,这不是约定而是规则:`demo.Hello` 这个类,JVM 一定去 classpath 下的 `demo/Hello.class` 找。理解了这条,后面看到 `ClassNotFoundException` 就知道先查目录结构。
+
+```mermaid
+flowchart TD
+  A[javac -d out src/demo/Hello.java] --> B[out/demo/Hello.class]
+  B --> C{java -cp out 后面跟什么}
+  C -->|demo.Hello| D[去 out/demo/ 找 Hello.class,跑通]
+  C -->|Hello| E[去 out/ 根下找,找不到]
+  C -->|Hello.java| F[当前目录没有该源码,当成类名,报错]
+```
 
 ## java 后面跟的是类名,不是文件名
 
@@ -68,7 +84,7 @@ java -cp out demo.Hello            # 包名 + 类名,一个都不能少
 错误: 找不到或无法加载主类 Hello.java
 ```
 
-出现这个错,多半是你把文件路径当成了类名。记住:**`java` 后面跟的是类的全限定名**(`demo.Hello`),不是 `demo/Hello.class`,更不是 `Hello.java`。唯一的例外是上一篇的源码直跑模式 —— 那要求 `.java` 文件真的在当前目录里,否则 `java` 会把 `Hello.java` 当成类名去找,找不到就报上面这个错。
+出现这个错,多半是你把文件路径当成了类名。记住:`java` 后面跟的是类的全限定名(`demo.Hello`),不是 `demo/Hello.class`,更不是 `Hello.java`。唯一的例外是上一篇的源码直跑模式,那要求 `.java` 文件真的在当前目录里,否则 `java` 会把 `Hello.java` 当成类名去找,找不到就报上面这个错。
 
 对照一下:
 
@@ -81,7 +97,7 @@ java -cp out demo.Hello            # 包名 + 类名,一个都不能少
 
 ## 练习可以跳过编译:java Hello.java
 
-JDK 11 起(JEP 330),`java Hello.java` 会在内存里编译并执行,**不落 `.class`**;JDK 22 起(JEP 458)连多文件源码也能这样跑,入口文件里引用到的其他 `.java` 会一并编译。
+JDK 11 起(JEP 330),`java Hello.java` 会在内存里编译并执行,不落 `.class`;JDK 22 起(JEP 458)连多文件源码也能这样跑,入口文件里引用到的其他 `.java` 会一并编译。
 
 这条捷径适合练习与写小脚本,不适合交付:
 
@@ -89,7 +105,7 @@ JDK 11 起(JEP 330),`java Hello.java` 会在内存里编译并执行,**不落 `.
 - 要用外部 jar,还是得显式给 `-cp`;
 - 产物不落盘,没法交给别人运行。
 
-所以本站的建议是:**练习用直跑,理解用两步,交付打 jar。**
+所以本站的建议是:练习用直跑,理解用两步,交付打 jar。
 
 ## 打包与运行 jar
 
@@ -100,7 +116,7 @@ jar --create --file app.jar --main-class demo.Hello -C out .
 java -jar app.jar
 ```
 
-`--main-class` 写进 jar 的清单文件(manifest),`java -jar` 时 JVM 读它决定从哪个类开始。这里有一个真坑:**用了 `-jar`,命令行的 `-cp` 就被忽略**,classpath 改由 manifest 里的 `Class-Path` 决定。所以「`java -cp lib/* -jar app.jar` 为什么找不到依赖」的答案是:依赖要写进 manifest,或者干脆不用 `-jar`,改回 `java -cp "app.jar;lib/*" demo.Hello`(Windows 分隔符是 `;`,Linux 与 macOS 是 `:`)。
+`--main-class` 写进 jar 的清单文件(manifest),`java -jar` 时 JVM 读它决定从哪个类开始。这里有一个真坑:用了 `-jar`,命令行的 `-cp` 就被忽略,classpath 改由 manifest 里的 `Class-Path` 决定。所以「`java -cp lib/* -jar app.jar` 为什么找不到依赖」的答案是:依赖要写进 manifest,或者干脆不用 `-jar`,改回 `java -cp "app.jar;lib/*" demo.Hello`(Windows 分隔符是 `;`,Linux 与 macOS 是 `:`)。
 
 ## jshell:把 API 当草稿纸
 
@@ -113,7 +129,7 @@ $1 ==> [2, 4, 6]
 jshell> /exit
 ```
 
-学到新类时,先在 jshell 里敲两下看返回值,比读十遍文档记得牢。它也是后面第 7 章练 Stream 的顺手工具。
+学到新类时,先在 jshell 里敲两下看返回值,再回文档里对签名。它也是后面第 7 章练 Stream 的顺手工具。
 
 ## 值得记住的几个旗标
 
@@ -124,19 +140,19 @@ jshell> /exit
 | `-Xlint:all` | javac | 打开全部警告,学习期建议常开 |
 | `-g` | javac | 保留调试信息,断点调试需要 |
 | `-Xmx512m` | java | 限制堆内存上限,排查内存问题时常用 |
-| `--enable-preview` | 两者 | 启用预览特性,**编译和运行都要加**,少一步就报错 |
+| `--enable-preview` | 两者 | 启用预览特性,编译和运行都要加,少一步就报错 |
 
-`--release` 值得多说一句:它同时锁语法、类库与字节码版本,比老的 `-source` / `-target` 组合更可靠 —— 后者可能让你用上新 API 却编出旧 JVM 跑不了的产物。
+`--release` 值得多说一句:它同时锁语法、类库与字节码版本,比老的 `-source` / `-target` 组合更可靠。后者可能让你用上新 API,却编出旧 JVM 跑不了的产物。
 
 ## IDE 做了什么
 
 三个主流选择:
 
-- **IntelliJ IDEA**:2025.3 起社区版与旗舰版合并成一个统一发行版,Java / Kotlin 核心开发功能免费(含商用),Spring 深度支持、数据库工具等高级功能走 Ultimate 订阅,装完送 30 天试用。学 Java 装它就够;
-- **VS Code + Extension Pack for Java**:轻量,适合已经住在 VS Code 里的人;
-- **Eclipse**:老牌免费选项,公司里存量不少。
+- IntelliJ IDEA:2025.3 起社区版与旗舰版合并成一个统一发行版,Java / Kotlin 核心开发功能免费(含商用),Spring 深度支持、数据库工具等高级功能走 Ultimate 订阅,装完送 30 天试用。学 Java 装它就够;
+- VS Code + Extension Pack for Java:轻量,适合已经住在 VS Code 里的人;
+- Eclipse:老牌免费选项,公司里存量不少。
 
-IDE 替你做的事,拆开就是这几件:**增量编译**(改一个文件只编它)、**索引**(全项目跳转与补全)、**调试**(断点单步)、**重构**(改名改签名不漏)。它没有发明新步骤,只是把 `javac` 与 `java` 包了起来。
+IDE 替你做的事,拆开就是这几件:增量编译(改一个文件只编它)、索引(全项目跳转与补全)、调试(断点单步)、重构(改名改签名不漏)。它没有发明新步骤,只是把 `javac` 与 `java` 包了起来。
 
 对照表,左边的事右边都能做:
 
@@ -148,15 +164,13 @@ IDE 替你做的事,拆开就是这几件:**增量编译**(改一个文件只编
 | 指定语言级别 | `--release 21` | Project Structure → Language Level |
 | 加依赖 jar | `-cp` | 库配置 / Maven 依赖 |
 
-**项目里的 SDK 与语言级别,要和你命令行用的一致。** 两边不一致,就会出现「IDE 能跑命令行跑不了」的怪事。
+项目里的 SDK 与语言级别,要和你命令行用的一致。两边不一致,就会出现「IDE 能跑命令行跑不了」的怪事。
 
 ## 四个常见坑
 
-1. **中文乱码。** Windows 默认编码是 GBK,源码存成 UTF-8 而编译没指定编码,中文就花了。统一 `-encoding UTF-8`,编辑器也设成 UTF-8。
-2. **改了代码没重新编译。** 命令行模式下 `.class` 不会自己更新,跑的还是旧字节码;IDE 里则检查是否开了自动构建。
-3. **IDE 能跑,命令行不能跑。** 九成是 classpath 不一致:IDE 偷偷帮你加了依赖或模块路径。回到第一步,把 `-cp` 写全。
-4. **预览特性报错。** 编译加了 `--enable-preview`,运行忘了加(或反过来)。两步都要加,且 JDK 版本要一致。
+1. 中文乱码。Windows 默认编码是 GBK,源码存成 UTF-8 而编译没指定编码,中文就花了。统一 `-encoding UTF-8`,编辑器也设成 UTF-8。
+2. 改了代码没重新编译。命令行模式下 `.class` 不会自己更新,跑的还是旧字节码;IDE 里则检查自动构建有没有开。how2j 在「Eclipse 找不到类」一课里给过两个排查方向:一看 Build Automatically 是否勾选,二看 problems 视图里有没有报错。
+3. IDE 能跑,命令行不能跑。多半是 classpath 不一致:IDE 偷偷帮你加了依赖或模块路径。回到第一步,把 `-cp` 写全。
+4. 预览特性报错。编译加了 `--enable-preview`,运行忘了加,或反过来。两步都要加,且 JDK 版本要一致。
 
-## 一句话总结
-
-**javac 管「翻译成字节码」,java 管「按类名加载执行」,classpath 是两者之间的桥。** 把这条桥亲手搭一遍,IDE 就从黑盒变成了快捷键。
+命令行这条桥亲手搭一遍,IDE 就从黑盒变成了快捷键。下一篇是本章最后一篇,讲讲这 17 章的目录怎么读、按你的目标该从哪进。

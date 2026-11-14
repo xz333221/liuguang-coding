@@ -1,0 +1,194 @@
+{
+  "id": "root",
+  "text": "装 JDK:选构建、配变量、跑通",
+  "children": [
+    {
+      "id": "pick",
+      "text": "选发行版与版本",
+      "children": [
+        {
+          "id": "pick-tck",
+          "text": "同一规范,多家构建,都过 TCK",
+          "children": []
+        },
+        {
+          "id": "pick-temurin",
+          "text": "Temurin:本文默认推荐",
+          "note": {
+            "text": "Eclipse Adoptium 社区维护,免费,安装包齐全。"
+          },
+          "children": []
+        },
+        {
+          "id": "pick-nftc",
+          "text": "Oracle NFTC:免费商用,更新窗口有限",
+          "note": {
+            "text": "21 的免费更新到 2026-09,25 到 2028-09。停在老版本不付费 = 不再修漏洞。"
+          },
+          "children": []
+        },
+        {
+          "id": "pick-ver",
+          "text": "学习 25,公司跟公司定的 LTS",
+          "children": []
+        },
+        {
+          "id": "pick-feature",
+          "text": "特性版 27 不当主线",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "win",
+      "text": "Windows 两条路线",
+      "children": [
+        {
+          "id": "win-msi",
+          "text": "路线 A:.msi 勾 JAVA_HOME 与 PATH",
+          "children": []
+        },
+        {
+          "id": "win-zip",
+          "text": "路线 B:.zip 解压后手动配",
+          "richContent": {
+            "kind": "code",
+            "lang": "text",
+            "raw": "JAVA_HOME = C:\\Java\\jdk-25\nPath 追加 %JAVA_HOME%\\bin,移靠前"
+          },
+          "children": []
+        },
+        {
+          "id": "win-root",
+          "text": "JAVA_HOME 指根目录,不是 bin",
+          "children": []
+        },
+        {
+          "id": "win-user",
+          "text": "用户变量同名条目清掉,避免干扰",
+          "note": {
+            "text": "how2j 的提醒:系统变量上面的用户变量里不要有这两个。"
+          },
+          "children": []
+        },
+        {
+          "id": "win-classpath",
+          "text": "CLASSPATH 不用配,JDK 1.5 起",
+          "note": {
+            "text": "菜鸟教程:老教程里的 CLASSPATH 步骤直接跳过。"
+          },
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "unix",
+      "text": "macOS 与 Linux",
+      "children": [
+        {
+          "id": "unix-mac",
+          "text": ".pkg 安装,java_home 管多版本",
+          "richContent": {
+            "kind": "code",
+            "lang": "bash",
+            "raw": "/usr/libexec/java_home -V\nexport JAVA_HOME=$(/usr/libexec/java_home -v 25)"
+          },
+          "children": []
+        },
+        {
+          "id": "unix-zshrc",
+          "text": "export 写进 ~/.zshrc",
+          "children": []
+        },
+        {
+          "id": "unix-linux",
+          "text": "仓库包或 tar.gz 解压 /opt/jdk-25",
+          "children": []
+        },
+        {
+          "id": "unix-alt",
+          "text": "update-alternatives:一个开关决定谁生效",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "text": "验收与多版本",
+      "children": [
+        {
+          "id": "check-cmds",
+          "text": "重开终端后验收",
+          "richContent": {
+            "kind": "code",
+            "lang": "bash",
+            "raw": "java --version\njavac --version\nwhere java"
+          },
+          "children": []
+        },
+        {
+          "id": "check-first",
+          "text": "where java 第一行必须是新装的",
+          "children": []
+        },
+        {
+          "id": "check-layers",
+          "text": "三层:终端 PATH / 构建 JAVA_HOME / IDE SDK",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "first",
+      "text": "第一个程序",
+      "children": [
+        {
+          "id": "first-run",
+          "text": "java Hello.java:内存编译,不落 .class",
+          "richContent": {
+            "kind": "code",
+            "lang": "bash",
+            "raw": "java Hello.java"
+          },
+          "children": []
+        },
+        {
+          "id": "first-25",
+          "text": "JDK 25 可换紧凑写法再跑一遍",
+          "children": []
+        },
+        {
+          "id": "first-next",
+          "text": "两步走留给下一篇",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pitfalls",
+      "text": "四个坑",
+      "children": [
+        {
+          "id": "pit-path",
+          "text": "旧安装抢 PATH,javapath 挪后",
+          "children": []
+        },
+        {
+          "id": "pit-home",
+          "text": "JAVA_HOME 指错层级",
+          "children": []
+        },
+        {
+          "id": "pit-term",
+          "text": "改完变量没重开终端",
+          "children": []
+        },
+        {
+          "id": "pit-arch",
+          "text": "下错架构:Apple Silicon 选 aarch64",
+          "children": []
+        }
+      ]
+    }
+  ]
+}
