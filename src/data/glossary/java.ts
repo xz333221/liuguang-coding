@@ -1,7 +1,123 @@
 import type { Term } from './types'
 
-/** Java:相等性这条线上的名词。 */
+/** Java:环境与运行这条线(JDK / JRE / JVM / 字节码),加上相等性与工程建模两条线。 */
 export const javaTerms: Term[] = [
+  {
+    id: 'jdk',
+    term: 'JDK',
+    en: 'Java Development Kit',
+    group: 'java',
+    plain: '写 Java 要装的那一整套:编译器、打包与诊断工具,外加一份能跑程序的运行时。',
+    formal:
+      'Java SE 的开发工具集,含 javac、jar、javadoc、jshell、jlink 等工具与一份完整运行时;自 JDK 11 起不再单独发布 JRE。',
+    misread: 'JDK 不是"一个编译器",而是工具加运行时的合集;只跑别人给的 jar 也仍然需要其中那份运行时。',
+    related: ['jre', 'jvm'],
+    see: 'java/install-jdk',
+    source: {
+      title: 'JDK 25 Installation Guide · Overview',
+      url: 'https://docs.oracle.com/en/java/javase/25/install/overview-jdk-installation.html',
+    },
+  },
+  {
+    id: 'jre',
+    term: 'JRE',
+    en: 'Java Runtime Environment',
+    group: 'java',
+    plain: '只够"跑"Java 程序的那一层:虚拟机加核心类库,不带编译器。',
+    formal:
+      'JVM 与 Java SE 核心类库的组合,提供执行已编译字节码所需的最小环境;JDK 11 之后不再作为独立安装包发布,可用 jlink 从 JDK 裁出定制运行时。',
+    misread: '下载页上早已没有单独的 JRE;老教程里"装 JRE"的说法,今天对应装一份 JDK 或 jlink 产物。',
+    related: ['jdk', 'jvm'],
+    see: 'java/what-is-java',
+    source: {
+      title: 'jlink · The Java Development Kit tool reference',
+      url: 'https://docs.oracle.com/en/java/javase/25/docs/specs/man/jlink.html',
+    },
+  },
+  {
+    id: 'jvm',
+    term: 'JVM',
+    en: 'Java Virtual Machine',
+    aliases: ['Java 虚拟机'],
+    group: 'java',
+    plain: '真正执行字节码的那台"假机器":每个操作系统一份实现,所以同一份 .class 到处能跑。',
+    formal:
+      'Java 虚拟机规范定义的抽象机器:加载并校验 .class 字节码,解释或即时编译执行,并管理内存与垃圾回收;HotSpot、OpenJ9 等是具体实现。',
+    misread: '"一次编写,到处运行"说的是字节码跨平台;JVM 本身恰恰是每个平台各一份,并不跨平台。',
+    related: ['bytecode', 'jit', 'jdk'],
+    see: 'java/what-is-java',
+    source: {
+      title: 'Java 虚拟机规范(Java SE 25)',
+      url: 'https://docs.oracle.com/javase/specs/jvms/se25/html/index.html',
+    },
+  },
+  {
+    id: 'bytecode',
+    term: '字节码',
+    en: 'bytecode',
+    aliases: ['class 文件'],
+    group: 'java',
+    plain: 'javac 把 .java 翻译成的中间指令,装在 .class 文件里;JVM 只认它,不认源码。',
+    formal:
+      'Java 虚拟机规范定义的指令与常量池格式,以 .class 文件承载;与平台无关,由 JVM 加载、校验后执行。',
+    related: ['jvm', 'compile-time'],
+    see: 'java/cli-and-ide',
+    source: {
+      title: 'Java 虚拟机规范 · 第 4 章 The class File Format',
+      url: 'https://docs.oracle.com/javase/specs/jvms/se25/html/jvms-4.html',
+    },
+  },
+  {
+    id: 'classpath',
+    term: 'classpath',
+    en: 'class path',
+    aliases: ['类路径'],
+    group: 'java',
+    plain: '告诉 JVM 去哪儿找 .class 和 jar 的一张清单;"找不到类"多半是这张清单没写对。',
+    formal:
+      'java / javac 定位类与资源的搜索路径,由 -cp / -classpath 或 CLASSPATH 环境变量给出;JDK 9 起另有模块路径 --module-path 与之并列。',
+    misread: 'classpath 不是"项目目录"一个值,而是一串目录与 jar;分隔符 Windows 用 ;,Linux 与 macOS 用 :。',
+    related: ['bytecode', 'jdk'],
+    see: 'java/cli-and-ide',
+    source: {
+      title: 'java · The Java Development Kit tool reference',
+      url: 'https://docs.oracle.com/en/java/javase/25/docs/specs/man/java.html',
+    },
+  },
+  {
+    id: 'jit',
+    term: 'JIT',
+    en: 'just-in-time compilation',
+    aliases: ['即时编译'],
+    group: 'java',
+    plain: 'JVM 边跑边把热点字节码编成机器码:开头解释执行图启动快,跑热了再编译图执行快。',
+    formal:
+      '即时编译:运行时把频繁执行的字节码编译为本地机器码并缓存;HotSpot 以分层编译(C1 / C2)组织,与 AOT 提前编译相对。',
+    misread: '"Java 是解释执行所以慢"只说对了开头;热点代码最终跑的是编译后的机器码。',
+    related: ['jvm', 'bytecode', 'runtime'],
+    see: 'java/what-is-java',
+    source: {
+      title: 'Java Hotspot Virtual Machine Performance Enhancements',
+      url: 'https://docs.oracle.com/en/java/javase/25/vm/java-hotspot-virtual-machine-performance-enhancements.html',
+    },
+  },
+  {
+    id: 'lts',
+    term: 'LTS',
+    en: 'long-term support',
+    aliases: ['长期支持版'],
+    group: 'java',
+    plain: '厂商愿意多修几年的版本:17、21、25 这种;生产上一般只跟 LTS。',
+    formal:
+      'Long-Term Support:对特定 Java SE 版本提供延长更新的发布策略;LTS 每两年一个(17 → 21 → 25 → 29),其间每六个月一个非 LTS 特性版。',
+    misread: 'LTS 不等于免费:Oracle JDK 的免费更新窗口由 NFTC 许可单独规定,与是不是 LTS 是两回事。',
+    related: ['jdk'],
+    see: 'java/install-jdk',
+    source: {
+      title: 'Oracle Java SE Support Roadmap',
+      url: 'https://www.oracle.com/java/technologies/java-se-support-roadmap.html',
+    },
+  },
   {
     id: 'primitive-type',
     term: '基本类型',
