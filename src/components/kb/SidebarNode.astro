@@ -45,11 +45,18 @@ const own = topics.filter((topic) => topicNode(topic) === node.id)
 // 编号已经把层级说清了,缩进只做轻提示;240px 的侧栏再深就挤掉名字了
 const indent = Math.min(depth, 4)
 const collapsible = children.length > 0
+// 一节只有一个知识点时,「节名 + 文章名」两行说的是同一件事,还一长一短;
+// 合成一行:直接链到文章,名字用文章标题。
+const onlyTopic = !collapsible && number && own.length === 1 ? own[0] : undefined
 const onPath = openPath.has(node.id)
 // 方向层(没有编号)保持展开,17 章默认收起,不然侧栏一屏放不下
 const open = !number || onPath
 const panelId = `lg-nav-${scope}-${node.id}`
 const toggleLabel = `${open ? '收起' : '展开'} ${number ? `${number} ` : ''}${node.name}`
+const rowHref = onlyTopic ? topicPath(onlyTopic) : categoryPath(node.id)
+const rowName = onlyTopic ? onlyTopic.data.title : node.name
+const rowActive = onlyTopic ? currentTopic === onlyTopic.id || current === node.id : current === node.id
+const rowTitle = number ? `${number} ${rowName}` : rowName
 ---
 
 <div class="lg-nav-branch" data-nav-node={node.id} data-nav-path={onPath} data-open={open}>
@@ -83,20 +90,26 @@ const toggleLabel = `${open ? '收起' : '展开'} ${number ? `${number} ` : ''}
       )
     }
     <a
-      href={categoryPath(node.id)}
+      href={rowHref}
       class="lg-nav-item lg-nav-item--node"
-      data-active={current === node.id}
+      data-active={rowActive}
       data-empty={count === 0}
-      title={number ? `${number} ${node.name}` : node.name}
+      title={rowTitle}
     >
       {number ? <span class="lg-nav-num">{number}</span> : null}
-      <span class="min-w-0 flex-1 truncate">{node.name}</span>
-      {count > 0 ? <span class="lg-nav-count">{count}</span> : <span class="lg-badge">筹备中</span>}
+      <span class="min-w-0 flex-1 truncate">{rowName}</span>
+      {
+        onlyTopic ? null : count > 0 ? (
+          <span class="lg-nav-count">{count}</span>
+        ) : (
+          <span class="lg-badge">筹备中</span>
+        )
+      }
     </a>
   </div>
 
   {
-    (collapsible || own.length > 0) && (
+    (collapsible || (own.length > 0 && !onlyTopic)) && (
       <div class="lg-nav-panel" id={collapsible ? panelId : undefined} hidden={collapsible && !open}>
         {own.length > 0 && (
           <ul class="flex flex-col gap-0.5">
