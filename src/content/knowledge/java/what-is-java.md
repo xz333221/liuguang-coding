@@ -93,7 +93,7 @@ java Hello         # 运行:启动 JVM,加载 Hello.class,从 main 开始执行
 4. 执行。解释器逐条执行字节码;某段代码跑热了,JIT 把它编译成本地机器码缓存起来,之后直接跑机器码。
 
 ```mermaid
-flowchart LR
+flowchart TD
   S[Hello.java 源码] -->|javac 编译| B[Hello.class 字节码]
   B --> V[JVM 加载与校验]
   V --> I[解释器逐条执行]

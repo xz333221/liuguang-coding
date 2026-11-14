@@ -455,12 +455,14 @@
   }
 
   .lg-mermaid {
+    position: relative;
     margin: 1.25rem 0;
     padding: 1.1rem 1.25rem;
     overflow-x: auto;
     border: 1px solid var(--line);
     border-radius: 18px;
     background: var(--panel);
+    cursor: zoom-in;
   }
 
   .lg-mermaid svg {
@@ -492,6 +494,80 @@
     margin-top: 0.75rem;
     font-size: 0.85rem;
     color: var(--muted);
+  }
+
+  .lg-mermaid-expand {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.7rem;
+    padding: 0.22rem 0.6rem;
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    color: var(--muted);
+    font-size: 0.72rem;
+    transition: color 0.18s;
+    cursor: pointer;
+  }
+
+  .lg-mermaid-expand:hover {
+    color: var(--ink);
+  }
+
+  .lg-mermaid-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    padding: 1.5rem;
+    background: color-mix(in srgb, var(--canvas) 92%, transparent);
+    backdrop-filter: blur(6px);
+  }
+
+  .lg-mermaid-stage {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    border: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .lg-mermaid-stage-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.76rem;
+  }
+
+  .lg-mermaid-close {
+    padding: 0.2rem 0.6rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    transition: color 0.18s;
+    cursor: pointer;
+  }
+
+  .lg-mermaid-close:hover {
+    color: var(--ink);
+  }
+
+  .lg-mermaid-stage-canvas {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    overflow: auto;
+    padding: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .lg-mermaid-overlay {
+      padding: 0;
+    }
   }
 
   .lg-prose blockquote {
