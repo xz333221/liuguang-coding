@@ -1,5 +1,5 @@
 ---
-import { catalog } from '../../data/catalog'
+import { catalog, pathOf } from '../../data/catalog'
 import { totalLevels } from '../../data/game'
 import { terms } from '../../data/glossary'
 import { countByCategory, getTopics, glossaryPath, withBase } from '../../lib/content'
@@ -12,12 +12,16 @@ interface Props {
   currentTopic?: string
   /** 不在分类树里的独立页面(目前只有 glossary 与 game) */
   page?: string
+  /** 桌面 aside 与移动 details 各渲染一份,DOM id 用它区分 */
+  scope: string
 }
 
-const { current, currentTopic, page } = Astro.props
+const { current, currentTopic, page, scope } = Astro.props
 const topics = await getTopics()
 const counts = countByCategory(topics)
 const roots = catalog.filter((item) => item.status !== 'hidden')
+// 正在读的那条链(方向 → 章 → 节)始终展开,折叠记忆只作用于其它章节
+const openPath = new Set(current ? [...pathOf(current).map((item) => item.id), current] : [])
 ---
 
 <nav aria-label="分类导航" class="flex flex-col gap-0.5">
@@ -29,6 +33,8 @@ const roots = catalog.filter((item) => item.status !== 'hidden')
         counts={counts}
         current={current}
         currentTopic={currentTopic}
+        openPath={openPath}
+        scope={scope}
       />
     ))
   }
@@ -53,3 +59,60 @@ const roots = catalog.filter((item) => item.status !== 'hidden')
     <span class="lg-nav-count">{totalLevels()}</span>
   </a>
 </nav>
+
+<script>
+  // 章节折叠:服务端已经给了默认开合,这里只做两件事 ——
+  // 按 localStorage 覆盖(当前路径除外),以及点箭头时就地开合并记住。
+  const KEY = 'lg-kb-nav-open'
+
+  function readStored(): Record<string, boolean> {
+    try {
+      const raw = JSON.parse(localStorage.getItem(KEY) ?? '{}')
+      return raw && typeof raw === 'object' ? raw : {}
+    } catch {
+      return {}
+    }
+  }
+
+  const stored = readStored()
+  const branches = Array.from(document.querySelectorAll<HTMLElement>('[data-nav-node]'))
+
+  function setOpen(branch: HTMLElement, open: boolean) {
+    const button = branch.querySelector<HTMLButtonElement>(':scope > .lg-nav-row .lg-nav-toggle')
+    const panel = branch.querySelector<HTMLElement>(':scope > .lg-nav-panel')
+    if (!button || !panel) return
+    const name = branch.querySelector('.lg-nav-item--node')?.getAttribute('title') ?? ''
+    branch.dataset.open = String(open)
+    button.setAttribute('aria-expanded', String(open))
+    button.setAttribute('aria-label', `${open ? '收起' : '展开'} ${name}`)
+    button.title = open ? '收起' : '展开'
+    panel.hidden = !open
+  }
+
+  for (const branch of branches) {
+    const id = branch.dataset.navNode
+    if (!id || branch.dataset.navPath === 'true') continue
+    if (typeof stored[id] === 'boolean') setOpen(branch, stored[id])
+  }
+
+  document.addEventListener('click', (event) => {
+    const target = event.target instanceof Element ? event.target : null
+    const button = target?.closest<HTMLButtonElement>('.lg-nav-toggle')
+    if (!button || button.classList.contains('lg-nav-toggle--void')) return
+    const branch = button.closest<HTMLElement>('[data-nav-node]')
+    const id = branch?.dataset.navNode
+    if (!branch || !id) return
+
+    const open = branch.dataset.open !== 'true'
+    // 同一页有两份侧栏,同一个节点要一起开合
+    for (const other of branches) {
+      if (other.dataset.navNode === id) setOpen(other, open)
+    }
+    stored[id] = open
+    try {
+      localStorage.setItem(KEY, JSON.stringify(stored))
+    } catch {
+      // 隐私模式下写不进去,本次开合仍然生效
+    }
+  })
+</script>

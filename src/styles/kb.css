@@ -115,9 +115,8 @@
     font-weight: 500;
   }
 
-  /* 章节树:缩进由 --nav-depth 驱动(组件里已把深度截到 4),真正的层级靠编号表达 */
+  /* 章节树:缩进由行上的 --nav-depth 驱动(组件里已把深度截到 4),真正的层级靠编号表达 */
   .lg-nav-item--node {
-    padding-left: calc(0.75rem + var(--nav-depth, 0) * 0.5rem);
     font-size: 0.82rem;
   }
 
@@ -128,6 +127,62 @@
 
   .lg-nav-item--node[data-active='true'] {
     opacity: 1;
+  }
+
+  /* 折叠:一个节点 = 一行(开关 + 链接)+ 一块子树。缩进落在行上,
+     开关占掉的宽度从链接的左内边距里扣,名字才不会比原来右移一截。 */
+  .lg-nav-branch,
+  .lg-nav-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .lg-nav-panel[hidden] {
+    display: none;
+  }
+
+  .lg-nav-row {
+    display: flex;
+    align-items: center;
+    padding-left: calc(var(--nav-depth, 0) * 0.5rem);
+  }
+
+  .lg-nav-row .lg-nav-item--node {
+    flex: 1;
+    padding-left: 0.25rem;
+  }
+
+  .lg-nav-toggle {
+    display: flex;
+    height: 1.05rem;
+    width: 1.05rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.15rem;
+    border-radius: 6px;
+    color: var(--muted);
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .lg-nav-toggle:hover {
+    background: var(--surface);
+    color: var(--ink);
+  }
+
+  .lg-nav-toggle svg {
+    transition: transform 0.18s ease;
+  }
+
+  /* 只转自己这一行的箭头,别把展开的子孙章节一起转了 */
+  .lg-nav-branch[data-open='true'] > .lg-nav-row .lg-nav-toggle svg {
+    transform: rotate(90deg);
+  }
+
+  /* 没有子章节的节点留一个同样宽的空位,名字才和上下对齐 */
+  .lg-nav-toggle--void {
+    pointer-events: none;
   }
 
   .lg-nav-num {
