@@ -3,7 +3,7 @@ import Breadcrumbs from '../../components/kb/Breadcrumbs.astro'
 import MindMapPanel from '../../components/kb/MindMapPanel.vue'
 import SourceList from '../../components/kb/SourceList.astro'
 import Toc from '../../components/kb/Toc.astro'
-import { findCategory, parentOf } from '../../data/catalog'
+import { findCategory, pathOf } from '../../data/catalog'
 import type { ArticleContext } from '../../lib/chat'
 import {
   categoryPath,
@@ -11,6 +11,7 @@ import {
   getTopics,
   neighboursOf,
   render,
+  topicNode,
   topicPath,
   withBase,
 } from '../../lib/content'
@@ -51,15 +52,12 @@ const article: ArticleContext = {
 // 结构化数据(JSON-LD):文章信息 + 面包屑。
 // frontmatter 里只有 updated 一个时间字段,datePublished 与 dateModified 同用它。
 const pageUrl = new URL(topicPath(topic), Astro.site).href
-const parent = parentOf(topic.data.category)
+// 文章挂在章节点上(没声明 node 就是分类本身),面包屑要整条祖先链
+const trail = pathOf(topicNode(topic))
+const crumbCategory = trail.at(-1) ?? meta
 const crumbs = [
   { name: '首页', url: new URL(withBase(), Astro.site).href },
-  // 叶子分类(如 python)上面还有父分类(编程语言),面包屑跟着可见导航的层级走
-  ...(parent ? [{ name: parent.name, url: new URL(categoryPath(parent.id), Astro.site).href }] : []),
-  {
-    name: meta?.name ?? topic.data.category,
-    url: new URL(categoryPath(topic.data.category), Astro.site).href,
-  },
+  ...trail.map((node) => ({ name: node.name, url: new URL(categoryPath(node.id), Astro.site).href })),
   { name: topic.data.title, url: pageUrl },
 ]
 const jsonLd = JSON.stringify({
@@ -92,15 +90,15 @@ const jsonLd = JSON.stringify({
 <DocsLayout
   title={`${topic.data.title} · ${meta?.name ?? ''} · 流光 coding 知识库`}
   description={topic.data.summary}
-  category={topic.data.category}
+  category={topicNode(topic)}
   topic={topic.id}
   article={article}
   ogType="article"
   jsonLd={jsonLd}
 >
   <Breadcrumbs
-    categoryId={topic.data.category}
-    categoryName={meta?.name ?? topic.data.category}
+    categoryId={crumbCategory?.id ?? topic.data.category}
+    categoryName={crumbCategory?.name ?? topic.data.category}
     title={topic.data.title}
   />
 

@@ -2,6 +2,7 @@
 title: MyBatis 与 MyBatis-Plus:谁写 SQL,谁不写
 summary: 'MyBatis 只做一件事:把 SQL 还给你,再帮你把结果塞进对象。MyBatis-Plus 不是另一个框架,它在 MyBatis 上补了"不写 SQL 的那一半" —— 单表 CRUD、条件构造器、分页、自动填充、逻辑删除。'
 category: java
+node: java-persistence-mybatis
 order: 4
 level: 入门
 tags: [MyBatis, MyBatis-Plus, 持久层, SQL 映射, 面试高频]

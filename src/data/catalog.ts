@@ -7,17 +7,27 @@
 //
 // 知识点通过 frontmatter 的 category 指向叶子分类的 id(如 python / ai / algorithm),
 // 父分类(如 lang)只用来分组和做落地页。
+//
+// 章节树(numbered):java 的 children 是一棵 14 章的大纲(见 javaOutline.ts),文章再用
+// frontmatter 的 `node` 指到具体章节点。这类节点有两个特别之处:
+//   · 编号由树位置推导(outlineNumber),不写进数据;
+//   · 「筹备中」由子树里的文章数推导,不是看 status —— 所以大纲节点一律 active,
+//     补上文章后徽标自动消失。方向级的 soon(前端/后端那些)仍照旧声明。
+
+import { javaChapters } from './javaOutline'
 
 export type CategoryStatus = 'active' | 'soon' | 'hidden'
 
 export interface Category {
   id: string
   name: string
-  /** 一句话说明,首页卡片与分类页都会用 */
-  intro: string
+  /** 一句话说明,首页卡片与分类页都会用;章节树的叶子节点可以省略 */
+  intro?: string
   status: CategoryStatus
   /** 置灰时给的提示语 */
   note?: string
+  /** true = 我的 children 从 1 开始编号(章 → 节 → 小节),子孙继承这个编号 */
+  numbered?: boolean
   children?: Category[]
 }
 
@@ -37,8 +47,10 @@ export const catalog: Category[] = [
       {
         id: 'java',
         name: 'Java',
-        intro: '从对象与引用的比较规则开始,再到 Maven、Spring Boot、MyBatis 这些工程基础,最后看 DDD 怎么组织模型。',
+        intro: '按 14 章走完:环境与语法 → 面向对象 → 异常、泛型、集合 → 反射、IO、并发、JVM → Maven、Spring、MyBatis 与 DDD。',
         status: 'active',
+        numbered: true,
+        children: javaChapters,
       },
     ],
   },
@@ -106,7 +118,48 @@ export function leafCategories(list: Category[] = catalog): Category[] {
   return visibleCategories(list).filter(isLeaf)
 }
 
-/** 父级分类(如 lang),用来做面包屑 */
-export function parentOf(id: string, list: Category[] = catalog): Category | undefined {
-  return list.find((item) => item.children?.some((child) => child.id === id))
+/** 从根到该节点的祖先链(不含自己,跳过 hidden),用来做面包屑 */
+export function pathOf(id: string, list: Category[] = catalog): Category[] {
+  const walk = (nodes: Category[], trail: Category[]): Category[] | null => {
+    for (const node of nodes) {
+      if (node.status === 'hidden') continue
+      if (node.id === id) return trail
+      const hit = walk(node.children ?? [], [...trail, node])
+      if (hit) return hit
+    }
+    return null
+  }
+  return walk(list, []) ?? []
+}
+
+/** 该节点及其全部后代的 id(含自己)—— 章节落地页按这个把子孙章节的文章一起收上来 */
+export function subtreeIds(id: string, list: Category[] = catalog): string[] {
+  const node = findCategory(id, list)
+  return node ? visibleCategories([node]).map((item) => item.id) : []
+}
+
+/**
+ * 节点在编号大纲里的位置(如 [3,2,1]);不在任何 numbered 子树里则 undefined。
+ * 编号只数可见节点 —— hidden 的兄弟不该占号。
+ */
+export function outlineRank(id: string, list: Category[] = catalog): number[] | undefined {
+  const walk = (nodes: Category[], prefix: number[] | null): number[] | undefined => {
+    let index = 0
+    for (const node of nodes) {
+      if (node.status === 'hidden') continue
+      index += 1
+      const mine = prefix ? [...prefix, index] : null
+      if (node.id === id) return mine ?? undefined
+      // numbered 的节点让 children 从 1 重新开始;否则把自己的编号往下传
+      const hit = walk(node.children ?? [], node.numbered ? [] : mine)
+      if (hit) return hit
+    }
+    return undefined
+  }
+  return walk(list, null)
+}
+
+/** 展示用编号('3.2.1');不在编号大纲里返回 '' */
+export function outlineNumber(id: string, list: Category[] = catalog): string {
+  return (outlineRank(id, list) ?? []).join('.')
 }

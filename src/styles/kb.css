@@ -115,14 +115,37 @@
     font-weight: 500;
   }
 
-  .lg-nav-item--child {
-    padding-left: 1.6rem;
-    font-size: 0.85rem;
+  /* 章节树:缩进由 --nav-depth 驱动(组件里已把深度截到 4),真正的层级靠编号表达 */
+  .lg-nav-item--node {
+    padding-left: calc(0.75rem + var(--nav-depth, 0) * 0.5rem);
+    font-size: 0.82rem;
+  }
+
+  /* 还没有内容的章节:压暗,但仍可点进去看打算怎么写 */
+  .lg-nav-item--node[data-empty='true'] {
+    opacity: 0.6;
+  }
+
+  .lg-nav-item--node[data-active='true'] {
+    opacity: 1;
+  }
+
+  .lg-nav-num {
+    flex-shrink: 0;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
   }
 
   .lg-nav-item--topic {
-    padding-left: 2.4rem;
-    font-size: 0.82rem;
+    padding-left: calc(1.15rem + var(--nav-depth, 0) * 0.5rem);
+    font-size: 0.78rem;
+  }
+
+  /* 侧栏里的「筹备中」比卡片上小一号,不然 240px 宽挤不下章节名 */
+  .lg-nav-item .lg-badge {
+    padding: 0.05rem 0.35rem;
+    font-size: 0.6rem;
   }
 
   .lg-nav-count {

@@ -20,6 +20,12 @@ const knowledge = defineCollection({
     summary: z.string(),
     /** 叶子分类 id,见 src/data/catalog.ts */
     category: z.string(),
+    /**
+     * 章节点 id(见 src/data/javaOutline.ts),决定这篇文章挂在目录树的哪一节。
+     * 不填就挂在 category 那一层。写错的 id 会让构建失败。
+     * 注意:它**不影响地址** —— 地址仍是 /<category>/<文件名>/。
+     */
+    node: z.string().optional(),
     /** 同分类内的排序,小的在前 */
     order: z.number().default(100),
     level: z.enum(['入门', '进阶', '深入']).default('入门'),

@@ -1,0 +1,77 @@
+---
+// 目录树的一个节点(方向 / 章 / 节 / 小节),递归渲染。
+//
+// 编号不在数据里,由父节点往下传:java 标了 numbered,它的 children 就是 1..14,
+// 再往下拼成 3.1 / 3.1.1。空节点(子树里 0 篇文章)显示「筹备中」并压暗 ——
+// 补上文章后自动恢复,不用回来改数据。
+import type { Category } from '../../data/catalog'
+import type { Topic } from '../../lib/content'
+import { categoryPath, countFor, topicNode, topicPath } from '../../lib/content'
+import SidebarNode from './SidebarNode.astro'
+
+interface Props {
+  node: Category
+  /** 全部文章(已按大纲排好序) */
+  topics: Topic[]
+  counts: Record<string, number>
+  current?: string
+  currentTopic?: string
+  /** 展示编号,如 '3.1';方向级节点不传 */
+  number?: string
+  depth?: number
+}
+
+const { node, topics, counts, current, currentTopic, number, depth = 0 } = Astro.props
+const count = countFor(node.id, counts)
+const children = (node.children ?? []).filter((child) => child.status !== 'hidden')
+const own = topics.filter((topic) => topicNode(topic) === node.id)
+// 编号已经把层级说清了,缩进只做轻提示;240px 的侧栏再深就挤掉名字了
+const indent = Math.min(depth, 4)
+---
+
+<a
+  href={categoryPath(node.id)}
+  class="lg-nav-item lg-nav-item--node"
+  style={`--nav-depth:${indent}`}
+  data-active={current === node.id}
+  data-empty={count === 0}
+  title={number ? `${number} ${node.name}` : node.name}
+>
+  {number ? <span class="lg-nav-num">{number}</span> : null}
+  <span class="min-w-0 flex-1 truncate">{node.name}</span>
+  {count > 0 ? <span class="lg-nav-count">{count}</span> : <span class="lg-badge">筹备中</span>}
+</a>
+
+{
+  own.length > 0 && (
+    <ul class="flex flex-col gap-0.5">
+      {own.map((topic) => (
+        <li>
+          <a
+            href={topicPath(topic)}
+            class="lg-nav-item lg-nav-item--topic"
+            style={`--nav-depth:${Math.min(depth + 1, 4)}`}
+            data-active={currentTopic === topic.id}
+            title={topic.data.title}
+          >
+            <span class="min-w-0 flex-1 truncate">{topic.data.title}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+{
+  children.map((child, index) => (
+    <SidebarNode
+      node={child}
+      topics={topics}
+      counts={counts}
+      current={current}
+      currentTopic={currentTopic}
+      number={node.numbered ? String(index + 1) : number ? `${number}.${index + 1}` : undefined}
+      depth={depth + 1}
+    />
+  ))
+}

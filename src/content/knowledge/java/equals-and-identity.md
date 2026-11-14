@@ -2,6 +2,7 @@
 title: == 与 equals:比身份还是比内容
 summary: '== 比的是身份,equals 默认也只看身份,只有被重写之后才比内容。String 常量池与 Integer 缓存会把这条规则变得更绕,但也更好记。'
 category: java
+node: java-oop-equals
 order: 1
 level: 入门
 tags: [equals, hashCode, 常量池, 面试高频]

@@ -2,6 +2,7 @@
 title: Maven:一个 pom.xml 说清的三件事
 summary: 'Maven 只做三件事:按约定找代码、按坐标取依赖、按生命周期跑插件。pom.xml 里的标签都挂在这三条上,记住这三条就不用背配置。'
 category: java
+node: java-build-maven
 order: 2
 level: 入门
 tags: [Maven, 构建, 依赖管理, 多模块, 面试高频]

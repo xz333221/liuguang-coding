@@ -1,5 +1,5 @@
 ---
-import { parentOf } from '../../data/catalog'
+import { pathOf } from '../../data/catalog'
 import { categoryPath, withBase } from '../../lib/content'
 
 interface Props {
@@ -9,22 +9,21 @@ interface Props {
 }
 
 const { categoryId, categoryName, title } = Astro.props
-const parent = parentOf(categoryId)
+// 章节树有三层,面包屑要整条祖先链都带上(编程语言 / Java / 3 面向对象 / 3.2 比较规则)
+const trail = pathOf(categoryId)
 ---
 
 <nav aria-label="面包屑" class="mb-6 flex flex-wrap items-center gap-2 text-[0.78rem] text-muted">
   <a href={withBase()} class="hover:text-ink">知识库</a>
-  <span aria-hidden="true" class="text-line-strong">/</span>
   {
-    parent ? (
+    trail.map((node) => (
       <>
-        <a href={categoryPath(parent.id)} class="hover:text-ink">
-          {parent.name}
-        </a>
         <span aria-hidden="true" class="text-line-strong">/</span>
+        <a href={categoryPath(node.id)} class="hover:text-ink">{node.name}</a>
       </>
-    ) : null
+    ))
   }
+  <span aria-hidden="true" class="text-line-strong">/</span>
   <a href={categoryPath(categoryId)} class="hover:text-ink">{categoryName}</a>
   {
     title ? (

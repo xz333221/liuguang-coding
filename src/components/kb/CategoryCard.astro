@@ -3,7 +3,7 @@ import type { CategoryStatus } from '../../data/catalog'
 
 interface Props {
   name: string
-  intro: string
+  intro?: string
   href: string
   status: CategoryStatus
   count: number
@@ -19,7 +19,7 @@ const soon = status === 'soon'
     <span>{name}</span>
     {soon ? <span class="lg-badge">筹备中</span> : null}
   </div>
-  <p class="lg-card-intro">{intro}</p>
+  {intro ? <p class="lg-card-intro">{intro}</p> : null}
   <p class="lg-card-meta">
     {count > 0 ? `${count} 个知识点` : '还没有知识点'}
     {note ? ` · ${note}` : ''}

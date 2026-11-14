@@ -3,7 +3,7 @@ import Breadcrumbs from '../../components/kb/Breadcrumbs.astro'
 import CategoryCard from '../../components/kb/CategoryCard.astro'
 import ResourceList from '../../components/kb/ResourceList.astro'
 import TopicRow from '../../components/kb/TopicRow.astro'
-import { findCategory, visibleCategories } from '../../data/catalog'
+import { findCategory, outlineNumber, visibleCategories } from '../../data/catalog'
 import { resourcesOf } from '../../data/resources'
 import {
   categoryPath,
@@ -12,11 +12,12 @@ import {
   formatDate,
   getTopics,
   topicPath,
+  topicsUnder,
 } from '../../lib/content'
 import DocsLayout from '../../layouts/DocsLayout.astro'
 
 export function getStaticPaths() {
-  // 父分类和子分类都要能出页(编程语言 → Python / Java)
+  // 父分类、子分类与章节树的每一节都要能出页(编程语言 → Java → 3 面向对象 → 3.1 基础)
   return visibleCategories().map((item) => ({ params: { category: item.id } }))
 }
 
@@ -25,37 +26,54 @@ if (!meta) throw new Error(`未知分类:${Astro.params.category}`)
 
 const topics = await getTopics()
 const counts = countByCategory(topics)
-const list = topics.filter((topic) => topic.data.category === meta.id)
-const children = (meta.children ?? []).filter((child) => child.status !== 'hidden')
+// 章节页要把子孙节里的文章一起收上来(3 面向对象 → 3.2.1 那篇)
+const list = topicsUnder(meta.id, topics)
+const count = countFor(meta.id, counts)
+const children = (meta.children ?? [])
+  .filter((child) => child.status !== 'hidden')
+  .map((child) => {
+    const number = outlineNumber(child.id)
+    const childCount = countFor(child.id, counts)
+    return {
+      ...child,
+      count: childCount,
+      label: number ? `${number} ${child.name}` : child.name,
+      // 空章节按「筹备中」显示,补上文章后自动恢复
+      status: childCount === 0 ? ('soon' as const) : child.status,
+    }
+  })
 
 // 空分类时给一个去处:已经有内容的第一个分类
 const suggested = topics[0]
 const resourceGroup = resourcesOf(meta.id)
+const description = meta.intro ?? `${meta.name} —— 流光 coding 知识库`
 ---
 
 <DocsLayout
   title={`${meta.name} · 流光 coding 知识库`}
-  description={meta.intro}
+  description={description}
   category={meta.id}
 >
   <Breadcrumbs categoryId={meta.id} categoryName={meta.name} />
 
-  <h1 class="text-[1.75rem] leading-[1.3] font-medium tracking-tight md:text-[2rem]">{meta.name}</h1>
-  <p class="mt-4 max-w-[34em] text-[0.95rem] leading-relaxed text-muted">{meta.intro}</p>
-  {meta.status === 'soon' ? <span class="lg-badge mt-4 inline-block">筹备中</span> : null}
+  <h1 class="text-[1.75rem] leading-[1.3] font-medium tracking-tight md:text-[2rem]">
+    {outlineNumber(meta.id) ? `${outlineNumber(meta.id)} ${meta.name}` : meta.name}
+  </h1>
+  {meta.intro ? <p class="mt-4 max-w-[34em] text-[0.95rem] leading-relaxed text-muted">{meta.intro}</p> : null}
+  {meta.status === 'soon' || count === 0 ? <span class="lg-badge mt-4 inline-block">筹备中</span> : null}
 
   {
     children.length > 0 ? (
       <section class="mt-10">
-        <h2 class="text-sm text-muted">子分类</h2>
+        <h2 class="text-sm text-muted">{meta.numbered ? '章节目录' : '子分类'}</h2>
         <div class="mt-4 grid gap-4 sm:grid-cols-2">
           {children.map((child) => (
             <CategoryCard
-              name={child.name}
+              name={child.label}
               intro={child.intro}
               href={categoryPath(child.id)}
               status={child.status}
-              count={countFor(child.id, counts)}
+              count={child.count}
               note={child.note}
             />
           ))}

@@ -2,6 +2,7 @@
 title: DDD:先把「下单」关进一个限界上下文里
 summary: 'DDD 不是几张分层目录,而是三件事:用一套业务语言说话、让聚合根守住不变式、把领域层从框架里摘出来。分层只是这三件事的结果。'
 category: java
+node: java-ddd-bounded-context
 order: 5
 level: 进阶
 tags: [DDD, 限界上下文, 聚合根, 值对象, 分层]
