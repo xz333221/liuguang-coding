@@ -470,6 +470,30 @@
     margin: 0 auto;
   }
 
+  .lg-figure {
+    margin: 1.25rem 0;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--canvas);
+  }
+
+  .lg-figure svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .lg-figure text {
+    font-family: inherit;
+  }
+
+  .lg-figure figcaption {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
   .lg-prose blockquote {
     padding: 0.25rem 0 0.25rem 1.1rem;
     border-left: 2px solid var(--accent);

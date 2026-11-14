@@ -29,11 +29,41 @@ sources:
 
 Java 有两层身份:一门编程语言,和一套让这门语言跑起来的平台。你写的 `.java` 文件操作系统并不认识,它先被编译成字节码,再交给 JVM 这台「假机器」执行。JDK、JRE、JVM 不是三个并列的东西,而是一层包一层:
 
-```text
-JDK = JRE + 开发工具(javac、jar、javadoc、jshell、jlink …)
-JRE = JVM + 核心类库(java.lang、java.util、java.io …)
-JVM = 加载、校验、执行字节码的那台虚拟机
-```
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 430" role="img" aria-label="JDK 包含 JRE,JRE 包含 JVM 的三层包含关系图">
+    <rect x="6" y="6" width="748" height="418" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <text x="32" y="48" font-size="20" font-weight="700" fill="var(--ink)">JDK</text>
+    <text x="88" y="48" font-size="13" fill="var(--muted)">JRE + 开发工具</text>
+    <g font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--muted)" text-anchor="middle">
+      <rect x="430" y="28" width="52" height="26" rx="13" fill="var(--canvas)" stroke="var(--line)" />
+      <text x="456" y="45">javac</text>
+      <rect x="490" y="28" width="38" height="26" rx="13" fill="var(--canvas)" stroke="var(--line)" />
+      <text x="509" y="45">jar</text>
+      <rect x="536" y="28" width="66" height="26" rx="13" fill="var(--canvas)" stroke="var(--line)" />
+      <text x="569" y="45">javadoc</text>
+      <rect x="610" y="28" width="58" height="26" rx="13" fill="var(--canvas)" stroke="var(--line)" />
+      <text x="639" y="45">jshell</text>
+      <rect x="676" y="28" width="50" height="26" rx="13" fill="var(--canvas)" stroke="var(--line)" />
+      <text x="701" y="45">jlink</text>
+    </g>
+    <rect x="38" y="74" width="684" height="318" rx="16" fill="var(--canvas)" stroke="var(--line-strong)" />
+    <text x="64" y="116" font-size="20" font-weight="700" fill="var(--ink)">JRE</text>
+    <text x="120" y="116" font-size="13" fill="var(--muted)">JVM + 核心类库</text>
+    <g font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--muted)" text-anchor="middle">
+      <rect x="452" y="96" width="80" height="26" rx="13" fill="var(--panel)" stroke="var(--line)" />
+      <text x="492" y="113">java.lang</text>
+      <rect x="540" y="96" width="80" height="26" rx="13" fill="var(--panel)" stroke="var(--line)" />
+      <text x="580" y="113">java.util</text>
+      <rect x="628" y="96" width="66" height="26" rx="13" fill="var(--panel)" stroke="var(--line)" />
+      <text x="661" y="113">java.io</text>
+    </g>
+    <rect x="70" y="142" width="620" height="218" rx="14" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="380" y="228" font-size="22" font-weight="700" fill="var(--accent)" text-anchor="middle">JVM</text>
+    <text x="380" y="260" font-size="14" fill="var(--ink)" text-anchor="middle">加载、校验、执行字节码</text>
+    <text x="380" y="288" font-size="12" fill="var(--muted)" text-anchor="middle">类加载器 · 执行引擎(解释器 + JIT) · 内存管理与 GC</text>
+  </svg>
+  <figcaption>写成等式:JDK = JRE + 开发工具,JRE = JVM + 核心类库。</figcaption>
+</figure>
 
 ## 三个名字各管什么
 

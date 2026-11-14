@@ -17,7 +17,7 @@ import type { Element, Nodes, Text } from 'hast'
 import { linkEntries, type LinkEntry } from '../data/glossary'
 
 /** 这些标签底下的一切都不标注 */
-const SKIP_TAGS = new Set(['code', 'pre', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'script', 'style'])
+const SKIP_TAGS = new Set(['code', 'pre', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'script', 'style', 'svg'])
 
 const ASCII_WORD = /[A-Za-z0-9_]/
 
