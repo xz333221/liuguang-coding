@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "方法入门:参数、返回值",
+  "children": [
+    {
+      "id": "def",
+      "text": "定义方法",
+      "children": [
+        {
+          "id": "def-parts",
+          "text": "返回类型 + 名字 + 参数列表 + return",
+          "richContent": { "kind": "code", "lang": "java", "raw": "static int add(int a, int b) {\n    return a + b;\n}" },
+          "children": []
+        },
+        { "id": "def-void", "text": "void 不交结果;static 现阶段先加上", "children": [] },
+        { "id": "def-return", "text": "有返回类型则每条路径都要 return", "children": [] }
+      ]
+    },
+    {
+      "id": "pass",
+      "text": "只有值传递(重点)",
+      "children": [
+        { "id": "pass-prim", "text": "基本类型抄值,改副本不影响原件", "children": [] },
+        { "id": "pass-ref", "text": "引用类型抄引用:改对象内容看得见", "children": [] },
+        { "id": "pass-rebind", "text": "形参重新赋值,外面看不见", "children": [] }
+      ]
+    },
+    {
+      "id": "overload",
+      "text": "重载",
+      "children": [
+        { "id": "overload-rule", "text": "同名不同参数列表;只返回值不同不算", "children": [] }
+      ]
+    },
+    {
+      "id": "scope",
+      "text": "作用域",
+      "children": [
+        { "id": "scope-local", "text": "局部变量活在方法里,花括号也划界", "children": [] }
+      ]
+    },
+    {
+      "id": "rec",
+      "text": "递归",
+      "children": [
+        { "id": "rec-exit", "text": "要有出口,太深 StackOverflowError", "children": [] }
+      ]
+    }
+  ]
+}

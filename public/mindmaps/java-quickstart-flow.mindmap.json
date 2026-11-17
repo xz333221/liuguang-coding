@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "流程控制:分支与循环",
+  "children": [
+    {
+      "id": "if",
+      "text": "if 分岔",
+      "children": [
+        { "id": "if-bool", "text": "条件必须是 boolean,从上往下命中即止", "children": [] },
+        { "id": "if-brace", "text": "一行也写花括号,缩进不决定归属", "children": [] }
+      ]
+    },
+    {
+      "id": "switch",
+      "text": "switch 多选",
+      "children": [
+        { "id": "switch-old", "text": "老式不写 break 会穿透", "children": [] },
+        {
+          "id": "switch-new",
+          "text": "JDK 14 箭头写法:不穿透,可当表达式",
+          "richContent": { "kind": "code", "lang": "java", "raw": "case 1, 2, 3, 4, 5 -> \"工作日\";" },
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "loop",
+      "text": "循环",
+      "children": [
+        { "id": "loop-for", "text": "知道圈数用 for 三段式", "children": [] },
+        { "id": "loop-each", "text": "遍历数组优先 for-each", "children": [] },
+        { "id": "loop-while", "text": "只知停止条件用 while;先问何时变 false", "children": [] }
+      ]
+    },
+    {
+      "id": "jump",
+      "text": "break / continue",
+      "children": [
+        { "id": "jump-break", "text": "break 结束整个循环", "children": [] },
+        { "id": "jump-cont", "text": "continue 跳过本轮", "children": [] },
+        { "id": "jump-layer", "text": "只作用于自己那一层", "children": [] }
+      ]
+    },
+    {
+      "id": "offby1",
+      "text": "边界差一",
+      "children": [
+        { "id": "offby1-rule", "text": "长度 n,下标 0~n-1,条件写 i < n", "children": [] }
+      ]
+    }
+  ]
+}

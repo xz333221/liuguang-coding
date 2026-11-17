@@ -1,0 +1,60 @@
+{
+  "id": "root",
+  "text": "变量与基本类型",
+  "children": [
+    {
+      "id": "var",
+      "text": "变量:先定义后使用",
+      "children": [
+        {
+          "id": "var-def",
+          "text": "int age = 18; 类型 + 名字 + 初始值",
+          "richContent": { "kind": "code", "lang": "java", "raw": "int age = 18;\nage = 20; // 重新赋值不写类型" },
+          "children": []
+        },
+        {
+          "id": "var-assign",
+          "text": "= 是赋值,基本类型赋值是抄值",
+          "children": []
+        },
+        {
+          "id": "var-var",
+          "text": "var 推断类型,只用于局部变量",
+          "note": { "text": "推断完类型就定死,不是动态类型。" },
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "types",
+      "text": "八种基本类型",
+      "children": [
+        { "id": "types-int", "text": "整数:byte / short / int / long", "children": [] },
+        { "id": "types-float", "text": "浮点:float / double", "children": [] },
+        { "id": "types-char", "text": "char 单引号,boolean 只有 true/false", "children": [] },
+        {
+          "id": "types-suffix",
+          "text": "long 加 L,float 加 f",
+          "richContent": { "kind": "code", "lang": "java", "raw": "long n = 1400000000L;\nfloat f = 9.9f;" },
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "trap",
+      "text": "两个坑",
+      "children": [
+        { "id": "trap-overflow", "text": "整数溢出绕回:int 最大值 + 1 变最小值", "children": [] },
+        { "id": "trap-float", "text": "0.1 + 0.2 != 0.3,算钱用 BigDecimal", "children": [] }
+      ]
+    },
+    {
+      "id": "ref",
+      "text": "引用类型认个脸",
+      "children": [
+        { "id": "ref-str", "text": "String、数组是引用类型", "children": [] },
+        { "id": "ref-null", "text": "可以为 null,对着 null 调方法抛 NPE", "children": [] }
+      ]
+    }
+  ]
+}

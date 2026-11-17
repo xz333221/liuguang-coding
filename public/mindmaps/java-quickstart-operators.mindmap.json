@@ -1,0 +1,58 @@
+{
+  "id": "root",
+  "text": "运算符与求值顺序",
+  "children": [
+    {
+      "id": "arith",
+      "text": "算术",
+      "children": [
+        { "id": "arith-div", "text": "整数除法截断:7 / 2 = 3", "children": [] },
+        { "id": "arith-mod", "text": "% 取余,符号跟被除数", "children": [] },
+        { "id": "arith-zero", "text": "int 除零抛异常,double 除零得 Infinity/NaN", "children": [] }
+      ]
+    },
+    {
+      "id": "inc",
+      "text": "++ 分前后",
+      "children": [
+        {
+          "id": "inc-code",
+          "text": "在前先加再用,在后先用再加",
+          "richContent": { "kind": "code", "lang": "java", "raw": "int b = a++; // 用旧值\nint d = ++c; // 用新值" },
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "logic",
+      "text": "逻辑与短路",
+      "children": [
+        { "id": "logic-short", "text": "&& 左 false 不算右,|| 左 true 不算右", "children": [] },
+        {
+          "id": "logic-guard",
+          "text": "挡 null、挡除零,顺序不能反",
+          "richContent": { "kind": "code", "lang": "java", "raw": "user != null && user.getName()..." },
+          "children": []
+        },
+        { "id": "logic-ternary", "text": "三目:条件 ? 值1 : 值2", "children": [] }
+      ]
+    },
+    {
+      "id": "promote",
+      "text": "类型提升",
+      "children": [
+        { "id": "promote-int", "text": "byte/short/char 运算先变 int", "children": [] },
+        { "id": "promote-cast", "text": "大赋小要强转,(int)3.9 = 3 直接砍", "children": [] },
+        { "id": "promote-compound", "text": "复合赋值自带强转:s += 1 能编译", "children": [] }
+      ]
+    },
+    {
+      "id": "order",
+      "text": "求值顺序",
+      "children": [
+        { "id": "order-str", "text": "字符串 + 从左往右拼", "children": [] },
+        { "id": "order-paren", "text": "优先级不背,拿不准加括号", "children": [] }
+      ]
+    }
+  ]
+}

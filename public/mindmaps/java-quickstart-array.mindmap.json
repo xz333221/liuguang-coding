@@ -1,0 +1,56 @@
+{
+  "id": "root",
+  "text": "数组",
+  "children": [
+    {
+      "id": "def",
+      "text": "定义与初始化",
+      "children": [
+        {
+          "id": "def-two",
+          "text": "new int[5] 拿默认值 / {…} 列元素",
+          "richContent": { "kind": "code", "lang": "java", "raw": "int[] a = new int[5];\nint[] b = {90, 85, 77};" },
+          "children": []
+        },
+        { "id": "def-fixed", "text": "长度定了不能变,可变用 ArrayList", "children": [] },
+        { "id": "def-default", "text": "默认值:0 / 0.0 / false / null", "children": [] }
+      ]
+    },
+    {
+      "id": "index",
+      "text": "下标从 0 开始",
+      "children": [
+        { "id": "index-last", "text": "最后一个是 length - 1", "children": [] },
+        { "id": "index-oob", "text": "越界运行时抛 ArrayIndexOutOfBoundsException", "children": [] }
+      ]
+    },
+    {
+      "id": "loop",
+      "text": "遍历与打印",
+      "children": [
+        { "id": "loop-each", "text": "只取值用 for-each,不会越界", "children": [] },
+        { "id": "loop-print", "text": "打印内容用 Arrays.toString", "children": [] }
+      ]
+    },
+    {
+      "id": "ref",
+      "text": "引用语义(重点)",
+      "children": [
+        { "id": "ref-assign", "text": "b = a 抄引用,改 b[0] 则 a[0] 也变", "children": [] },
+        {
+          "id": "ref-copy",
+          "text": "独立副本用 Arrays.copyOf",
+          "richContent": { "kind": "code", "lang": "java", "raw": "int[] c = Arrays.copyOf(a, a.length);" },
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "multi",
+      "text": "多维数组",
+      "children": [
+        { "id": "multi-grid", "text": "int[][] 存表格,套两层循环", "children": [] }
+      ]
+    }
+  ]
+}
