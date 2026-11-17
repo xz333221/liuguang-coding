@@ -126,7 +126,7 @@
     },
     {
       "id": "sugar",
-      "text": "JDK 25 的入门糖",
+      "text": "JDK 25 的简化写法",
       "children": [
         {
           "id": "sugar-jep",

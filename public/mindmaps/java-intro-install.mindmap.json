@@ -166,7 +166,7 @@
     },
     {
       "id": "pitfalls",
-      "text": "四个坑",
+      "text": "常见的坑",
       "children": [
         {
           "id": "pit-path",

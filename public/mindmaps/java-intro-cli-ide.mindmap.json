@@ -111,7 +111,7 @@
     },
     {
       "id": "flags",
-      "text": "值得记住的旗标",
+      "text": "值得记住的参数",
       "children": [
         {
           "id": "flags-release",
@@ -156,7 +156,7 @@
         },
         {
           "id": "ide-jobs",
-          "text": "增量编译 / 索引 / 调试 / 重构",
+          "text": "自动补全 / 自动编译 / 断点调试",
           "children": []
         },
         {
@@ -168,7 +168,7 @@
     },
     {
       "id": "pitfalls",
-      "text": "四个坑",
+      "text": "常见问题",
       "children": [
         {
           "id": "pit-gbk",
@@ -177,10 +177,7 @@
         },
         {
           "id": "pit-build",
-          "text": "没重编:查 Build Automatically 与 problems",
-          "note": {
-            "text": "how2j「Eclipse 找不到类」给的两个排查方向。"
-          },
+          "text": "没重编:命令行要重新 javac,IDE 查自动构建",
           "children": []
         },
         {
@@ -190,7 +187,7 @@
         },
         {
           "id": "pit-preview",
-          "text": "预览旗标少一步就报错",
+          "text": "预览参数编译运行都要加",
           "children": []
         }
       ]

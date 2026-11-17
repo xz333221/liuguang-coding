@@ -86,7 +86,7 @@
       "children": [
         {
           "id": "read-concl",
-          "text": "先读开头结论段",
+          "text": "按目标选入口,不必从头硬啃",
           "children": []
         },
         {
@@ -137,7 +137,7 @@
     },
     {
       "id": "dont",
-      "text": "四个不要",
+      "text": "学习建议",
       "children": [
         {
           "id": "dont-api",
