@@ -1,0 +1,80 @@
+{
+  "id": "root",
+  "text": "正则表达式:Pattern / Matcher",
+  "children": [
+    {
+      "id": "base",
+      "text": "基本规则",
+      "children": [
+        {
+          "id": "base-esc",
+          "text": "Java 字符串反斜杠双写",
+          "children": []
+        },
+        {
+          "id": "base-cls",
+          "text": "\\d \\w \\s 与 [abc] [a-z] [^...]",
+          "children": []
+        },
+        {
+          "id": "base-qty",
+          "text": "* + ? {n} {n,m};或 |;锚 ^ $",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pm",
+      "text": "Pattern / Matcher",
+      "children": [
+        {
+          "id": "pm-match",
+          "text": "matches 全匹配,find 找子串",
+          "children": []
+        },
+        {
+          "id": "pm-group",
+          "text": "括号分组,group(n) 取内容",
+          "children": []
+        },
+        {
+          "id": "pm-cache",
+          "text": "Pattern 编译一次复用",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "greedy",
+      "text": "贪婪与非贪婪",
+      "children": [
+        {
+          "id": "greedy-q",
+          "text": "默认贪婪,加 ? 到最近边界",
+          "children": []
+        },
+        {
+          "id": "greedy-warn",
+          "text": "避免量词嵌套,回溯爆炸",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "str",
+      "text": "字符串方法",
+      "children": [
+        {
+          "id": "str-re",
+          "text": "replaceAll / replaceFirst / split 走正则",
+          "children": []
+        },
+        {
+          "id": "str-lit",
+          "text": "replace 是字面量",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

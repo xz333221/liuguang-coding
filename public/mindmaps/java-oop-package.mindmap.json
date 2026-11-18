@@ -1,0 +1,85 @@
+{
+  "id": "root",
+  "text": "包与作用域",
+  "children": [
+    {
+      "id": "pkg",
+      "text": "包",
+      "children": [
+        {
+          "id": "pkg-fqn",
+          "text": "全限定名解决重名",
+          "children": []
+        },
+        {
+          "id": "pkg-dir",
+          "text": "包名对应目录,倒置域名全小写",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "import",
+      "text": "import",
+      "children": [
+        {
+          "id": "import-sugar",
+          "text": "只是编译期简写",
+          "children": []
+        },
+        {
+          "id": "import-lang",
+          "text": "java.lang 与同包自动可见",
+          "children": []
+        },
+        {
+          "id": "import-star",
+          "text": "通配不含子包",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "scope",
+      "text": "四档权限",
+      "children": [
+        {
+          "id": "scope-1",
+          "text": "private:本类",
+          "children": []
+        },
+        {
+          "id": "scope-2",
+          "text": "包级:本类 + 同包",
+          "children": []
+        },
+        {
+          "id": "scope-3",
+          "text": "protected:+ 跨包子类",
+          "children": []
+        },
+        {
+          "id": "scope-4",
+          "text": "public:任何地方",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "rule",
+      "text": "原则",
+      "children": [
+        {
+          "id": "rule-small",
+          "text": "能小不大,暴露即承诺",
+          "children": []
+        },
+        {
+          "id": "rule-class",
+          "text": "顶层类只能 public 或包级",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

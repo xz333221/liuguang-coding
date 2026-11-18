@@ -1,0 +1,60 @@
+{
+  "id": "root",
+  "text": "静态字段和静态方法",
+  "children": [
+    {
+      "id": "field",
+      "text": "静态字段",
+      "children": [
+        {
+          "id": "field-one",
+          "text": "全类一份,描述公共状态",
+          "children": []
+        },
+        {
+          "id": "field-access",
+          "text": "用类名访问,别用实例",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "text": "静态方法",
+      "children": [
+        {
+          "id": "method-no",
+          "text": "没有 this,摸不到实例字段,没有多态",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "const",
+      "text": "常量",
+      "children": [
+        {
+          "id": "const-def",
+          "text": "public static final + 全大写",
+          "children": []
+        },
+        {
+          "id": "const-ref",
+          "text": "final 锁引用不锁对象内容",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "block",
+      "text": "static 代码块",
+      "children": [
+        {
+          "id": "block-once",
+          "text": "类加载时执行一次",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "id": "root",
+  "text": "内部类",
+  "children": [
+    {
+      "id": "inner",
+      "text": "Inner Class",
+      "children": [
+        {
+          "id": "inner-bind",
+          "text": "依附外部实例:outer.new Inner()",
+          "children": []
+        },
+        {
+          "id": "inner-this",
+          "text": "Outer.this 访问外部,能摸 private",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "anon",
+      "text": "匿名类",
+      "children": [
+        {
+          "id": "anon-new",
+          "text": "new 接口() { 实现 } 定义即实例化",
+          "children": []
+        },
+        {
+          "id": "anon-file",
+          "text": "编译为 Outer$1.class",
+          "children": []
+        },
+        {
+          "id": "anon-lambda",
+          "text": "单方法接口优先 Lambda",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "static",
+      "text": "Static Nested Class",
+      "children": [
+        {
+          "id": "static-free",
+          "text": "独立存在,不依附外部实例",
+          "children": []
+        },
+        {
+          "id": "static-access",
+          "text": "只能访问外部 private 静态成员",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pick",
+      "text": "选型",
+      "children": [
+        {
+          "id": "pick-1",
+          "text": "优先顶层类;其次静态内部类",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

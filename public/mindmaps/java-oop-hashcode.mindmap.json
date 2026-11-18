@@ -1,0 +1,76 @@
+{
+  "id": "root",
+  "text": "hashCode 与 equals 的契约",
+  "children": [
+    {
+      "id": "how",
+      "text": "HashMap 认人两步",
+      "children": [
+        {
+          "id": "how-1",
+          "text": "hashCode 定位桶",
+          "children": []
+        },
+        {
+          "id": "how-2",
+          "text": "桶内 equals 逐个比对",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "contract",
+      "text": "契约",
+      "children": [
+        {
+          "id": "contract-must",
+          "text": "equals 相等 → hashCode 必须相等",
+          "children": []
+        },
+        {
+          "id": "contract-should",
+          "text": "不等对象哈希尽量不等;冲突允许",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "bug",
+      "text": "只覆写 equals 的后果",
+      "children": [
+        {
+          "id": "bug-null",
+          "text": "Map 存得进取不出,返回 null",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "write",
+      "text": "正确写法",
+      "children": [
+        {
+          "id": "write-fields",
+          "text": "与 equals 同一组字段,Objects.hash",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "text": "延伸",
+      "children": [
+        {
+          "id": "tips-cap",
+          "text": "预估容量减少扩容",
+          "children": []
+        },
+        {
+          "id": "tips-mut",
+          "text": "可变对象别当 key",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

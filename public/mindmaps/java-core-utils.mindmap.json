@@ -1,0 +1,71 @@
+{
+  "id": "root",
+  "text": "常用工具类",
+  "children": [
+    {
+      "id": "math",
+      "text": "Math",
+      "children": [
+        {
+          "id": "math-api",
+          "text": "abs / max / min / pow / sqrt",
+          "children": []
+        },
+        {
+          "id": "math-rad",
+          "text": "三角函数用弧度",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "random",
+      "text": "Random",
+      "children": [
+        {
+          "id": "random-seed",
+          "text": "给种子可复现",
+          "children": []
+        },
+        {
+          "id": "random-tl",
+          "text": "多线程 ThreadLocalRandom;安全 SecureRandom",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "hex",
+      "text": "HexFormat(JDK 17)",
+      "children": [
+        {
+          "id": "hex-conv",
+          "text": "byte[] ↔ 十六进制字符串",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "objects",
+      "text": "Objects",
+      "children": [
+        {
+          "id": "objects-3",
+          "text": "equals / hash / requireNonNull",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "arrays",
+      "text": "Arrays",
+      "children": [
+        {
+          "id": "arrays-api",
+          "text": "toString / sort / fill / copyOf / binarySearch",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

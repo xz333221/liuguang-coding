@@ -1,0 +1,71 @@
+{
+  "id": "root",
+  "text": "模块",
+  "children": [
+    {
+      "id": "why",
+      "text": "为什么",
+      "children": [
+        {
+          "id": "why-dep",
+          "text": "jar 不管依赖;rt.jar 太大",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "info",
+      "text": "module-info.java",
+      "children": [
+        {
+          "id": "info-req",
+          "text": "requires 声明依赖,java.base 自动",
+          "children": []
+        },
+        {
+          "id": "info-exp",
+          "text": "exports 开放包,public 不再全球可见",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "run",
+      "text": "编译运行",
+      "children": [
+        {
+          "id": "run-cmd",
+          "text": "--module-path + --module",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "jlink",
+      "text": "jmod 与 jlink",
+      "children": [
+        {
+          "id": "jlink-jmod",
+          "text": ".jmod 不能运行,是打包中间产物",
+          "children": []
+        },
+        {
+          "id": "jlink-jre",
+          "text": "jlink 按需裁出精简 JRE",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "use",
+      "text": "业务项目",
+      "children": [
+        {
+          "id": "use-now",
+          "text": "大多仍跑 classpath,认识即可",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

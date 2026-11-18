@@ -1,0 +1,70 @@
+{
+  "id": "root",
+  "text": "抽象类",
+  "children": [
+    {
+      "id": "def",
+      "text": "abstract 方法 / 类",
+      "children": [
+        {
+          "id": "def-sig",
+          "text": "只有签名没有实现",
+          "children": []
+        },
+        {
+          "id": "def-new",
+          "text": "抽象类不能 new",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "sub",
+      "text": "子类义务",
+      "children": [
+        {
+          "id": "sub-all",
+          "text": "实现全部抽象方法才是具体类",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "mix",
+      "text": "可以有具体成员",
+      "children": [
+        {
+          "id": "mix-field",
+          "text": "字段、构造方法、具体方法都能有",
+          "children": []
+        },
+        {
+          "id": "mix-tpl",
+          "text": "公共流程在父类,变化步骤留子类",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "use",
+      "text": "何时用",
+      "children": [
+        {
+          "id": "use-1",
+          "text": "复用公共状态 / 逻辑",
+          "children": []
+        },
+        {
+          "id": "use-2",
+          "text": "强制子类实现某些方法",
+          "children": []
+        },
+        {
+          "id": "use-3",
+          "text": "只定契约不带状态 → 用接口",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

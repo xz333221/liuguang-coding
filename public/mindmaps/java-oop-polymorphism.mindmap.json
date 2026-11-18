@@ -1,0 +1,71 @@
+{
+  "id": "root",
+  "text": "多态",
+  "children": [
+    {
+      "id": "override",
+      "text": "覆写 Override",
+      "children": [
+        {
+          "id": "override-sig",
+          "text": "父子类签名完全相同",
+          "children": []
+        },
+        {
+          "id": "override-anno",
+          "text": "加 @Override 让编译器把关",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "dynamic",
+      "text": "动态分派",
+      "children": [
+        {
+          "id": "dynamic-rule",
+          "text": "父类引用调方法,执行实际类型的版本",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "power",
+      "text": "威力",
+      "children": [
+        {
+          "id": "power-open",
+          "text": "新增子类不改基于父类的旧代码",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "object",
+      "text": "覆写 Object 方法",
+      "children": [
+        {
+          "id": "object-3",
+          "text": "toString / equals / hashCode",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "bound",
+      "text": "边界",
+      "children": [
+        {
+          "id": "bound-field",
+          "text": "字段没有多态",
+          "children": []
+        },
+        {
+          "id": "bound-static",
+          "text": "static 方法没有多态",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "id": "root",
+  "text": "类与实例:class 和 instance",
+  "children": [
+    {
+      "id": "tpl",
+      "text": "class 是模板,instance 是实物",
+      "children": [
+        {
+          "id": "tpl-new",
+          "text": "new 一次造一个,字段各自独立",
+          "children": []
+        },
+        {
+          "id": "tpl-ref",
+          "text": "变量装的是引用,不是对象本身",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "field",
+      "text": "字段",
+      "children": [
+        {
+          "id": "field-def",
+          "text": "有默认值:0 / false / null",
+          "children": []
+        },
+        {
+          "id": "field-local",
+          "text": "局部变量没有默认值",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "method",
+      "text": "实例方法",
+      "children": [
+        {
+          "id": "method-call",
+          "text": "通过实例调用,用自己的字段",
+          "children": []
+        },
+        {
+          "id": "method-this",
+          "text": "this 指向当前实例",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "enc",
+      "text": "封装",
+      "children": [
+        {
+          "id": "enc-priv",
+          "text": "字段 private,操作走 public 方法",
+          "children": []
+        },
+        {
+          "id": "enc-check",
+          "text": "检查逻辑写在 setter / 构造方法里",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "null",
+      "text": "引用与 null",
+      "children": [
+        {
+          "id": "null-share",
+          "text": "s2 = s1 指向同一对象",
+          "children": []
+        },
+        {
+          "id": "null-npe",
+          "text": "对 null 调方法 → NullPointerException",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

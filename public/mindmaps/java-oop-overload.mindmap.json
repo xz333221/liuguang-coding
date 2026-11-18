@@ -1,0 +1,70 @@
+{
+  "id": "root",
+  "text": "方法重载",
+  "children": [
+    {
+      "id": "def",
+      "text": "同名 + 不同参数列表",
+      "children": [
+        {
+          "id": "def-ret",
+          "text": "只有返回值不同不算重载",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pick",
+      "text": "编译器挑选顺序",
+      "children": [
+        {
+          "id": "pick-1",
+          "text": "精确匹配",
+          "children": []
+        },
+        {
+          "id": "pick-2",
+          "text": "基本类型拓宽",
+          "children": []
+        },
+        {
+          "id": "pick-3",
+          "text": "装箱 / 拆箱",
+          "children": []
+        },
+        {
+          "id": "pick-4",
+          "text": "可变参数",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pit",
+      "text": "两个坑",
+      "children": [
+        {
+          "id": "pit-null",
+          "text": "null 匹配多版本 → 引用不明确,显式转型",
+          "children": []
+        },
+        {
+          "id": "pit-sem",
+          "text": "各版本语义要一致",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "vs",
+      "text": "重载 ≠ 覆写",
+      "children": [
+        {
+          "id": "vs-time",
+          "text": "重载编译期选版本;覆写运行期换实现",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "id": "root",
+  "text": "继承",
+  "children": [
+    {
+      "id": "extends",
+      "text": "extends 复用父类",
+      "children": [
+        {
+          "id": "extends-single",
+          "text": "单继承,根是 Object",
+          "children": []
+        },
+        {
+          "id": "extends-priv",
+          "text": "private 摸不到,protected 向子类开放",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "super",
+      "text": "构造方法与 super",
+      "children": [
+        {
+          "id": "super-first",
+          "text": "子类构造第一行必须 super(...)",
+          "children": []
+        },
+        {
+          "id": "super-noarg",
+          "text": "父类无无参构造时要显式写",
+          "children": []
+        },
+        {
+          "id": "super-call",
+          "text": "super.方法() 调被覆写的父类版本",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "cast",
+      "text": "转型",
+      "children": [
+        {
+          "id": "cast-up",
+          "text": "向上转型永远安全",
+          "children": []
+        },
+        {
+          "id": "cast-down",
+          "text": "向下转型可能 ClassCastException",
+          "children": []
+        },
+        {
+          "id": "cast-inst",
+          "text": "先 instanceof;JDK 16 模式匹配一步到位",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "limit",
+      "text": "限制继承",
+      "children": [
+        {
+          "id": "limit-final",
+          "text": "final 类 / 方法;sealed permits 名单",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "is",
+      "text": "is-a 继承,has-a 组合",
+      "children": []
+    }
+  ]
+}

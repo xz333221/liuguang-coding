@@ -1,0 +1,76 @@
+{
+  "id": "root",
+  "text": "包装类型",
+  "children": [
+    {
+      "id": "map",
+      "text": "八对对应",
+      "children": [
+        {
+          "id": "map-special",
+          "text": "int→Integer,char→Character",
+          "children": []
+        },
+        {
+          "id": "map-imm",
+          "text": "都是不可变类",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "create",
+      "text": "创建",
+      "children": [
+        {
+          "id": "create-vof",
+          "text": "valueOf / 自动装箱;new 已废弃",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "text": "常用 API",
+      "children": [
+        {
+          "id": "api-parse",
+          "text": "parseInt 可带进制,失败抛 NumberFormatException",
+          "children": []
+        },
+        {
+          "id": "api-hex",
+          "text": "toHexString / toBinaryString 显示格式",
+          "children": []
+        },
+        {
+          "id": "api-const",
+          "text": "MAX_VALUE / MIN_VALUE / SIZE / BYTES",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "number",
+      "text": "Number 父类",
+      "children": [
+        {
+          "id": "number-xxx",
+          "text": "intValue / longValue / doubleValue",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "text": "何时用",
+      "children": [
+        {
+          "id": "when-3",
+          "text": "集合泛型 / null 语义 / 对象方法;其余用基本类型",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

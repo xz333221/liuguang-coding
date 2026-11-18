@@ -1,0 +1,92 @@
+{
+  "id": "root",
+  "text": "接口",
+  "children": [
+    {
+      "id": "def",
+      "text": "纯契约",
+      "children": [
+        {
+          "id": "def-method",
+          "text": "方法默认 public abstract",
+          "children": []
+        },
+        {
+          "id": "def-field",
+          "text": "没有实例字段、没有构造方法",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "impl",
+      "text": "implements",
+      "children": [
+        {
+          "id": "impl-multi",
+          "text": "一个类可实现多个接口",
+          "children": []
+        },
+        {
+          "id": "impl-ext",
+          "text": "接口间 extends,可多继承",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "ref",
+      "text": "接口引用 + 多态",
+      "children": [
+        {
+          "id": "ref-list",
+          "text": "List list = new ArrayList()",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "default",
+      "text": "default 方法(JDK 8)",
+      "children": [
+        {
+          "id": "default-why",
+          "text": "给接口加方法不破坏老实现类",
+          "children": []
+        },
+        {
+          "id": "default-limit",
+          "text": "访问不了实例字段",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "vs",
+      "text": "抽象类 vs 接口",
+      "children": [
+        {
+          "id": "vs-is",
+          "text": "is-a 用抽象类,can-do 用接口",
+          "children": []
+        },
+        {
+          "id": "vs-coop",
+          "text": "接口定规范 + 抽象类放公共实现",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "fi",
+      "text": "函数式接口",
+      "children": [
+        {
+          "id": "fi-lambda",
+          "text": "单抽象方法接口 → Lambda,第 7 章",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

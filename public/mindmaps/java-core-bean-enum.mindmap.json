@@ -1,0 +1,64 @@
+{
+  "id": "root",
+  "text": "JavaBean 与枚举",
+  "children": [
+    {
+      "id": "bean",
+      "text": "JavaBean 约定",
+      "children": [
+        {
+          "id": "bean-rule",
+          "text": "private 字段 + getter/setter + 无参构造",
+          "children": []
+        },
+        {
+          "id": "bean-frame",
+          "text": "框架靠反射按命名约定映射",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "record",
+      "text": "record(JDK 16)",
+      "children": [
+        {
+          "id": "record-gen",
+          "text": "自动生成构造器 / 访问器 / equals / hashCode / toString",
+          "children": []
+        },
+        {
+          "id": "record-compact",
+          "text": "紧凑构造器加校验;不可变,不能继承",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "enum",
+      "text": "枚举",
+      "children": [
+        {
+          "id": "enum-type",
+          "text": "常量成为类型,编译期查错",
+          "children": []
+        },
+        {
+          "id": "enum-eq",
+          "text": "全局唯一实例,用 == 比较",
+          "children": []
+        },
+        {
+          "id": "enum-ordinal",
+          "text": "别依赖 ordinal(),编号加字段",
+          "children": []
+        },
+        {
+          "id": "enum-class",
+          "text": "本质是 class,可有字段方法",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

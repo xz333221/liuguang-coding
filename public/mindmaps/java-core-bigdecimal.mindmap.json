@@ -1,0 +1,65 @@
+{
+  "id": "root",
+  "text": "BigInteger / BigDecimal",
+  "children": [
+    {
+      "id": "bi",
+      "text": "BigInteger",
+      "children": [
+        {
+          "id": "bi-op",
+          "text": "任意精度整数,运算走方法",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "bd",
+      "text": "BigDecimal",
+      "children": [
+        {
+          "id": "bd-str",
+          "text": "字符串构造;double 构造搬进误差",
+          "children": []
+        },
+        {
+          "id": "bd-div",
+          "text": "除法必须给 scale + RoundingMode",
+          "children": []
+        },
+        {
+          "id": "bd-imm",
+          "text": "不可变,运算返回新对象",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "cmp",
+      "text": "比较的坑",
+      "children": [
+        {
+          "id": "cmp-scale",
+          "text": "equals 连 scale 一起比",
+          "children": []
+        },
+        {
+          "id": "cmp-compare",
+          "text": "数值比较 compareTo == 0",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "money",
+      "text": "金额",
+      "children": [
+        {
+          "id": "money-2",
+          "text": "BigDecimal 或 long 存分,别用 double",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

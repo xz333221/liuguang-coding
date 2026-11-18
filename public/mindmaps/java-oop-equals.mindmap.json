@@ -1,0 +1,91 @@
+{
+  "id": "root",
+  "text": "引用相等与 equals 的分工",
+  "children": [
+    {
+      "id": "eq",
+      "text": "== 比身份",
+      "children": [
+        {
+          "id": "eq-prim",
+          "text": "基本类型比值",
+          "children": []
+        },
+        {
+          "id": "eq-ref",
+          "text": "引用类型比是否同一对象",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "equals",
+      "text": "equals",
+      "children": [
+        {
+          "id": "equals-def",
+          "text": "默认就是 ==,覆写后才比内容",
+          "children": []
+        },
+        {
+          "id": "equals-list",
+          "text": "List.contains 用 equals 认人",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "write",
+      "text": "覆写三步",
+      "children": [
+        {
+          "id": "write-1",
+          "text": "instanceof 模式匹配判类型",
+          "children": []
+        },
+        {
+          "id": "write-2",
+          "text": "引用字段 Objects.equals(防 null)",
+          "children": []
+        },
+        {
+          "id": "write-3",
+          "text": "基本字段 ==",
+          "children": []
+        },
+        {
+          "id": "write-obj",
+          "text": "参数必须 Object,加 @Override",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "contract",
+      "text": "五条契约",
+      "children": [
+        {
+          "id": "contract-5",
+          "text": "自反 / 对称 / 传递 / 一致 / null 为 false",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "when",
+      "text": "何时覆写",
+      "children": [
+        {
+          "id": "when-need",
+          "text": "要比内容 / 进集合查找才覆写",
+          "children": []
+        },
+        {
+          "id": "when-hash",
+          "text": "覆写 equals 必须连带 hashCode",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

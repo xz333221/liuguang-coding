@@ -1,0 +1,86 @@
+{
+  "id": "root",
+  "text": "日期时间:LocalDate / LocalDateTime 与时区",
+  "children": [
+    {
+      "id": "why",
+      "text": "旧 API 的问题",
+      "children": [
+        {
+          "id": "why-3",
+          "text": "Date 可变 / 月份 0 起 / SimpleDateFormat 线程不安全",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "local",
+      "text": "本地类型",
+      "children": [
+        {
+          "id": "local-3",
+          "text": "LocalDate / LocalTime / LocalDateTime",
+          "children": []
+        },
+        {
+          "id": "local-of",
+          "text": "of 创建,parse 解析,ISO 带 T",
+          "children": []
+        },
+        {
+          "id": "local-op",
+          "text": "plus / minus / with,月末自动调整",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "fmt",
+      "text": "DateTimeFormatter",
+      "children": [
+        {
+          "id": "fmt-pat",
+          "text": "yyyy-MM-dd HH:mm:ss;HH 24 小时制",
+          "children": []
+        },
+        {
+          "id": "fmt-safe",
+          "text": "不可变线程安全,static final 共用",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "zone",
+      "text": "时区",
+      "children": [
+        {
+          "id": "zone-zdt",
+          "text": "ZonedDateTime.withZoneSameInstant",
+          "children": []
+        },
+        {
+          "id": "zone-id",
+          "text": "时区 ID 用洲/城市",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "instant",
+      "text": "Instant 与最佳实践",
+      "children": [
+        {
+          "id": "instant-store",
+          "text": "存储传输用 Instant / epoch,展示转时区",
+          "children": []
+        },
+        {
+          "id": "instant-dur",
+          "text": "间隔 Duration / Period",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

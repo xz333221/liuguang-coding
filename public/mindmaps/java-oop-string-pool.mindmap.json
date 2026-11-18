@@ -1,0 +1,70 @@
+{
+  "id": "root",
+  "text": "String 常量池与 Integer 缓存",
+  "children": [
+    {
+      "id": "pool",
+      "text": "字符串常量池",
+      "children": [
+        {
+          "id": "pool-lit",
+          "text": "相同字面量共用一个对象",
+          "children": []
+        },
+        {
+          "id": "pool-new",
+          "text": "new String 强制新建",
+          "children": []
+        },
+        {
+          "id": "pool-fold",
+          "text": "编译期常量折叠进池;运行期拼接不进",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "intern",
+      "text": "intern()",
+      "children": [
+        {
+          "id": "intern-use",
+          "text": "运行期字符串登记进池,日常少用",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "cache",
+      "text": "Integer 缓存",
+      "children": [
+        {
+          "id": "cache-range",
+          "text": "valueOf 缓存 -128~127",
+          "children": []
+        },
+        {
+          "id": "cache-eq",
+          "text": "区间内 == 恰好 true,区间外 false",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "rule",
+      "text": "结论",
+      "children": [
+        {
+          "id": "rule-equals",
+          "text": "比内容一律 equals",
+          "children": []
+        },
+        {
+          "id": "rule-valueof",
+          "text": "创建用 valueOf / 自动装箱,别 new",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

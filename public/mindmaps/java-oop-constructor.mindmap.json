@@ -1,0 +1,71 @@
+{
+  "id": "root",
+  "text": "构造方法",
+  "children": [
+    {
+      "id": "def",
+      "text": "定义",
+      "children": [
+        {
+          "id": "def-name",
+          "text": "与类同名,无返回值类型",
+          "children": []
+        },
+        {
+          "id": "def-call",
+          "text": "new 时自动执行,出生即可用",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "default",
+      "text": "默认构造方法",
+      "children": [
+        {
+          "id": "default-gift",
+          "text": "不写才送无参的;写了任何一个就没了",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "multi",
+      "text": "多个构造方法",
+      "children": [
+        {
+          "id": "multi-overload",
+          "text": "构成重载",
+          "children": []
+        },
+        {
+          "id": "multi-this",
+          "text": "this(...) 委托,必须第一行",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "order",
+      "text": "初始化顺序",
+      "children": [
+        {
+          "id": "order-3",
+          "text": "默认值 → 字段初始化 → 构造方法体",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "priv",
+      "text": "private 构造方法",
+      "children": [
+        {
+          "id": "priv-use",
+          "text": "工具类 / 单例,禁止外部 new",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

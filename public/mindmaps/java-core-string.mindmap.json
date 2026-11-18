@@ -1,0 +1,91 @@
+{
+  "id": "root",
+  "text": "字符串与编码 / StringBuilder",
+  "children": [
+    {
+      "id": "imm",
+      "text": "String 不可变",
+      "children": [
+        {
+          "id": "imm-new",
+          "text": "「修改」方法都返回新串",
+          "children": []
+        },
+        {
+          "id": "imm-eq",
+          "text": "比较用 equals",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "text": "常用方法",
+      "children": [
+        {
+          "id": "api-search",
+          "text": "contains / indexOf / startsWith",
+          "children": []
+        },
+        {
+          "id": "api-sub",
+          "text": "substring 含头不含尾",
+          "children": []
+        },
+        {
+          "id": "api-strip",
+          "text": "strip 认 Unicode 空白,优于 trim",
+          "children": []
+        },
+        {
+          "id": "api-split",
+          "text": "split 参数是正则",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "enc",
+      "text": "编码",
+      "children": [
+        {
+          "id": "enc-utf8",
+          "text": "getBytes / new String 显式指定 UTF-8",
+          "children": []
+        },
+        {
+          "id": "enc-byte",
+          "text": "汉字 UTF-8 占 3 字节",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "sb",
+      "text": "StringBuilder",
+      "children": [
+        {
+          "id": "sb-loop",
+          "text": "循环拼接用它,链式 append",
+          "children": []
+        },
+        {
+          "id": "sb-buffer",
+          "text": "StringBuffer 留给真多线程",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "sj",
+      "text": "StringJoiner / String.join",
+      "children": [
+        {
+          "id": "sj-sep",
+          "text": "分隔符 + 前缀 + 后缀",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

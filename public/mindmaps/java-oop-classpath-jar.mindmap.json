@@ -1,0 +1,80 @@
+{
+  "id": "root",
+  "text": "classpath 和 jar",
+  "children": [
+    {
+      "id": "cp",
+      "text": "classpath",
+      "children": [
+        {
+          "id": "cp-list",
+          "text": "目录与 jar 的搜索清单",
+          "children": []
+        },
+        {
+          "id": "cp-root",
+          "text": "目录从包根算起",
+          "children": []
+        },
+        {
+          "id": "cp-sep",
+          "text": "分隔符:Windows ; 其他 :",
+          "children": []
+        },
+        {
+          "id": "cp-def",
+          "text": "默认当前目录;标准库不用写",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "err",
+      "text": "找不到类",
+      "children": [
+        {
+          "id": "err-2",
+          "text": "ClassNotFoundException / NoClassDefFoundError",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "jar",
+      "text": "jar",
+      "children": [
+        {
+          "id": "jar-zip",
+          "text": "按包结构打包的类容器",
+          "children": []
+        },
+        {
+          "id": "jar-main",
+          "text": "manifest 的 Main-Class → java -jar",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pit",
+      "text": "-jar 忽略 -cp",
+      "children": [
+        {
+          "id": "pit-fix1",
+          "text": "改 -cp 列全 + 主类全名",
+          "children": []
+        },
+        {
+          "id": "pit-fix2",
+          "text": "manifest 写 Class-Path",
+          "children": []
+        },
+        {
+          "id": "pit-fix3",
+          "text": "打胖 jar",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

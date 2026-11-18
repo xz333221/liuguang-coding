@@ -1,0 +1,71 @@
+{
+  "id": "root",
+  "text": "自动装箱与拆箱",
+  "children": [
+    {
+      "id": "mech",
+      "text": "机制",
+      "children": [
+        {
+          "id": "mech-box",
+          "text": "装箱 = 编译器插 valueOf",
+          "children": []
+        },
+        {
+          "id": "mech-unbox",
+          "text": "拆箱 = 插 xxxValue,只在编译期",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pit1",
+      "text": "坑一:null 拆箱 NPE",
+      "children": [
+        {
+          "id": "pit1-hide",
+          "text": "算式 / 三元 / map.get 里最隐蔽",
+          "children": []
+        },
+        {
+          "id": "pit1-fix",
+          "text": "getOrDefault 防御",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pit2",
+      "text": "坑二:循环装箱",
+      "children": [
+        {
+          "id": "pit2-fix",
+          "text": "累加计数用基本类型",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pit3",
+      "text": "坑三:== 缓存巧合",
+      "children": [
+        {
+          "id": "pit3-tern",
+          "text": "三元类型不一致也会触发拆箱",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "overload",
+      "text": "装箱参与重载挑选",
+      "children": [
+        {
+          "id": "overload-order",
+          "text": "排在拓宽之后",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

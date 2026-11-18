@@ -1,0 +1,76 @@
+{
+  "id": "root",
+  "text": "方法",
+  "children": [
+    {
+      "id": "inst",
+      "text": "实例方法 vs static 方法",
+      "children": [
+        {
+          "id": "inst-call",
+          "text": "实例方法:对象调用;static:类名调用",
+          "children": []
+        },
+        {
+          "id": "inst-limit",
+          "text": "static 没有 this,摸不到实例字段",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "this",
+      "text": "this",
+      "children": [
+        {
+          "id": "this-field",
+          "text": "this.name = name 区分字段与参数",
+          "children": []
+        },
+        {
+          "id": "this-ctor",
+          "text": "this(...) 调本类构造方法,放第一行",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pass",
+      "text": "传参",
+      "children": [
+        {
+          "id": "pass-rule",
+          "text": "只有值传递,引用类型抄引用",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "varargs",
+      "text": "可变参数",
+      "children": [
+        {
+          "id": "varargs-arr",
+          "text": "int... 本质是数组",
+          "children": []
+        },
+        {
+          "id": "varargs-last",
+          "text": "必须放最后,只能有一个",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "sig",
+      "text": "方法签名",
+      "children": [
+        {
+          "id": "sig-def",
+          "text": "方法名 + 参数列表,不含返回值",
+          "children": []
+        }
+      ]
+    }
+  ]
+}
