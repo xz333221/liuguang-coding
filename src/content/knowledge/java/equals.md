@@ -53,7 +53,7 @@ public boolean equals(Object obj) {
 }
 ```
 
-也就是说,**不覆写的话,equals 和 == 完全等价**。很多人以为 equals 天生比内容,这是最常见的误会。String、Integer 这些类之所以 equals 比内容,是因为它们覆写了。
+**不覆写的话,equals 和 == 完全等价**。很多人以为 equals 天生比内容,这是最常见的误会。String、Integer 这些类之所以 equals 比内容,是因为它们覆写了。
 
 自己写的类不覆写 equals,放进集合就查不到:
 

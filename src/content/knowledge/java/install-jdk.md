@@ -121,7 +121,7 @@ Linux 两条路:用发行版仓库的 OpenJDK 包(比如 `apt install openjdk-25
 
 ## 机器上有多个 JDK 很正常
 
-老项目要 17,新项目要 25,一台机器上装三四个 JDK 是常态,不是事故。关键是分清三个地方各自用哪个:
+老项目要 17,新项目要 25,一台机器上装三四个 JDK 是常态。关键是分清三个地方各自用哪个:
 
 1. 终端里:`where java`(Windows)或 `which -a java`(macOS/Linux)的第一行说了算,由 PATH 顺序决定;
 2. Maven / Gradle 里:读 `JAVA_HOME`,或者构建工具自己的 toolchain 配置;

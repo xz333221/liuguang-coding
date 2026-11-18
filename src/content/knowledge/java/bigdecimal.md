@@ -63,7 +63,7 @@ new BigDecimal(0.1);
 // 0.1000000000000000055511151231257827021181583404541015625
 ```
 
-double 的 0.1 本来就不精确,BigDecimal 忠实地把那个不精确的值原样搬了进来。这不是 BigDecimal 的 bug,是 double 的原罪。`BigDecimal.valueOf(0.1)` 可以救场——它内部先 Double.toString 转成 "0.1" 再构造,但既然手里有字符串,直接字符串构造最稳。
+double 的 0.1 本来就不精确,BigDecimal 忠实地把那个不精确的值原样搬了进来,问题出在 double 本身。`BigDecimal.valueOf(0.1)` 可以救场——它内部先 Double.toString 转成 "0.1" 再构造,但既然手里有字符串,直接字符串构造最稳。
 
 ## 运算与舍入
 

@@ -113,7 +113,7 @@ JDK(Java Development Kit,Java 开发工具包)是 JRE 再加上一套开发工�
 
 ## 编译和运行,两条命令
 
-Java 源码本质上是文本文件,操作系统不能直接执行它。完整的流程是两步:
+Java 源码就是文本文件,操作系统不能直接执行它。完整的流程是两步:
 
 ```bash
 javac Hello.java   # 第一步:编译,生成 Hello.class

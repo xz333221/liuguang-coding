@@ -18,7 +18,7 @@ sources:
     note: hashCode 契约的官方定义。
 ---
 
-上一篇结尾留了个尾巴:覆写了 equals 必须连带 hashCode。为什么?因为 HashMap、HashSet 这些哈希容器,认人靠的是两个方法配合。这一篇把配合机制讲清。
+上一篇结尾留了个尾巴:覆写了 equals 必须连带 hashCode。为什么?因为 HashMap、HashSet 这些哈希容器,认人靠的是两个方法配合。
 
 ## HashMap 怎么找东西
 
@@ -80,7 +80,7 @@ System.out.println(map.get(new Person("小明", 12)));   // null!
 
 ## 正确写 hashCode
 
-原则一句话:**equals 用了哪些字段,hashCode 就用哪些字段,一个不多一个不少。**
+原则:**equals 用了哪些字段,hashCode 就用哪些字段,一个不多一个不少。**
 
 ```java
 @Override

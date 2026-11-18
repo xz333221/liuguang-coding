@@ -18,7 +18,7 @@ sources:
     note: 多态三要素(继承、覆写、父类引用)的对照。
 ---
 
-上一篇末尾留了个现象:`Person p = new Student();` 之后调 p.getName(),如果 Student 覆写了这个方法,执行的是 Student 的版本。这一篇把这个机制讲透,它就是多态。
+上一篇末尾留了个现象:`Person p = new Student();` 之后调 p.getName(),如果 Student 覆写了这个方法,执行的是 Student 的版本。这个机制就是多态。
 
 ## 覆写:签名相同,实现换掉
 
@@ -180,7 +180,7 @@ System.out.println(a.x);   // 1,不是 2
 
 **static 方法没有多态。** static 方法属于类,父类引用调 static 方法,执行的是父类的版本。子类写一个同签名的 static 方法叫隐藏,不叫覆写,别这么干。
 
-记住一句话:多态是实例方法的动态分派,字段和 static 方法不参与。
+多态是实例方法的动态分派,字段和 static 方法不参与。
 
 ## 小结
 
