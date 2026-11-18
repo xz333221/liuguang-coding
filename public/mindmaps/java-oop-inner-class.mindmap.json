@@ -13,7 +13,7 @@
         },
         {
           "id": "inner-this",
-          "text": "Outer.this 访问外部,能摸 private",
+          "text": "Outer.this 访问外部,能访问 private",
           "children": []
         }
       ]

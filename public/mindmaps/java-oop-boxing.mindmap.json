@@ -20,7 +20,7 @@
     },
     {
       "id": "pit1",
-      "text": "坑一:null 拆箱 NPE",
+      "text": "易错点一:null 拆箱 NPE",
       "children": [
         {
           "id": "pit1-hide",
@@ -36,7 +36,7 @@
     },
     {
       "id": "pit2",
-      "text": "坑二:循环装箱",
+      "text": "易错点二:循环装箱",
       "children": [
         {
           "id": "pit2-fix",
@@ -47,7 +47,7 @@
     },
     {
       "id": "pit3",
-      "text": "坑三:== 缓存巧合",
+      "text": "易错点三:== 缓存巧合",
       "children": [
         {
           "id": "pit3-tern",

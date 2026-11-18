@@ -98,7 +98,7 @@ jar --create --file app.jar --main-class com.flowdash.Main -C out .
 
 ## -jar 会忽略 -cp
 
-这是个关键的坑:
+这是个关键的陷阱:
 
 ```bash
 java -cp lib/a.jar -jar app.jar   // lib/a.jar 不生效!

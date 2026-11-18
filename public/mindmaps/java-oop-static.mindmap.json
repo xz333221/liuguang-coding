@@ -24,7 +24,7 @@
       "children": [
         {
           "id": "method-no",
-          "text": "没有 this,摸不到实例字段,没有多态",
+          "text": "没有 this,访问不了实例字段,没有多态",
           "children": []
         }
       ]

@@ -64,7 +64,7 @@ import 不引入任何代码,只是告诉编译器「我说的 StringUtil 指的
 - `import java.util.*` 是通配导入,只导入该包下的类,**不含子包**;
 - 两个包的同名类都 import 会冲突,这时留一个 import,另一个写全名。
 
-还有 `import static`,导入某个类的静态成员,之后可以直接喊名字:
+还有 `import static`,导入某个类的静态成员,之后可以直接用成员名调用:
 
 ```java
 import static java.lang.Math.*;
@@ -88,7 +88,7 @@ Java 的访问修饰符从小到大四档:private、不写(包级)、protected�
 几个容易记错的点:
 
 - protected 对**同包**也开放,不只是子类。它比包级多开的那一档,是「跨包的子类」;
-- 子类访问父类的 protected 成员,是通过子类自己的实例访问,不能拿一个父类实例去摸它的 protected 成员(跨包时);
+- 子类访问父类的 protected 成员,是通过子类自己的实例访问,不能通过一个父类实例访问它的 protected 成员(跨包时);
 - 不写修饰符不是「默认 public」,是包级私有,包外完全不可见。
 
 类本身(顶层类)只能用 public 或不写:public 类全 JVM 可见,包级类只在包内可见。顶层类写 private、protected 编译报错——类没有「外层类」和「父类」可言,这两档对它没意义。内部类的修饰符另说,内部类那篇讲。

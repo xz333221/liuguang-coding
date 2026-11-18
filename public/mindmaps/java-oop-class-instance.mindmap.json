@@ -8,7 +8,7 @@
       "children": [
         {
           "id": "tpl-new",
-          "text": "new 一次造一个,字段各自独立",
+          "text": "new 一次创建一个,字段各自独立",
           "children": []
         },
         {

@@ -30,7 +30,7 @@
         { "id": "logic-short", "text": "&& 左 false 不算右,|| 左 true 不算右", "children": [] },
         {
           "id": "logic-guard",
-          "text": "挡 null、挡除零,顺序不能反",
+          "text": "避免 null、避免除零,顺序不能反",
           "richContent": { "kind": "code", "lang": "java", "raw": "user != null && user.getName()..." },
           "children": []
         },
@@ -42,7 +42,7 @@
       "text": "类型提升",
       "children": [
         { "id": "promote-int", "text": "byte/short/char 运算先变 int", "children": [] },
-        { "id": "promote-cast", "text": "大赋小要强转,(int)3.9 = 3 直接砍", "children": [] },
+        { "id": "promote-cast", "text": "大赋小要强转,(int)3.9 = 3 直接截断", "children": [] },
         { "id": "promote-compound", "text": "复合赋值自带强转:s += 1 能编译", "children": [] }
       ]
     },

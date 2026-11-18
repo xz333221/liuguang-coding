@@ -147,7 +147,7 @@ export async function removeServerModel(id: string): Promise<void> {
  * 装一个 fetch 拦截器,干两件事:
  *   1. 把 LOCAL_API_BASE 的三条路由在浏览器里实现掉(本地兜底);
  *   2. 给打向真实中间件(/api/ai-model/)的请求补上登录头 —— 模型配置按用户存,
- *      服务端靠这个头认人;没登录就照旧存全局仓库。
+ *      服务端靠这个头识别用户;没登录就照旧存全局仓库。
  * 返回卸载函数。
  */
 export function installLocalModelBackend(): () => void {

@@ -18,7 +18,7 @@ sources:
     note: equals 契约的官方定义。
 ---
 
-第 2 章说过,引用变量里装的是指向对象的线。那么两个引用「相等」是什么意思?是线一样(指向同一个对象),还是对象内容一样?Java 把这两件事分给了两个工具:== 和 equals。这一篇讲清分工,再学怎么正确覆写 equals。
+第 2 章说过,引用变量里装的是指向对象的引用。那么两个引用「相等」是什么意思?是引用相同(指向同一个对象),还是对象内容相同?Java 把这两件事分给了两个工具:== 和 equals。这一篇讲清分工,再学怎么正确覆写 equals。
 
 ## ==:比的是身份
 
@@ -62,7 +62,7 @@ List<Person> list = List.of(new Person("小明"), new Person("小红"));
 System.out.println(list.contains(new Person("小红")));   // false!
 ```
 
-List.contains 内部是用 equals 挨个比的。Person 没覆写 equals,比的是身份,新 new 的「小红」和列表里那个不是同一个对象,自然找不到。
+List.contains 内部是用 equals 逐个比较的。Person 没覆写 equals,比的是身份,新 new 的「小红」和列表里那个不是同一个对象,自然找不到。
 
 ## 覆写 equals:三步
 
@@ -85,7 +85,7 @@ class Person {
 
 拆开看:
 
-1. `o instanceof Person p`:不是 Person(包括 null)直接 false;是的话,模式匹配顺手把 o 转成 p,不用再强转;
+1. `o instanceof Person p`:不是 Person(包括 null)直接 false;是的话,instanceof 的模式匹配会直接把 o 绑定为 Person 类型的 p,不用再强转;
 2. 引用类型字段用 `Objects.equals` 比:它内部处理了 null——两个都 null 算相等,一个 null 算不等,不会抛 NullPointerException;
 3. 基本类型字段直接 ==。
 

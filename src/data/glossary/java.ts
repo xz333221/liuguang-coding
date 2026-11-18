@@ -150,7 +150,7 @@ export const javaTerms: Term[] = [
     en: 'autoboxing',
     group: 'java',
     plain:
-      'Java 看到"基本类型"和"包装类型"对不上时，悄悄帮你转一下。麻烦在于它有时会复用旧对象，有时会造新对象。',
+      'Java 看到"基本类型"和"包装类型"对不上时，自动完成转换。需要注意的是它有时复用旧对象，有时创建新对象。',
     formal:
       '编译器在基本类型与其包装类型之间自动插入 valueOf / xxxValue 调用的机制。装箱可能命中缓存而复用对象，导致 == 的结果与直觉不符。',
     related: ['wrapper-class', 'identity'],
@@ -193,7 +193,7 @@ export const javaTerms: Term[] = [
     term: 'hashCode',
     group: 'java',
     plain:
-      '对象的哈希值。HashMap、HashSet 先靠它找到"桶"，再在桶里用 equals 挨个认人 —— 所以这两个方法必须配套。',
+      '对象的哈希值。HashMap、HashSet 先用它定位存储位置(桶)，再在桶内用 equals 逐个比较 key —— 所以这两个方法必须配套。',
     formal:
       'Object.hashCode() 返回对象的哈希值。约定:equals 相等则 hashCode 必须相等;反过来不要求，不同对象哈希值相同是允许的。',
     related: ['equals', 'hash-collision', 'hash-table'],
@@ -215,7 +215,7 @@ export const javaTerms: Term[] = [
     aliases: ['常量池'],
     group: 'java',
     plain:
-      'Java 把内容相同的字符串字面量攒在一起共用一份，省内存。所以两个写法一样的字面量，其实是同一个对象。',
+      'Java 把内容相同的字符串字面量集中存放、共用一份，省内存。所以两个写法一样的字面量，其实是同一个对象。',
     formal:
       '存放字符串字面量与 intern() 结果的驻留区域。内容相同的字面量复用同一对象，new String(...) 强制新建。',
     related: ['intern', 'literal', 'constant-folding'],
@@ -293,7 +293,7 @@ export const javaTerms: Term[] = [
     aliases: ['控制反转'],
     group: 'java',
     plain:
-      '对象的创建与依赖关系不归你管，交给容器。你只声明"我需要什么"，容器负责造好、组装好再给你。',
+      '对象的创建与依赖关系不由应用代码管理，交给容器。你只声明"我需要什么"，容器负责创建、组装再提供。',
     formal:
       '控制反转:对象的实例化、装配与生命周期由 IoC 容器负责，应用代码通过构造器或字段声明依赖，由容器注入。',
     related: ['dependency-injection', 'bean', 'spring-boot'],
@@ -309,7 +309,7 @@ export const javaTerms: Term[] = [
     aliases: ['构造器注入'],
     group: 'java',
     plain:
-      '不在代码里 new 依赖，而是在构造器参数里写"我要个什么"，由容器把它递进来。测试时换一个假的递进去就行。',
+      '不在代码里 new 依赖，而是在构造器参数里声明所需类型，由容器把它传入。测试时换一个假实现传入即可。',
     formal:
       'IoC 的具体实现方式:容器在创建 Bean 时按类型解析并传入其构造器参数、setter 或字段。构造器注入因可保持字段 final、依赖显式而首选。',
     related: ['ioc', 'bean'],
@@ -487,7 +487,7 @@ export const javaTerms: Term[] = [
     term: 'MyBatis',
     group: 'java',
     plain:
-      '一个"SQL 归你写"的持久层框架:你给 SQL,它负责把参数塞进去、把结果映射成对象。',
+      '一个"SQL 归你写"的持久层框架:你给 SQL,它负责把参数绑定进去、把结果映射成对象。',
     formal:
       '基于 Java 的持久层框架,以 Mapper 接口 + 映射文件(或注解)声明 SQL,负责参数绑定、结果映射与事务内的 SqlSession 管理,不做自动表结构映射。',
     related: ['mybatis-plus', 'mapper', 'resultmap'],
@@ -602,7 +602,7 @@ export const javaTerms: Term[] = [
     en: 'aggregate root',
     group: 'java',
     plain:
-      '一组必须一起改的对象里的那个"主对象"。外部只能通过它改状态,所以规则只在一处守。',
+      '一组必须一起改的对象里的那个"主对象"。外部只能通过它修改状态,所以规则只在一处维护。',
     formal:
       '聚合的一致性边界:通过唯一入口方法与不变式维护内部实体与值对象的一致;一次事务只修改一个聚合。',
     related: ['value-object', 'ddd'],
@@ -646,7 +646,7 @@ export const javaTerms: Term[] = [
     en: 'domain event',
     group: 'java',
     plain:
-      '"某件事已经发生了"的声明,用过去时命名。聚合只负责攒着,发到哪是基础设施层的事。',
+      '"某件事已经发生了"的声明,用过去时命名。聚合只负责收集,发布到何处由基础设施层决定。',
     formal:
       '表达领域内已发生事实的对象;由聚合产生,经应用层取出并由发布器(内存、日志、消息队列)对外发布。',
     related: ['application-service', 'bounded-context'],
@@ -658,7 +658,7 @@ export const javaTerms: Term[] = [
     aliases: ['ACL'],
     group: 'java',
     plain:
-      '跟外部系统之间的翻译官。它的职责是把外部模型挡在外面,不让它们渗进你的领域层。',
+      '与外部系统之间的防腐转换层。它的职责是隔离外部模型,防止其渗入领域层。',
     formal:
       '上下文或系统边界的适配层:负责双向模型映射、单位与状态对齐,隔离外部模型的变更对领域模型的影响。',
     related: ['bounded-context'],

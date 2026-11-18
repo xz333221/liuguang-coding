@@ -13,7 +13,7 @@
         },
         {
           "id": "extends-priv",
-          "text": "private 摸不到,protected 向子类开放",
+          "text": "private 访问不了,protected 向子类开放",
           "children": []
         }
       ]

@@ -106,7 +106,7 @@ jre/bin/java --module hello.world
 
 - JDK 自身和基础库的组织;
 - 需要 jlink 定制运行时分发的场景(客户端、容器镜像瘦身);
-- 强隔离需求的平台型代码(明确 exports,内部包谁也摸不到)。
+- 强隔离需求的平台型代码(明确 exports,未导出的包外部无法访问)。
 
 学习阶段的目标是:见到 module-info.java 知道是什么,见到 --module-path 知道怎么跑,知道 jlink 能裁 JRE。不必把自己的练习项目模块化。
 

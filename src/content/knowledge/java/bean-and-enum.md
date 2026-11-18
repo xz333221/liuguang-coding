@@ -148,7 +148,7 @@ enum Weekday {
 
 枚举本质是 class:构造方法 private(不许外面 new),可以有字段、方法,甚至实现接口。每个常量还能各自覆写方法,做到「每个常量自己的行为」,读框架源码时会见到。
 
-枚举也能进 switch,第 2 章的箭头 switch 配枚举特别清爽:
+枚举也能进 switch,第 2 章的箭头 switch 配枚举特别简洁:
 
 ```java
 String type = switch (day) {

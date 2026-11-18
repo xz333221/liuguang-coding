@@ -1,6 +1,6 @@
 ---
 title: hashCode 与 equals 的契约
-summary: 'HashMap 先用 hashCode 定位桶,再用 equals 在桶里认人。所以 equals 相等的两个对象,hashCode 必须相等;覆写 equals 不覆写 hashCode,Map 就存得进取不出。两个方法必须用同一组字段。'
+summary: 'HashMap 先用 hashCode 算出 key 的存储位置(哈希桶),再用 equals 在同一桶内比较 key 是否相等。所以 equals 相等的两个对象,hashCode 必须相等;覆写 equals 不覆写 hashCode,Map 就存得进取不出。两个方法必须用同一组字段。'
 category: java
 node: java-oop-hashcode
 order: 24
@@ -18,11 +18,11 @@ sources:
     note: hashCode 契约的官方定义。
 ---
 
-上一篇结尾留了个尾巴:覆写了 equals 必须连带 hashCode。为什么?因为 HashMap、HashSet 这些哈希容器,认人靠的是两个方法配合。
+上一篇结尾提到:覆写了 equals 必须连带 hashCode。为什么?因为 HashMap、HashSet 这些哈希容器,判断 key 是否相等靠的是两个方法配合。
 
 ## HashMap 怎么找东西
 
-HashMap 内部是一个数组,每个格子叫桶。放 key-value 时:
+HashMap 内部是一个数组,每个格子叫桶(bucket)。放 key-value 时:
 
 1. 调 key.hashCode() 得到一个 int;
 2. 用这个 int 算出桶的下标,把 entry 放进去。
@@ -39,7 +39,7 @@ System.out.println(key1 == key2);      // false,不是同一个对象
 System.out.println(map.get(key2));     // 123,照样取到
 ```
 
-key2 和 key1 不是同一个对象,但 String 覆写了 equals 和 hashCode:内容相同 → hashCode 相同 → 定位到同一个桶 → equals 认出相等 → 取出 123。
+key2 和 key1 不是同一个对象,但 String 覆写了 equals 和 hashCode:内容相同 → hashCode 相同 → 定位到同一个桶 → equals 判定相等 → 取出 123。
 
 ## 契约:两条
 
@@ -48,7 +48,7 @@ Object 文档对 hashCode 的规定,核心两条:
 1. **equals 相等的两个对象,hashCode 必须相等。** 这是正确性要求,违反它 HashMap 直接失灵;
 2. equals 不等的对象,hashCode 尽量不等。这是性能要求,违反了只是慢,不会错。
 
-第二条的「尽量」意味着:不同对象算出相同 hashCode 是允许的,叫哈希冲突。冲突了不要紧,桶里再用 equals 认一遍就行。int 只有 42 亿个取值,对象却可以无限多,冲突不可避免,哈希表的设计本来就预设了冲突。
+第二条的「尽量」意味着:不同对象算出相同 hashCode 是允许的,叫哈希冲突。冲突了不要紧,桶里再用 equals 逐个比较就行。int 只有 42 亿个取值,对象却可以无限多,冲突不可避免,哈希表的设计本来就预设了冲突。
 
 ## 只覆写 equals 会怎样
 
@@ -76,7 +76,7 @@ System.out.println(map.get(new Person("小明", 12)));   // null!
 
 两个 Person equals 相等,但 hashCode 用的是 Object 默认实现,两个不同对象算出不同的值,定位到不同的桶——get 的那个桶里根本没有 entry,返回 null。存得进,取不出,数据像丢了一样。
 
-这就是「覆写 equals 必须连带 hashCode」的原因。IDE 的生成 equals 功能会顺手把 hashCode 一起生成,别只生成一半。
+这就是「覆写 equals 必须连带 hashCode」的原因。IDE 的生成 equals 功能会同时生成 hashCode,别只生成一半。
 
 ## 正确写 hashCode
 
@@ -89,12 +89,12 @@ public int hashCode() {
 }
 ```
 
-Objects.hash 把各字段的哈希组合成一个 int,内部处理了 null。手写组合的经典写法是反复 `h = 31 * h + 字段哈希`,31 是个奇素数,乘 31 能让结果分布更均匀,且 JVM 会把它优化成移位加减,不亏。日常直接用 Objects.hash,可读性更好。
+Objects.hash 把各字段的哈希组合成一个 int,内部处理了 null。手写组合的经典写法是反复 `h = 31 * h + 字段哈希`,31 是个奇素数,乘 31 能让结果分布更均匀,且 JVM 会把它优化成移位加减,没有额外开销。日常直接用 Objects.hash,可读性更好。
 
 字段选择的两个反例都违反契约:
 
 - equals 比 name+age,hashCode 只算 name:不相等的对象哈希大量相同,性能退化(不违反正确性,但浪费);
-- equals 比 name+age,hashCode 算了 name+age+score:equals 相等的对象可能哈希不同,正确性直接崩。
+- equals 比 name+age,hashCode 算了 name+age+score:equals 相等的对象可能哈希不同,直接违反契约。
 
 ## 两个延伸提醒
 
@@ -104,8 +104,8 @@ Objects.hash 把各字段的哈希组合成一个 int,内部处理了 null。手
 
 ## 小结
 
-- HashMap 先 hashCode 定位桶,再 equals 桶内认人,两个方法配合工作;
+- HashMap 先 hashCode 定位桶,再 equals 桶内比较,两个方法配合工作;
 - 契约:equals 相等 → hashCode 必须相等;不等对象哈希尽量不等,冲突允许;
 - 只覆写 equals 不覆写 hashCode,Map 存得进取不出;
-- hashCode 与 equals 用同一组字段,Objects.hash 一把梭;
+- hashCode 与 equals 用同一组字段,直接用 Objects.hash 生成;
 - 预估容量减少扩容;可变对象别当 key。

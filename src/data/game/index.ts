@@ -34,7 +34,7 @@ export const decks: Deck[] = [
   {
     id: 'java',
     name: 'Java',
-    intro: '相等性与基本类型这条最容易答错的线,再到集合、并发与 JVM。',
+    intro: '相等性与基本类型这一组最容易答错的主题,再到集合、并发与 JVM。',
     levels: javaLevels,
   },
   {

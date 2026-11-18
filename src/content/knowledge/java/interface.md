@@ -116,7 +116,7 @@ interface Person {
 
 default 方法和抽象类的具体方法有个本质区别:接口没有实例字段,default 方法里访问不了状态,只能调接口里的其他方法。需要状态支撑的公共逻辑,还是放抽象类。
 
-JDK 8 还允许接口写 static 方法(工具方法,如 Comparator.comparing),JDK 9 起允许 private 方法给 default 方法打杂。见到不奇怪,自己写业务接口很少用到。
+JDK 8 还允许接口写 static 方法(工具方法,如 Comparator.comparing),JDK 9 起允许 private 方法,供 default 方法内部调用。见到不奇怪,自己写业务接口很少用到。
 
 ## 抽象类 vs 接口
 
@@ -131,7 +131,7 @@ JDK 8 还允许接口写 static 方法(工具方法,如 Comparator.comparing),JD
 
 选型口诀:要复用状态和公共逻辑,用抽象类;只定能力契约,用接口。两者经常配合:接口定规范,抽象类实现一部分公共逻辑,具体类补齐剩下的。Java 集合框架就是这个结构:List 接口 → AbstractList 抽象类 → ArrayList 具体类。
 
-## 函数式接口:一个伏笔
+## 函数式接口:预告
 
 只有一个抽象方法的接口,叫函数式接口,Runnable 就是。JDK 8 起它可以用 Lambda 一行写完:
 
@@ -139,7 +139,7 @@ JDK 8 还允许接口写 static 方法(工具方法,如 Comparator.comparing),JD
 Runnable r = () -> System.out.println("跑");
 ```
 
-这是第 7 章函数式编程的主角,这里先认个脸。
+这是第 7 章函数式编程的重点,这里先初步了解。
 
 ## 小结
 

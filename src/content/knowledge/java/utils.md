@@ -82,7 +82,7 @@ HexFormat hf = HexFormat.ofDelimiter(" ").withPrefix("0x").withUpperCase();
 hf.formatHex(data);   // "0x48 0x65 0x6C 0x6C 0x6F"
 ```
 
-JDK 17 之前这活得自己写循环查表,现在标准库包了。打印哈希值、调试二进制协议时常用。
+JDK 17 之前这需要自己写循环查表,现在标准库已经封装。打印哈希值、调试二进制协议时常用。
 
 ## Objects:null 安全的杂活
 
@@ -120,7 +120,7 @@ Arrays.binarySearch(a, 2);   // 二分查找,数组必须先排好序
 Arrays.equals(a, b);         // 逐元素比内容
 ```
 
-直接 println 数组只会打出哈希值,toString 才是人看的内容——这个坑第 2 章讲过,再强调一次。多维数组用 deepToString。
+直接 println 数组只会打出哈希值,toString 才是可读的内容——这个易错点第 2 章讲过,再强调一次。多维数组用 deepToString。
 
 ## 小结
 

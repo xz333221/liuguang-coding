@@ -166,7 +166,7 @@
     },
     {
       "id": "pitfalls",
-      "text": "常见的坑",
+      "text": "常见易错点",
       "children": [
         {
           "id": "pit-path",

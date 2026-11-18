@@ -36,7 +36,7 @@
       "id": "ref",
       "text": "引用语义(重点)",
       "children": [
-        { "id": "ref-assign", "text": "b = a 抄引用,改 b[0] 则 a[0] 也变", "children": [] },
+        { "id": "ref-assign", "text": "b = a 复制引用,改 b[0] 则 a[0] 也变", "children": [] },
         {
           "id": "ref-copy",
           "text": "独立副本用 Arrays.copyOf",

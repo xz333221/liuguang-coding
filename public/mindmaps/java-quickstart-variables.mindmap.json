@@ -14,7 +14,7 @@
         },
         {
           "id": "var-assign",
-          "text": "= 是赋值,基本类型赋值是抄值",
+          "text": "= 是赋值,基本类型赋值是复制值",
           "children": []
         },
         {
@@ -42,15 +42,15 @@
     },
     {
       "id": "trap",
-      "text": "两个坑",
+      "text": "两个易错点",
       "children": [
-        { "id": "trap-overflow", "text": "整数溢出绕回:int 最大值 + 1 变最小值", "children": [] },
+        { "id": "trap-overflow", "text": "整数溢出回绕:int 最大值 + 1 变最小值", "children": [] },
         { "id": "trap-float", "text": "0.1 + 0.2 != 0.3,算钱用 BigDecimal", "children": [] }
       ]
     },
     {
       "id": "ref",
-      "text": "引用类型认个脸",
+      "text": "引用类型初步了解",
       "children": [
         { "id": "ref-str", "text": "String、数组是引用类型", "children": [] },
         { "id": "ref-null", "text": "可以为 null,对着 null 调方法抛 NPE", "children": [] }

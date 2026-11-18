@@ -29,7 +29,7 @@
         },
         {
           "id": "equals-list",
-          "text": "List.contains 用 equals 认人",
+          "text": "List.contains 用 equals 比较",
           "children": []
         }
       ]

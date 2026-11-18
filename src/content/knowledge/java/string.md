@@ -77,7 +77,7 @@ trim 和 strip 的区别:trim 只去 ASCII 空白(空格、\t、\r、\n),strip �
 String.join("-", "2026", "11", "18"); // "2026-11-18"
 ```
 
-split 的参数是正则表达式,按 . 分割要写 `"\\."`,直接写 "." 会按「任意字符」分割,得到空数组——这是个高频坑,正则那篇细讲。
+split 的参数是正则表达式,按 . 分割要写 `"\\."`,直接写 "." 会按「任意字符」分割,得到空数组——这是个高频易错点,正则那篇细讲。
 
 ## 编码:字符与字节
 
@@ -115,7 +115,7 @@ String s = sb.toString();
 
 append 返回自身,所以能链式写。预估长度时 `new StringBuilder(1024)` 给个初始容量,省得内部数组反复扩容。
 
-StringBuffer 是 StringBuilder 的线程安全版,方法带 synchronized。单线程场景(绝大多数)用 StringBuilder,别为用不到的同步买单。
+StringBuffer 是 StringBuilder 的线程安全版,方法带 synchronized。单线程场景(绝大多数)用 StringBuilder,不必为用不到的同步付出开销。
 
 ## StringJoiner:带分隔符的拼接
 

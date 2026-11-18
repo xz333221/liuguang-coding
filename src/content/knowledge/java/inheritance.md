@@ -211,7 +211,7 @@ class Student extends Person {
 ## 小结
 
 - extends 复用父类功能,子类只写新增;Java 单继承,所有类的根是 Object;
-- private 子类摸不到,protected 向继承树开放;
+- private 子类访问不了,protected 向继承树开放;
 - 子类不继承构造方法;子类构造方法第一行必须 super(...),父类没有无参构造时要显式写;
 - 向上转型永远安全;向下转型可能 ClassCastException,先 instanceof(JDK 16 起可模式匹配一步到位);
 - final 禁止继承 / 覆写,sealed 限定子类名单;

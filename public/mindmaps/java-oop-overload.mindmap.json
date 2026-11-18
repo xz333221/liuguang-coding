@@ -41,7 +41,7 @@
     },
     {
       "id": "pit",
-      "text": "两个坑",
+      "text": "两个易错点",
       "children": [
         {
           "id": "pit-null",

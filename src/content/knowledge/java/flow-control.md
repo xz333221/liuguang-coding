@@ -1,6 +1,6 @@
 ---
 title: 流程控制：分支与循环
-summary: 'if 管分岔,for / while 管转圈,switch 管多选。JDK 14 起的箭头 switch 不用写 break。break 跳出循环,continue 跳过本轮,循环边界差一是最常见的 bug。'
+summary: 'if 管分支,for / while 管循环,switch 管多选。JDK 14 起的箭头 switch 不用写 break。break 跳出循环,continue 跳过本轮,循环边界差一是最常见的 bug。'
 category: java
 node: java-quickstart-flow
 order: 7
@@ -24,9 +24,9 @@ sources:
     note: while / do while / break / continue 的对照。
 ---
 
-程序默认一行一行往下走,流程控制就是让它会分岔、会转圈。分岔用 if 和 switch,转圈用 for 和 while。这一篇全部过一遍,例子都能直接跑。
+程序默认一行一行往下走,流程控制就是让它能分支、能循环。分支用 if 和 switch,循环用 for 和 while。这一篇全部过一遍,例子都能直接跑。
 
-## if:分岔
+## if:分支
 
 ```java
 int score = 75;
@@ -66,7 +66,7 @@ switch (day) {
 }
 ```
 
-老式 switch 有个坑:不写 `break`,会穿透到下一个 case 继续执行,不管条件匹不匹配。很多 bug 就是这么来的。
+老式 switch 有个陷阱:不写 `break`,会穿透到下一个 case 继续执行,不管条件匹不匹配。很多 bug 就是这么来的。
 
 JDK 14 起转正的箭头写法没有这个问题,不用写 break,也不会穿透:
 
@@ -88,11 +88,11 @@ String label = switch (day) {
 };
 ```
 
-多个值用逗号并列。分支里要写好几行时,用花括号包起来,用 `yield` 交出结果。新代码建议一律用箭头写法,老式写法在读旧项目时认识就行。
+多个值用逗号并列。分支里要写好几行时,用花括号包起来,用 `yield` 返回结果。新代码建议一律用箭头写法,老式写法在读旧项目时认识就行。
 
-## for:转圈
+## for:循环
 
-知道要转几圈,用 for:
+知道要循环几次,用 for:
 
 ```java
 int sum = 0;
@@ -102,7 +102,7 @@ for (int i = 1; i <= 100; i++) {
 System.out.println(sum);   // 5050
 ```
 
-三段式:`int i = 1` 初始化,只执行一次;`i <= 100` 每圈开始前判断,false 就退出;`i++` 每圈结束后执行。
+三段式:`int i = 1` 初始化,只执行一次;`i <= 100` 每轮开始前判断,false 就退出;`i++` 每轮结束后执行。
 
 遍历数组有更省事的 for-each,不用管下标:
 
@@ -117,7 +117,7 @@ for (int s : scores) {
 
 ## while 和 do while
 
-不知道转几圈、只知道停止条件时,用 while:
+不知道循环几次、只知道停止条件时,用 while:
 
 ```java
 int n = 1;
@@ -127,7 +127,7 @@ while (n < 100) {
 System.out.println(n);   // 128
 ```
 
-do while 先执行一圈再判断,所以至少执行一次:
+do while 先执行一轮再判断,所以至少执行一次:
 
 ```java
 do {
@@ -142,7 +142,7 @@ do {
 ## break 和 continue
 
 - `break`:整个循环立刻结束,跳出去执行后面的代码;
-- `continue`:本轮剩下的代码跳过,直接进入下一圈。
+- `continue`:本轮剩下的代码跳过,直接进入下一轮。
 
 ```java
 for (int i = 1; i <= 10; i++) {
@@ -171,7 +171,7 @@ for (int i = 0; i <= 5; i++) { // i = 5 时越界,抛异常
 
 - if 条件必须是 boolean;分支只有一行也写花括号;
 - switch 新代码用箭头写法,不穿透、不用 break,还能当表达式;
-- 知道圈数用 for,只知道停止条件用 while,遍历数组优先 for-each;
+- 知道次数用 for,只知道停止条件用 while,遍历数组优先 for-each;
 - break 结束整个循环,continue 跳过本轮,都只管自己那一层;
 - 循环条件写 `i < n`,边界差一是最常见的 bug。
 

@@ -4,7 +4,7 @@
   "children": [
     {
       "id": "if",
-      "text": "if 分岔",
+      "text": "if 分支",
       "children": [
         { "id": "if-bool", "text": "条件必须是 boolean,从上往下命中即止", "children": [] },
         { "id": "if-brace", "text": "一行也写花括号,缩进不决定归属", "children": [] }

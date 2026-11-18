@@ -19,7 +19,7 @@
       "children": [
         {
           "id": "bd-str",
-          "text": "字符串构造;double 构造搬进误差",
+          "text": "字符串构造;double 构造带入误差",
           "children": []
         },
         {
@@ -36,7 +36,7 @@
     },
     {
       "id": "cmp",
-      "text": "比较的坑",
+      "text": "比较的易错点",
       "children": [
         {
           "id": "cmp-scale",

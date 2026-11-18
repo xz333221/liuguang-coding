@@ -1,6 +1,6 @@
 ---
 title: 数组
-summary: '数组是一组同类型的值,长度定了就不能变,下标从 0 开始。数组是引用类型:赋值抄的是引用,改一个另一个也变;要独立副本用 Arrays.copyOf。'
+summary: '数组是一组同类型的值,长度定了就不能变,下标从 0 开始。数组是引用类型:赋值复制的是引用,改一个另一个也变;要独立副本用 Arrays.copyOf。'
 category: java
 node: java-quickstart-array
 order: 8
@@ -83,18 +83,18 @@ System.out.println(Arrays.toString(b));   // [90, 100, 77]
 
 `Arrays` 是 `java.util` 里的工具类,用之前要 `import java.util.Arrays;`。它还有 `sort`(排序)、`copyOf`(复制)等,后面用到再查。
 
-## 数组是引用类型:赋值抄的是引用
+## 数组是引用类型:赋值复制的是引用
 
 这一节是关键,看例子:
 
 ```java
 int[] a = {1, 2, 3};
-int[] b = a;        // 把 a 的引用抄给 b,不是复制数组
+int[] b = a;        // 把 a 的引用复制给 b,不是复制数组
 b[0] = 99;
 System.out.println(a[0]);   // 99,a 也变了
 ```
 
-基本类型赋值是抄值,两不相干;数组赋值是抄引用,两个变量指向同一个数组,改哪个名字看到的都是同一份数据。画出来:
+基本类型赋值是复制值,两不相干;数组赋值是复制引用,两个变量指向同一个数组,改哪个名字看到的都是同一份数据。画出来:
 
 ```text
 a ──┐
@@ -134,7 +134,7 @@ System.out.println(grid.length);  // 2,行数
 - 数组长度固定,下标 0 到 length-1,越界运行时抛异常;
 - 只指定长度时元素拿默认值:0 / 0.0 / false / null;
 - 遍历优先 for-each;打印内容用 Arrays.toString,直接 println 打印的是哈希码;
-- 数组是引用类型,赋值抄引用,改一处两处都变;独立副本用 Arrays.copyOf;
+- 数组是引用类型,赋值复制引用,改一处两处都变;独立副本用 Arrays.copyOf;
 - 需要可变长度,等第 6 章的 ArrayList。
 
 下一篇讲方法:把一段逻辑包起来,起个名字,反复用。

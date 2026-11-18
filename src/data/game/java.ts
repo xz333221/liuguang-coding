@@ -1,7 +1,7 @@
 // Java 面试题库。
 //
 // 顺序按"语言基础 → 怎么组织代码 → 怎么跑起来"排:先是相等性与基本类型这条
-// 最容易答错的线,再是 String、集合、面向对象,最后是异常、泛型、并发与 JVM。
+// 最容易答错的主线,再是 String、集合、面向对象,最后是异常、泛型、并发与 JVM。
 // 题目能挂术语 link 的都挂上了;知识点重写后再补 see 去处。
 
 import type { Level } from './types'
@@ -90,7 +90,7 @@ export const javaLevels: Level[] = [
           { text: '没有后果,equals 优先被调用', correct: false },
         ],
         explain:
-          '哈希表先按哈希找桶,再在桶里用 equals 认人。哈希不同就落进不同桶,equals 根本没机会被调用。',
+          '哈希表先按哈希值定位桶,再在桶内用 equals 逐个比较 key。哈希不同就落进不同桶,equals 根本不会被调用。',
         link: { term: 'hashcode' },
       },
       {
@@ -102,7 +102,7 @@ export const javaLevels: Level[] = [
           { text: '错', correct: true },
         ],
         explain:
-          'BigDecimal.equals 连 scale(小数位数)一起比,1.0 与 1.00 不相等。按数值比较要用 compareTo(...) == 0。这是金额场景的经典坑。',
+          'BigDecimal.equals 连 scale(小数位数)一起比,1.0 与 1.00 不相等。按数值比较要用 compareTo(...) == 0。这是金额场景的经典易错点。',
         link: { term: 'bigdecimal' },
       },
       {
@@ -559,7 +559,7 @@ export const javaLevels: Level[] = [
       {
         id: 'j-ex-6',
         kind: 'scenario',
-        prompt: '`catch (Exception e)` 一把梭的问题主要是:',
+        prompt: '`catch (Exception e)` 不加区分地捕获所有异常,问题主要是:',
         choices: [
           { text: '把编程错误也吞了,问题被藏起来', correct: true },
           { text: '性能明显下降', correct: false },
@@ -637,7 +637,7 @@ export const javaLevels: Level[] = [
           { text: '错', correct: false },
         ],
         explain:
-          '类型参数会被擦除成 Object,基本类型塞不进 Object。写 `List<int>` 编译不过,得用 `List<Integer>`。',
+          '类型参数会被擦除成 Object,基本类型不是对象,不能直接作为 Object 存入。写 `List<int>` 编译不过,得用 `List<Integer>`。',
         link: { term: 'wrapper-class' },
       },
       {
@@ -697,7 +697,7 @@ export const javaLevels: Level[] = [
           { text: '前者性能更差但更安全', correct: false },
         ],
         explain:
-          'Hashtable 给整个方法加锁,一把大锁全挡住。ConcurrentHashMap 按桶 / 节点加锁,读基本不阻塞,也不允许 null 键值。',
+          'Hashtable 给整个方法加锁,同一时刻只允许一个线程访问。ConcurrentHashMap 按桶 / 节点加锁,读基本不阻塞,也不允许 null 键值。',
         link: { term: 'hash-table' },
       },
       {
@@ -722,7 +722,7 @@ export const javaLevels: Level[] = [
           { text: '错', correct: false },
         ],
         explain:
-          '线程池的线程会复用,ThreadLocal 里存的大对象不清理就一直在。Entry 的 key 是弱引用,value 不是,容易累积。',
+          '线程池的线程会复用,ThreadLocal 里存的大对象不清理就会一直保留。Entry 的 key 是弱引用,value 不是,容易累积。',
       },
       {
         id: 'j-con-6',
@@ -770,7 +770,7 @@ export const javaLevels: Level[] = [
           { text: '栈用于多线程,堆用于单线程', correct: false },
         ],
         explain:
-          '每个线程一份栈,方法进栈压帧、返回撕帧;对象都分配在堆,被所有线程共享。栈溢出(StackOverflowError)多半是递归太深。',
+          '每个线程一份栈,方法调用压入栈帧、返回弹出栈帧;对象都分配在堆,被所有线程共享。栈溢出(StackOverflowError)多半是递归太深。',
         link: { term: 'stack-and-heap' },
       },
       {
@@ -796,7 +796,7 @@ export const javaLevels: Level[] = [
           { text: '访问速度不同', correct: false },
         ],
         explain:
-          '强引用一直活着;软引用在内存不足前回收(适合缓存);弱引用下次 GC 就没了(适合 ThreadLocal 的 key、WeakHashMap)。',
+          '强引用始终存活;软引用在内存不足前回收(适合缓存);弱引用下次 GC 即被回收(适合 ThreadLocal 的 key、WeakHashMap)。',
         link: { term: 'reference' },
       },
       {

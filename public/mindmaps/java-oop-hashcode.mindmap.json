@@ -4,7 +4,7 @@
   "children": [
     {
       "id": "how",
-      "text": "HashMap 认人两步",
+      "text": "HashMap 查找两步",
       "children": [
         {
           "id": "how-1",

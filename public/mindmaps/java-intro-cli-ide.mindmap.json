@@ -85,7 +85,7 @@
     },
     {
       "id": "jar",
-      "text": "打包与 -jar 的坑",
+      "text": "打包与 -jar 的易错点",
       "children": [
         {
           "id": "jar-cmd",

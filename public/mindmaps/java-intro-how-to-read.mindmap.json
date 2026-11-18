@@ -86,7 +86,7 @@
       "children": [
         {
           "id": "read-concl",
-          "text": "按目标选入口,不必从头硬啃",
+          "text": "按目标选入口,不必从头逐章读",
           "children": []
         },
         {
@@ -146,7 +146,7 @@
         },
         {
           "id": "dont-jvm",
-          "text": "不一开始啃 JVM 与并发",
+          "text": "不一开始学 JVM 与并发",
           "children": []
         },
         {

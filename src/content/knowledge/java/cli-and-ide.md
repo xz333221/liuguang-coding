@@ -36,7 +36,7 @@ sources:
     note: 「工作中都用 IDE,仍值得花 10 分钟学命令行编译执行」的出处。
 ---
 
-实际工作中没人天天敲 `javac`,大家都用 IDE,点一下运行按钮就完事。但还是建议花十分钟,在命令行把编译和运行亲手做一遍。原因很简单:IDE 的运行按钮背后就是这两条命令,亲手跑过,以后报错你才知道是编译的问题还是运行的问题,该查哪一步。
+实际工作中没人天天敲 `javac`,大家都用 IDE,点一下运行按钮即可。但还是建议花十分钟,在命令行把编译和运行亲手做一遍。原因很简单:IDE 的运行按钮背后就是这两条命令,亲手跑过,以后报错你才知道是编译的问题还是运行的问题,该查哪一步。
 
 ## 两步:先编译,再运行
 
@@ -62,7 +62,7 @@ JVM 加载一个类的时候,得知道去哪个目录找对应的 `.class` 文�
 
 多个目录用分隔符连起来:Windows 用 `;`,Linux 和 macOS 用 `:`。JVM 按顺序逐个找,找到就停,全找不到才报错。
 
-注意两点,都是老教程留下的坑:
+注意两点,都是老教程留下的易错点:
 
 - 不要在系统环境变量里设全局 `CLASSPATH`,那样会影响机器上所有 Java 程序。需要指定就在启动时用 `-cp`,用完即走;
 - 不要把 Java 核心库加进 classpath。`String`、`ArrayList` 这些类 JVM 自己知道去哪找,不用你操心。
@@ -134,7 +134,7 @@ java -jar app.jar
 
 `--main-class` 把入口类写进 jar 的清单文件(manifest),`java -jar` 时 JVM 读它决定从哪个类开始执行。
 
-这里有个真坑:用了 `-jar`,命令行上的 `-cp` 就会被忽略,classpath 改由 manifest 里的 `Class-Path` 决定。所以 `java -cp lib/* -jar app.jar` 找不到依赖不是 bug,是规则如此。两个解决办法:把依赖写进 manifest,或者不用 `-jar`,改回普通方式:
+这里有个真正的陷阱:用了 `-jar`,命令行上的 `-cp` 就会被忽略,classpath 改由 manifest 里的 `Class-Path` 决定。所以 `java -cp lib/* -jar app.jar` 找不到依赖不是 bug,是规则如此。两个解决办法:把依赖写进 manifest,或者不用 `-jar`,改回普通方式:
 
 ```bash
 java -cp "app.jar;lib/*" demo.Hello   # Windows 用 ; 分隔,Linux/macOS 用 :
@@ -142,7 +142,7 @@ java -cp "app.jar;lib/*" demo.Hello   # Windows 用 ; 分隔,Linux/macOS 用 :
 
 ## jshell:试 API 不用建文件
 
-JDK 自带一个交互式工具 jshell,敲一行执行一行,学新类的时候特别顺手:
+JDK 自带一个交互式工具 jshell,敲一行执行一行,学新类的时候很方便:
 
 ```text
 $ jshell
@@ -173,7 +173,7 @@ IDE 是集成开发环境(Integrated Development Environment),把写代码、编
 Java 的 IDE 现在主要三个选择:
 
 - IntelliJ IDEA:2025.3 起社区版和旗舰版合并成一个发行版,Java / Kotlin 核心开发功能免费(含商用),Spring 深度支持、数据库工具等高级功能走 Ultimate 订阅。学 Java 装它就够;
-- VS Code + Extension Pack for Java:轻量,适合本来就住在 VS Code 里的人;
+- VS Code + Extension Pack for Java:轻量,适合本来就用 VS Code 的人;
 - Eclipse:老牌免费,公司里存量不少。
 
 IDE 没有发明新步骤,它做的还是 `javac` 和 `java` 那两件事,只是自动化了。对照一下:

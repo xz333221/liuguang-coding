@@ -91,7 +91,7 @@ new BigDecimal("3.14159").setScale(2, RoundingMode.HALF_UP);   // 3.14
 
 所有运算都返回新对象。`a.add(b);` 不接返回值等于白算——这是初学者最常犯的错,和 String 一个道理。
 
-## equals 的坑:连位数一起比
+## equals 的易错点:连位数一起比
 
 BigDecimal 的 equals 同时比数值和 scale:
 
@@ -122,7 +122,7 @@ stripTrailingZeros 去掉多余的尾零,展示金额时常用。
 ## 小结
 
 - BigInteger 任意精度整数,运算走方法,不可变;
-- BigDecimal 用字符串构造,double 构造会搬进二进制误差;valueOf 是折中;
+- BigDecimal 用字符串构造,double 构造会带入二进制误差;valueOf 是折中;
 - 除法必须给 scale + RoundingMode,否则除不尽抛异常;运算返回新对象;
 - equals 连 scale 一起比,数值比较用 compareTo == 0;输出用 toPlainString;
 - 金额用 BigDecimal 或 long 存分,别用 double。

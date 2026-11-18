@@ -13,7 +13,7 @@
         },
         {
           "id": "inst-limit",
-          "text": "static 没有 this,摸不到实例字段",
+          "text": "static 没有 this,访问不了实例字段",
           "children": []
         }
       ]
@@ -40,7 +40,7 @@
       "children": [
         {
           "id": "pass-rule",
-          "text": "只有值传递,引用类型抄引用",
+          "text": "只有值传递,引用类型复制引用",
           "children": []
         }
       ]
