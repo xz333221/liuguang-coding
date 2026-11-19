@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { categoryId, categoryName, title } = Astro.props
-// 章节树有三层,面包屑要整条祖先链都带上(编程语言 / Java / 3 面向对象 / 3.2 比较规则)
+// 章节树有三层,面包屑要整条祖先链都带上(后端 / Java / 3 面向对象 / 3.2 比较规则)
 const trail = pathOf(categoryId)
 ---
 
