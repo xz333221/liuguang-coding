@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "组件、props 与状态",
+  "children": [
+    {
+      "id": "shape",
+      "text": "组件形状",
+      "children": [
+        { "id": "shape-sfc", "text": "单文件组件", "children": [] },
+        { "id": "shape-fn", "text": "函数返回 JSX", "children": [] },
+        { "id": "shape-io", "text": "props 进事件出", "children": [] }
+      ]
+    },
+    {
+      "id": "props",
+      "text": "props",
+      "children": [
+        { "id": "props-readonly", "text": "只读,不直接改", "children": [] },
+        { "id": "props-derive", "text": "派生值现算", "children": [] },
+        { "id": "props-flow", "text": "单向数据流", "children": [] }
+      ]
+    },
+    {
+      "id": "state",
+      "text": "状态放哪",
+      "children": [
+        { "id": "state-local", "text": "就近放最低层", "children": [] },
+        { "id": "state-lift", "text": "兄弟共享才提升", "children": [] },
+        { "id": "state-controlled", "text": "开关交给父级", "children": [] }
+      ]
+    },
+    {
+      "id": "content",
+      "text": "传结构",
+      "children": [
+        { "id": "content-slot", "text": "slot 与具名插槽", "children": [] },
+        { "id": "content-children", "text": "children 传 JSX", "children": [] },
+        { "id": "content-scoped", "text": "作用域插槽回填", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfalls",
+      "text": "常见坑",
+      "children": [
+        { "id": "pitfalls-init", "text": "props 初始化 state", "children": [] },
+        { "id": "pitfalls-inner", "text": "组件内定义组件", "children": [] },
+        { "id": "pitfalls-inline", "text": "内联对象破 memo", "children": [] }
+      ]
+    }
+  ]
+}

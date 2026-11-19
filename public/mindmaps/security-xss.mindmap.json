@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "XSS 注入与防御",
+  "children": [
+    {
+      "id": "types",
+      "text": "三种类型",
+      "children": [
+        { "id": "types-stored", "text": "存储型影响所有访客", "children": [] },
+        { "id": "types-reflect", "text": "反射型靠诱导点击", "children": [] },
+        { "id": "types-dom", "text": "DOM 型不过服务端", "children": [] }
+      ]
+    },
+    {
+      "id": "sink",
+      "text": "危险 sink",
+      "children": [
+        { "id": "sink-html", "text": "innerHTML 解析 HTML", "children": [] },
+        { "id": "sink-code", "text": "eval 与字符串定时器", "children": [] },
+        { "id": "sink-url", "text": "href 的伪协议", "children": [] }
+      ]
+    },
+    {
+      "id": "encode",
+      "text": "上下文编码",
+      "children": [
+        { "id": "enc-attr", "text": "属性值必须加引号", "children": [] },
+        { "id": "enc-url", "text": "协议位用白名单", "children": [] },
+        { "id": "enc-output", "text": "输出时编码不回存", "children": [] }
+      ]
+    },
+    {
+      "id": "rich",
+      "text": "富文本清洗",
+      "children": [
+        { "id": "rich-white", "text": "白名单不是黑名单", "children": [] },
+        { "id": "rich-purify", "text": "DOMPurify 定标签表", "children": [] },
+        { "id": "rich-restore", "text": "清洗结果别回存", "children": [] }
+      ]
+    },
+    {
+      "id": "defense",
+      "text": "默认安全写法",
+      "children": [
+        { "id": "def-text", "text": "textContent 不解析", "children": [] },
+        { "id": "def-framework", "text": "显式开关才危险", "children": [] },
+        { "id": "def-httponly", "text": "HttpOnly 只挡读取", "children": [] }
+      ]
+    }
+  ]
+}

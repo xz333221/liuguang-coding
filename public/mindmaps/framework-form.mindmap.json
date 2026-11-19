@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "事件、表单与双向绑定",
+  "children": [
+    {
+      "id": "events",
+      "text": "事件",
+      "children": [
+        { "id": "events-modifier", "text": "修饰符省样板", "children": [] },
+        { "id": "events-synthetic", "text": "合成事件抹平差异", "children": [] },
+        { "id": "events-prevent", "text": "return false 无效", "children": [] }
+      ]
+    },
+    {
+      "id": "controlled",
+      "text": "受控与非受控",
+      "children": [
+        { "id": "controlled-pair", "text": "value 配 onChange", "children": [] },
+        { "id": "controlled-readonly", "text": "只给 value 变只读", "children": [] },
+        { "id": "controlled-ref", "text": "非受控用 ref 读", "children": [] }
+      ]
+    },
+    {
+      "id": "vmodel",
+      "text": "v-model",
+      "children": [
+        { "id": "vmodel-expand", "text": "value 加 input", "children": [] },
+        { "id": "vmodel-checkbox", "text": "checkbox 用 checked", "children": [] },
+        { "id": "vmodel-modifier", "text": "lazy number trim", "children": [] }
+      ]
+    },
+    {
+      "id": "submit",
+      "text": "提交校验",
+      "children": [
+        { "id": "submit-formdata", "text": "FormData 收集", "children": [] },
+        { "id": "submit-validity", "text": "原生校验先跑", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfalls",
+      "text": "常见坑",
+      "children": [
+        { "id": "pitfalls-ime", "text": "输入法组词抖动", "children": [] },
+        { "id": "pitfalls-number", "text": "空串转成 0", "children": [] },
+        { "id": "pitfalls-rerender", "text": "大表单整表重渲染", "children": [] }
+      ]
+    }
+  ]
+}

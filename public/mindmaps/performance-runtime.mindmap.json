@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "运行时性能",
+  "children": [
+    {
+      "id": "longtask",
+      "text": "长任务",
+      "children": [
+        { "id": "lt-50", "text": "超过 50ms 卡输入", "children": [] },
+        { "id": "lt-delay", "text": "输入延迟占大头", "children": [] },
+        { "id": "lt-cost", "text": "让路有调度开销", "children": [] }
+      ]
+    },
+    {
+      "id": "yield",
+      "text": "让路手段",
+      "children": [
+        { "id": "yd-yield", "text": "scheduler.yield 优先", "children": [] },
+        { "id": "yd-timeout", "text": "setTimeout 兜底", "children": [] },
+        { "id": "yd-idle", "text": "idle 只给非紧急", "children": [] }
+      ]
+    },
+    {
+      "id": "virtual",
+      "text": "虚拟列表",
+      "children": [
+        { "id": "vl-window", "text": "按滚动算窗口", "children": [] },
+        { "id": "vl-over", "text": "overscan 补几行", "children": [] },
+        { "id": "vl-pad", "text": "padding 撑总高", "children": [] },
+        { "id": "vl-raf", "text": "rAF 合并滚动", "children": [] }
+      ]
+    },
+    {
+      "id": "render",
+      "text": "渲染开销",
+      "children": [
+        { "id": "rd-rw", "text": "先读后写不交替", "children": [] },
+        { "id": "rd-cv", "text": "content-visibility 跳过", "children": [] },
+        { "id": "rd-anim", "text": "动画交给合成", "children": [] }
+      ]
+    },
+    {
+      "id": "handler",
+      "text": "回调瘦身",
+      "children": [
+        { "id": "hd-debounce", "text": "输入防抖去竞态", "children": [] },
+        { "id": "hd-passive", "text": "passive 滚动监听", "children": [] },
+        { "id": "hd-cache", "text": "缓存几何读取", "children": [] }
+      ]
+    }
+  ]
+}

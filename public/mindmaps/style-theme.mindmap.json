@@ -1,0 +1,46 @@
+{
+  "id": "root",
+  "text": "深浅色、对比度与排版",
+  "children": [
+    {
+      "id": "dark",
+      "text": "深色主题",
+      "children": [
+        { "id": "dark-tokens", "text": "一套结构两套值", "children": [] },
+        { "id": "dark-scheme", "text": "color-scheme 管控件", "children": [] },
+        { "id": "dark-contrast", "text": "不用纯黑配纯白", "children": [] },
+        { "id": "dark-saturate", "text": "饱和色降一档", "children": [] }
+      ]
+    },
+    {
+      "id": "switch",
+      "text": "切换机制",
+      "children": [
+        { "id": "switch-attr", "text": "data-theme 权重更高", "children": [] },
+        { "id": "switch-light", "text": "显式浅色块也要写", "children": [] },
+        { "id": "switch-fouc", "text": "head 内联脚本防白闪", "children": [] },
+        { "id": "switch-storage", "text": "localStorage 要 try", "children": [] }
+      ]
+    },
+    {
+      "id": "contrast",
+      "text": "对比度",
+      "children": [
+        { "id": "contrast-body", "text": "正文 4.5:1", "children": [] },
+        { "id": "contrast-large", "text": "大字号 3:1", "children": [] },
+        { "id": "contrast-graphic", "text": "图标与焦点环 3:1", "children": [] },
+        { "id": "contrast-alpha", "text": "半透明按合成色算", "children": [] }
+      ]
+    },
+    {
+      "id": "type",
+      "text": "流体排版",
+      "children": [
+        { "id": "type-clamp", "text": "clamp 三段落区间", "children": [] },
+        { "id": "type-rem", "text": "上下限用 rem", "children": [] },
+        { "id": "type-leading", "text": "行高无单位", "children": [] },
+        { "id": "type-track", "text": "字距用 em", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "从零做一个静态站点",
+  "children": [
+    {
+      "id": "layout",
+      "text": "目录约定",
+      "children": [
+        { "id": "layout-page", "text": "页面即 html", "children": [] },
+        { "id": "layout-src", "text": "样式脚本进 src", "children": [] },
+        { "id": "layout-public", "text": "public 原样搬", "children": [] }
+      ]
+    },
+    {
+      "id": "page",
+      "text": "页面与样式",
+      "children": [
+        { "id": "page-semantic", "text": "语义化结构", "children": [] },
+        { "id": "page-module", "text": "模块脚本延迟", "children": [] },
+        { "id": "page-measure", "text": "行宽 68ch", "children": [] },
+        { "id": "page-grid", "text": "minmax 防撑破", "children": [] }
+      ]
+    },
+    {
+      "id": "current",
+      "text": "当前页高亮",
+      "children": [
+        { "id": "current-aria", "text": "aria-current", "children": [] },
+        { "id": "current-prefix", "text": "前缀匹配子路径", "children": [] },
+        { "id": "current-year", "text": "年份占位替换", "children": [] }
+      ]
+    },
+    {
+      "id": "build",
+      "text": "多页构建",
+      "children": [
+        { "id": "build-input", "text": "多页入口 input", "children": [] },
+        { "id": "build-esm", "text": "配置无 dirname", "children": [] },
+        { "id": "build-hash", "text": "文件名带 hash", "children": [] }
+      ]
+    },
+    {
+      "id": "verify",
+      "text": "上线前验证",
+      "children": [
+        { "id": "verify-preview", "text": "preview 验产物", "children": [] },
+        { "id": "verify-file", "text": "file 协议限制", "children": [] },
+        { "id": "verify-path", "text": "部署后路径 404", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "泛型与约束",
+  "children": [
+    {
+      "id": "gen-param",
+      "text": "类型参数",
+      "children": [
+        { "id": "gen-param-relation", "text": "保留输入输出关系", "children": [] },
+        { "id": "gen-param-any", "text": "any 丢掉信息", "children": [] },
+        { "id": "gen-param-explicit", "text": "推断不出就显式传", "children": [] }
+      ]
+    },
+    {
+      "id": "gen-constraint",
+      "text": "约束",
+      "children": [
+        { "id": "gen-constraint-extends", "text": "extends 限定形状", "children": [] },
+        { "id": "gen-constraint-keyof", "text": "keyof 取出键", "children": [] },
+        { "id": "gen-constraint-indexed", "text": "T[K] 精确取值", "children": [] }
+      ]
+    },
+    {
+      "id": "gen-default",
+      "text": "默认参数",
+      "children": [
+        { "id": "gen-default-when", "text": "推断不出才生效", "children": [] },
+        { "id": "gen-default-order", "text": "有默认值的排后面", "children": [] }
+      ]
+    },
+    {
+      "id": "gen-container",
+      "text": "容器与类",
+      "children": [
+        { "id": "gen-container-interface", "text": "接口带类型参数", "children": [] },
+        { "id": "gen-container-class", "text": "类实例绑定类型", "children": [] },
+        { "id": "gen-container-ctor", "text": "构造签名 new", "children": [] }
+      ]
+    },
+    {
+      "id": "gen-runtime",
+      "text": "运行时不存在",
+      "children": [
+        { "id": "gen-runtime-schema", "text": "传 schema 或守卫", "children": [] },
+        { "id": "gen-runtime-tsx", "text": "tsx 里要加逗号", "children": [] }
+      ]
+    }
+  ]
+}

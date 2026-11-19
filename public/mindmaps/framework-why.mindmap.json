@@ -1,0 +1,41 @@
+{
+  "id": "root",
+  "text": "框架解决什么问题",
+  "children": [
+    {
+      "id": "imperative",
+      "text": "手写更新",
+      "children": [
+        { "id": "imperative-sync", "text": "状态视图两份真相", "children": [] },
+        { "id": "imperative-miss", "text": "漏改一处静默出错", "children": [] },
+        { "id": "imperative-cost", "text": "同步点随功能相乘", "children": [] }
+      ]
+    },
+    {
+      "id": "declarative",
+      "text": "声明式",
+      "children": [
+        { "id": "declarative-view", "text": "视图是状态的函数", "children": [] },
+        { "id": "declarative-derive", "text": "衍生值写成表达式", "children": [] }
+      ]
+    },
+    {
+      "id": "tracking",
+      "text": "两种追踪",
+      "children": [
+        { "id": "tracking-proxy", "text": "Proxy 读收集写通知", "children": [] },
+        { "id": "tracking-ref", "text": "ref 用 getter setter", "children": [] },
+        { "id": "tracking-rerun", "text": "React 重跑函数再 diff", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfalls",
+      "text": "失效场景",
+      "children": [
+        { "id": "pitfalls-destructure", "text": "解构丢响应式", "children": [] },
+        { "id": "pitfalls-replace", "text": "整体替换丢代理", "children": [] },
+        { "id": "pitfalls-mutate", "text": "原地改引用没变", "children": [] }
+      ]
+    }
+  ]
+}

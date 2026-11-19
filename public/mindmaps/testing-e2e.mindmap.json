@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "端到端：Playwright",
+  "children": [
+    {
+      "id": "scope",
+      "text": "跑什么",
+      "children": [
+        { "id": "scope-real", "text": "真浏览器跑打包产物", "children": [] },
+        { "id": "scope-main", "text": "只覆盖主路径", "children": [] },
+        { "id": "scope-cost", "text": "慢且失败信息少", "children": [] }
+      ]
+    },
+    {
+      "id": "locator",
+      "text": "定位器",
+      "children": [
+        { "id": "locator-role", "text": "getByRole 优先", "children": [] },
+        { "id": "locator-strict", "text": "严格模式命中多个报错", "children": [] },
+        { "id": "locator-scope", "text": "收窄到行或弹窗", "children": [] }
+      ]
+    },
+    {
+      "id": "wait",
+      "text": "自动等待",
+      "children": [
+        { "id": "wait-action", "text": "动作前查可见与稳定", "children": [] },
+        { "id": "wait-assert", "text": "断言重试到超时", "children": [] },
+        { "id": "wait-text", "text": "textContent 不等待", "children": [] }
+      ]
+    },
+    {
+      "id": "auth",
+      "text": "登录态复用",
+      "children": [
+        { "id": "auth-setup", "text": "setup 项目先登录", "children": [] },
+        { "id": "auth-state", "text": "storageState 存文件", "children": [] },
+        { "id": "auth-session", "text": "sessionStorage 不在内", "children": [] }
+      ]
+    },
+    {
+      "id": "ops",
+      "text": "调试与并行",
+      "children": [
+        { "id": "ops-trace", "text": "trace 回放每一步", "children": [] },
+        { "id": "ops-shard", "text": "--shard 拆到多机", "children": [] },
+        { "id": "ops-server", "text": "webServer 自起服务", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "id": "root",
+  "text": "缓存与失效：SWR / TanStack Query",
+  "children": [
+    {
+      "id": "four",
+      "text": "四个问题",
+      "children": [
+        { "id": "four-key", "text": "键怎么认", "children": [] },
+        { "id": "four-fresh", "text": "何时算新鲜", "children": [] },
+        { "id": "four-refetch", "text": "何时重取", "children": [] },
+        { "id": "four-gc", "text": "何时回收", "children": [] }
+      ]
+    },
+    {
+      "id": "swr",
+      "text": "stale-while-revalidate",
+      "children": [
+        { "id": "swr-old", "text": "先给旧值再更新", "children": [] },
+        { "id": "swr-http", "text": "HTTP 缓存同名指令", "children": [] },
+        { "id": "swr-lib", "text": "SWR 的键与 mutate", "children": [] }
+      ]
+    },
+    {
+      "id": "times",
+      "text": "两个时间",
+      "children": [
+        { "id": "times-stale", "text": "staleTime 默认 0", "children": [] },
+        { "id": "times-gc", "text": "gcTime 默认 5 分钟", "children": [] },
+        { "id": "times-rename", "text": "cacheTime 已改名", "children": [] }
+      ]
+    },
+    {
+      "id": "key",
+      "text": "缓存键",
+      "children": [
+        { "id": "key-params", "text": "带上全部参数", "children": [] },
+        { "id": "key-stable", "text": "不能放变化的值", "children": [] },
+        { "id": "key-prefix", "text": "数组前缀匹配", "children": [] }
+      ]
+    },
+    {
+      "id": "invalidate",
+      "text": "失效与去重",
+      "children": [
+        { "id": "invalidate-call", "text": "invalidateQueries", "children": [] },
+        { "id": "invalidate-set", "text": "setQueryData 就地改", "children": [] },
+        { "id": "invalidate-dedupe", "text": "同键在途请求去重", "children": [] },
+        { "id": "invalidate-ssr", "text": "SSR 每请求一个实例", "children": [] }
+      ]
+    }
+  ]
+}

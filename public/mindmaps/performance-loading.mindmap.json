@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "加载性能：关键渲染路径",
+  "children": [
+    {
+      "id": "path",
+      "text": "关键路径",
+      "children": [
+        { "id": "path-dom", "text": "HTML 解析成 DOM", "children": [] },
+        { "id": "path-css", "text": "CSS 阻塞渲染", "children": [] },
+        { "id": "path-script", "text": "同步脚本阻塞解析", "children": [] }
+      ]
+    },
+    {
+      "id": "script",
+      "text": "脚本加载方式",
+      "children": [
+        { "id": "script-defer", "text": "defer 保序延迟", "children": [] },
+        { "id": "script-async", "text": "async 下完即跑", "children": [] },
+        { "id": "script-module", "text": "module 默认延迟", "children": [] }
+      ]
+    },
+    {
+      "id": "conn",
+      "text": "提前建连",
+      "children": [
+        { "id": "conn-preconnect", "text": "preconnect 三步握手", "children": [] },
+        { "id": "conn-dns", "text": "dns-prefetch 只查域名", "children": [] },
+        { "id": "conn-limit", "text": "控制在 4 个以内", "children": [] }
+      ]
+    },
+    {
+      "id": "preload",
+      "text": "preload 关键资源",
+      "children": [
+        { "id": "pre-as", "text": "as 必须写对", "children": [] },
+        { "id": "pre-font", "text": "字体要 crossorigin", "children": [] },
+        { "id": "pre-warn", "text": "预载未用的警告", "children": [] }
+      ]
+    },
+    {
+      "id": "prio",
+      "text": "优先级",
+      "children": [
+        { "id": "prio-high", "text": "LCP 图提为 high", "children": [] },
+        { "id": "prio-low", "text": "折叠线下给 low", "children": [] },
+        { "id": "prio-css", "text": "非关键 CSS 异步化", "children": [] }
+      ]
+    }
+  ]
+}

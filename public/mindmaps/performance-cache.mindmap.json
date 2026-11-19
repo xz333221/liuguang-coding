@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "缓存策略与 CDN",
+  "children": [
+    {
+      "id": "level",
+      "text": "两级缓存",
+      "children": [
+        { "id": "lv-strong", "text": "强缓存不发请求", "children": [] },
+        { "id": "lv-negotiate", "text": "协商缓存回 304", "children": [] },
+        { "id": "lv-order", "text": "先过期再验证", "children": [] }
+      ]
+    },
+    {
+      "id": "asset",
+      "text": "静态资源",
+      "children": [
+        { "id": "as-hash", "text": "文件名带内容哈希", "children": [] },
+        { "id": "as-immutable", "text": "immutable 跳过验证", "children": [] },
+        { "id": "as-year", "text": "max-age 一年", "children": [] }
+      ]
+    },
+    {
+      "id": "html",
+      "text": "HTML 与指令",
+      "children": [
+        { "id": "ht-nocache", "text": "HTML 用 no-cache", "children": [] },
+        { "id": "ht-store", "text": "no-store 完全不存", "children": [] },
+        { "id": "ht-swr", "text": "先旧后新 swr", "children": [] }
+      ]
+    },
+    {
+      "id": "cdn",
+      "text": "CDN",
+      "children": [
+        { "id": "cd-smaxage", "text": "s-maxage 管共享缓存", "children": [] },
+        { "id": "cd-private", "text": "private 禁止 CDN", "children": [] },
+        { "id": "cd-back", "text": "回源次数看命中率", "children": [] }
+      ]
+    },
+    {
+      "id": "key",
+      "text": "缓存键与验证",
+      "children": [
+        { "id": "ky-vary", "text": "Vary 控制键", "children": [] },
+        { "id": "ky-ua", "text": "Vary UA 命中归零", "children": [] },
+        { "id": "ky-curl", "text": "curl 看响应头", "children": [] }
+      ]
+    }
+  ]
+}

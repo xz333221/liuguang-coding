@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "覆盖率与 CI 门禁",
+  "children": [
+    {
+      "id": "metric",
+      "text": "四个口径",
+      "children": [
+        { "id": "metric-branch", "text": "分支最能暴露漏测", "children": [] },
+        { "id": "metric-line", "text": "行覆盖一行只算一次", "children": [] },
+        { "id": "metric-threshold", "text": "阈值从现状往上加", "children": [] }
+      ]
+    },
+    {
+      "id": "provider",
+      "text": "统计方式",
+      "children": [
+        { "id": "provider-v8", "text": "v8 快,靠 sourcemap", "children": [] },
+        { "id": "provider-istanbul", "text": "istanbul 插桩更细", "children": [] },
+        { "id": "provider-report", "text": "看标红的分支", "children": [] }
+      ]
+    },
+    {
+      "id": "fake",
+      "text": "不等于质量",
+      "children": [
+        { "id": "fake-call", "text": "调用一次就满分", "children": [] },
+        { "id": "fake-assert", "text": "没断言也能覆盖", "children": [] },
+        { "id": "fake-mutation", "text": "变异测试看断言强度", "children": [] }
+      ]
+    },
+    {
+      "id": "pipeline",
+      "text": "流水线",
+      "children": [
+        { "id": "pipeline-jobs", "text": "静态、单元、端到端并行", "children": [] },
+        { "id": "pipeline-ci", "text": "npm ci 加缓存", "children": [] },
+        { "id": "pipeline-warnings", "text": "max-warnings 设为 0", "children": [] },
+        { "id": "pipeline-shard", "text": "端到端分片跑", "children": [] }
+      ]
+    },
+    {
+      "id": "flaky",
+      "text": "重试与 flaky",
+      "children": [
+        { "id": "flaky-green", "text": "重试通过算 flaky", "children": [] },
+        { "id": "flaky-trust", "text": "全员学会重跑", "children": [] },
+        { "id": "flaky-trace", "text": "留 trace 找不稳定点", "children": [] }
+      ]
+    }
+  ]
+}

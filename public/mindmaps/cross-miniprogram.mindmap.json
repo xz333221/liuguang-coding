@@ -1,0 +1,53 @@
+{
+  "id": "root",
+  "text": "小程序与 Hybrid 容器",
+  "children": [
+    {
+      "id": "thread",
+      "text": "双线程模型",
+      "children": [
+        { "id": "thread-logic", "text": "逻辑层 JSCore 或 V8", "children": [] },
+        { "id": "thread-view", "text": "视图层 WebView", "children": [] },
+        { "id": "thread-nodom", "text": "拿不到 DOM", "children": [] }
+      ]
+    },
+    {
+      "id": "setdata",
+      "text": "setData 开销",
+      "children": [
+        { "id": "setdata-path", "text": "路径写法只传字段", "children": [] },
+        { "id": "setdata-limit", "text": "单次上限 1024KB", "children": [] },
+        { "id": "setdata-direct", "text": "直接改 data 不渲染", "children": [] }
+      ]
+    },
+    {
+      "id": "package",
+      "text": "体积与分包",
+      "children": [
+        { "id": "package-main", "text": "主包 2MB 封顶", "children": [] },
+        { "id": "package-sub", "text": "分包按需下载", "children": [] },
+        { "id": "package-preload", "text": "preloadRule 预下载", "children": [] },
+        { "id": "package-static", "text": "图片字体走 CDN", "children": [] }
+      ]
+    },
+    {
+      "id": "platform",
+      "text": "平台差异",
+      "children": [
+        { "id": "platform-prefix", "text": "wx、my、tt 前缀", "children": [] },
+        { "id": "platform-pay", "text": "登录支付各写各的", "children": [] },
+        { "id": "platform-ifdef", "text": "条件编译分叉", "children": [] }
+      ]
+    },
+    {
+      "id": "hybrid",
+      "text": "Hybrid 与桥",
+      "children": [
+        { "id": "hybrid-bridge", "text": "JSBridge 回调 id", "children": [] },
+        { "id": "hybrid-timing", "text": "注入时机不定", "children": [] },
+        { "id": "hybrid-leak", "text": "跳转后回调泄漏", "children": [] },
+        { "id": "hybrid-white", "text": "白屏与进程回收", "children": [] }
+      ]
+    }
+  ]
+}

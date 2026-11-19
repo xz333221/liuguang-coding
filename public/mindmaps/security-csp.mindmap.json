@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "CSP 与 Trusted Types",
+  "children": [
+    {
+      "id": "directive",
+      "text": "指令与回退",
+      "children": [
+        { "id": "dir-default", "text": "default-src 兜底", "children": [] },
+        { "id": "dir-noinherit", "text": "base-uri 不回退", "children": [] },
+        { "id": "dir-frame", "text": "frame-ancestors 单写", "children": [] }
+      ]
+    },
+    {
+      "id": "nonce",
+      "text": "nonce 与 hash",
+      "children": [
+        { "id": "no-fresh", "text": "每请求重新生成", "children": [] },
+        { "id": "no-cache", "text": "不能被缓存复用", "children": [] },
+        { "id": "no-hash", "text": "静态脚本用 hash", "children": [] }
+      ]
+    },
+    {
+      "id": "strict",
+      "text": "strict-dynamic",
+      "children": [
+        { "id": "st-chain", "text": "信任沿插入链传递", "children": [] },
+        { "id": "st-ignore", "text": "忽略域名白名单", "children": [] },
+        { "id": "st-limit", "text": "innerHTML 不传递", "children": [] }
+      ]
+    },
+    {
+      "id": "rollout",
+      "text": "上线策略",
+      "children": [
+        { "id": "ro-inline", "text": "unsafe-inline 会被忽略", "children": [] },
+        { "id": "ro-report", "text": "先跑 Report-Only", "children": [] },
+        { "id": "ro-eval", "text": "eval 要单独放开", "children": [] }
+      ]
+    },
+    {
+      "id": "trusted",
+      "text": "Trusted Types",
+      "children": [
+        { "id": "tt-sink", "text": "从写入侧收口", "children": [] },
+        { "id": "tt-policy", "text": "策略名要具体", "children": [] },
+        { "id": "tt-support", "text": "只有 Chromium 支持", "children": [] }
+      ]
+    }
+  ]
+}

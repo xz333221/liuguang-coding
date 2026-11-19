@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "映射类型与工具类型",
+  "children": [
+    {
+      "id": "util-mapped",
+      "text": "映射类型",
+      "children": [
+        { "id": "util-mapped-keyof", "text": "keyof 遍历键", "children": [] },
+        { "id": "util-mapped-indexed", "text": "T[K] 取值", "children": [] },
+        { "id": "util-mapped-homo", "text": "同态保留修饰", "children": [] }
+      ]
+    },
+    {
+      "id": "util-modifier",
+      "text": "修饰符",
+      "children": [
+        { "id": "util-modifier-optional", "text": "-? 去可选", "children": [] },
+        { "id": "util-modifier-readonly", "text": "-readonly 去只读", "children": [] },
+        { "id": "util-modifier-as", "text": "as 改键名或过滤", "children": [] }
+      ]
+    },
+    {
+      "id": "util-builtin",
+      "text": "内置工具",
+      "children": [
+        { "id": "util-builtin-partial", "text": "Partial 与 Required", "children": [] },
+        { "id": "util-builtin-pick", "text": "Pick 与 Omit", "children": [] },
+        { "id": "util-builtin-record", "text": "Record 与 NonNullable", "children": [] }
+      ]
+    },
+    {
+      "id": "util-conditional",
+      "text": "条件类型",
+      "children": [
+        { "id": "util-conditional-form", "text": "extends ? : 三元", "children": [] },
+        { "id": "util-conditional-infer", "text": "infer 占位", "children": [] },
+        { "id": "util-conditional-return", "text": "ReturnType 与 Awaited", "children": [] }
+      ]
+    },
+    {
+      "id": "util-distribute",
+      "text": "分发",
+      "children": [
+        { "id": "util-distribute-naked", "text": "裸参数逐个展开", "children": [] },
+        { "id": "util-distribute-tuple", "text": "元组包一层关闭", "children": [] }
+      ]
+    }
+  ]
+}

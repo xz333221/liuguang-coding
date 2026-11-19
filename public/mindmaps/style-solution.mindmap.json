@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "组件库与样式方案",
+  "children": [
+    {
+      "id": "delivery",
+      "text": "交付形态",
+      "children": [
+        { "id": "delivery-css", "text": "纯 CSS: 好覆盖", "children": [] },
+        { "id": "delivery-modules", "text": "Modules: 安全但难改", "children": [] },
+        { "id": "delivery-in-js", "text": "CSS-in-JS: 灵活有开销", "children": [] }
+      ]
+    },
+    {
+      "id": "modules",
+      "text": "CSS Modules",
+      "children": [
+        { "id": "modules-local", "text": "只哈希类名", "children": [] },
+        { "id": "modules-global", "text": ":global 是唯一出口", "children": [] },
+        { "id": "modules-element", "text": "元素选择器仍全局", "children": [] }
+      ]
+    },
+    {
+      "id": "tailwind",
+      "text": "Tailwind",
+      "children": [
+        { "id": "tailwind-scan", "text": "扫描源码文本", "children": [] },
+        { "id": "tailwind-dynamic", "text": "动态类名要用映射表", "children": [] },
+        { "id": "tailwind-content", "text": "内容来源要显式配置", "children": [] },
+        { "id": "tailwind-token", "text": "接回语义令牌", "children": [] }
+      ]
+    },
+    {
+      "id": "runtime",
+      "text": "运行期与构建期",
+      "children": [
+        { "id": "runtime-cost", "text": "开销随组件数增长", "children": [] },
+        { "id": "runtime-ssr", "text": "SSR 要处理注入顺序", "children": [] },
+        { "id": "runtime-zero", "text": "vanilla-extract 零运行时", "children": [] }
+      ]
+    },
+    {
+      "id": "override",
+      "text": "覆盖第三方",
+      "children": [
+        { "id": "override-var", "text": "先改变量", "children": [] },
+        { "id": "override-where", "text": ":where 归零权重", "children": [] },
+        { "id": "override-layer", "text": "@layer 固定顺序", "children": [] }
+      ]
+    }
+  ]
+}

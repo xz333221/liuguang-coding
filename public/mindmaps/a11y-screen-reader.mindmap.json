@@ -1,0 +1,122 @@
+{
+  "id": "root",
+  "text": "屏幕阅读器、对比度与动效偏好",
+  "children": [
+    {
+      "id": "mode",
+      "text": "两个模式",
+      "children": [
+        {
+          "id": "mode-browse",
+          "text": "浏览模式读整页",
+          "children": []
+        },
+        {
+          "id": "mode-form",
+          "text": "表单模式交给页面",
+          "children": []
+        },
+        {
+          "id": "mode-tools",
+          "text": "NVDA 与 VoiceOver",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "hearing",
+      "text": "听出来的问题",
+      "children": [
+        {
+          "id": "hearing-name",
+          "text": "按钮没有名称",
+          "children": []
+        },
+        {
+          "id": "hearing-link",
+          "text": "点击这里没有上下文",
+          "children": []
+        },
+        {
+          "id": "hearing-heading",
+          "text": "标题层级断层",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "contrast",
+      "text": "对比度阈值",
+      "children": [
+        {
+          "id": "contrast-text",
+          "text": "正文 4.5:1",
+          "children": []
+        },
+        {
+          "id": "contrast-large",
+          "text": "大字与控件 3:1",
+          "children": []
+        },
+        {
+          "id": "contrast-grey",
+          "text": "灰字在临界值反复",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "not-color",
+      "text": "颜色不是唯一信息",
+      "children": [
+        {
+          "id": "not-color-error",
+          "text": "错误要图标加文字",
+          "children": []
+        },
+        {
+          "id": "not-color-link",
+          "text": "正文链接留下划线",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "preference",
+      "text": "系统偏好",
+      "children": [
+        {
+          "id": "preference-motion",
+          "text": "减少动态效果",
+          "children": []
+        },
+        {
+          "id": "preference-contrast",
+          "text": "提高对比度",
+          "children": []
+        },
+        {
+          "id": "preference-forced",
+          "text": "强制配色用系统色",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "testing",
+      "text": "工具与人工",
+      "children": [
+        {
+          "id": "testing-axe",
+          "text": "自动化查机械问题",
+          "children": []
+        },
+        {
+          "id": "testing-manual",
+          "text": "顺序与语义要人听",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

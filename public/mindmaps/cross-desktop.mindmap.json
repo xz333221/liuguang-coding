@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "Electron 与 Tauri：桌面端取舍",
+  "children": [
+    {
+      "id": "process",
+      "text": "进程模型",
+      "children": [
+        { "id": "process-main", "text": "主进程管窗口与系统", "children": [] },
+        { "id": "process-renderer", "text": "渲染进程只有 DOM", "children": [] },
+        { "id": "process-ipc", "text": "能力全走 IPC", "children": [] }
+      ]
+    },
+    {
+      "id": "security",
+      "text": "安全边界",
+      "children": [
+        { "id": "security-isolation", "text": "contextIsolation 默认开", "children": [] },
+        { "id": "security-node", "text": "nodeIntegration 关掉", "children": [] },
+        { "id": "security-bridge", "text": "preload 白名单方法", "children": [] },
+        { "id": "security-clone", "text": "跨桥只传可克隆值", "children": [] }
+      ]
+    },
+    {
+      "id": "ipc",
+      "text": "IPC 两种形态",
+      "children": [
+        { "id": "ipc-invoke", "text": "invoke 配 handle", "children": [] },
+        { "id": "ipc-send", "text": "send 配 on 单向", "children": [] },
+        { "id": "ipc-error", "text": "错误只带一层文字", "children": [] }
+      ]
+    },
+    {
+      "id": "size",
+      "text": "体积与内存",
+      "children": [
+        { "id": "size-chromium", "text": "Electron 打包 Chromium", "children": [] },
+        { "id": "size-webview", "text": "Tauri 用系统 WebView", "children": [] },
+        { "id": "size-multi", "text": "每窗口一组进程", "children": [] }
+      ]
+    },
+    {
+      "id": "tauri",
+      "text": "Tauri 的代价",
+      "children": [
+        { "id": "tauri-rust", "text": "后端写 Rust 命令", "children": [] },
+        { "id": "tauri-engines", "text": "三平台三套内核", "children": [] },
+        { "id": "tauri-update", "text": "更新包要签名", "children": [] }
+      ]
+    }
+  ]
+}

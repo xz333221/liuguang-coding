@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "能力边界",
+  "children": [
+    {
+      "id": "public",
+      "text": "产物是公开文件",
+      "children": [
+        { "id": "pu-minify", "text": "压缩不是加密", "children": [] },
+        { "id": "pu-devtools", "text": "内存与响应可改", "children": [] },
+        { "id": "pu-map", "text": "source-map 全暴露", "children": [] }
+      ]
+    },
+    {
+      "id": "secret",
+      "text": "密钥与签名",
+      "children": [
+        { "id": "se-inline", "text": "常量被折进 bundle", "children": [] },
+        { "id": "se-prefix", "text": "VITE 前缀即公开", "children": [] },
+        { "id": "se-ssr", "text": "SSR 别塞进 props", "children": [] }
+      ]
+    },
+    {
+      "id": "auth",
+      "text": "鉴权判定",
+      "children": [
+        { "id": "au-route", "text": "守卫只挡入口", "children": [] },
+        { "id": "au-session", "text": "身份从会话取", "children": [] },
+        { "id": "au-404", "text": "越权统一回 404", "children": [] }
+      ]
+    },
+    {
+      "id": "money",
+      "text": "交易计算",
+      "children": [
+        { "id": "mo-price", "text": "价格服务端重算", "children": [] },
+        { "id": "mo-stock", "text": "条件更新扣库存", "children": [] },
+        { "id": "mo-coupon", "text": "事务内占用券", "children": [] }
+      ]
+    },
+    {
+      "id": "validate",
+      "text": "校验分工",
+      "children": [
+        { "id": "va-ux", "text": "前端只为体验", "children": [] },
+        { "id": "va-server", "text": "服务端同一份规则", "children": [] },
+        { "id": "va-upload", "text": "上传按真实字节", "children": [] }
+      ]
+    }
+  ]
+}

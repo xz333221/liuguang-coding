@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "测量：工具与数据",
+  "children": [
+    {
+      "id": "data",
+      "text": "两种数据",
+      "children": [
+        { "id": "da-lab", "text": "实验室可复现", "children": [] },
+        { "id": "da-field", "text": "现场看第 75 百分位", "children": [] },
+        { "id": "da-gap", "text": "分数涨不等于变快", "children": [] }
+      ]
+    },
+    {
+      "id": "lighthouse",
+      "text": "Lighthouse",
+      "children": [
+        { "id": "lh-mobile", "text": "移动端模拟降速", "children": [] },
+        { "id": "lh-tbt", "text": "TBT 代理 INP", "children": [] },
+        { "id": "lh-flaky", "text": "跑多次取中位数", "children": [] }
+      ]
+    },
+    {
+      "id": "panel",
+      "text": "Performance 面板",
+      "children": [
+        { "id": "pn-frame", "text": "先找红色掉帧", "children": [] },
+        { "id": "pn-task", "text": "再看最长任务", "children": [] },
+        { "id": "pn-bottom", "text": "Bottom-Up 找函数", "children": [] }
+      ]
+    },
+    {
+      "id": "mark",
+      "text": "自定义打点",
+      "children": [
+        { "id": "mk-mark", "text": "mark 与 measure", "children": [] },
+        { "id": "mk-po", "text": "观察 measure 条目", "children": [] },
+        { "id": "mk-name", "text": "命名要能区分场景", "children": [] }
+      ]
+    },
+    {
+      "id": "rum",
+      "text": "RUM 与基线",
+      "children": [
+        { "id": "ru-beacon", "text": "隐藏时 sendBeacon", "children": [] },
+        { "id": "ru-sample", "text": "按流量定采样", "children": [] },
+        { "id": "ru-budget", "text": "预算写进 CI", "children": [] }
+      ]
+    }
+  ]
+}

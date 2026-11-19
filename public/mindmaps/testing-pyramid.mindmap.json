@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "测试金字塔与取舍",
+  "children": [
+    {
+      "id": "layers",
+      "text": "三层分工",
+      "children": [
+        { "id": "layers-unit", "text": "单元测逻辑,毫秒级", "children": [] },
+        { "id": "layers-comp", "text": "组件测交互,DOM 真", "children": [] },
+        { "id": "layers-e2e", "text": "端到端测主路径", "children": [] }
+      ]
+    },
+    {
+      "id": "shape",
+      "text": "数量递减",
+      "children": [
+        { "id": "shape-cost", "text": "越往上越慢越脆", "children": [] },
+        { "id": "shape-locate", "text": "失败定位越模糊", "children": [] },
+        { "id": "shape-ratio", "text": "E2E 留 5-15 条", "children": [] },
+        { "id": "shape-cone", "text": "冰淇淋筒是反例", "children": [] }
+      ]
+    },
+    {
+      "id": "behavior",
+      "text": "测行为",
+      "children": [
+        { "id": "behavior-impl", "text": "别断言调了哪个方法", "children": [] },
+        { "id": "behavior-result", "text": "断言可观察的结果", "children": [] },
+        { "id": "behavior-refactor", "text": "重构不该改测试", "children": [] }
+      ]
+    },
+    {
+      "id": "skip",
+      "text": "不写的部分",
+      "children": [
+        { "id": "skip-framework", "text": "框架自身保证的", "children": [] },
+        { "id": "skip-style", "text": "纯样式交给截图", "children": [] },
+        { "id": "skip-lib", "text": "第三方库不测", "children": [] }
+      ]
+    },
+    {
+      "id": "rot",
+      "text": "测试腐化",
+      "children": [
+        { "id": "rot-truthy", "text": "退化成 toBeTruthy", "children": [] },
+        { "id": "rot-skip", "text": "红灯加 skip 没人管", "children": [] },
+        { "id": "rot-delete", "text": "删掉会漏 bug 才留", "children": [] }
+      ]
+    }
+  ]
+}

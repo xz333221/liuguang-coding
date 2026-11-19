@@ -1,0 +1,54 @@
+{
+  "id": "root",
+  "text": "带数据的应用",
+  "children": [
+    {
+      "id": "state",
+      "text": "两类状态",
+      "children": [
+        { "id": "state-server", "text": "服务端会过期", "children": [] },
+        { "id": "state-ui", "text": "界面状态在本地", "children": [] },
+        { "id": "state-mix", "text": "混用等于手工缓存", "children": [] }
+      ]
+    },
+    {
+      "id": "router",
+      "text": "路由接管",
+      "children": [
+        { "id": "router-click", "text": "拦截普通点击", "children": [] },
+        { "id": "router-pop", "text": "监听 popstate", "children": [] },
+        { "id": "router-param", "text": "正则取路径参数", "children": [] },
+        { "id": "router-f5", "text": "刷新靠 fallback", "children": [] }
+      ]
+    },
+    {
+      "id": "request",
+      "text": "请求封装",
+      "children": [
+        { "id": "request-ok", "text": "手动判 res.ok", "children": [] },
+        { "id": "request-timeout", "text": "abort 做超时", "children": [] },
+        { "id": "request-204", "text": "204 没有响应体", "children": [] }
+      ]
+    },
+    {
+      "id": "screen",
+      "text": "四种界面",
+      "children": [
+        { "id": "screen-loading", "text": "骨架屏", "children": [] },
+        { "id": "screen-empty", "text": "空态给出口", "children": [] },
+        { "id": "screen-error", "text": "错误带重试", "children": [] },
+        { "id": "screen-race", "text": "序号挡竞态", "children": [] }
+      ]
+    },
+    {
+      "id": "cache",
+      "text": "缓存与失效",
+      "children": [
+        { "id": "cache-key", "text": "键带全参数", "children": [] },
+        { "id": "cache-ttl", "text": "TTL 按变化频率", "children": [] },
+        { "id": "cache-invalidate", "text": "提交后前缀失效", "children": [] },
+        { "id": "cache-lib", "text": "需求多就换库", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "状态管理",
+  "children": [
+    {
+      "id": "kinds",
+      "text": "三类状态",
+      "children": [
+        { "id": "kinds-local", "text": "局部 UI 留组件", "children": [] },
+        { "id": "kinds-global", "text": "全局 UI 进 store", "children": [] },
+        { "id": "kinds-server", "text": "服务端数据走缓存", "children": [] }
+      ]
+    },
+    {
+      "id": "lift",
+      "text": "提升路径",
+      "children": [
+        { "id": "lift-near", "text": "先找共同父级", "children": [] },
+        { "id": "lift-far", "text": "跨四层再上 Context", "children": [] },
+        { "id": "lift-over", "text": "过度提升失单向", "children": [] }
+      ]
+    },
+    {
+      "id": "compose",
+      "text": "组合式复用",
+      "children": [
+        { "id": "compose-logic", "text": "复用逻辑不复用状态", "children": [] },
+        { "id": "compose-share", "text": "共享要搬到组件外", "children": [] }
+      ]
+    },
+    {
+      "id": "choose",
+      "text": "全局方案",
+      "children": [
+        { "id": "choose-pinia", "text": "Pinia 精确订阅", "children": [] },
+        { "id": "choose-context", "text": "Context 全量广播", "children": [] },
+        { "id": "choose-memo", "text": "value 要 memo", "children": [] }
+      ]
+    },
+    {
+      "id": "edges",
+      "text": "边界",
+      "children": [
+        { "id": "edges-destructure", "text": "解构丢响应式", "children": [] },
+        { "id": "edges-copy", "text": "props 别抄进 store", "children": [] },
+        { "id": "edges-url", "text": "跨页参数放 URL", "children": [] }
+      ]
+    }
+  ]
+}

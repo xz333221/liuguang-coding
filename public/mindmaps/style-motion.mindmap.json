@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "动效与减少动态",
+  "children": [
+    {
+      "id": "purpose",
+      "text": "动效的两件事",
+      "children": [
+        { "id": "purpose-feedback", "text": "反馈操作已接收", "children": [] },
+        { "id": "purpose-space", "text": "说明从哪来到哪去", "children": [] },
+        { "id": "purpose-optional", "text": "缺了不丢信息", "children": [] }
+      ]
+    },
+    {
+      "id": "timing",
+      "text": "时长与缓动",
+      "children": [
+        { "id": "timing-range", "text": "80 到 320ms", "children": [] },
+        { "id": "timing-out", "text": "进场 ease-out", "children": [] },
+        { "id": "timing-linear", "text": "linear 只给进度", "children": [] }
+      ]
+    },
+    {
+      "id": "props",
+      "text": "动哪些属性",
+      "children": [
+        { "id": "props-composite", "text": "transform 与 opacity", "children": [] },
+        { "id": "props-layout", "text": "尺寸与位置触发布局", "children": [] },
+        { "id": "props-side", "text": "过渡写在常态选择器", "children": [] }
+      ]
+    },
+    {
+      "id": "reduce",
+      "text": "减少动态",
+      "children": [
+        { "id": "reduce-global", "text": "全局兜底覆盖第三方", "children": [] },
+        { "id": "reduce-ms", "text": "压到 0.01ms 不删逻辑", "children": [] },
+        { "id": "reduce-none", "text": "none 会让事件不派发", "children": [] },
+        { "id": "reduce-spinner", "text": "加载指示器单独放行", "children": [] }
+      ]
+    },
+    {
+      "id": "beyond",
+      "text": "媒体查询之外",
+      "children": [
+        { "id": "beyond-js", "text": "JS 动画自己读偏好", "children": [] },
+        { "id": "beyond-scroll", "text": "scroll-behavior 关掉", "children": [] },
+        { "id": "beyond-hover", "text": "hover 包一层查询", "children": [] }
+      ]
+    }
+  ]
+}

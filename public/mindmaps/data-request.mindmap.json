@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "请求层封装：错误、超时与重试",
+  "children": [
+    {
+      "id": "status",
+      "text": "fetch 不认状态码",
+      "children": [
+        { "id": "status-fulfilled", "text": "4xx / 5xx 也 fulfilled", "children": [] },
+        { "id": "status-reject", "text": "只有网络层失败才 reject", "children": [] },
+        { "id": "status-ok", "text": "先判 res.ok", "children": [] }
+      ]
+    },
+    {
+      "id": "layers",
+      "text": "三层错误",
+      "children": [
+        { "id": "layers-network", "text": "网络层 TypeError", "children": [] },
+        { "id": "layers-http", "text": "HTTP 状态码", "children": [] },
+        { "id": "layers-biz", "text": "200 + 业务码", "children": [] }
+      ]
+    },
+    {
+      "id": "wrap",
+      "text": "统一封装",
+      "children": [
+        { "id": "wrap-error", "text": "ApiError 收三层", "children": [] },
+        { "id": "wrap-204", "text": "204 无正文先返回", "children": [] },
+        { "id": "wrap-timeout", "text": "AbortSignal.timeout", "children": [] }
+      ]
+    },
+    {
+      "id": "retry",
+      "text": "重试条件",
+      "children": [
+        { "id": "retry-idempotent", "text": "只给幂等请求", "children": [] },
+        { "id": "retry-status", "text": "429 / 502 / 503 / 504", "children": [] },
+        { "id": "retry-backoff", "text": "指数退避加抖动", "children": [] },
+        { "id": "retry-after", "text": "Retry-After 优先", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "常见坑",
+      "children": [
+        { "id": "pitfall-post", "text": "POST 重试重复下单", "children": [] },
+        { "id": "pitfall-401", "text": "401 重试成死循环", "children": [] },
+        { "id": "pitfall-json", "text": "空正文 JSON 报错", "children": [] }
+      ]
+    }
+  ]
+}

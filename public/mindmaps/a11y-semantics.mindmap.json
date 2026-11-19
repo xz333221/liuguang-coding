@@ -1,0 +1,132 @@
+{
+  "id": "root",
+  "text": "语义、焦点与键盘操作",
+  "children": [
+    {
+      "id": "focus-base",
+      "text": "焦点是键盘入口",
+      "children": [
+        {
+          "id": "focus-native",
+          "text": "原生可聚焦元素",
+          "children": []
+        },
+        {
+          "id": "focus-dom-order",
+          "text": "Tab 顺序按 DOM",
+          "children": []
+        },
+        {
+          "id": "focus-visual-order",
+          "text": "视觉顺序不一致的坑",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "tabindex",
+      "text": "tabindex 三种值",
+      "children": [
+        {
+          "id": "tabindex-zero",
+          "text": "0 加入 Tab 序列",
+          "children": []
+        },
+        {
+          "id": "tabindex-minus",
+          "text": "-1 只给脚本聚焦",
+          "children": []
+        },
+        {
+          "id": "tabindex-positive",
+          "text": "正数打乱全页顺序",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "native-keyboard",
+      "text": "原生控件的键盘行为",
+      "children": [
+        {
+          "id": "native-button",
+          "text": "button 回车与空格",
+          "children": []
+        },
+        {
+          "id": "native-link",
+          "text": "链接只响应回车",
+          "children": []
+        },
+        {
+          "id": "native-div",
+          "text": "div 要补三样",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "focus-visible",
+      "text": "焦点必须可见",
+      "children": [
+        {
+          "id": "focus-visible-outline",
+          "text": "不删 outline",
+          "children": []
+        },
+        {
+          "id": "focus-visible-pseudo",
+          "text": "focus-visible 区分鼠标",
+          "children": []
+        },
+        {
+          "id": "focus-visible-contrast",
+          "text": "焦点环也要对比度",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "dialog-focus",
+      "text": "弹窗里的焦点",
+      "children": [
+        {
+          "id": "dialog-native",
+          "text": "dialog 与 showModal",
+          "children": []
+        },
+        {
+          "id": "dialog-modal",
+          "text": "aria-modal 只声明",
+          "children": []
+        },
+        {
+          "id": "dialog-inert",
+          "text": "inert 挡住背景",
+          "children": []
+        },
+        {
+          "id": "dialog-return",
+          "text": "关闭后归还焦点",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "skip-link",
+      "text": "跳过导航",
+      "children": [
+        {
+          "id": "skip-link-first",
+          "text": "放在 body 首位",
+          "children": []
+        },
+        {
+          "id": "skip-link-main",
+          "text": "main 加 tabindex=-1",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "CSRF 与 Cookie",
+  "children": [
+    {
+      "id": "cause",
+      "text": "成因",
+      "children": [
+        { "id": "cause-auto", "text": "浏览器自动带 Cookie", "children": [] },
+        { "id": "cause-send", "text": "只需发出不需读取", "children": [] },
+        { "id": "cause-form", "text": "表单是主要载体", "children": [] }
+      ]
+    },
+    {
+      "id": "samesite",
+      "text": "SameSite 三档",
+      "children": [
+        { "id": "ss-lax", "text": "Lax 是默认值", "children": [] },
+        { "id": "ss-strict", "text": "Strict 会断外链登录", "children": [] },
+        { "id": "ss-none", "text": "None 必须配 Secure", "children": [] }
+      ]
+    },
+    {
+      "id": "token",
+      "text": "令牌方案",
+      "children": [
+        { "id": "tok-sync", "text": "同步器令牌绑会话", "children": [] },
+        { "id": "tok-double", "text": "双提交对子域敏感", "children": [] },
+        { "id": "tok-sign", "text": "签名双提交补洞", "children": [] }
+      ]
+    },
+    {
+      "id": "verify",
+      "text": "来源校验",
+      "children": [
+        { "id": "ver-origin", "text": "Origin 脚本改不了", "children": [] },
+        { "id": "ver-null", "text": "null 不能放行", "children": [] },
+        { "id": "ver-get", "text": "GET 不该有副作用", "children": [] }
+      ]
+    },
+    {
+      "id": "scope",
+      "text": "Cookie 作用域",
+      "children": [
+        { "id": "sc-domain", "text": "别设父域 Domain", "children": [] },
+        { "id": "sc-host", "text": "__Host- 前缀锁死", "children": [] },
+        { "id": "sc-path", "text": "Path 不是边界", "children": [] }
+      ]
+    }
+  ]
+}

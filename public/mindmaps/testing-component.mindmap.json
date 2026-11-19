@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "组件测试：Testing Library",
+  "children": [
+    {
+      "id": "what",
+      "text": "测什么",
+      "children": [
+        { "id": "what-dom", "text": "jsdom 里渲染真 DOM", "children": [] },
+        { "id": "what-behavior", "text": "只测用户可见行为", "children": [] },
+        { "id": "what-screen", "text": "查询用 screen", "children": [] }
+      ]
+    },
+    {
+      "id": "query",
+      "text": "查询优先级",
+      "children": [
+        { "id": "query-role", "text": "getByRole 首选", "children": [] },
+        { "id": "query-label", "text": "表单用 labelText", "children": [] },
+        { "id": "query-prefix", "text": "get/query/find 三分", "children": [] },
+        { "id": "query-testid", "text": "testid 只兜底", "children": [] }
+      ]
+    },
+    {
+      "id": "event",
+      "text": "交互事件",
+      "children": [
+        { "id": "event-user", "text": "userEvent 走完整序列", "children": [] },
+        { "id": "event-fire", "text": "fireEvent 只派发一次", "children": [] },
+        { "id": "event-await", "text": "v14 全部是异步", "children": [] }
+      ]
+    },
+    {
+      "id": "async",
+      "text": "异步等待",
+      "children": [
+        { "id": "async-find", "text": "findBy 等于 get 加等", "children": [] },
+        { "id": "async-side-effect", "text": "waitFor 里别点击", "children": [] },
+        { "id": "async-timeout", "text": "加大超时是掩盖", "children": [] }
+      ]
+    },
+    {
+      "id": "avoid",
+      "text": "别断言的东西",
+      "children": [
+        { "id": "avoid-class", "text": "class 名跟样式绑定", "children": [] },
+        { "id": "avoid-state", "text": "内部 state 与调用次数", "children": [] },
+        { "id": "avoid-aria", "text": "改断言语义与状态", "children": [] }
+      ]
+    }
+  ]
+}

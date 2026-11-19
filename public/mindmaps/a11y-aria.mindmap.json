@@ -1,0 +1,106 @@
+{
+  "id": "root",
+  "text": "ARIA 的正确用法与常见误用",
+  "children": [
+    {
+      "id": "rule-one",
+      "text": "第一条规则",
+      "children": [
+        {
+          "id": "rule-one-native",
+          "text": "能用原生就不用",
+          "children": []
+        },
+        {
+          "id": "rule-one-table",
+          "text": "原生与 ARIA 对照",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "role",
+      "text": "role 只声明",
+      "children": [
+        {
+          "id": "role-no-behavior",
+          "text": "不带来键盘行为",
+          "children": []
+        },
+        {
+          "id": "role-button-fix",
+          "text": "补焦点与按键",
+          "children": []
+        },
+        {
+          "id": "role-presentation",
+          "text": "presentation 的误用",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "naming",
+      "text": "名称与描述",
+      "children": [
+        {
+          "id": "naming-order",
+          "text": "labelledby 优先",
+          "children": []
+        },
+        {
+          "id": "naming-label",
+          "text": "aria-label 覆盖可见文本",
+          "children": []
+        },
+        {
+          "id": "naming-desc",
+          "text": "describedby 是描述",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "state",
+      "text": "状态要同步",
+      "children": [
+        {
+          "id": "state-expanded",
+          "text": "expanded 放触发元素",
+          "children": []
+        },
+        {
+          "id": "state-pressed",
+          "text": "pressed 与 selected",
+          "children": []
+        },
+        {
+          "id": "state-stale",
+          "text": "只改 UI 不改属性",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "hidden-live",
+      "text": "隐藏与播报",
+      "children": [
+        {
+          "id": "hidden-focus",
+          "text": "aria-hidden 不能罩焦点",
+          "children": []
+        },
+        {
+          "id": "live-polite",
+          "text": "polite 与 assertive",
+          "children": []
+        },
+        {
+          "id": "live-container",
+          "text": "容器先占位再改文本",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

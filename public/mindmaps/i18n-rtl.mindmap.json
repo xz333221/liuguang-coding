@@ -1,0 +1,132 @@
+{
+  "id": "root",
+  "text": "RTL 与本地化布局",
+  "children": [
+    {
+      "id": "dir",
+      "text": "dir 决定方向",
+      "children": [
+        {
+          "id": "dir-html",
+          "text": "标在 html 上",
+          "children": []
+        },
+        {
+          "id": "dir-auto",
+          "text": "auto 看首个强字符",
+          "children": []
+        },
+        {
+          "id": "dir-attribute",
+          "text": "用属性不用 CSS",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "logical",
+      "text": "逻辑属性",
+      "children": [
+        {
+          "id": "logical-spacing",
+          "text": "margin-inline-start",
+          "children": []
+        },
+        {
+          "id": "logical-align",
+          "text": "text-align: start",
+          "children": []
+        },
+        {
+          "id": "logical-inset",
+          "text": "inset-inline-end",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "flex-grid",
+      "text": "布局自动翻转",
+      "children": [
+        {
+          "id": "flex-grid-row",
+          "text": "row 主轴随方向",
+          "children": []
+        },
+        {
+          "id": "flex-grid-reverse",
+          "text": "row-reverse 双重翻转",
+          "children": []
+        },
+        {
+          "id": "flex-grid-order",
+          "text": "order 不改轴向",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "mirror",
+      "text": "镜像的选择",
+      "children": [
+        {
+          "id": "mirror-yes",
+          "text": "箭头与进度条要翻",
+          "children": []
+        },
+        {
+          "id": "mirror-no",
+          "text": "播放键与 logo 不翻",
+          "children": []
+        },
+        {
+          "id": "mirror-css",
+          "text": "scaleX(-1) 的边界",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "bidi",
+      "text": "双向文本",
+      "children": [
+        {
+          "id": "bidi-bdi",
+          "text": "bdi 隔离未知内容",
+          "children": []
+        },
+        {
+          "id": "bidi-ltr",
+          "text": "代码与 URL 保持 LTR",
+          "children": []
+        },
+        {
+          "id": "bidi-controls",
+          "text": "不用不可见控制符",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "physical",
+      "text": "物理属性的坑",
+      "children": [
+        {
+          "id": "physical-absolute",
+          "text": "left 与 right 写死",
+          "children": []
+        },
+        {
+          "id": "physical-transform",
+          "text": "translateX 不翻转",
+          "children": []
+        },
+        {
+          "id": "physical-test",
+          "text": "改 dir 截图对比",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

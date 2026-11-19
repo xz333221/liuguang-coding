@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "跨端方案：React Native 与 Flutter Web",
+  "children": [
+    {
+      "id": "rn",
+      "text": "React Native",
+      "children": [
+        { "id": "rn-native", "text": "组件映射原生控件", "children": [] },
+        { "id": "rn-style", "text": "Flexbox 子集无单位", "children": [] },
+        { "id": "rn-bridge", "text": "旧桥异步批量序列化", "children": [] }
+      ]
+    },
+    {
+      "id": "arch",
+      "text": "新架构",
+      "children": [
+        { "id": "arch-jsi", "text": "JSI 直连 C++", "children": [] },
+        { "id": "arch-fabric", "text": "Fabric 管渲染", "children": [] },
+        { "id": "arch-turbo", "text": "TurboModules 懒加载", "children": [] }
+      ]
+    },
+    {
+      "id": "flutter",
+      "text": "Flutter 自绘",
+      "children": [
+        { "id": "flutter-canvas", "text": "画布绘制不映射控件", "children": [] },
+        { "id": "flutter-pixel", "text": "三端像素一致", "children": [] },
+        { "id": "flutter-a11y", "text": "无障碍要自己补", "children": [] }
+      ]
+    },
+    {
+      "id": "web",
+      "text": "Flutter Web",
+      "children": [
+        { "id": "web-canvaskit", "text": "CanvasKit 走 WebGL", "children": [] },
+        { "id": "web-skwasm", "text": "skwasm 需 COOP COEP", "children": [] },
+        { "id": "web-text", "text": "文字画进 canvas", "children": [] },
+        { "id": "web-seo", "text": "查找翻译爬虫失效", "children": [] }
+      ]
+    },
+    {
+      "id": "choice",
+      "text": "何时不值得",
+      "children": [
+        { "id": "choice-content", "text": "内容型站点", "children": [] },
+        { "id": "choice-native", "text": "重原生能力", "children": [] },
+        { "id": "choice-perf", "text": "性能天花板仍在原生", "children": [] }
+      ]
+    }
+  ]
+}

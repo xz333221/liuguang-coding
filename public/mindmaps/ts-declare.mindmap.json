@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "声明文件与第三方类型",
+  "children": [
+    {
+      "id": "decl-file",
+      "text": "声明文件",
+      "children": [
+        { "id": "decl-file-typesonly", "text": "只有类型", "children": [] },
+        { "id": "decl-file-nojs", "text": "不产出 JS", "children": [] },
+        { "id": "decl-file-ambient", "text": "环境上下文", "children": [] }
+      ]
+    },
+    {
+      "id": "decl-syntax",
+      "text": "declare 用法",
+      "children": [
+        { "id": "decl-syntax-global", "text": "声明全局值与类", "children": [] },
+        { "id": "decl-syntax-module", "text": "declare module", "children": [] },
+        { "id": "decl-syntax-augment", "text": "declare global", "children": [] }
+      ]
+    },
+    {
+      "id": "decl-source",
+      "text": "类型从哪来",
+      "children": [
+        { "id": "decl-source-field", "text": "包自带 types", "children": [] },
+        { "id": "decl-source-atsign", "text": "@types 补位", "children": [] },
+        { "id": "decl-source-exports", "text": "exports.types 条件", "children": [] }
+      ]
+    },
+    {
+      "id": "decl-config",
+      "text": "tsconfig",
+      "children": [
+        { "id": "decl-config-types", "text": "types 是白名单", "children": [] },
+        { "id": "decl-config-roots", "text": "typeRoots 改目录", "children": [] },
+        { "id": "decl-config-skip", "text": "skipLibCheck 跳过", "children": [] }
+      ]
+    },
+    {
+      "id": "decl-pitfall",
+      "text": "常见坑",
+      "children": [
+        { "id": "decl-pitfall-include", "text": "include 没覆盖", "children": [] },
+        { "id": "decl-pitfall-merge", "text": "同名声明会合并", "children": [] },
+        { "id": "decl-pitfall-reference", "text": "三斜线已过期", "children": [] }
+      ]
+    }
+  ]
+}

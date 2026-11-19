@@ -1,0 +1,44 @@
+{
+  "id": "root",
+  "text": "设计令牌与主题",
+  "children": [
+    {
+      "id": "layers",
+      "text": "三层令牌",
+      "children": [
+        { "id": "layers-primitive", "text": "原始值: 色板与刻度", "children": [] },
+        { "id": "layers-semantic", "text": "语义: 按用途命名", "children": [] },
+        { "id": "layers-component", "text": "组件: 只服务一个部件", "children": [] },
+        { "id": "layers-read", "text": "业务只读后两层", "children": [] }
+      ]
+    },
+    {
+      "id": "tone",
+      "text": "tone 与作用域",
+      "children": [
+        { "id": "tone-scope", "text": "容器声明, 子树继承", "children": [] },
+        { "id": "tone-default", "text": ":root 必须有默认值", "children": [] },
+        { "id": "tone-portal", "text": "弹层脱离子树拿不到", "children": [] }
+      ]
+    },
+    {
+      "id": "theme",
+      "text": "换主题",
+      "children": [
+        { "id": "theme-override", "text": "只覆盖语义层", "children": [] },
+        { "id": "theme-scheme", "text": "color-scheme 管控件", "children": [] },
+        { "id": "theme-dark", "text": "深色不用纯黑纯白", "children": [] }
+      ]
+    },
+    {
+      "id": "derive",
+      "text": "派生与边界",
+      "children": [
+        { "id": "derive-mix", "text": "color-mix 算中间色", "children": [] },
+        { "id": "derive-fallback", "text": "前置一条纯色兜底", "children": [] },
+        { "id": "derive-cycle", "text": "互相引用会失效", "children": [] },
+        { "id": "derive-count", "text": "令牌数量要有上限", "children": [] }
+      ]
+    }
+  ]
+}

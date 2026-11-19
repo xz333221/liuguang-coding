@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "依赖与供应链",
+  "children": [
+    {
+      "id": "tree",
+      "text": "依赖树",
+      "children": [
+        { "id": "tr-depth", "text": "多层传递依赖", "children": [] },
+        { "id": "tr-bloat", "text": "膨胀即攻击面", "children": [] },
+        { "id": "tr-owner", "text": "维护者会换人", "children": [] }
+      ]
+    },
+    {
+      "id": "scan",
+      "text": "漏洞扫描",
+      "children": [
+        { "id": "sc-audit", "text": "audit 只查已登记", "children": [] },
+        { "id": "sc-level", "text": "CI 里要设阈值", "children": [] },
+        { "id": "sc-force", "text": "fix --force 会改坏", "children": [] }
+      ]
+    },
+    {
+      "id": "install",
+      "text": "安装控制",
+      "children": [
+        { "id": "in-lock", "text": "lockfile 必须提交", "children": [] },
+        { "id": "in-ci", "text": "CI 用 npm ci", "children": [] },
+        { "id": "in-scripts", "text": "关掉 postinstall", "children": [] }
+      ]
+    },
+    {
+      "id": "origin",
+      "text": "来源识别",
+      "children": [
+        { "id": "or-sign", "text": "验签名与来源证明", "children": [] },
+        { "id": "or-typo", "text": "提防名字相近", "children": [] },
+        { "id": "or-scope", "text": "私有 scope 指向内网", "children": [] }
+      ]
+    },
+    {
+      "id": "lock",
+      "text": "完整性锁定",
+      "children": [
+        { "id": "lo-override", "text": "overrides 提版本", "children": [] },
+        { "id": "lo-clean", "text": "修完要清理", "children": [] },
+        { "id": "lo-sri", "text": "CDN 脚本加 integrity", "children": [] }
+      ]
+    }
+  ]
+}

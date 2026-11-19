@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "列表、条件与 key",
+  "children": [
+    {
+      "id": "render",
+      "text": "列表渲染",
+      "children": [
+        { "id": "render-vfor", "text": "v-for 与 map", "children": [] },
+        { "id": "render-key-missing", "text": "缺 key 有警告", "children": [] }
+      ]
+    },
+    {
+      "id": "key",
+      "text": "key 的作用",
+      "children": [
+        { "id": "key-identity", "text": "声明节点同一性", "children": [] },
+        { "id": "key-state", "text": "状态跟着 key 走", "children": [] },
+        { "id": "key-index", "text": "索引 key 会错位", "children": [] }
+      ]
+    },
+    {
+      "id": "diff",
+      "text": "diff 规则",
+      "children": [
+        { "id": "diff-same-level", "text": "同层比较不跨层", "children": [] },
+        { "id": "diff-type", "text": "类型不同整棵重建", "children": [] },
+        { "id": "diff-move", "text": "按 key 算最小移动", "children": [] }
+      ]
+    },
+    {
+      "id": "conditional",
+      "text": "条件渲染",
+      "children": [
+        { "id": "conditional-if", "text": "v-if 销毁重建", "children": [] },
+        { "id": "conditional-show", "text": "v-show 切 display", "children": [] },
+        { "id": "conditional-zero", "text": "0 被 && 渲染", "children": [] }
+      ]
+    },
+    {
+      "id": "perf",
+      "text": "列表开销",
+      "children": [
+        { "id": "perf-filter", "text": "筛选排序要缓存", "children": [] },
+        { "id": "perf-inline", "text": "内联值破 memo", "children": [] }
+      ]
+    }
+  ]
+}

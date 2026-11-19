@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "接口、类型别名与结构类型",
+  "children": [
+    {
+      "id": "iface-syntax",
+      "text": "两种写法",
+      "children": [
+        { "id": "iface-syntax-optional", "text": "可选与只读", "children": [] },
+        { "id": "iface-syntax-method", "text": "方法两种写法", "children": [] },
+        { "id": "iface-syntax-extends", "text": "extends 多个", "children": [] }
+      ]
+    },
+    {
+      "id": "iface-structural",
+      "text": "结构类型",
+      "children": [
+        { "id": "iface-structural-shape", "text": "只看形状", "children": [] },
+        { "id": "iface-structural-class", "text": "类不用 implements", "children": [] },
+        { "id": "iface-structural-private", "text": "private 是例外", "children": [] }
+      ]
+    },
+    {
+      "id": "iface-excess",
+      "text": "多余属性检查",
+      "children": [
+        { "id": "iface-excess-literal", "text": "字面量直接赋值触发", "children": [] },
+        { "id": "iface-excess-bypass", "text": "中转变量绕过", "children": [] },
+        { "id": "iface-excess-typo", "text": "挡住拼写错误", "children": [] }
+      ]
+    },
+    {
+      "id": "iface-index",
+      "text": "索引签名",
+      "children": [
+        { "id": "iface-index-constraint", "text": "约束所有键值", "children": [] },
+        { "id": "iface-index-missing", "text": "缺键不返回 undefined", "children": [] },
+        { "id": "iface-index-record", "text": "Record 是语法糖", "children": [] }
+      ]
+    },
+    {
+      "id": "iface-choice",
+      "text": "接口与别名",
+      "children": [
+        { "id": "iface-choice-merge", "text": "接口能声明合并", "children": [] },
+        { "id": "iface-choice-union", "text": "别名能写联合", "children": [] }
+      ]
+    }
+  ]
+}

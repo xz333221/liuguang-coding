@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "路由与代码分割",
+  "children": [
+    {
+      "id": "mode",
+      "text": "两种模式",
+      "children": [
+        { "id": "mode-hash", "text": "hash 不发请求", "children": [] },
+        { "id": "mode-history", "text": "history 要回退", "children": [] },
+        { "id": "mode-nginx", "text": "try_files 兜底", "children": [] }
+      ]
+    },
+    {
+      "id": "table",
+      "text": "路由表",
+      "children": [
+        { "id": "table-nested", "text": "嵌套复用布局", "children": [] },
+        { "id": "table-param", "text": "动态段与 props", "children": [] }
+      ]
+    },
+    {
+      "id": "split",
+      "text": "代码分割",
+      "children": [
+        { "id": "split-dynamic", "text": "import 切 chunk", "children": [] },
+        { "id": "split-fail", "text": "发版后 chunk 404", "children": [] },
+        { "id": "split-granularity", "text": "粒度看使用范围", "children": [] }
+      ]
+    },
+    {
+      "id": "reuse",
+      "text": "组件复用",
+      "children": [
+        { "id": "reuse-watch", "text": "watch 参数变化", "children": [] },
+        { "id": "reuse-key", "text": "key 强制重建", "children": [] },
+        { "id": "reuse-guard", "text": "守卫只是体验", "children": [] }
+      ]
+    },
+    {
+      "id": "cache",
+      "text": "keep-alive",
+      "children": [
+        { "id": "cache-name", "text": "include 靠组件名", "children": [] },
+        { "id": "cache-max", "text": "必须设上限", "children": [] },
+        { "id": "cache-deactivated", "text": "失活时清副作用", "children": [] }
+      ]
+    }
+  ]
+}

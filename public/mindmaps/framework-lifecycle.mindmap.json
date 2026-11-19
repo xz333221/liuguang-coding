@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "生命周期与副作用",
+  "children": [
+    {
+      "id": "pure",
+      "text": "渲染要纯",
+      "children": [
+        { "id": "pure-twice", "text": "可能执行两次", "children": [] },
+        { "id": "pure-external", "text": "别在渲染里改外部", "children": [] }
+      ]
+    },
+    {
+      "id": "effect",
+      "text": "useEffect",
+      "children": [
+        { "id": "effect-deps", "text": "依赖数组三种形态", "children": [] },
+        { "id": "effect-cleanup", "text": "返回清理函数", "children": [] },
+        { "id": "effect-strict", "text": "严格模式跑两次", "children": [] }
+      ]
+    },
+    {
+      "id": "stale",
+      "text": "过期闭包",
+      "children": [
+        { "id": "stale-capture", "text": "空依赖读初始值", "children": [] },
+        { "id": "stale-fix", "text": "函数式更新或补依赖", "children": [] }
+      ]
+    },
+    {
+      "id": "vue-hooks",
+      "text": "Vue 钩子",
+      "children": [
+        { "id": "vue-hooks-mounted", "text": "onMounted 后执行", "children": [] },
+        { "id": "vue-hooks-watch", "text": "watch 显式源", "children": [] },
+        { "id": "vue-hooks-watcheffect", "text": "watchEffect 自动收集", "children": [] }
+      ]
+    },
+    {
+      "id": "async",
+      "text": "异步与清理",
+      "children": [
+        { "id": "async-abort", "text": "AbortController 处理竞态", "children": [] },
+        { "id": "async-async", "text": "回调不能是 async", "children": [] },
+        { "id": "async-leak", "text": "卸载前清监听定时器", "children": [] }
+      ]
+    }
+  ]
+}

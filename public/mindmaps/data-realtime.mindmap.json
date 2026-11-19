@@ -1,0 +1,53 @@
+{
+  "id": "root",
+  "text": "实时数据：WebSocket 与 SSE",
+  "children": [
+    {
+      "id": "compare",
+      "text": "三种方案",
+      "children": [
+        { "id": "compare-poll", "text": "短轮询空请求多", "children": [] },
+        { "id": "compare-sse", "text": "SSE 单向推送", "children": [] },
+        { "id": "compare-ws", "text": "WebSocket 双向", "children": [] }
+      ]
+    },
+    {
+      "id": "handshake",
+      "text": "WebSocket 握手",
+      "children": [
+        { "id": "handshake-upgrade", "text": "Upgrade 换 101", "children": [] },
+        { "id": "handshake-frame", "text": "之后走帧协议", "children": [] },
+        { "id": "handshake-wss", "text": "线上必须 wss", "children": [] }
+      ]
+    },
+    {
+      "id": "heartbeat",
+      "text": "心跳与重连",
+      "children": [
+        { "id": "heartbeat-app", "text": "浏览器没有 ping", "children": [] },
+        { "id": "heartbeat-check", "text": "要检查回应", "children": [] },
+        { "id": "heartbeat-backoff", "text": "指数退避加抖动", "children": [] },
+        { "id": "heartbeat-backfill", "text": "重连后补全量", "children": [] }
+      ]
+    },
+    {
+      "id": "sse",
+      "text": "SSE",
+      "children": [
+        { "id": "sse-stream", "text": "text/event-stream", "children": [] },
+        { "id": "sse-limit", "text": "只支持 GET", "children": [] },
+        { "id": "sse-retry", "text": "自动重连无退避", "children": [] },
+        { "id": "sse-lastid", "text": "Last-Event-ID 续传", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "坑",
+      "children": [
+        { "id": "pitfall-buffer", "text": "代理缓冲导致延迟", "children": [] },
+        { "id": "pitfall-limit", "text": "同域 6 连接上限", "children": [] },
+        { "id": "pitfall-timer", "text": "卸载不清定时器", "children": [] }
+      ]
+    }
+  ]
+}

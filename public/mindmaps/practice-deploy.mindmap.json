@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "部署与上线",
+  "children": [
+    {
+      "id": "artifact",
+      "text": "产物",
+      "children": [
+        { "id": "artifact-dist", "text": "只传 dist", "children": [] },
+        { "id": "artifact-ignore", "text": "产物不进仓库", "children": [] },
+        { "id": "artifact-preview", "text": "preview 验产物", "children": [] }
+      ]
+    },
+    {
+      "id": "path",
+      "text": "路径与 base",
+      "children": [
+        { "id": "path-sub", "text": "子路径配 base", "children": [] },
+        { "id": "path-white", "text": "白屏加 404", "children": [] },
+        { "id": "path-env", "text": "环境变量给前缀", "children": [] }
+      ]
+    },
+    {
+      "id": "cache",
+      "text": "缓存头",
+      "children": [
+        { "id": "cache-html", "text": "HTML 不缓存", "children": [] },
+        { "id": "cache-assets", "text": "hash 资源一年", "children": [] },
+        { "id": "cache-sw", "text": "sw.js 不缓存", "children": [] }
+      ]
+    },
+    {
+      "id": "fallback",
+      "text": "兜底规则",
+      "children": [
+        { "id": "fallback-try", "text": "try_files 兜底", "children": [] },
+        { "id": "fallback-api", "text": "排除 /api 前缀", "children": [] },
+        { "id": "fallback-mpa", "text": "多页不用兜底", "children": [] }
+      ]
+    },
+    {
+      "id": "release",
+      "text": "发布与回滚",
+      "children": [
+        { "id": "release-ci", "text": "npm ci 可复现", "children": [] },
+        { "id": "release-concurrency", "text": "并发取消旧构建", "children": [] },
+        { "id": "release-rollback", "text": "指向旧产物", "children": [] }
+      ]
+    }
+  ]
+}

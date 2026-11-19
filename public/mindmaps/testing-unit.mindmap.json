@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "单元测试：Vitest",
+  "children": [
+    {
+      "id": "vs-jest",
+      "text": "与 Jest 的关系",
+      "children": [
+        { "id": "vs-jest-api", "text": "jest 换成 vi", "children": [] },
+        { "id": "vs-jest-esm", "text": "原生 ESM 与 TS", "children": [] },
+        { "id": "vs-jest-run", "text": "vitest run 跑一次", "children": [] }
+      ]
+    },
+    {
+      "id": "env",
+      "text": "运行环境",
+      "children": [
+        { "id": "env-node", "text": "纯逻辑用 node", "children": [] },
+        { "id": "env-jsdom", "text": "jsdom 贴近浏览器", "children": [] },
+        { "id": "env-happy", "text": "happy-dom 更快", "children": [] }
+      ]
+    },
+    {
+      "id": "case",
+      "text": "用例组织",
+      "children": [
+        { "id": "case-each", "text": "it.each 展开数据", "children": [] },
+        { "id": "case-throw", "text": "toThrow 传函数", "children": [] },
+        { "id": "case-await", "text": "异步断言要 await", "children": [] }
+      ]
+    },
+    {
+      "id": "mock",
+      "text": "vi.mock 提升",
+      "children": [
+        { "id": "mock-hoist", "text": "提到 import 之前", "children": [] },
+        { "id": "mock-hoisted", "text": "vi.hoisted 共享变量", "children": [] },
+        { "id": "mock-spy", "text": "单方法用 spyOn", "children": [] }
+      ]
+    },
+    {
+      "id": "snapshot",
+      "text": "快照成本",
+      "children": [
+        { "id": "snapshot-blind", "text": "没人逐字 review", "children": [] },
+        { "id": "snapshot-update", "text": "-u 一把全更新", "children": [] },
+        { "id": "snapshot-inline", "text": "inline 能看 diff", "children": [] }
+      ]
+    }
+  ]
+}

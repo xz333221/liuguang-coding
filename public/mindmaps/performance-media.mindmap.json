@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "图片、字体与媒体",
+  "children": [
+    {
+      "id": "format",
+      "text": "格式选择",
+      "children": [
+        { "id": "fmt-webp", "text": "WebP 主力格式", "children": [] },
+        { "id": "fmt-avif", "text": "AVIF 更小更费 CPU", "children": [] },
+        { "id": "fmt-svg", "text": "图标用 SVG", "children": [] }
+      ]
+    },
+    {
+      "id": "size",
+      "text": "尺寸适配",
+      "children": [
+        { "id": "sz-srcset", "text": "srcset 多候选", "children": [] },
+        { "id": "sz-sizes", "text": "sizes 说布局宽度", "children": [] },
+        { "id": "sz-ratio", "text": "宽高属性占位", "children": [] }
+      ]
+    },
+    {
+      "id": "load",
+      "text": "加载时机",
+      "children": [
+        { "id": "ld-lazy", "text": "lazy 只给屏外", "children": [] },
+        { "id": "ld-async", "text": "decoding 异步解码", "children": [] },
+        { "id": "ld-picture", "text": "picture 做格式回退", "children": [] }
+      ]
+    },
+    {
+      "id": "font",
+      "text": "字体",
+      "children": [
+        { "id": "ft-display", "text": "font-display 取舍", "children": [] },
+        { "id": "ft-subset", "text": "子集化与 unicode-range", "children": [] },
+        { "id": "ft-preload", "text": "首屏字体预加载", "children": [] },
+        { "id": "ft-adjust", "text": "size-adjust 压位移", "children": [] }
+      ]
+    },
+    {
+      "id": "video",
+      "text": "视频与动图",
+      "children": [
+        { "id": "vd-none", "text": "preload 设 none", "children": [] },
+        { "id": "vd-poster", "text": "poster 保首屏画面", "children": [] },
+        { "id": "vd-gif", "text": "GIF 换 MP4", "children": [] }
+      ]
+    }
+  ]
+}

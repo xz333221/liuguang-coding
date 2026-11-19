@@ -1,0 +1,43 @@
+{
+  "id": "root",
+  "text": "代码分割、懒加载与预取",
+  "children": [
+    {
+      "id": "bundle",
+      "text": "单包代价",
+      "children": [
+        { "id": "bd-download", "text": "下载整包才执行", "children": [] },
+        { "id": "bd-parse", "text": "解析编译按体积", "children": [] },
+        { "id": "bd-run", "text": "顶层副作用照跑", "children": [] }
+      ]
+    },
+    {
+      "id": "split",
+      "text": "分割点",
+      "children": [
+        { "id": "sp-import", "text": "import() 返回 Promise", "children": [] },
+        { "id": "sp-static", "text": "路径要可静态分析", "children": [] },
+        { "id": "sp-route", "text": "路由是最稳边界", "children": [] },
+        { "id": "sp-comp", "text": "组件级三条标准", "children": [] }
+      ]
+    },
+    {
+      "id": "hint",
+      "text": "资源提示",
+      "children": [
+        { "id": "hi-modulepreload", "text": "当前页依赖预载解析", "children": [] },
+        { "id": "hi-prefetch", "text": "空闲时备下一页", "children": [] },
+        { "id": "hi-idle", "text": "requestIdleCallback 触发", "children": [] }
+      ]
+    },
+    {
+      "id": "cost",
+      "text": "预取边界",
+      "children": [
+        { "id": "co-save", "text": "saveData 时跳过", "children": [] },
+        { "id": "co-waste", "text": "没人去就白花", "children": [] },
+        { "id": "co-side", "text": "别预取写操作接口", "children": [] }
+      ]
+    }
+  ]
+}

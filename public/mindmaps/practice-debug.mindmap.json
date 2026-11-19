@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "调试面板手册",
+  "children": [
+    {
+      "id": "triage",
+      "text": "按症状分诊",
+      "children": [
+        { "id": "triage-style", "text": "样式看 Elements", "children": [] },
+        { "id": "triage-data", "text": "数据看 Network", "children": [] },
+        { "id": "triage-slow", "text": "卡顿看性能面板", "children": [] }
+      ]
+    },
+    {
+      "id": "elements",
+      "text": "结构与样式",
+      "children": [
+        { "id": "elements-strike", "text": "删除线即被覆盖", "children": [] },
+        { "id": "elements-computed", "text": "Computed 找来源", "children": [] },
+        { "id": "elements-hov", "text": "强制 hover", "children": [] }
+      ]
+    },
+    {
+      "id": "network",
+      "text": "网络请求",
+      "children": [
+        { "id": "network-status", "text": "failed 不是 4xx", "children": [] },
+        { "id": "network-timing", "text": "TTFB 归服务端", "children": [] },
+        { "id": "network-initiator", "text": "Initiator 溯源", "children": [] },
+        { "id": "network-log", "text": "跨页留日志", "children": [] }
+      ]
+    },
+    {
+      "id": "console",
+      "text": "控制台",
+      "children": [
+        { "id": "console-api", "text": "$0 与 copy()", "children": [] },
+        { "id": "console-events", "text": "查事件监听", "children": [] },
+        { "id": "console-break", "text": "断点调代码", "children": [] }
+      ]
+    },
+    {
+      "id": "perf",
+      "text": "性能与存储",
+      "children": [
+        { "id": "perf-long", "text": "50ms 算长任务", "children": [] },
+        { "id": "perf-bottomup", "text": "Bottom-Up 排序", "children": [] },
+        { "id": "perf-app", "text": "清站点数据", "children": [] }
+      ]
+    }
+  ]
+}

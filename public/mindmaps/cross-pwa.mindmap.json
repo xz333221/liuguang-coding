@@ -1,0 +1,54 @@
+{
+  "id": "root",
+  "text": "PWA：Service Worker 与离线缓存",
+  "children": [
+    {
+      "id": "scope",
+      "text": "作用域与前提",
+      "children": [
+        { "id": "scope-path", "text": "脚本路径定 scope", "children": [] },
+        { "id": "scope-header", "text": "Service-Worker-Allowed", "children": [] },
+        { "id": "scope-https", "text": "仅 HTTPS 与 localhost", "children": [] }
+      ]
+    },
+    {
+      "id": "lifecycle",
+      "text": "三个生命周期",
+      "children": [
+        { "id": "life-install", "text": "install 预缓存", "children": [] },
+        { "id": "life-activate", "text": "activate 清旧缓存", "children": [] },
+        { "id": "life-fetch", "text": "fetch 拦截请求", "children": [] },
+        { "id": "life-waituntil", "text": "waitUntil 延长生命周期", "children": [] }
+      ]
+    },
+    {
+      "id": "update",
+      "text": "更新与接管",
+      "children": [
+        { "id": "update-waiting", "text": "默认停在 waiting", "children": [] },
+        { "id": "update-skip", "text": "skipWaiting 立即激活", "children": [] },
+        { "id": "update-claim", "text": "claim 接管已开页面", "children": [] },
+        { "id": "update-risk", "text": "新旧资源混用白屏", "children": [] }
+      ]
+    },
+    {
+      "id": "strategy",
+      "text": "缓存策略",
+      "children": [
+        { "id": "strategy-first", "text": "cache-first 哈希资源", "children": [] },
+        { "id": "strategy-network", "text": "network-first 落回缓存", "children": [] },
+        { "id": "strategy-swr", "text": "stale-while-revalidate", "children": [] },
+        { "id": "strategy-offline", "text": "navigate 失败回退页", "children": [] }
+      ]
+    },
+    {
+      "id": "install-app",
+      "text": "可安装性",
+      "children": [
+        { "id": "install-manifest", "text": "manifest 四要素", "children": [] },
+        { "id": "install-icons", "text": "192 与 512 图标", "children": [] },
+        { "id": "install-ios", "text": "iOS 需手动添加", "children": [] }
+      ]
+    }
+  ]
+}

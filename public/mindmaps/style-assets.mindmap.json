@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "图标、字体与静态资源",
+  "children": [
+    {
+      "id": "icon",
+      "text": "图标",
+      "children": [
+        { "id": "icon-inline", "text": "内联 SVG 最直接", "children": [] },
+        { "id": "icon-sprite", "text": "symbol 加 use 复用", "children": [] },
+        { "id": "icon-color", "text": "stroke 用 currentColor", "children": [] },
+        { "id": "icon-font", "text": "图标字体读屏不友好", "children": [] }
+      ]
+    },
+    {
+      "id": "font-load",
+      "text": "字体加载",
+      "children": [
+        { "id": "font-display", "text": "正文 swap 标题 optional", "children": [] },
+        { "id": "font-adjust", "text": "size-adjust 减抖动", "children": [] },
+        { "id": "font-range", "text": "unicode-range 切片", "children": [] }
+      ]
+    },
+    {
+      "id": "preload",
+      "text": "preload 边界",
+      "children": [
+        { "id": "preload-cross", "text": "必须带 crossorigin", "children": [] },
+        { "id": "preload-one", "text": "只给首屏那一个字重", "children": [] },
+        { "id": "preload-cjk", "text": "中文全量不能预加载", "children": [] }
+      ]
+    },
+    {
+      "id": "image",
+      "text": "图片",
+      "children": [
+        { "id": "image-ratio", "text": "宽高防累积位移", "children": [] },
+        { "id": "image-srcset", "text": "srcset 要配 sizes", "children": [] },
+        { "id": "image-priority", "text": "首屏图不 lazy", "children": [] }
+      ]
+    },
+    {
+      "id": "cache",
+      "text": "缓存与授权",
+      "children": [
+        { "id": "cache-hash", "text": "文件名带内容哈希", "children": [] },
+        { "id": "cache-immutable", "text": "长缓存加 immutable", "children": [] },
+        { "id": "cache-license", "text": "字体需 web 授权", "children": [] }
+      ]
+    }
+  ]
+}

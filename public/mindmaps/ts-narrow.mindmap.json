@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "类型收窄、守卫与断言",
+  "children": [
+    {
+      "id": "narrow-source",
+      "text": "收窄入口",
+      "children": [
+        { "id": "narrow-source-typeof", "text": "typeof 与 instanceof", "children": [] },
+        { "id": "narrow-source-in", "text": "in 与真值判断", "children": [] },
+        { "id": "narrow-source-tag", "text": "判别字段", "children": [] }
+      ]
+    },
+    {
+      "id": "narrow-union",
+      "text": "判别联合",
+      "children": [
+        { "id": "narrow-union-kind", "text": "kind 用字面量", "children": [] },
+        { "id": "narrow-union-switch", "text": "switch 逐分支收窄", "children": [] },
+        { "id": "narrow-union-never", "text": "never 查漏", "children": [] }
+      ]
+    },
+    {
+      "id": "narrow-guard",
+      "text": "类型守卫",
+      "children": [
+        { "id": "narrow-guard-is", "text": "is 谓词", "children": [] },
+        { "id": "narrow-guard-filter", "text": "filter 收窄数组", "children": [] },
+        { "id": "narrow-guard-asserts", "text": "asserts 断言函数", "children": [] }
+      ]
+    },
+    {
+      "id": "narrow-assert",
+      "text": "断言",
+      "children": [
+        { "id": "narrow-assert-as", "text": "as 不做检查", "children": [] },
+        { "id": "narrow-assert-satisfies", "text": "satisfies 保留类型", "children": [] },
+        { "id": "narrow-assert-combo", "text": "as const satisfies", "children": [] }
+      ]
+    },
+    {
+      "id": "narrow-bang",
+      "text": "非空断言",
+      "children": [
+        { "id": "narrow-bang-erase", "text": "编译后消失", "children": [] },
+        { "id": "narrow-bang-safe", "text": "判空与可选链", "children": [] }
+      ]
+    }
+  ]
+}

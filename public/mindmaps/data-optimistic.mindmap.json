@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "乐观更新与离线队列",
+  "children": [
+    {
+      "id": "steps",
+      "text": "三步走",
+      "children": [
+        { "id": "steps-snapshot", "text": "先存旧快照", "children": [] },
+        { "id": "steps-local", "text": "立刻改本地", "children": [] },
+        { "id": "steps-rollback", "text": "失败还原", "children": [] }
+      ]
+    },
+    {
+      "id": "rollback",
+      "text": "回滚边界",
+      "children": [
+        { "id": "rollback-fn", "text": "函数式只改单项", "children": [] },
+        { "id": "rollback-server", "text": "以服务端为准", "children": [] },
+        { "id": "rollback-cancel", "text": "先取消在途查询", "children": [] }
+      ]
+    },
+    {
+      "id": "boundary",
+      "text": "适用边界",
+      "children": [
+        { "id": "boundary-like", "text": "点赞收藏可乐观", "children": [] },
+        { "id": "boundary-pay", "text": "下单支付不可", "children": [] },
+        { "id": "boundary-idem", "text": "用幂等方法", "children": [] }
+      ]
+    },
+    {
+      "id": "queue",
+      "text": "离线队列",
+      "children": [
+        { "id": "queue-idb", "text": "IndexedDB 持久化", "children": [] },
+        { "id": "queue-online", "text": "online 事件重放", "children": [] },
+        { "id": "queue-branch", "text": "网络错与 4xx 分开", "children": [] }
+      ]
+    },
+    {
+      "id": "idem",
+      "text": "幂等键",
+      "children": [
+        { "id": "idem-when", "text": "入队时生成", "children": [] },
+        { "id": "idem-reuse", "text": "重放复用同一个", "children": [] },
+        { "id": "idem-server", "text": "服务端按键去重", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "id": "root",
+  "text": "国际化：文案组织、日期数字与复数",
+  "children": [
+    {
+      "id": "copy",
+      "text": "文案与代码分离",
+      "children": [
+        {
+          "id": "copy-key",
+          "text": "语义化 key 分组",
+          "children": []
+        },
+        {
+          "id": "copy-no-html",
+          "text": "资源里不放 HTML",
+          "children": []
+        },
+        {
+          "id": "copy-no-concat",
+          "text": "整句加占位符",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "plural",
+      "text": "复数与选择",
+      "children": [
+        {
+          "id": "plural-icu",
+          "text": "ICU plural 与 #",
+          "children": []
+        },
+        {
+          "id": "plural-other",
+          "text": "other 必须有",
+          "children": []
+        },
+        {
+          "id": "plural-rules",
+          "text": "PluralRules 判断类别",
+          "children": []
+        },
+        {
+          "id": "plural-ordinal",
+          "text": "序数用 ordinal",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "intl",
+      "text": "Intl 格式化",
+      "children": [
+        {
+          "id": "intl-number",
+          "text": "NumberFormat 与货币",
+          "children": []
+        },
+        {
+          "id": "intl-date",
+          "text": "DateTimeFormat 样式",
+          "children": []
+        },
+        {
+          "id": "intl-relative",
+          "text": "RelativeTimeFormat",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "timezone",
+      "text": "时区与存储",
+      "children": [
+        {
+          "id": "timezone-utc",
+          "text": "存 UTC 显示转换",
+          "children": []
+        },
+        {
+          "id": "timezone-iana",
+          "text": "用 IANA 名",
+          "children": []
+        },
+        {
+          "id": "timezone-server",
+          "text": "服务端别用本地时区",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "lang",
+      "text": "语言标记",
+      "children": [
+        {
+          "id": "lang-html",
+          "text": "html 上标 lang",
+          "children": []
+        },
+        {
+          "id": "lang-inline",
+          "text": "混排片段局部标",
+          "children": []
+        },
+        {
+          "id": "lang-fallback",
+          "text": "回退链与缺失检查",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "id": "root",
+  "text": "渲染模式",
+  "children": [
+    {
+      "id": "csr",
+      "text": "CSR",
+      "children": [
+        { "id": "csr-empty", "text": "空容器等 JS", "children": [] },
+        { "id": "csr-whitescreen", "text": "白屏与骨架屏", "children": [] }
+      ]
+    },
+    {
+      "id": "ssr",
+      "text": "SSR 与注水",
+      "children": [
+        { "id": "ssr-render", "text": "服务端出字符串", "children": [] },
+        { "id": "ssr-hydrate", "text": "复用 DOM 补事件", "children": [] },
+        { "id": "ssr-mismatch", "text": "两端结构要一致", "children": [] }
+      ]
+    },
+    {
+      "id": "mismatch",
+      "text": "mismatch 来源",
+      "children": [
+        { "id": "mismatch-time", "text": "时间与随机数", "children": [] },
+        { "id": "mismatch-env", "text": "浏览器 API 分支", "children": [] },
+        { "id": "mismatch-html", "text": "非法嵌套被纠正", "children": [] },
+        { "id": "mismatch-user", "text": "服务端不知道登录态", "children": [] }
+      ]
+    },
+    {
+      "id": "ssg",
+      "text": "SSG",
+      "children": [
+        { "id": "ssg-build", "text": "构建时出静态页", "children": [] },
+        { "id": "ssg-update", "text": "ISR 与按需重建", "children": [] },
+        { "id": "ssg-time", "text": "时间戳停在构建日", "children": [] }
+      ]
+    },
+    {
+      "id": "islands",
+      "text": "islands",
+      "children": [
+        { "id": "islands-static", "text": "静态海洋零 JS", "children": [] },
+        { "id": "islands-directive", "text": "load idle visible only", "children": [] },
+        { "id": "islands-share", "text": "跨岛状态难共享", "children": [] }
+      ]
+    },
+    {
+      "id": "ssr-pitfalls",
+      "text": "SSR 的坑",
+      "children": [
+        { "id": "ssr-pitfalls-window", "text": "没有 window", "children": [] },
+        { "id": "ssr-pitfalls-effect", "text": "不跑挂载钩子", "children": [] },
+        { "id": "ssr-pitfalls-cache", "text": "别缓存用户数据", "children": [] }
+      ]
+    }
+  ]
+}

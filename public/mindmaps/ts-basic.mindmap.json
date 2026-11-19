@@ -1,0 +1,42 @@
+{
+  "id": "root",
+  "text": "基础类型、字面量与联合类型",
+  "children": [
+    {
+      "id": "basic-infer",
+      "text": "推断",
+      "children": [
+        { "id": "basic-infer-let", "text": "let 放宽成宽类型", "children": [] },
+        { "id": "basic-infer-const", "text": "const 保留字面量", "children": [] },
+        { "id": "basic-infer-empty", "text": "空数组推成 any[]", "children": [] }
+      ]
+    },
+    {
+      "id": "basic-kinds",
+      "text": "基础类型",
+      "children": [
+        { "id": "basic-kinds-primitive", "text": "七个原始类型", "children": [] },
+        { "id": "basic-kinds-tuple", "text": "数组与元组", "children": [] },
+        { "id": "basic-kinds-asconst", "text": "as const 冻结", "children": [] }
+      ]
+    },
+    {
+      "id": "basic-union",
+      "text": "联合与交叉",
+      "children": [
+        { "id": "basic-union-literal", "text": "字面量选项", "children": [] },
+        { "id": "basic-union-common", "text": "只访问共有成员", "children": [] },
+        { "id": "basic-union-cross", "text": "交叉合并成员", "children": [] }
+      ]
+    },
+    {
+      "id": "basic-special",
+      "text": "三个特殊类型",
+      "children": [
+        { "id": "basic-special-any", "text": "any 会传染", "children": [] },
+        { "id": "basic-special-unknown", "text": "unknown 先收窄", "children": [] },
+        { "id": "basic-special-never", "text": "never 穷尽检查", "children": [] }
+      ]
+    }
+  ]
+}

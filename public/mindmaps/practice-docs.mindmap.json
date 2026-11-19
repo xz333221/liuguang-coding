@@ -1,0 +1,53 @@
+{
+  "id": "root",
+  "text": "文档与资料怎么用",
+  "children": [
+    {
+      "id": "layers",
+      "text": "来源分层",
+      "children": [
+        { "id": "layers-spec", "text": "规范定行为", "children": [] },
+        { "id": "layers-mdn", "text": "MDN 查用法", "children": [] },
+        { "id": "layers-tutorial", "text": "教程补体系", "children": [] },
+        { "id": "layers-second", "text": "二手资料要验证", "children": [] }
+      ]
+    },
+    {
+      "id": "mdn",
+      "text": "读 MDN",
+      "children": [
+        { "id": "mdn-bcd", "text": "兼容表看起始版本", "children": [] },
+        { "id": "mdn-footnote", "text": "星号脚注必看", "children": [] },
+        { "id": "mdn-spec", "text": "底部规范链接", "children": [] },
+        { "id": "mdn-lang", "text": "中文滞后切英文", "children": [] }
+      ]
+    },
+    {
+      "id": "tutorial",
+      "text": "教程结构",
+      "children": [
+        { "id": "tutorial-order", "text": "按章节顺序读", "children": [] },
+        { "id": "tutorial-task", "text": "任务验证理解", "children": [] },
+        { "id": "tutorial-fit", "text": "补体系不查 API", "children": [] }
+      ]
+    },
+    {
+      "id": "search",
+      "text": "搜报错",
+      "children": [
+        { "id": "search-keyword", "text": "删掉路径与变量", "children": [] },
+        { "id": "search-quote", "text": "引号包住整句", "children": [] },
+        { "id": "search-site", "text": "site 限定来源", "children": [] }
+      ]
+    },
+    {
+      "id": "version",
+      "text": "对齐版本",
+      "children": [
+        { "id": "version-issue", "text": "is:closed 筛已关", "children": [] },
+        { "id": "version-npm", "text": "npm ls 看版本", "children": [] },
+        { "id": "version-notes", "text": "release 看变更", "children": [] }
+      ]
+    }
+  ]
+}

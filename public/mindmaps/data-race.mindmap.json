@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "竞态、防抖与并发控制",
+  "children": [
+    {
+      "id": "race",
+      "text": "后发先至",
+      "children": [
+        { "id": "race-order", "text": "网络不保证顺序", "children": [] },
+        { "id": "race-overwrite", "text": "旧响应盖新结果", "children": [] },
+        { "id": "race-symptom", "text": "偶发错乱难复现", "children": [] }
+      ]
+    },
+    {
+      "id": "fix",
+      "text": "两种修法",
+      "children": [
+        { "id": "fix-seq", "text": "序号比对后丢弃", "children": [] },
+        { "id": "fix-abort", "text": "AbortController 中止", "children": [] },
+        { "id": "fix-silent", "text": "AbortError 静默", "children": [] }
+      ]
+    },
+    {
+      "id": "debounce",
+      "text": "防抖与节流",
+      "children": [
+        { "id": "debounce-wait", "text": "停止 300ms 后执行", "children": [] },
+        { "id": "debounce-ime", "text": "输入法合成事件", "children": [] },
+        { "id": "debounce-throttle", "text": "节流固定间隔一次", "children": [] }
+      ]
+    },
+    {
+      "id": "pool",
+      "text": "并发池",
+      "children": [
+        { "id": "pool-limit", "text": "固定并发上限", "children": [] },
+        { "id": "pool-order", "text": "结果按下标保序", "children": [] },
+        { "id": "pool-allsettled", "text": "允许部分失败", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "坑",
+      "children": [
+        { "id": "pitfall-scope", "text": "序号要跨渲染保留", "children": [] },
+        { "id": "pitfall-cleanup", "text": "effect 清理两件事", "children": [] },
+        { "id": "pitfall-fastfail", "text": "一个 reject 掐全批", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "root",
+  "text": "为什么加类型：从 JavaScript 到 TypeScript",
+  "children": [
+    {
+      "id": "why-timing",
+      "text": "报错时机",
+      "children": [
+        { "id": "why-timing-runtime", "text": "运行时才暴露", "children": [] },
+        { "id": "why-timing-nan", "text": "NaN 静默向后传", "children": [] },
+        { "id": "why-timing-stack", "text": "栈里找不到源头", "children": [] }
+      ]
+    },
+    {
+      "id": "why-check",
+      "text": "检查在构建时",
+      "children": [
+        { "id": "why-check-tsc", "text": "tsc 只做检查", "children": [] },
+        { "id": "why-check-erase", "text": "类型全部擦除", "children": [] },
+        { "id": "why-check-enum", "text": "enum 会留代码", "children": [] }
+      ]
+    },
+    {
+      "id": "why-strict",
+      "text": "strict 集合",
+      "children": [
+        { "id": "why-strict-null", "text": "strictNullChecks", "children": [] },
+        { "id": "why-strict-any", "text": "noImplicitAny", "children": [] },
+        { "id": "why-strict-variance", "text": "函数参数逆变检查", "children": [] }
+      ]
+    },
+    {
+      "id": "why-migrate",
+      "text": "渐进迁移",
+      "children": [
+        { "id": "why-migrate-allowjs", "text": "allowJs 先纳入", "children": [] },
+        { "id": "why-migrate-checkjs", "text": "checkJs 逐文件开", "children": [] },
+        { "id": "why-migrate-any", "text": "any 只当过渡", "children": [] }
+      ]
+    }
+  ]
+}

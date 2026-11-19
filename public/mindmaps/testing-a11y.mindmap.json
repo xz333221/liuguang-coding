@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "可访问性测试与视觉回归",
+  "children": [
+    {
+      "id": "axe",
+      "text": "axe 能查",
+      "children": [
+        { "id": "axe-alt", "text": "缺 alt 与 label", "children": [] },
+        { "id": "axe-name", "text": "按钮无可访问名称", "children": [] },
+        { "id": "axe-aria", "text": "ARIA 属性值不合法", "children": [] }
+      ]
+    },
+    {
+      "id": "limit",
+      "text": "查不到的",
+      "children": [
+        { "id": "limit-alt-meaning", "text": "alt 写得有无意义", "children": [] },
+        { "id": "limit-keyboard", "text": "Tab 顺序与焦点", "children": [] },
+        { "id": "limit-sr", "text": "屏幕阅读器朗读", "children": [] }
+      ]
+    },
+    {
+      "id": "contrast",
+      "text": "对比度边界",
+      "children": [
+        { "id": "contrast-ratio", "text": "正文 4.5 比 1", "children": [] },
+        { "id": "contrast-bg", "text": "背景图算不出来", "children": [] },
+        { "id": "contrast-incomplete", "text": "标成 incomplete", "children": [] }
+      ]
+    },
+    {
+      "id": "visual",
+      "text": "视觉回归",
+      "children": [
+        { "id": "visual-threshold", "text": "threshold 管单像素", "children": [] },
+        { "id": "visual-ratio", "text": "maxDiffPixelRatio 管占比", "children": [] },
+        { "id": "visual-scope", "text": "只截卡片不截整页", "children": [] }
+      ]
+    },
+    {
+      "id": "font",
+      "text": "字体差异",
+      "children": [
+        { "id": "font-raster", "text": "抗锯齿不同就差几像素", "children": [] },
+        { "id": "font-image", "text": "本地与 CI 同镜像", "children": [] },
+        { "id": "font-clock", "text": "固定时钟与数据", "children": [] }
+      ]
+    }
+  ]
+}

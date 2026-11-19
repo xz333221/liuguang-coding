@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "指标体系：Core Web Vitals",
+  "children": [
+    {
+      "id": "three",
+      "text": "三个核心指标",
+      "children": [
+        { "id": "three-lcp", "text": "LCP 最大内容绘制", "children": [] },
+        { "id": "three-inp", "text": "INP 交互到下一帧", "children": [] },
+        { "id": "three-cls", "text": "CLS 累积位移", "children": [] }
+      ]
+    },
+    {
+      "id": "threshold",
+      "text": "阈值与口径",
+      "children": [
+        { "id": "th-25", "text": "2.5s / 200ms / 0.1", "children": [] },
+        { "id": "th-p75", "text": "取第 75 百分位", "children": [] },
+        { "id": "th-avg", "text": "平均值会抹平长尾", "children": [] }
+      ]
+    },
+    {
+      "id": "lcp-stage",
+      "text": "LCP 四段",
+      "children": [
+        { "id": "lcp-ttfb", "text": "TTFB", "children": [] },
+        { "id": "lcp-delay", "text": "资源加载延迟", "children": [] },
+        { "id": "lcp-duration", "text": "资源加载时长", "children": [] },
+        { "id": "lcp-render", "text": "元素渲染延迟", "children": [] }
+      ]
+    },
+    {
+      "id": "cls-rule",
+      "text": "CLS 计分规则",
+      "children": [
+        { "id": "cls-formula", "text": "影响比例乘移动距离", "children": [] },
+        { "id": "cls-input", "text": "输入后 500ms 不计", "children": [] },
+        { "id": "cls-transform", "text": "transform 不算位移", "children": [] }
+      ]
+    },
+    {
+      "id": "collect",
+      "text": "采集方式",
+      "children": [
+        { "id": "col-po", "text": "PerformanceObserver", "children": [] },
+        { "id": "col-buffered", "text": "buffered 补发早期条目", "children": [] },
+        { "id": "col-hide", "text": "页面隐藏时上报", "children": [] }
+      ]
+    }
+  ]
+}
