@@ -51,7 +51,7 @@ export async function getTopics(): Promise<Topic[]> {
   for (const topic of entries) {
     // 写错的 node 会让这篇文章从目录里静默消失,所以在构建期就炸掉
     if (topic.data.node && !findCategory(topic.data.node)) {
-      throw new Error(`「${topic.id}」的 node 指向了不存在的章节:${topic.data.node}(见 src/data/javaOutline.ts)`)
+      throw new Error(`「${topic.id}」的 node 指向了不存在的章节:${topic.data.node}(见 src/data/*Outline.ts)`)
     }
   }
   return entries.sort(compareTopics)

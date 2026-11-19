@@ -49,7 +49,7 @@ const collapsible = children.length > 0
 // 合成一行:直接链到文章,名字用文章标题。
 const onlyTopic = !collapsible && number && own.length === 1 ? own[0] : undefined
 const onPath = openPath.has(node.id)
-// 方向层(没有编号)保持展开,17 章默认收起,不然侧栏一屏放不下
+// 方向层(没有编号)保持展开,章节树默认收起,不然侧栏一屏放不下
 const open = !number || onPath
 const panelId = `lg-nav-${scope}-${node.id}`
 const toggleLabel = `${open ? '收起' : '展开'} ${number ? `${number} ` : ''}${node.name}`

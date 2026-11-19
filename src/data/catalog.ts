@@ -8,12 +8,13 @@
 // 知识点通过 frontmatter 的 category 指向叶子分类的 id(如 python / ai / algorithm),
 // 父分类(如 backend)只用来分组和做落地页。
 //
-// 章节树(numbered):java 的 children 是一棵 17 章的大纲(见 javaOutline.ts),文章再用
-// frontmatter 的 `node` 指到具体章节点。这类节点有两个特别之处:
+// 章节树(numbered):java 与 frontend 的 children 各是一棵大纲(见 javaOutline.ts /
+// frontendOutline.ts),文章再用 frontmatter 的 `node` 指到具体章节点。这类节点有两个特别之处:
 //   · 编号由树位置推导(outlineNumber),不写进数据;
 //   · 「筹备中」由子树里的文章数推导,不是看 status —— 所以大纲节点一律 active,
 //     补上文章后徽标自动消失。方向级的 soon(前端/后端那些)仍照旧声明。
 
+import { frontendChapters } from './frontendOutline'
 import { javaChapters } from './javaOutline'
 
 export type CategoryStatus = 'active' | 'soon' | 'hidden'
@@ -69,8 +70,11 @@ export const catalog: Category[] = [
   {
     id: 'frontend',
     name: '前端',
-    intro: '浏览器渲染、JavaScript 运行时、工程化与性能。',
-    status: 'soon',
+    intro:
+      '按 20 章走完:HTML 与 CSS → JavaScript 语言与异步 → DOM 与浏览器 → 工程化与 TypeScript → 框架与数据 → 性能、测试、安全、可访问性 → 跨端与实战。',
+    status: 'active',
+    numbered: true,
+    children: frontendChapters,
   },
   {
     id: 'ops',
