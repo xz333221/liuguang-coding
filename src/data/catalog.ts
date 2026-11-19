@@ -34,6 +34,27 @@ export interface Category {
 
 export const catalog: Category[] = [
   {
+    id: 'product',
+    name: '产品设计',
+    intro: '需求判断、流程设计、指标与迭代节奏。',
+    status: 'soon',
+  },
+  {
+    id: 'ui',
+    name: 'UI 设计',
+    intro: '视觉层级、排版、色彩与组件规范。',
+    status: 'soon',
+  },
+  {
+    id: 'frontend',
+    name: '前端',
+    intro:
+      '按 20 章走完:HTML 与 CSS → JavaScript 语言与异步 → DOM 与浏览器 → 工程化与 TypeScript → 框架与数据 → 性能、测试、安全、可访问性 → 跨端与实战。',
+    status: 'active',
+    numbered: true,
+    children: frontendChapters,
+  },
+  {
     id: 'backend',
     name: '后端',
     intro: 'Python 与 Java 两套语言教程,以及接口设计、数据库、缓存与一致性。',
@@ -56,10 +77,10 @@ export const catalog: Category[] = [
     ],
   },
   {
-    id: 'ai',
-    name: 'AI',
-    intro: '大模型怎么生成文字、怎么调参、怎么把模型接进真实系统。',
-    status: 'active',
+    id: 'ops',
+    name: '运维',
+    intro: 'Linux、网络、容器、可观测性与发布流程。',
+    status: 'soon',
   },
   {
     id: 'algorithm',
@@ -68,31 +89,10 @@ export const catalog: Category[] = [
     status: 'active',
   },
   {
-    id: 'frontend',
-    name: '前端',
-    intro:
-      '按 20 章走完:HTML 与 CSS → JavaScript 语言与异步 → DOM 与浏览器 → 工程化与 TypeScript → 框架与数据 → 性能、测试、安全、可访问性 → 跨端与实战。',
+    id: 'ai',
+    name: 'AI',
+    intro: '大模型怎么生成文字、怎么调参、怎么把模型接进真实系统。',
     status: 'active',
-    numbered: true,
-    children: frontendChapters,
-  },
-  {
-    id: 'ops',
-    name: '运维',
-    intro: 'Linux、网络、容器、可观测性与发布流程。',
-    status: 'soon',
-  },
-  {
-    id: 'ui',
-    name: 'UI 设计',
-    intro: '视觉层级、排版、色彩与组件规范。',
-    status: 'soon',
-  },
-  {
-    id: 'product',
-    name: '产品设计',
-    intro: '需求判断、流程设计、指标与迭代节奏。',
-    status: 'soon',
   },
 ]
 
