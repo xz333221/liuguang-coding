@@ -113,10 +113,11 @@ export function setupMermaidBlocks() {
         flowchart: { useMaxWidth: true },
       })
       for (const pre of blocks) {
-        let host = pre.nextElementSibling
-        if (!(host instanceof HTMLElement) || !host.classList.contains('lg-mermaid')) {
-          host = document.createElement('div')
-          host.className = 'lg-mermaid'
+        const next = pre.nextElementSibling
+        let host = next instanceof HTMLElement && next.classList.contains('lg-mermaid') ? next : null
+        if (!host) {
+          const created = document.createElement('div')
+          created.className = 'lg-mermaid'
           const canvas = document.createElement('div')
           canvas.className = 'lg-mermaid-canvas'
           const expand = document.createElement('button')
@@ -124,9 +125,10 @@ export function setupMermaidBlocks() {
           expand.className = 'lg-mermaid-expand'
           expand.textContent = '放大'
           expand.setAttribute('aria-label', '全屏查看流程图')
-          host.append(canvas, expand)
-          host.addEventListener('click', () => openOverlay(host))
-          pre.after(host)
+          created.append(canvas, expand)
+          created.addEventListener('click', () => openOverlay(created))
+          pre.after(created)
+          host = created
         }
         const id = `lg-mermaid-${seq++}`
         try {
