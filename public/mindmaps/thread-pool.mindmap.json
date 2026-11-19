@@ -1,0 +1,54 @@
+{
+  "id": "root",
+  "text": "线程池与 Executor",
+  "children": [
+    {
+      "id": "params",
+      "text": "七个参数",
+      "children": [
+        { "id": "params-size", "text": "corePoolSize 与 maximumPoolSize", "children": [] },
+        { "id": "params-keep", "text": "keepAliveTime 与 unit", "children": [] },
+        { "id": "params-queue", "text": "workQueue 存放等待任务", "children": [] },
+        { "id": "params-factory", "text": "threadFactory 与 handler", "children": [] }
+      ]
+    },
+    {
+      "id": "order",
+      "text": "提交顺序",
+      "children": [
+        { "id": "order-core", "text": "核心线程", "children": [] },
+        { "id": "order-queue", "text": "任务队列", "children": [] },
+        { "id": "order-max", "text": "最大线程", "children": [] },
+        { "id": "order-reject", "text": "拒绝策略", "children": [] }
+      ]
+    },
+    {
+      "id": "reject",
+      "text": "四种拒绝策略",
+      "children": [
+        { "id": "reject-abort", "text": "AbortPolicy 抛异常", "children": [] },
+        { "id": "reject-caller", "text": "CallerRunsPolicy 形成反压", "children": [] },
+        { "id": "reject-discard", "text": "DiscardPolicy 静默丢弃", "children": [] },
+        { "id": "reject-oldest", "text": "DiscardOldestPolicy 丢最旧任务", "children": [] }
+      ]
+    },
+    {
+      "id": "queue",
+      "text": "队列与工厂方法",
+      "children": [
+        { "id": "queue-bounded", "text": "有界队列让最大线程生效", "children": [] },
+        { "id": "queue-fixed", "text": "newFixedThreadPool 使用无界队列", "children": [] },
+        { "id": "queue-cached", "text": "newCachedThreadPool 线程数无上限", "children": [] }
+      ]
+    },
+    {
+      "id": "close",
+      "text": "关闭与规模",
+      "children": [
+        { "id": "close-shutdown", "text": "shutdown 保留已提交任务", "children": [] },
+        { "id": "close-now", "text": "shutdownNow 中断并返回未执行任务", "children": [] },
+        { "id": "close-size", "text": "CPU 密集 N+1,IO 密集按等待比估算", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "id": "root",
+  "text": "排查命令与常用参数",
+  "children": [
+    {
+      "id": "proc",
+      "text": "进程与 GC",
+      "children": [
+        { "id": "proc-jps", "text": "jps -l 定位 PID", "children": [] },
+        { "id": "proc-jstat", "text": "jstat -gcutil 看各区占用", "children": [] },
+        { "id": "proc-fgc", "text": "关注老年代与 Full GC", "children": [] }
+      ]
+    },
+    {
+      "id": "thread",
+      "text": "线程",
+      "children": [
+        { "id": "thread-jstack", "text": "jstack -l 抓线程栈", "children": [] },
+        { "id": "thread-deadlock", "text": "检测 Java-level deadlock", "children": [] },
+        { "id": "thread-cpu", "text": "top -Hp 与 nid 十六进制对应", "children": [] }
+      ]
+    },
+    {
+      "id": "heap",
+      "text": "内存",
+      "children": [
+        { "id": "heap-histo", "text": "jmap -histo 查对象分布", "children": [] },
+        { "id": "heap-dump", "text": "jmap -dump 导出 hprof", "children": [] }
+      ]
+    },
+    {
+      "id": "entry",
+      "text": "统一入口",
+      "children": [
+        { "id": "entry-jcmd", "text": "jcmd 调用诊断命令", "children": [] },
+        { "id": "entry-jinfo", "text": "jinfo 查看生效参数", "children": [] }
+      ]
+    },
+    {
+      "id": "param",
+      "text": "关键参数",
+      "children": [
+        { "id": "param-heap", "text": "-Xms/-Xmx/-Xmn", "children": [] },
+        { "id": "param-dump", "text": "HeapDumpOnOutOfMemoryError", "children": [] },
+        { "id": "param-log", "text": "-Xlog:gc* 输出日志", "children": [] }
+      ]
+    },
+    {
+      "id": "check",
+      "text": "排查清单",
+      "children": [
+        { "id": "check-cpu", "text": "CPU 高查热点线程", "children": [] },
+        { "id": "check-mem", "text": "内存涨查老年代与大对象", "children": [] },
+        { "id": "check-thread", "text": "线程卡查栈与锁", "children": [] }
+      ]
+    }
+  ]
+}

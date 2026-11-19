@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "自动配置与 starter",
+  "children": [
+    {
+      "id": "auto",
+      "text": "自动配置",
+      "children": [
+        { "id": "auto-conditional", "text": "条件化配置类", "children": [] },
+        { "id": "auto-enable", "text": "@EnableAutoConfiguration 收集", "children": [] }
+      ]
+    },
+    {
+      "id": "register",
+      "text": "注册清单",
+      "children": [
+        { "id": "reg-factories", "text": "spring.factories 旧位置", "children": [] },
+        { "id": "reg-imports", "text": "AutoConfiguration.imports 新位置", "children": [] }
+      ]
+    },
+    {
+      "id": "condition",
+      "text": "条件注解",
+      "children": [
+        { "id": "cond-class", "text": "@ConditionalOnClass", "children": [] },
+        { "id": "cond-missing", "text": "@ConditionalOnMissingBean", "children": [] },
+        { "id": "cond-property", "text": "@ConditionalOnProperty", "children": [] }
+      ]
+    },
+    {
+      "id": "order-module",
+      "text": "顺序与模块",
+      "children": [
+        { "id": "ord-after", "text": "@AutoConfigureAfter 排序", "children": [] },
+        { "id": "ord-autoconfigure", "text": "autoconfigure 模块", "children": [] },
+        { "id": "ord-starter", "text": "starter 模块", "children": [] }
+      ]
+    },
+    {
+      "id": "debug-override",
+      "text": "查看与覆盖",
+      "children": [
+        { "id": "dbg-report", "text": "--debug 条件评估报告", "children": [] },
+        { "id": "ovr-bean", "text": "自定义 Bean 覆盖", "children": [] },
+        { "id": "ovr-property", "text": "配置属性覆盖", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "值对象与领域事件",
+  "children": [
+    {
+      "id": "vo",
+      "text": "值对象",
+      "children": [
+        { "id": "vo-immutable", "text": "创建后不可变", "children": [] },
+        { "id": "vo-equality", "text": "按属性值相等", "children": [] },
+        { "id": "vo-side-effect", "text": "方法无副作用", "children": [] }
+      ]
+    },
+    {
+      "id": "record",
+      "text": "record 实现",
+      "children": [
+        { "id": "record-equals", "text": "自动生成 equals/hashCode", "children": [] },
+        { "id": "record-check", "text": "紧凑构造器做校验", "children": [] },
+        { "id": "record-scale", "text": "构造时统一精度", "children": [] }
+      ]
+    },
+    {
+      "id": "money",
+      "text": "Money",
+      "children": [
+        { "id": "money-bigdecimal", "text": "用 BigDecimal 表示金额", "children": [] },
+        { "id": "money-currency", "text": "金额与币种绑定", "children": [] },
+        { "id": "money-new", "text": "运算返回新对象", "children": [] }
+      ]
+    },
+    {
+      "id": "event",
+      "text": "领域事件",
+      "children": [
+        { "id": "event-past", "text": "过去式命名已发生事实", "children": [] },
+        { "id": "event-fields", "text": "事件 ID 与发生时间", "children": [] },
+        { "id": "event-payload", "text": "聚合 ID 与必要载荷", "children": [] }
+      ]
+    },
+    {
+      "id": "publish",
+      "text": "事件发布",
+      "children": [
+        { "id": "publish-collect", "text": "聚合收集事件", "children": [] },
+        { "id": "publish-after-commit", "text": "事务提交后发布", "children": [] },
+        { "id": "publish-idempotent", "text": "消费方按事件 ID 幂等", "children": [] }
+      ]
+    }
+  ]
+}

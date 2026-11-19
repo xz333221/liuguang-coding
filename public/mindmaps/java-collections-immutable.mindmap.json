@@ -1,0 +1,46 @@
+{
+  "id": "root",
+  "text": "不可变集合与 Collections 工具",
+  "children": [
+    {
+      "id": "of",
+      "text": "of / copyOf 真不可变",
+      "children": [
+        { "id": "of-throw", "text": "修改抛 UnsupportedOperationException", "children": [] },
+        { "id": "of-null", "text": "禁止 null", "children": [] },
+        { "id": "of-safe", "text": "天然线程安全", "children": [] }
+      ]
+    },
+    {
+      "id": "view",
+      "text": "unmodifiable 视图",
+      "children": [
+        { "id": "view-wrap", "text": "包装原集合,读转发", "children": [] },
+        { "id": "view-change", "text": "底层变则视图变", "children": [] }
+      ]
+    },
+    {
+      "id": "choose",
+      "text": "怎么选",
+      "children": [
+        { "id": "choose-const", "text": "内容恒定用 of/copyOf", "children": [] },
+        { "id": "choose-ref", "text": "限制引用修改用视图", "children": [] }
+      ]
+    },
+    {
+      "id": "defensive",
+      "text": "防御性拷贝",
+      "children": [
+        { "id": "def-get", "text": "getter 返回不可变副本", "children": [] },
+        { "id": "def-ctor", "text": "构造器拷贝外部集合", "children": [] }
+      ]
+    },
+    {
+      "id": "utils",
+      "text": "Collections 工具",
+      "children": [
+        { "id": "utils-list", "text": "sort / empty / singleton / synchronized / checked", "children": [] }
+      ]
+    }
+  ]
+}

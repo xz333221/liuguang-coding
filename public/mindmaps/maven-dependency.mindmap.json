@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "依赖坐标、scope 与冲突仲裁",
+  "children": [
+    {
+      "id": "scope",
+      "text": "六种 scope",
+      "children": [
+        { "id": "scope-compile", "text": "compile 默认,全程可见并打包", "children": [] },
+        { "id": "scope-provided", "text": "provided 运行期由容器提供", "children": [] },
+        { "id": "scope-runtime", "text": "runtime 编译不可见,运行可见", "children": [] },
+        { "id": "scope-import", "text": "test 与 import 的特殊用途", "children": [] }
+      ]
+    },
+    {
+      "id": "transitive",
+      "text": "传递依赖",
+      "children": [
+        { "id": "trans-intro", "text": "B 的依赖进入 A 的 classpath", "children": [] },
+        { "id": "trans-scope", "text": "scope 收敛,provided 与 test 不传递", "children": [] }
+      ]
+    },
+    {
+      "id": "arbitration",
+      "text": "冲突仲裁",
+      "children": [
+        { "id": "arb-nearest", "text": "最短路径优先", "children": [] },
+        { "id": "arb-first", "text": "路径相同先声明者优先", "children": [] }
+      ]
+    },
+    {
+      "id": "govern",
+      "text": "版本治理",
+      "children": [
+        { "id": "gov-exclude", "text": "exclusions 排除传递依赖", "children": [] },
+        { "id": "gov-manage", "text": "dependencyManagement 统一版本", "children": [] },
+        { "id": "gov-bom", "text": "BOM 与 scope=import", "children": [] },
+        { "id": "gov-optional", "text": "optional 阻断向下传递", "children": [] }
+      ]
+    },
+    {
+      "id": "tree",
+      "text": "排查工具",
+      "children": [
+        { "id": "tree-basic", "text": "dependency:tree 查看依赖树", "children": [] },
+        { "id": "tree-verbose", "text": "-Dverbose 显示被省略版本", "children": [] }
+      ]
+    }
+  ]
+}

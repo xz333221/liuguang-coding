@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "synchronized 与锁",
+  "children": [
+    {
+      "id": "scope",
+      "text": "锁的范围",
+      "children": [
+        { "id": "scope-instance", "text": "实例方法锁 this", "children": [] },
+        { "id": "scope-static", "text": "静态方法锁 Class 对象", "children": [] },
+        { "id": "scope-block", "text": "同步块锁指定对象", "children": [] }
+      ]
+    },
+    {
+      "id": "reentrant",
+      "text": "可重入",
+      "children": [
+        { "id": "reentrant-count", "text": "JVM 记录重入次数", "children": [] },
+        { "id": "reentrant-nested", "text": "同步方法可嵌套调用", "children": [] }
+      ]
+    },
+    {
+      "id": "wait",
+      "text": "wait 与 notify",
+      "children": [
+        { "id": "wait-lock", "text": "必须持有同一把锁", "children": [] },
+        { "id": "wait-release", "text": "wait 释放锁,notify 不释放", "children": [] },
+        { "id": "wait-while", "text": "条件判断用 while", "children": [] }
+      ]
+    },
+    {
+      "id": "deadlock",
+      "text": "死锁",
+      "children": [
+        { "id": "deadlock-four", "text": "互斥、请求并保持、不可剥夺、循环等待", "children": [] },
+        { "id": "deadlock-order", "text": "固定加锁顺序", "children": [] },
+        { "id": "deadlock-timeout", "text": "tryLock 超时放弃", "children": [] }
+      ]
+    },
+    {
+      "id": "compare",
+      "text": "与 ReentrantLock 取舍",
+      "children": [
+        { "id": "compare-auto", "text": "synchronized 自动释放", "children": [] },
+        { "id": "compare-feature", "text": "ReentrantLock 支持公平、超时、可中断", "children": [] }
+      ]
+    }
+  ]
+}

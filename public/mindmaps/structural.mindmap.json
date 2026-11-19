@@ -1,0 +1,42 @@
+{
+  "id": "root",
+  "text": "结构型:代理 / 装饰器 / 适配器",
+  "children": [
+    {
+      "id": "proxy",
+      "text": "代理",
+      "children": [
+        { "id": "proxy-static", "text": "静态代理:手写同接口转发", "children": [] },
+        { "id": "proxy-dynamic", "text": "动态代理:InvocationHandler 集中拦截", "children": [] },
+        { "id": "proxy-intent", "text": "意图:控制对目标的访问", "children": [] }
+      ]
+    },
+    {
+      "id": "decorator",
+      "text": "装饰器",
+      "children": [
+        { "id": "decorator-hold", "text": "实现同一接口,持有同类型引用", "children": [] },
+        { "id": "decorator-layer", "text": "按需嵌套,每层加一种能力", "children": [] },
+        { "id": "decorator-io", "text": "BufferedInputStream 是典型用法", "children": [] }
+      ]
+    },
+    {
+      "id": "adapter",
+      "text": "适配器",
+      "children": [
+        { "id": "adapter-convert", "text": "转换接口、单位与参数顺序", "children": [] },
+        { "id": "adapter-object", "text": "对象适配器组合被适配者,更灵活", "children": [] },
+        { "id": "adapter-legacy", "text": "兼容遗留 SDK 与第三方服务", "children": [] }
+      ]
+    },
+    {
+      "id": "compare",
+      "text": "三者对照",
+      "children": [
+        { "id": "compare-proxy", "text": "代理控制访问", "children": [] },
+        { "id": "compare-decorator", "text": "装饰器叠加职责", "children": [] },
+        { "id": "compare-adapter", "text": "适配器转换接口", "children": [] }
+      ]
+    }
+  ]
+}

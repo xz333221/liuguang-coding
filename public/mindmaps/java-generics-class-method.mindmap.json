@@ -1,0 +1,45 @@
+{
+  "id": "root",
+  "text": "泛型类与泛型方法",
+  "children": [
+    {
+      "id": "why",
+      "text": "动机",
+      "children": [
+        { "id": "why-cast", "text": "消除强转", "children": [] },
+        { "id": "why-compile", "text": "类型错误提前到编译期", "children": [] }
+      ]
+    },
+    {
+      "id": "class",
+      "text": "泛型类 Box<T>",
+      "children": [
+        { "id": "class-param", "text": "类型参数在使用处替换", "children": [] },
+        { "id": "class-name", "text": "命名约定 T/E/K/V/R", "children": [] }
+      ]
+    },
+    {
+      "id": "method",
+      "text": "泛型方法 <T> T f(...)",
+      "children": [
+        { "id": "method-infer", "text": "调用时多可推断 T", "children": [] },
+        { "id": "method-indep", "text": "与类是否泛型无关", "children": [] }
+      ]
+    },
+    {
+      "id": "iface",
+      "text": "泛型接口",
+      "children": [
+        { "id": "iface-impl", "text": "实现时指定或保留参数", "children": [] }
+      ]
+    },
+    {
+      "id": "inherit",
+      "text": "泛型不变",
+      "children": [
+        { "id": "inherit-list", "text": "List<String> 非 List<Object> 子类型", "children": [] },
+        { "id": "inherit-array", "text": "数组协变,错误推迟到运行时", "children": [] }
+      ]
+    }
+  ]
+}

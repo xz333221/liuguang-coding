@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "Web 层:Controller / 参数绑定 / 统一返回",
+  "children": [
+    {
+      "id": "controller",
+      "text": "控制器",
+      "children": [
+        { "id": "ctl-rest", "text": "@RestController 返回数据", "children": [] },
+        { "id": "ctl-view", "text": "@Controller 返回视图", "children": [] }
+      ]
+    },
+    {
+      "id": "mapping",
+      "text": "请求映射",
+      "children": [
+        { "id": "map-request", "text": "@RequestMapping 公共前缀", "children": [] },
+        { "id": "map-get-post", "text": "@GetMapping 与 @PostMapping", "children": [] }
+      ]
+    },
+    {
+      "id": "binding",
+      "text": "参数绑定",
+      "children": [
+        { "id": "bind-path", "text": "@PathVariable 路径", "children": [] },
+        { "id": "bind-query", "text": "@RequestParam 查询参数", "children": [] },
+        { "id": "bind-body", "text": "@RequestBody 请求体", "children": [] },
+        { "id": "bind-header", "text": "@RequestHeader 请求头", "children": [] }
+      ]
+    },
+    {
+      "id": "validate-response",
+      "text": "校验与统一返回",
+      "children": [
+        { "id": "val-valid", "text": "@Valid 校验", "children": [] },
+        { "id": "val-advice", "text": "@RestControllerAdvice", "children": [] },
+        { "id": "val-handler", "text": "@ExceptionHandler", "children": [] }
+      ]
+    },
+    {
+      "id": "status-layer",
+      "text": "状态码与分层",
+      "children": [
+        { "id": "sta-http", "text": "HTTP 状态码语义", "children": [] },
+        { "id": "sta-service", "text": "Controller 调用 Service", "children": [] }
+      ]
+    }
+  ]
+}

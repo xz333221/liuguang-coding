@@ -1,0 +1,46 @@
+{
+  "id": "root",
+  "text": "fail-fast 与并发修改",
+  "children": [
+    {
+      "id": "phen",
+      "text": "现象",
+      "children": [
+        { "id": "phen-cme", "text": "遍历中 remove 抛 CME", "children": [] },
+        { "id": "phen-single", "text": "单线程也会触发", "children": [] }
+      ]
+    },
+    {
+      "id": "mech",
+      "text": "机制",
+      "children": [
+        { "id": "mech-mod", "text": "modCount 记录结构修改", "children": [] },
+        { "id": "mech-exp", "text": "迭代器快照 expectedModCount", "children": [] },
+        { "id": "mech-check", "text": "next 比对不等即抛", "children": [] }
+      ]
+    },
+    {
+      "id": "best",
+      "text": "尽力检测",
+      "children": [
+        { "id": "best-noguar", "text": "不作逻辑保证", "children": [] }
+      ]
+    },
+    {
+      "id": "fix",
+      "text": "正确删除",
+      "children": [
+        { "id": "fix-iter", "text": "iterator.remove 同步计数", "children": [] },
+        { "id": "fix-removeif", "text": "removeIf", "children": [] }
+      ]
+    },
+    {
+      "id": "mt",
+      "text": "多线程",
+      "children": [
+        { "id": "mt-conc", "text": "并发集合 / 外部加锁", "children": [] },
+        { "id": "mt-cow", "text": "CopyOnWrite 快照 fail-safe", "children": [] }
+      ]
+    }
+  ]
+}

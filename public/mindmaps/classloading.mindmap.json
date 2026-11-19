@@ -1,0 +1,60 @@
+{
+  "id": "root",
+  "text": "类加载机制",
+  "children": [
+    {
+      "id": "phase",
+      "text": "五个阶段",
+      "children": [
+        { "id": "phase-load", "text": "加载字节流并生成 Class 对象", "children": [] },
+        { "id": "phase-prepare", "text": "准备阶段赋零值", "children": [] },
+        { "id": "phase-resolve", "text": "解析符号引用", "children": [] },
+        { "id": "phase-init", "text": "初始化执行 <clinit>", "children": [] }
+      ]
+    },
+    {
+      "id": "loader",
+      "text": "类加载器层次",
+      "children": [
+        { "id": "loader-boot", "text": "Bootstrap 加载核心类", "children": [] },
+        { "id": "loader-platform", "text": "Platform 加载平台模块", "children": [] },
+        { "id": "loader-app", "text": "Application 加载 classpath", "children": [] },
+        { "id": "loader-custom", "text": "自定义加载器重写 findClass", "children": [] }
+      ]
+    },
+    {
+      "id": "delegate",
+      "text": "双亲委派",
+      "children": [
+        { "id": "delegate-flow", "text": "先委派父加载器,失败再 findClass", "children": [] },
+        { "id": "delegate-unique", "text": "保证类的唯一性", "children": [] },
+        { "id": "delegate-safe", "text": "保护核心类不被替换", "children": [] }
+      ]
+    },
+    {
+      "id": "break",
+      "text": "打破委派",
+      "children": [
+        { "id": "break-tomcat", "text": "Tomcat 应用先加载自身类", "children": [] },
+        { "id": "break-spi", "text": "JDBC SPI 用线程上下文加载器", "children": [] }
+      ]
+    },
+    {
+      "id": "trigger",
+      "text": "初始化时机",
+      "children": [
+        { "id": "trigger-active", "text": "六种主动引用", "children": [] },
+        { "id": "trigger-passive", "text": "子类引用父类静态字段不初始化子类", "children": [] },
+        { "id": "trigger-const", "text": "数组与编译期常量不触发", "children": [] }
+      ]
+    },
+    {
+      "id": "unload",
+      "text": "类的卸载",
+      "children": [
+        { "id": "unload-cond", "text": "实例、ClassLoader、Class 都不可达", "children": [] },
+        { "id": "unload-hot", "text": "热部署与插件化的基础", "children": [] }
+      ]
+    }
+  ]
+}

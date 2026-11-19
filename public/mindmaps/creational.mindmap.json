@@ -1,0 +1,43 @@
+{
+  "id": "root",
+  "text": "创建型:工厂 / 单例 / 建造者",
+  "children": [
+    {
+      "id": "factory",
+      "text": "工厂",
+      "children": [
+        { "id": "factory-simple", "text": "简单工厂:一个方法按参数返回实现", "children": [] },
+        { "id": "factory-method", "text": "工厂方法:子类决定实例化哪个产品", "children": [] },
+        { "id": "factory-abstract", "text": "抽象工厂:创建配套的产品族", "children": [] }
+      ]
+    },
+    {
+      "id": "singleton",
+      "text": "单例",
+      "children": [
+        { "id": "singleton-hungry", "text": "饿汉:类加载时创建,天然线程安全", "children": [] },
+        { "id": "singleton-dcl", "text": "双重检查:实例字段必须 volatile", "children": [] },
+        { "id": "singleton-holder", "text": "静态内部类:延迟加载,无额外同步", "children": [] },
+        { "id": "singleton-enum", "text": "枚举:防反射与反序列化破坏", "children": [] }
+      ]
+    },
+    {
+      "id": "builder",
+      "text": "建造者",
+      "children": [
+        { "id": "builder-chain", "text": "每步返回 this,链式装配参数", "children": [] },
+        { "id": "builder-build", "text": "build 时校验,产出不可变对象", "children": [] },
+        { "id": "builder-lombok", "text": "Lombok @Builder 生成同构代码", "children": [] }
+      ]
+    },
+    {
+      "id": "boundary",
+      "text": "使用边界",
+      "children": [
+        { "id": "boundary-one", "text": "只有一个实现时直接 new", "children": [] },
+        { "id": "boundary-few", "text": "参数少时构造函数更直接", "children": [] },
+        { "id": "boundary-state", "text": "单例持可变状态仍需同步", "children": [] }
+      ]
+    }
+  ]
+}

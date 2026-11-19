@@ -1,0 +1,54 @@
+{
+  "id": "root",
+  "text": "哈希与排序:从 HashMap 到快排 / 归并",
+  "children": [
+    {
+      "id": "hash",
+      "text": "哈希表",
+      "children": [
+        { "id": "hash-func", "text": "哈希函数定位桶,平均 O(1)", "children": [] },
+        { "id": "hash-spread", "text": "扰动后按位与取下标", "children": [] }
+      ]
+    },
+    {
+      "id": "collision",
+      "text": "冲突处理",
+      "children": [
+        { "id": "col-chain", "text": "链地址法,过长转红黑树", "children": [] },
+        { "id": "col-open", "text": "开放寻址法,线性探测", "children": [] }
+      ]
+    },
+    {
+      "id": "resize",
+      "text": "负载因子与扩容",
+      "children": [
+        { "id": "resize-factor", "text": "默认 0.75,超过阈值扩容", "children": [] },
+        { "id": "resize-rehash", "text": "容量翻倍,rehash O(n)", "children": [] }
+      ]
+    },
+    {
+      "id": "quadratic",
+      "text": "O(n²) 排序",
+      "children": [
+        { "id": "quad-small", "text": "冒泡、选择、插入适合小数组", "children": [] },
+        { "id": "quad-insert", "text": "插入排序对接近有序的数据 O(n)", "children": [] }
+      ]
+    },
+    {
+      "id": "nlogn",
+      "text": "快排与归并",
+      "children": [
+        { "id": "nl-quick", "text": "原地分区,平均 O(n log n),最坏 O(n²)", "children": [] },
+        { "id": "nl-merge", "text": "稳定但需要 O(n) 辅助空间", "children": [] }
+      ]
+    },
+    {
+      "id": "stdlib",
+      "text": "标准库与二分",
+      "children": [
+        { "id": "std-sort", "text": "基本类型双轴快排,对象 TimSort", "children": [] },
+        { "id": "std-binary", "text": "二分要求有序,用左闭右开区间", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "id": "root",
+  "text": "NIO:Buffer / Channel / Selector",
+  "children": [
+    {
+      "id": "blocking",
+      "text": "阻塞 IO 的瓶颈",
+      "children": [
+        { "id": "bl-thread", "text": "一个连接一个线程", "children": [] },
+        { "id": "bl-wait", "text": "线程多数时间在等待", "children": [] },
+        { "id": "bl-cost", "text": "栈空间与切换开销", "children": [] }
+      ]
+    },
+    {
+      "id": "buffer",
+      "text": "Buffer 三个下标",
+      "children": [
+        { "id": "buf-pos", "text": "capacity/position/limit", "children": [] },
+        { "id": "buf-flip", "text": "flip 切到读模式", "children": [] },
+        { "id": "buf-clear", "text": "clear 复位", "children": [] },
+        { "id": "buf-compact", "text": "compact 保留未读数据", "children": [] }
+      ]
+    },
+    {
+      "id": "channel",
+      "text": "Channel 双向通道",
+      "children": [
+        { "id": "ch-file", "text": "FileChannel 文件读写", "children": [] },
+        { "id": "ch-socket", "text": "SocketChannel 客户端连接", "children": [] },
+        { "id": "ch-server", "text": "ServerSocketChannel 服务端监听", "children": [] }
+      ]
+    },
+    {
+      "id": "selector",
+      "text": "Selector 多路复用",
+      "children": [
+        { "id": "sel-register", "text": "注册 OP_ACCEPT/OP_READ", "children": [] },
+        { "id": "sel-select", "text": "select 返回就绪事件", "children": [] },
+        { "id": "sel-remove", "text": "selectedKeys 处理完移除", "children": [] }
+      ]
+    },
+    {
+      "id": "positioning",
+      "text": "NIO 的定位",
+      "children": [
+        { "id": "pos-high", "text": "适合高并发连接", "children": [] },
+        { "id": "pos-complex", "text": "状态与缓冲需自行维护", "children": [] },
+        { "id": "pos-netty", "text": "业务多用 Netty 封装", "children": [] },
+        { "id": "pos-zerocopy", "text": "transferTo 零拷贝", "children": [] }
+      ]
+    }
+  ]
+}

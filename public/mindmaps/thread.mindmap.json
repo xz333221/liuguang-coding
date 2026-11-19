@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "线程的创建与状态",
+  "children": [
+    {
+      "id": "create",
+      "text": "创建方式",
+      "children": [
+        { "id": "create-thread", "text": "继承 Thread,覆写 run", "children": [] },
+        { "id": "create-runnable", "text": "实现 Runnable,任务与线程分离", "children": [] },
+        { "id": "create-callable", "text": "Callable + FutureTask 取返回值", "children": [] }
+      ]
+    },
+    {
+      "id": "start",
+      "text": "start 与 run",
+      "children": [
+        { "id": "start-new", "text": "start 创建新线程并由 JVM 调用 run", "children": [] },
+        { "id": "start-direct", "text": "直接调 run 仍在当前线程", "children": [] }
+      ]
+    },
+    {
+      "id": "state",
+      "text": "六种状态",
+      "children": [
+        { "id": "state-new", "text": "NEW 与 RUNNABLE", "children": [] },
+        { "id": "state-block", "text": "BLOCKED 等待监视器锁", "children": [] },
+        { "id": "state-wait", "text": "WAITING 与 TIMED_WAITING", "children": [] },
+        { "id": "state-end", "text": "TERMINATED 不可复用", "children": [] }
+      ]
+    },
+    {
+      "id": "cooperate",
+      "text": "协作方法",
+      "children": [
+        { "id": "coop-sleep", "text": "sleep 不释放锁", "children": [] },
+        { "id": "coop-join", "text": "join 等待目标线程结束", "children": [] },
+        { "id": "coop-interrupt", "text": "interrupt 设置中断标志", "children": [] }
+      ]
+    },
+    {
+      "id": "daemon",
+      "text": "守护线程与开销",
+      "children": [
+        { "id": "daemon-set", "text": "setDaemon 须在 start 前", "children": [] },
+        { "id": "daemon-exit", "text": "不阻止 JVM 退出", "children": [] },
+        { "id": "daemon-cost", "text": "线程栈与上下文切换开销", "children": [] }
+      ]
+    }
+  ]
+}

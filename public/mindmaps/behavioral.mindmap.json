@@ -1,0 +1,42 @@
+{
+  "id": "root",
+  "text": "行为型:策略 / 观察者 / 模板方法",
+  "children": [
+    {
+      "id": "strategy",
+      "text": "策略",
+      "children": [
+        { "id": "strategy-interface", "text": "把 if-else 分支抽成接口实现", "children": [] },
+        { "id": "strategy-map", "text": "Map 注册,按 code 查表", "children": [] },
+        { "id": "strategy-spring", "text": "Spring 注入全部实现", "children": [] }
+      ]
+    },
+    {
+      "id": "observer",
+      "text": "观察者",
+      "children": [
+        { "id": "observer-listener", "text": "监听器接口维护一对多通知", "children": [] },
+        { "id": "observer-spring", "text": "ApplicationEvent 与 @EventListener", "children": [] },
+        { "id": "observer-sync", "text": "默认同步,异常影响发布方", "children": [] }
+      ]
+    },
+    {
+      "id": "template",
+      "text": "模板方法",
+      "children": [
+        { "id": "template-skeleton", "text": "final 骨架固定步骤顺序", "children": [] },
+        { "id": "template-steps", "text": "抽象方法由子类实现", "children": [] },
+        { "id": "template-jdbc", "text": "JdbcTemplate 抽象变化点", "children": [] }
+      ]
+    },
+    {
+      "id": "boundary",
+      "text": "适用边界",
+      "children": [
+        { "id": "boundary-branch", "text": "分支少而稳定时直接 if-else", "children": [] },
+        { "id": "boundary-state", "text": "状态随事件切换,策略选定后不变", "children": [] },
+        { "id": "boundary-inherit", "text": "骨架不稳定时用组合替代继承", "children": [] }
+      ]
+    }
+  ]
+}

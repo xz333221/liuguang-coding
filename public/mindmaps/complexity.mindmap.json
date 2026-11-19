@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "复杂度与 Big-O:怎么估一个写法贵不贵",
+  "children": [
+    {
+      "id": "notation",
+      "text": "三个记号",
+      "children": [
+        { "id": "notation-o", "text": "Big-O 上界:最坏不超过", "children": [] },
+        { "id": "notation-omega", "text": "Big-Ω 下界:至少是这个量级", "children": [] },
+        { "id": "notation-theta", "text": "Big-Θ 紧确界:上下界一致", "children": [] }
+      ]
+    },
+    {
+      "id": "estimate",
+      "text": "估算方法",
+      "children": [
+        { "id": "est-order", "text": "只保留最高阶项,忽略常数", "children": [] },
+        { "id": "est-loop", "text": "数循环嵌套与迭代次数", "children": [] },
+        { "id": "est-recursion", "text": "递归写递推式或画递归树", "children": [] }
+      ]
+    },
+    {
+      "id": "levels",
+      "text": "常见量级",
+      "children": [
+        { "id": "lev-fast", "text": "O(1) / O(log n) / O(n)", "children": [] },
+        { "id": "lev-mid", "text": "O(n log n) 是排序的目标", "children": [] },
+        { "id": "lev-slow", "text": "O(n²) 与 O(2ⁿ) 只适合小规模", "children": [] }
+      ]
+    },
+    {
+      "id": "space",
+      "text": "空间与递归",
+      "children": [
+        { "id": "space-aux", "text": "统计额外申请的内存", "children": [] },
+        { "id": "space-stack", "text": "递归深度占用调用栈 O(n)", "children": [] }
+      ]
+    },
+    {
+      "id": "mistake",
+      "text": "两个高频误区",
+      "children": [
+        { "id": "mis-loop", "text": "内层固定次数时仍是 O(n)", "children": [] },
+        { "id": "mis-string", "text": "循环内字符串拼接是隐式 O(n²)", "children": [] }
+      ]
+    }
+  ]
+}

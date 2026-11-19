@@ -1,0 +1,58 @@
+{
+  "id": "root",
+  "text": "JDBC 与连接池:SQL 到对象的最短路径",
+  "children": [
+    {
+      "id": "api",
+      "text": "四个核心接口",
+      "children": [
+        { "id": "api-driver", "text": "DriverManager 建立连接", "children": [] },
+        { "id": "api-conn", "text": "Connection 控制会话与事务", "children": [] },
+        { "id": "api-stmt", "text": "PreparedStatement 执行 SQL", "children": [] },
+        { "id": "api-rs", "text": "ResultSet 按列读取结果", "children": [] }
+      ]
+    },
+    {
+      "id": "driver",
+      "text": "驱动加载",
+      "children": [
+        { "id": "dr-forname", "text": "Class.forName 的旧写法", "children": [] },
+        { "id": "dr-spi", "text": "JDBC 4 SPI 自动发现", "children": [] }
+      ]
+    },
+    {
+      "id": "inject",
+      "text": "预编译与注入",
+      "children": [
+        { "id": "ij-placeholder", "text": "占位符按值传参", "children": [] },
+        { "id": "ij-concat", "text": "拼接字符串导致注入", "children": [] }
+      ]
+    },
+    {
+      "id": "batch",
+      "text": "批量操作",
+      "children": [
+        { "id": "bt-add", "text": "addBatch 与 executeBatch", "children": [] },
+        { "id": "bt-chunk", "text": "分批提交控制内存", "children": [] },
+        { "id": "bt-rewrite", "text": "rewriteBatchedStatements 合并", "children": [] }
+      ]
+    },
+    {
+      "id": "tx",
+      "text": "事务控制",
+      "children": [
+        { "id": "tx-auto", "text": "关闭 autocommit", "children": [] },
+        { "id": "tx-commit", "text": "成功 commit 失败 rollback", "children": [] }
+      ]
+    },
+    {
+      "id": "why",
+      "text": "为何封装",
+      "children": [
+        { "id": "wy-boiler", "text": "样板代码与资源管理", "children": [] },
+        { "id": "wy-ex", "text": "SQLException 转运行时异常", "children": [] },
+        { "id": "wy-mybatis", "text": "MyBatis 是它的封装", "children": [] }
+      ]
+    }
+  ]
+}

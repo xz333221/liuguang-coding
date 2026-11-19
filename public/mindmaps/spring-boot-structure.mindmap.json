@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "Spring Boot 项目结构与启动流程",
+  "children": [
+    {
+      "id": "layout",
+      "text": "标准目录",
+      "children": [
+        { "id": "layout-java", "text": "src/main/java 按业务分层", "children": [] },
+        { "id": "layout-res", "text": "resources 放配置与静态资源", "children": [] },
+        { "id": "layout-root", "text": "启动类位于根包", "children": [] }
+      ]
+    },
+    {
+      "id": "annotation",
+      "text": "组合注解",
+      "children": [
+        { "id": "ann-config", "text": "@SpringBootConfiguration", "children": [] },
+        { "id": "ann-auto", "text": "@EnableAutoConfiguration", "children": [] },
+        { "id": "ann-scan", "text": "@ComponentScan", "children": [] }
+      ]
+    },
+    {
+      "id": "startup",
+      "text": "启动流程",
+      "children": [
+        { "id": "start-env", "text": "准备 Environment", "children": [] },
+        { "id": "start-context", "text": "创建 ApplicationContext", "children": [] },
+        { "id": "start-refresh", "text": "刷新容器并启动内嵌服务器", "children": [] }
+      ]
+    },
+    {
+      "id": "starter",
+      "text": "starter 与可执行 jar",
+      "children": [
+        { "id": "st-dep", "text": "starter 是依赖集合", "children": [] },
+        { "id": "st-jar", "text": "BOOT-INF/classes 与 lib", "children": [] },
+        { "id": "st-loader", "text": "启动器负责构造类加载器", "children": [] }
+      ]
+    },
+    {
+      "id": "config",
+      "text": "配置入口",
+      "children": [
+        { "id": "cfg-yml", "text": "application.yml 默认配置", "children": [] },
+        { "id": "cfg-profile", "text": "application-{profile}.yml 按环境拆分", "children": [] }
+      ]
+    }
+  ]
+}

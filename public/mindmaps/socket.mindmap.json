@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "网络编程:Socket 与 HTTP 客户端",
+  "children": [
+    {
+      "id": "tcp",
+      "text": "TCP 与 Socket",
+      "children": [
+        { "id": "tcp-stream", "text": "面向连接的可靠字节流", "children": [] },
+        { "id": "tcp-server", "text": "ServerSocket 监听端口", "children": [] },
+        { "id": "tcp-socket", "text": "Socket 代表一条连接", "children": [] }
+      ]
+    },
+    {
+      "id": "echo",
+      "text": "echo 服务端",
+      "children": [
+        { "id": "echo-accept", "text": "accept 循环接收连接", "children": [] },
+        { "id": "echo-thread", "text": "每个连接一个线程", "children": [] }
+      ]
+    },
+    {
+      "id": "client",
+      "text": "客户端",
+      "children": [
+        { "id": "cli-connect", "text": "new Socket 建立连接", "children": [] },
+        { "id": "cli-timeout", "text": "setSoTimeout 设置读超时", "children": [] },
+        { "id": "cli-utf8", "text": "显式 UTF-8 避免乱码", "children": [] }
+      ]
+    },
+    {
+      "id": "close",
+      "text": "关闭顺序",
+      "children": [
+        { "id": "cls-order", "text": "先输出、再输入、最后 Socket", "children": [] },
+        { "id": "cls-twr", "text": "try-with-resources 逆序关闭", "children": [] }
+      ]
+    },
+    {
+      "id": "http",
+      "text": "JDK 11+ HttpClient",
+      "children": [
+        { "id": "http-send", "text": "send 同步调用", "children": [] },
+        { "id": "http-async", "text": "sendAsync 异步调用", "children": [] },
+        { "id": "http-body", "text": "BodyHandlers.ofString", "children": [] },
+        { "id": "http-timeout", "text": "连接超时与请求超时", "children": [] }
+      ]
+    }
+  ]
+}

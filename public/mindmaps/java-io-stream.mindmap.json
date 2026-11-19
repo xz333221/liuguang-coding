@@ -1,0 +1,44 @@
+{
+  "id": "root",
+  "text": "字节流与字符流",
+  "children": [
+    {
+      "id": "base",
+      "text": "四大基类",
+      "children": [
+        { "id": "base-byte", "text": "InputStream/OutputStream 字节", "children": [] },
+        { "id": "base-char", "text": "Reader/Writer 字符", "children": [] }
+      ]
+    },
+    {
+      "id": "bridge",
+      "text": "编码桥",
+      "children": [
+        { "id": "br-bridge", "text": "InputStream/OutputStreamWriter", "children": [] },
+        { "id": "br-utf8", "text": "显式 UTF-8,不依赖平台默认", "children": [] }
+      ]
+    },
+    {
+      "id": "read",
+      "text": "读取约定",
+      "children": [
+        { "id": "read-n", "text": "read 返回实际长度,-1 结束", "children": [] },
+        { "id": "read-line", "text": "BufferedReader.readLine 按行", "children": [] }
+      ]
+    },
+    {
+      "id": "decor",
+      "text": "装饰器包装",
+      "children": [
+        { "id": "dec-layer", "text": "基础流 + 缓冲 + 数据类型层层叠加", "children": [] }
+      ]
+    },
+    {
+      "id": "close",
+      "text": "flush 与 close",
+      "children": [
+        { "id": "close-twr", "text": "try-with-resources 关最外层", "children": [] }
+      ]
+    }
+  ]
+}

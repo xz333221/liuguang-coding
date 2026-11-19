@@ -1,0 +1,60 @@
+{
+  "id": "root",
+  "text": "JPA / Hibernate 一览:与 MyBatis 的分工",
+  "children": [
+    {
+      "id": "spec",
+      "text": "规范与实现",
+      "children": [
+        { "id": "sp-jpa", "text": "JPA 定义规范", "children": [] },
+        { "id": "sp-hib", "text": "Hibernate 提供实现", "children": [] },
+        { "id": "sp-data", "text": "Spring Data JPA 减少样板", "children": [] }
+      ]
+    },
+    {
+      "id": "entity",
+      "text": "实体映射",
+      "children": [
+        { "id": "en-table", "text": "@Entity 与 @Table", "children": [] },
+        { "id": "en-id", "text": "@Id 与 @GeneratedValue", "children": [] },
+        { "id": "en-col", "text": "@Column 长度与精度", "children": [] }
+      ]
+    },
+    {
+      "id": "em",
+      "text": "EntityManager",
+      "children": [
+        { "id": "em-persist", "text": "persist 与 find", "children": [] },
+        { "id": "em-merge", "text": "merge 与 remove", "children": [] },
+        { "id": "em-dirty", "text": "脏检查自动 UPDATE", "children": [] }
+      ]
+    },
+    {
+      "id": "query",
+      "text": "查询方式",
+      "children": [
+        { "id": "qu-jpql", "text": "JPQL 面向实体", "children": [] },
+        { "id": "qu-derived", "text": "派生查询按方法名生成", "children": [] },
+        { "id": "qu-n1", "text": "懒加载与 N+1", "children": [] }
+      ]
+    },
+    {
+      "id": "context",
+      "text": "持久化上下文",
+      "children": [
+        { "id": "cx-cache", "text": "一级缓存同一实例", "children": [] },
+        { "id": "cx-detach", "text": "事务结束变游离", "children": [] },
+        { "id": "cx-l2", "text": "二级缓存默认关闭", "children": [] }
+      ]
+    },
+    {
+      "id": "choice",
+      "text": "与 MyBatis 分工",
+      "children": [
+        { "id": "ch-model", "text": "对象模型为中心 vs SQL 为中心", "children": [] },
+        { "id": "ch-sql", "text": "复杂查询用手写 SQL", "children": [] },
+        { "id": "ch-mix", "text": "按场景选择或并存", "children": [] }
+      ]
+    }
+  ]
+}

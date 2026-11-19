@@ -1,0 +1,39 @@
+{
+  "id": "root",
+  "text": "缓冲与序列化",
+  "children": [
+    {
+      "id": "buffer",
+      "text": "缓冲收益",
+      "children": [
+        { "id": "buf-sys", "text": "减少系统调用", "children": [] },
+        { "id": "buf-default", "text": "文件 IO 默认套 Buffered", "children": [] },
+        { "id": "buf-flush", "text": "写出需 flush/close", "children": [] }
+      ]
+    },
+    {
+      "id": "ser",
+      "text": "序列化机制",
+      "children": [
+        { "id": "ser-iface", "text": "Serializable + write/readObject", "children": [] },
+        { "id": "ser-graph", "text": "递归对象图", "children": [] }
+      ]
+    },
+    {
+      "id": "fields",
+      "text": "transient / UID",
+      "children": [
+        { "id": "f-trans", "text": "transient 排除字段", "children": [] },
+        { "id": "f-uid", "text": "serialVersionUID 保兼容", "children": [] }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "局限与替代",
+      "children": [
+        { "id": "lim-sec", "text": "反序列化不可信数据有风险", "children": [] },
+        { "id": "lim-json", "text": "跨系统优先 JSON/Protobuf", "children": [] }
+      ]
+    }
+  ]
+}

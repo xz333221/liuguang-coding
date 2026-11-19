@@ -1,0 +1,45 @@
+{
+  "id": "root",
+  "text": "函数式接口:Function / Consumer / Supplier",
+  "children": [
+    {
+      "id": "shape",
+      "text": "按形状分类",
+      "children": [
+        { "id": "shape-f", "text": "Function 转换 / Consumer 消费", "children": [] },
+        { "id": "shape-s", "text": "Supplier 供给 / Predicate 判断", "children": [] },
+        { "id": "shape-op", "text": "Unary / BinaryOperator", "children": [] }
+      ]
+    },
+    {
+      "id": "anno",
+      "text": "@FunctionalInterface",
+      "children": [
+        { "id": "anno-check", "text": "编译期检查,非必需", "children": [] }
+      ]
+    },
+    {
+      "id": "compose",
+      "text": "组合",
+      "children": [
+        { "id": "comp-and", "text": "andThen 之后接你", "children": [] },
+        { "id": "comp-compose", "text": "compose 之前先你", "children": [] },
+        { "id": "comp-neg", "text": "negate / and / or", "children": [] }
+      ]
+    },
+    {
+      "id": "primitive",
+      "text": "基本类型特化",
+      "children": [
+        { "id": "prim-box", "text": "Int/Long/Double 版避免装箱", "children": [] }
+      ]
+    },
+    {
+      "id": "custom",
+      "text": "自定义",
+      "children": [
+        { "id": "custom-sam", "text": "形状不匹配再建,保持 SAM", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "root",
+  "text": "通配符与上下界(PECS)",
+  "children": [
+    {
+      "id": "unbounded",
+      "text": "无界 ?",
+      "children": [
+        { "id": "unbounded-read", "text": "只读,读出为 Object", "children": [] },
+        { "id": "unbounded-vs", "text": "不同于 List<Object>", "children": [] }
+      ]
+    },
+    {
+      "id": "extends",
+      "text": "? extends T 上界",
+      "children": [
+        { "id": "extends-read", "text": "读安全,写不安全", "children": [] },
+        { "id": "extends-producer", "text": "作 producer", "children": [] }
+      ]
+    },
+    {
+      "id": "super",
+      "text": "? super T 下界",
+      "children": [
+        { "id": "super-write", "text": "写安全,读不安全", "children": [] },
+        { "id": "super-consumer", "text": "作 consumer", "children": [] }
+      ]
+    },
+    {
+      "id": "pecs",
+      "text": "PECS",
+      "children": [
+        { "id": "pecs-rule", "text": "读 extends / 写 super / 读写用 T", "children": [] },
+        { "id": "pecs-copy", "text": "Collections.copy 签名示例", "children": [] }
+      ]
+    },
+    {
+      "id": "tvsw",
+      "text": "T 与 ? 分工",
+      "children": [
+        { "id": "tvsw-decl", "text": "T 声明处,? 使用处", "children": [] }
+      ]
+    }
+  ]
+}

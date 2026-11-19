@@ -1,0 +1,38 @@
+{
+  "id": "root",
+  "text": "动态代理",
+  "children": [
+    {
+      "id": "static",
+      "text": "静态代理的问题",
+      "children": [
+        { "id": "st-bloat", "text": "逐方法转发,代理类膨胀", "children": [] }
+      ]
+    },
+    {
+      "id": "jdk",
+      "text": "JDK 基于接口",
+      "children": [
+        { "id": "jdk-handler", "text": "InvocationHandler.invoke 集中拦截", "children": [] },
+        { "id": "jdk-new", "text": "Proxy.newProxyInstance 生成代理", "children": [] },
+        { "id": "jdk-limit", "text": "目标必须有接口", "children": [] }
+      ]
+    },
+    {
+      "id": "cglib",
+      "text": "CGLIB 基于子类",
+      "children": [
+        { "id": "cg-sub", "text": "生成子类覆写方法", "children": [] },
+        { "id": "cg-final", "text": "final 类/方法不可代理", "children": [] }
+      ]
+    },
+    {
+      "id": "aop",
+      "text": "Spring AOP",
+      "children": [
+        { "id": "aop-weave", "text": "代理织入事务/日志/权限", "children": [] },
+        { "id": "aop-self", "text": "自调用绕过代理致失效", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "root",
+  "text": "Stream 流水线:map / filter / collect",
+  "children": [
+    {
+      "id": "nature",
+      "text": "Stream 性质",
+      "children": [
+        { "id": "nat-nostore", "text": "不存储 / 不改源 / 一次性", "children": [] }
+      ]
+    },
+    {
+      "id": "lazy",
+      "text": "惰性执行",
+      "children": [
+        { "id": "lazy-mid", "text": "中间操作不立即执行", "children": [] },
+        { "id": "lazy-term", "text": "终端操作触发整条流水线", "children": [] },
+        { "id": "lazy-short", "text": "短路操作提前停", "children": [] }
+      ]
+    },
+    {
+      "id": "ops",
+      "text": "常用操作",
+      "children": [
+        { "id": "ops-mid", "text": "map/filter/flatMap/sorted/distinct/limit", "children": [] },
+        { "id": "ops-term", "text": "collect/reduce/forEach/match/find", "children": [] }
+      ]
+    },
+    {
+      "id": "collectors",
+      "text": "Collectors",
+      "children": [
+        { "id": "col-group", "text": "groupingBy / partitioningBy", "children": [] },
+        { "id": "col-join", "text": "joining / mapping / counting", "children": [] }
+      ]
+    },
+    {
+      "id": "parallel",
+      "text": "并行流边界",
+      "children": [
+        { "id": "par-when", "text": "大数据/无副作用/可结合才用", "children": [] },
+        { "id": "par-measure", "text": "先测量再开", "children": [] }
+      ]
+    }
+  ]
+}

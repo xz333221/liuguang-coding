@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "ResultMap 与动态 SQL",
+  "children": [
+    {
+      "id": "resultmap",
+      "text": "结果映射",
+      "children": [
+        { "id": "rm-column", "text": "列名与属性名不一致", "children": [] },
+        { "id": "rm-id", "text": "id 主键与 result 普通列", "children": [] },
+        { "id": "rm-assoc", "text": "association 与 collection", "children": [] }
+      ]
+    },
+    {
+      "id": "nplus1",
+      "text": "嵌套查询与 N+1",
+      "children": [
+        { "id": "np-join", "text": "嵌套结果一条 join", "children": [] },
+        { "id": "np-select", "text": "嵌套查询 1 + N 条 SQL", "children": [] }
+      ]
+    },
+    {
+      "id": "alias",
+      "text": "typeAlias",
+      "children": [
+        { "id": "al-package", "text": "按包扫描注册别名", "children": [] },
+        { "id": "al-name", "text": "类名即别名", "children": [] }
+      ]
+    },
+    {
+      "id": "dynamic",
+      "text": "动态 SQL",
+      "children": [
+        { "id": "dy-if", "text": "if 与 choose 分支", "children": [] },
+        { "id": "dy-where", "text": "where 与 set 自动裁剪", "children": [] },
+        { "id": "dy-foreach", "text": "foreach 批量插入", "children": [] },
+        { "id": "dy-sql", "text": "sql + include 复用片段", "children": [] }
+      ]
+    },
+    {
+      "id": "binding",
+      "text": "参数绑定",
+      "children": [
+        { "id": "bd-pre", "text": "#{} 预编译防注入", "children": [] },
+        { "id": "bd-dollar", "text": "${} 拼接需白名单", "children": [] }
+      ]
+    }
+  ]
+}

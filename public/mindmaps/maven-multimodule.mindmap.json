@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "多模块与生命周期",
+  "children": [
+    {
+      "id": "agg",
+      "text": "聚合与继承",
+      "children": [
+        { "id": "agg-modules", "text": "modules 列出子模块", "children": [] },
+        { "id": "agg-parent", "text": "父 POM 的 packaging 为 pom", "children": [] },
+        { "id": "agg-inherit", "text": "子模块通过 parent 继承配置", "children": [] }
+      ]
+    },
+    {
+      "id": "reactor",
+      "text": "reactor",
+      "children": [
+        { "id": "re-order", "text": "按模块依赖拓扑排序", "children": [] },
+        { "id": "re-cycle", "text": "循环依赖导致构建失败", "children": [] },
+        { "id": "re-lifecycle", "text": "每个模块执行完整生命周期", "children": [] }
+      ]
+    },
+    {
+      "id": "build",
+      "text": "定向构建",
+      "children": [
+        { "id": "build-pl", "text": "-pl 选择模块,-am 连带依赖", "children": [] },
+        { "id": "build-amd", "text": "-amd 连带使用方", "children": [] },
+        { "id": "build-rf", "text": "-rf 从失败模块继续", "children": [] }
+      ]
+    },
+    {
+      "id": "layers",
+      "text": "分层结构",
+      "children": [
+        { "id": "layer-modules", "text": "parent/api/dao/service/web", "children": [] },
+        { "id": "layer-direction", "text": "依赖方向保持单向", "children": [] }
+      ]
+    },
+    {
+      "id": "version",
+      "text": "版本统一",
+      "children": [
+        { "id": "ver-manage", "text": "dependencyManagement 集中声明", "children": [] },
+        { "id": "ver-child", "text": "子模块省略 version", "children": [] },
+        { "id": "ver-bom", "text": "BOM 导入外部套件版本", "children": [] }
+      ]
+    }
+  ]
+}

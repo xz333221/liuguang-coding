@@ -1,0 +1,40 @@
+{
+  "id": "root",
+  "text": "Class 对象与反射三件套",
+  "children": [
+    {
+      "id": "class",
+      "text": "Class 入口",
+      "children": [
+        { "id": "cls-unique", "text": "每类唯一 Class 对象", "children": [] },
+        { "id": "cls-get", "text": "字面量 / getClass / forName", "children": [] }
+      ]
+    },
+    {
+      "id": "three",
+      "text": "三件套",
+      "children": [
+        { "id": "three-field", "text": "Field 读写字段", "children": [] },
+        { "id": "three-method", "text": "Method invoke 调用", "children": [] },
+        { "id": "three-ctor", "text": "Constructor newInstance", "children": [] }
+      ]
+    },
+    {
+      "id": "access",
+      "text": "访问检查",
+      "children": [
+        { "id": "acc-declared", "text": "getDeclaredXxx 含 private", "children": [] },
+        { "id": "acc-set", "text": "setAccessible 突破封装", "children": [] }
+      ]
+    },
+    {
+      "id": "cost",
+      "text": "代价",
+      "children": [
+        { "id": "cost-perf", "text": "慢于直接调用,缓存成员", "children": [] },
+        { "id": "cost-sec", "text": "受模块/安全限制", "children": [] },
+        { "id": "cost-check", "text": "编译期检查丢失", "children": [] }
+      ]
+    }
+  ]
+}

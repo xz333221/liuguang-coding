@@ -1,0 +1,47 @@
+{
+  "id": "root",
+  "text": "异常体系:Error / Exception / Checked",
+  "children": [
+    {
+      "id": "tree",
+      "text": "Throwable 继承链",
+      "children": [
+        { "id": "tree-error", "text": "Error:JVM 严重问题", "children": [] },
+        { "id": "tree-exc", "text": "Exception:可处理异常", "children": [] },
+        { "id": "tree-rte", "text": "RuntimeException 属于 Exception", "children": [] }
+      ]
+    },
+    {
+      "id": "error",
+      "text": "Error 不捕获",
+      "children": [
+        { "id": "error-oom", "text": "OutOfMemoryError / StackOverflowError", "children": [] }
+      ]
+    },
+    {
+      "id": "checked",
+      "text": "checked:编译期强制",
+      "children": [
+        { "id": "checked-io", "text": "IOException / SQLException", "children": [] },
+        { "id": "checked-rule", "text": "捕获或 throws 声明,否则编译报错", "children": [] }
+      ]
+    },
+    {
+      "id": "unchecked",
+      "text": "unchecked:不强制",
+      "children": [
+        { "id": "unchecked-npe", "text": "NPE / 越界 / 转型 / 除零", "children": [] },
+        { "id": "unchecked-fix", "text": "多为编程错误,应修复逻辑", "children": [] }
+      ]
+    },
+    {
+      "id": "handle",
+      "text": "捕获还是向上抛",
+      "children": [
+        { "id": "handle-local", "text": "能给出有意义处理就捕获", "children": [] },
+        { "id": "handle-up", "text": "处理不了 throws 交上层", "children": [] },
+        { "id": "handle-noempty", "text": "禁止空 catch", "children": [] }
+      ]
+    }
+  ]
+}

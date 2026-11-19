@@ -1,0 +1,60 @@
+{
+  "id": "root",
+  "text": "GC 与常见收集器",
+  "children": [
+    {
+      "id": "reach",
+      "text": "可达性分析",
+      "children": [
+        { "id": "reach-roots", "text": "GC Roots:栈引用/静态字段/常量/JNI/活动线程", "children": [] },
+        { "id": "reach-chain", "text": "沿引用链遍历,不可达即回收", "children": [] },
+        { "id": "reach-loop", "text": "循环引用整组不可达仍可回收", "children": [] }
+      ]
+    },
+    {
+      "id": "gen",
+      "text": "分代假设",
+      "children": [
+        { "id": "gen-young", "text": "新生代 Eden 与两个 Survivor", "children": [] },
+        { "id": "gen-old", "text": "老年代存放长期存活对象", "children": [] },
+        { "id": "gen-card", "text": "卡表记录跨代引用", "children": [] }
+      ]
+    },
+    {
+      "id": "algo",
+      "text": "三种基本算法",
+      "children": [
+        { "id": "algo-sweep", "text": "标记-清除:简单但有碎片", "children": [] },
+        { "id": "algo-copy", "text": "复制:无碎片,适合新生代", "children": [] },
+        { "id": "algo-compact", "text": "标记-整理:无碎片,移动成本高", "children": [] }
+      ]
+    },
+    {
+      "id": "collector",
+      "text": "常见收集器",
+      "children": [
+        { "id": "collector-serial", "text": "Serial 与 Parallel 系列", "children": [] },
+        { "id": "collector-cms", "text": "CMS 并发回收但碎片化", "children": [] },
+        { "id": "collector-g1", "text": "G1 按 Region 回收并预测停顿", "children": [] },
+        { "id": "collector-zgc", "text": "ZGC/Shenandoah 毫秒级停顿", "children": [] }
+      ]
+    },
+    {
+      "id": "kind",
+      "text": "GC 类型",
+      "children": [
+        { "id": "kind-minor", "text": "Minor GC 回收新生代", "children": [] },
+        { "id": "kind-full", "text": "Full GC 停顿最长", "children": [] }
+      ]
+    },
+    {
+      "id": "log",
+      "text": "日志与建议",
+      "children": [
+        { "id": "log-xlog", "text": "-Xlog:gc* 统一日志", "children": [] },
+        { "id": "log-read", "text": "看停顿时长与 Full GC 频率", "children": [] },
+        { "id": "log-systemgc", "text": "生产禁用 System.gc()", "children": [] }
+      ]
+    }
+  ]
+}

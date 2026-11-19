@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "Maven 与 pom.xml:坐标、依赖、生命周期",
+  "children": [
+    {
+      "id": "coord",
+      "text": "项目坐标",
+      "children": [
+        { "id": "coord-gav", "text": "groupId/artifactId/version 三段定位", "children": [] },
+        { "id": "coord-packaging", "text": "packaging 决定产物类型,默认 jar", "children": [] }
+      ]
+    },
+    {
+      "id": "dirs",
+      "text": "标准目录",
+      "children": [
+        { "id": "dirs-main", "text": "src/main/java 与 resources", "children": [] },
+        { "id": "dirs-test", "text": "src/test/java 与 resources", "children": [] },
+        { "id": "dirs-target", "text": "target 存放构建输出", "children": [] }
+      ]
+    },
+    {
+      "id": "pom",
+      "text": "POM 结构",
+      "children": [
+        { "id": "pom-parent", "text": "modelVersion 与 parent", "children": [] },
+        { "id": "pom-props", "text": "properties 占位符", "children": [] },
+        { "id": "pom-deps", "text": "dependencies 与 build/plugins", "children": [] }
+      ]
+    },
+    {
+      "id": "lifecycle",
+      "text": "生命周期",
+      "children": [
+        { "id": "life-clean", "text": "clean 与 site 独立生命周期", "children": [] },
+        { "id": "life-phases", "text": "validate 到 deploy 顺序执行", "children": [] },
+        { "id": "life-plugin", "text": "插件目标绑定到阶段", "children": [] }
+      ]
+    },
+    {
+      "id": "repo",
+      "text": "命令与仓库",
+      "children": [
+        { "id": "repo-cmd", "text": "clean package 与 install", "children": [] },
+        { "id": "repo-local", "text": "本地仓库 .m2/repository", "children": [] },
+        { "id": "repo-mirror", "text": "settings.xml 配置镜像", "children": [] }
+      ]
+    }
+  ]
+}

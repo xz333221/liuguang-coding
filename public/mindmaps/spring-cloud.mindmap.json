@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "Spring Cloud 微服务",
+  "children": [
+    {
+      "id": "govern",
+      "text": "服务治理",
+      "children": [
+        { "id": "govern-registry", "text": "注册中心维护实例列表", "children": [] },
+        { "id": "govern-impl", "text": "Eureka / Nacos / Consul", "children": [] },
+        { "id": "govern-config", "text": "配置中心按 profile 下发", "children": [] }
+      ]
+    },
+    {
+      "id": "gateway",
+      "text": "网关",
+      "children": [
+        { "id": "gateway-route", "text": "路由由 id、uri、断言、过滤器组成", "children": [] },
+        { "id": "gateway-predicate", "text": "断言全部匹配才转发", "children": [] },
+        { "id": "gateway-lb", "text": "lb:// 交给负载均衡", "children": [] }
+      ]
+    },
+    {
+      "id": "call",
+      "text": "服务调用",
+      "children": [
+        { "id": "call-lb", "text": "LoadBalancer 客户端负载均衡", "children": [] },
+        { "id": "call-feign", "text": "OpenFeign 接口声明 HTTP 调用", "children": [] }
+      ]
+    },
+    {
+      "id": "stable",
+      "text": "稳定性",
+      "children": [
+        { "id": "stable-breaker", "text": "Resilience4j / Sentinel 熔断限流", "children": [] },
+        { "id": "stable-trace", "text": "traceId 与 spanId 串联调用链", "children": [] }
+      ]
+    },
+    {
+      "id": "version",
+      "text": "版本",
+      "children": [
+        { "id": "version-train", "text": "Release Train 统一发布", "children": [] },
+        { "id": "version-bom", "text": "BOM 导入依赖版本", "children": [] },
+        { "id": "version-boot", "text": "与 Spring Boot 版本对齐", "children": [] }
+      ]
+    }
+  ]
+}

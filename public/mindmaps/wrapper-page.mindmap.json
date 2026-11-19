@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "条件构造器与分页",
+  "children": [
+    {
+      "id": "wrapper",
+      "text": "条件构造器",
+      "children": [
+        { "id": "wr-query", "text": "QueryWrapper 字符串列名", "children": [] },
+        { "id": "wr-lambda", "text": "LambdaQueryWrapper 方法引用", "children": [] },
+        { "id": "wr-update", "text": "UpdateWrapper 与 LambdaUpdateWrapper", "children": [] }
+      ]
+    },
+    {
+      "id": "condition",
+      "text": "条件方法",
+      "children": [
+        { "id": "cd-bool", "text": "boolean 重载按需跳过", "children": [] },
+        { "id": "cd-group", "text": "and/or 用嵌套表达括号", "children": [] },
+        { "id": "cd-select", "text": "select 限定查询列", "children": [] }
+      ]
+    },
+    {
+      "id": "page",
+      "text": "分页",
+      "children": [
+        { "id": "pg-interceptor", "text": "MybatisPlusInterceptor 注册", "children": [] },
+        { "id": "pg-page", "text": "Page<T> 与 IPage", "children": [] },
+        { "id": "pg-count", "text": "count 语句由插件生成", "children": [] }
+      ]
+    },
+    {
+      "id": "logic",
+      "text": "逻辑删除",
+      "children": [
+        { "id": "lg-anno", "text": "@TableLogic 标记字段", "children": [] },
+        { "id": "lg-global", "text": "全局配置统一声明", "children": [] },
+        { "id": "lg-xml", "text": "手写 SQL 需自己加条件", "children": [] }
+      ]
+    },
+    {
+      "id": "boundary",
+      "text": "能力边界",
+      "children": [
+        { "id": "bd-join", "text": "join 与聚合写 XML", "children": [] },
+        { "id": "bd-read", "text": "比 SQL 难读时改回 XML", "children": [] }
+      ]
+    }
+  ]
+}

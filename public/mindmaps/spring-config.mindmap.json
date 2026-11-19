@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "配置管理与多环境",
+  "children": [
+    {
+      "id": "file",
+      "text": "配置文件",
+      "children": [
+        { "id": "file-props", "text": "properties 平铺 key=value", "children": [] },
+        { "id": "file-yml", "text": "yml 缩进表达层级", "children": [] },
+        { "id": "file-external", "text": "jar 外 config/ 可覆盖", "children": [] }
+      ]
+    },
+    {
+      "id": "bind",
+      "text": "配置绑定",
+      "children": [
+        { "id": "bind-value", "text": "@Value 注入单个 key", "children": [] },
+        { "id": "bind-props", "text": "@ConfigurationProperties 绑定整组", "children": [] },
+        { "id": "bind-relaxed", "text": "松散命名与校验", "children": [] }
+      ]
+    },
+    {
+      "id": "order",
+      "text": "优先级",
+      "children": [
+        { "id": "order-cli", "text": "命令行参数最高", "children": [] },
+        { "id": "order-env", "text": "环境变量次之", "children": [] },
+        { "id": "order-profile", "text": "profile 文件覆盖默认文件", "children": [] }
+      ]
+    },
+    {
+      "id": "profile",
+      "text": "多环境",
+      "children": [
+        { "id": "profile-active", "text": "spring.profiles.active 激活", "children": [] },
+        { "id": "profile-annot", "text": "@Profile 限定生效范围", "children": [] },
+        { "id": "profile-deploy", "text": "部署时覆盖,同一产物多环境", "children": [] }
+      ]
+    },
+    {
+      "id": "secret",
+      "text": "安全与刷新",
+      "children": [
+        { "id": "secret-env", "text": "密钥只留占位符", "children": [] },
+        { "id": "secret-refresh", "text": "配置中心配合 @RefreshScope", "children": [] }
+      ]
+    }
+  ]
+}

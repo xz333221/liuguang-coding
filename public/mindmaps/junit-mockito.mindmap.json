@@ -1,0 +1,58 @@
+{
+  "id": "root",
+  "text": "单元测试:JUnit 与 Mockito",
+  "children": [
+    {
+      "id": "junit",
+      "text": "JUnit 5 基础",
+      "children": [
+        { "id": "junit-test", "text": "@Test 与 @DisplayName", "children": [] },
+        { "id": "junit-life", "text": "@BeforeEach 与 @AfterEach", "children": [] },
+        { "id": "junit-visible", "text": "测试类与方法包级私有", "children": [] }
+      ]
+    },
+    {
+      "id": "assert",
+      "text": "断言与参数化",
+      "children": [
+        { "id": "assert-basic", "text": "assertEquals 与 assertThrows", "children": [] },
+        { "id": "assert-all", "text": "assertAll 分组报告", "children": [] },
+        { "id": "assert-param", "text": "@ValueSource 与 @CsvSource", "children": [] }
+      ]
+    },
+    {
+      "id": "mockito",
+      "text": "Mockito",
+      "children": [
+        { "id": "mock-when", "text": "mock 与 when/thenReturn/thenThrow", "children": [] },
+        { "id": "mock-verify", "text": "verify、times 与 never", "children": [] },
+        { "id": "mock-captor", "text": "ArgumentCaptor 捕获参数", "children": [] }
+      ]
+    },
+    {
+      "id": "annotation",
+      "text": "注解注入",
+      "children": [
+        { "id": "anno-extend", "text": "@ExtendWith(MockitoExtension.class)", "children": [] },
+        { "id": "anno-inject", "text": "@Mock 与 @InjectMocks", "children": [] }
+      ]
+    },
+    {
+      "id": "principle",
+      "text": "测试原则",
+      "children": [
+        { "id": "pri-pyramid", "text": "测试金字塔,单元多集成少", "children": [] },
+        { "id": "pri-private", "text": "不测私有方法", "children": [] },
+        { "id": "pri-value", "text": "不 mock 值对象,只 mock 边界", "children": [] }
+      ]
+    },
+    {
+      "id": "example",
+      "text": "完整示例",
+      "children": [
+        { "id": "ex-service", "text": "Service 依赖 Repository", "children": [] },
+        { "id": "ex-paths", "text": "正常注册与邮箱重复两条路径", "children": [] }
+      ]
+    }
+  ]
+}

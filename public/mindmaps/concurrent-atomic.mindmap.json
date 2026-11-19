@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "并发集合与原子类",
+  "children": [
+    {
+      "id": "chm",
+      "text": "ConcurrentHashMap",
+      "children": [
+        { "id": "chm-bucket", "text": "桶级 CAS 与首节点锁", "children": [] },
+        { "id": "chm-compute", "text": "computeIfAbsent 原子初始化", "children": [] },
+        { "id": "chm-read", "text": "读操作依赖 volatile", "children": [] }
+      ]
+    },
+    {
+      "id": "cow",
+      "text": "CopyOnWriteArrayList",
+      "children": [
+        { "id": "cow-read", "text": "读多写少", "children": [] },
+        { "id": "cow-copy", "text": "写时复制整个数组", "children": [] },
+        { "id": "cow-iterator", "text": "迭代器基于快照", "children": [] }
+      ]
+    },
+    {
+      "id": "queue",
+      "text": "BlockingQueue",
+      "children": [
+        { "id": "queue-array", "text": "ArrayBlockingQueue 有界", "children": [] },
+        { "id": "queue-linked", "text": "LinkedBlockingQueue 默认无界", "children": [] },
+        { "id": "queue-block", "text": "put 与 take 阻塞", "children": [] }
+      ]
+    },
+    {
+      "id": "cas",
+      "text": "CAS 与原子类",
+      "children": [
+        { "id": "cas-atomic", "text": "AtomicInteger 自旋 CAS", "children": [] },
+        { "id": "cas-aba", "text": "ABA 问题", "children": [] },
+        { "id": "cas-stamp", "text": "AtomicStampedReference 加版本号", "children": [] }
+      ]
+    },
+    {
+      "id": "adder",
+      "text": "LongAdder",
+      "children": [
+        { "id": "adder-cell", "text": "分段 Cell 累加", "children": [] },
+        { "id": "adder-throughput", "text": "高竞争下吞吐更高", "children": [] },
+        { "id": "adder-sum", "text": "sum 不是原子快照", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "root",
+  "text": "List:ArrayList / LinkedList",
+  "children": [
+    {
+      "id": "sem",
+      "text": "List 语义",
+      "children": [
+        { "id": "sem-order", "text": "有序 / 可重复 / 按索引", "children": [] },
+        { "id": "sem-iface", "text": "声明用接口类型", "children": [] }
+      ]
+    },
+    {
+      "id": "arraylist",
+      "text": "ArrayList 动态数组",
+      "children": [
+        { "id": "al-get", "text": "get O(1)", "children": [] },
+        { "id": "al-mid", "text": "中间增删 O(n) 搬移", "children": [] },
+        { "id": "al-grow", "text": "扩容约 1.5 倍,可预估容量", "children": [] }
+      ]
+    },
+    {
+      "id": "linkedlist",
+      "text": "LinkedList 双向链表",
+      "children": [
+        { "id": "ll-end", "text": "头尾 O(1)", "children": [] },
+        { "id": "ll-idx", "text": "索引 O(n)", "children": [] },
+        { "id": "ll-deque", "text": "兼作 Deque", "children": [] }
+      ]
+    },
+    {
+      "id": "choose",
+      "text": "选型",
+      "children": [
+        { "id": "choose-default", "text": "默认 ArrayList", "children": [] }
+      ]
+    },
+    {
+      "id": "iter",
+      "text": "遍历与删除",
+      "children": [
+        { "id": "iter-remove", "text": "遍历中删除用 iterator.remove", "children": [] }
+      ]
+    }
+  ]
+}

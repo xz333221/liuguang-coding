@@ -1,0 +1,45 @@
+{
+  "id": "root",
+  "text": "类型擦除",
+  "children": [
+    {
+      "id": "rule",
+      "text": "擦除规则",
+      "children": [
+        { "id": "rule-bound", "text": "替换为左边界,无界为 Object", "children": [] },
+        { "id": "rule-same", "text": "List<String> 与 List<Integer> 同 Class", "children": [] },
+        { "id": "rule-cast", "text": "取值处编译器自动插强转", "children": [] }
+      ]
+    },
+    {
+      "id": "bridge",
+      "text": "桥方法",
+      "children": [
+        { "id": "bridge-why", "text": "擦除后维持覆写/多态", "children": [] }
+      ]
+    },
+    {
+      "id": "limits",
+      "text": "限制",
+      "children": [
+        { "id": "limits-new", "text": "不能 new T() / new T[]", "children": [] },
+        { "id": "limits-instanceof", "text": "instanceof 不带类型实参", "children": [] },
+        { "id": "limits-static", "text": "静态成员不用类 T", "children": [] }
+      ]
+    },
+    {
+      "id": "signature",
+      "text": "声明处签名保留",
+      "children": [
+        { "id": "signature-reflect", "text": "反射可读,TypeReference 原理", "children": [] }
+      ]
+    },
+    {
+      "id": "why",
+      "text": "为何擦除",
+      "children": [
+        { "id": "why-migrate", "text": "迁移兼容;对比 C++ 模板", "children": [] }
+      ]
+    }
+  ]
+}

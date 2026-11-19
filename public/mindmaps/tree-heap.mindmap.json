@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "树与堆:二叉树 / BST / 优先队列",
+  "children": [
+    {
+      "id": "terms",
+      "text": "基本术语",
+      "children": [
+        { "id": "terms-root", "text": "根、叶与子树", "children": [] },
+        { "id": "terms-depth", "text": "深度从上往下,高度从下往上", "children": [] }
+      ]
+    },
+    {
+      "id": "traverse",
+      "text": "二叉树遍历",
+      "children": [
+        { "id": "tr-order", "text": "前中后序是访问根的三个时机", "children": [] },
+        { "id": "tr-recursion", "text": "递归实现,深度占调用栈", "children": [] },
+        { "id": "tr-level", "text": "层序遍历用队列逐层处理", "children": [] }
+      ]
+    },
+    {
+      "id": "bst",
+      "text": "二叉搜索树",
+      "children": [
+        { "id": "bst-inorder", "text": "中序遍历结果递增", "children": [] },
+        { "id": "bst-degrade", "text": "有序插入退化成链表 O(n)", "children": [] },
+        { "id": "bst-balance", "text": "AVL 与红黑树把树高控制在 O(log n)", "children": [] }
+      ]
+    },
+    {
+      "id": "heap",
+      "text": "堆",
+      "children": [
+        { "id": "heap-array", "text": "完全二叉树用数组存储", "children": [] },
+        { "id": "heap-sift", "text": "上浮与下沉维护堆序 O(log n)", "children": [] }
+      ]
+    },
+    {
+      "id": "pq",
+      "text": "PriorityQueue",
+      "children": [
+        { "id": "pq-default", "text": "默认小顶堆,比较器可改顺序", "children": [] },
+        { "id": "pq-topk", "text": "大小为 k 的堆求 Top-K,O(n log k)", "children": [] }
+      ]
+    }
+  ]
+}

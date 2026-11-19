@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "volatile 与 JMM 入门",
+  "children": [
+    {
+      "id": "jmm",
+      "text": "JMM 抽象",
+      "children": [
+        { "id": "jmm-main", "text": "主内存保存共享变量", "children": [] },
+        { "id": "jmm-work", "text": "工作内存保存线程副本", "children": [] }
+      ]
+    },
+    {
+      "id": "three",
+      "text": "三个性质",
+      "children": [
+        { "id": "three-visible", "text": "可见性", "children": [] },
+        { "id": "three-order", "text": "有序性", "children": [] },
+        { "id": "three-atomic", "text": "原子性", "children": [] }
+      ]
+    },
+    {
+      "id": "hb",
+      "text": "happens-before",
+      "children": [
+        { "id": "hb-program", "text": "程序顺序", "children": [] },
+        { "id": "hb-lock", "text": "监视器锁的 unlock 与 lock", "children": [] },
+        { "id": "hb-volatile", "text": "volatile 写先于后续读", "children": [] },
+        { "id": "hb-trans", "text": "传递性", "children": [] }
+      ]
+    },
+    {
+      "id": "semantics",
+      "text": "volatile 语义",
+      "children": [
+        { "id": "sem-visible", "text": "写刷新主内存,读重新读取", "children": [] },
+        { "id": "sem-reorder", "text": "内存屏障禁止重排序", "children": [] },
+        { "id": "sem-atomic", "text": "不保证复合操作原子", "children": [] }
+      ]
+    },
+    {
+      "id": "singleton",
+      "text": "双重检查单例",
+      "children": [
+        { "id": "single-volatile", "text": "静态实例字段加 volatile", "children": [] },
+        { "id": "single-publish", "text": "防止半初始化对象逸出", "children": [] }
+      ]
+    }
+  ]
+}

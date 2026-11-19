@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "限界上下文与统一语言",
+  "children": [
+    {
+      "id": "problem",
+      "text": "一个模型覆盖全系统",
+      "children": [
+        { "id": "problem-complexity", "text": "业务复杂度无法消除", "children": [] },
+        { "id": "problem-fields", "text": "一个 Order 承载多种职责", "children": [] },
+        { "id": "problem-distortion", "text": "术语混杂导致模型失真", "children": [] }
+      ]
+    },
+    {
+      "id": "language",
+      "text": "统一语言",
+      "children": [
+        { "id": "lang-one-meaning", "text": "上下文内一个词只有一个含义", "children": [] },
+        { "id": "lang-code", "text": "类名方法名与业务术语一致", "children": [] },
+        { "id": "lang-terms", "text": "歧义记入术语表并统一", "children": [] }
+      ]
+    },
+    {
+      "id": "boundary",
+      "text": "边界划分",
+      "children": [
+        { "id": "boundary-capability", "text": "按业务能力划分", "children": [] },
+        { "id": "boundary-team", "text": "按团队边界划分", "children": [] },
+        { "id": "boundary-language", "text": "按语言变化点划分", "children": [] }
+      ]
+    },
+    {
+      "id": "mapping",
+      "text": "上下文映射",
+      "children": [
+        { "id": "map-shared", "text": "共享内核", "children": [] },
+        { "id": "map-customer", "text": "客户-供应商", "children": [] },
+        { "id": "map-acl", "text": "防腐层", "children": [] },
+        { "id": "map-ohs", "text": "开放主机服务", "children": [] }
+      ]
+    },
+    {
+      "id": "practice",
+      "text": "落地建议",
+      "children": [
+        { "id": "practice-first", "text": "先划边界再建模型", "children": [] },
+        { "id": "practice-share", "text": "跨上下文不共享实体类", "children": [] },
+        { "id": "practice-package", "text": "按上下文分包再分层", "children": [] }
+      ]
+    }
+  ]
+}

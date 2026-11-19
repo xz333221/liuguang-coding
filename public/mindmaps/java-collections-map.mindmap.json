@@ -1,0 +1,45 @@
+{
+  "id": "root",
+  "text": "Map:HashMap / TreeMap",
+  "children": [
+    {
+      "id": "sem",
+      "text": "Map 语义",
+      "children": [
+        { "id": "sem-kv", "text": "键唯一 / 值可重复", "children": [] },
+        { "id": "sem-null", "text": "get null 二义,用 getOrDefault", "children": [] }
+      ]
+    },
+    {
+      "id": "hashmap",
+      "text": "HashMap 结构",
+      "children": [
+        { "id": "hm-bucket", "text": "哈希桶 + 扰动 + 位运算定位", "children": [] },
+        { "id": "hm-tree", "text": "链表 ≥8 转红黑树", "children": [] },
+        { "id": "hm-grow", "text": "0.75 装载因子扩容", "children": [] }
+      ]
+    },
+    {
+      "id": "key",
+      "text": "key 契约",
+      "children": [
+        { "id": "key-contract", "text": "hashCode/equals 配套", "children": [] },
+        { "id": "key-imm", "text": "作 key 期间不可变", "children": [] }
+      ]
+    },
+    {
+      "id": "treemap",
+      "text": "TreeMap 有序",
+      "children": [
+        { "id": "tm-rb", "text": "红黑树 O(log n),范围查询", "children": [] }
+      ]
+    },
+    {
+      "id": "linked",
+      "text": "LinkedHashMap",
+      "children": [
+        { "id": "lh-order", "text": "插入序 / 访问序(LRU)", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "root",
+  "text": "自定义异常与抛出时机",
+  "children": [
+    {
+      "id": "parent",
+      "text": "继承选择",
+      "children": [
+        { "id": "parent-rte", "text": "RuntimeException:业务/编程错误", "children": [] },
+        { "id": "parent-exc", "text": "Exception:需强制契约时才用", "children": [] }
+      ]
+    },
+    {
+      "id": "fields",
+      "text": "携带业务信息",
+      "children": [
+        { "id": "fields-code", "text": "错误码集中管理", "children": [] },
+        { "id": "fields-ctx", "text": "上下文便于统一返回", "children": [] }
+      ]
+    },
+    {
+      "id": "when",
+      "text": "抛出时机",
+      "children": [
+        { "id": "when-bound", "text": "入口参数校验", "children": [] },
+        { "id": "when-rule", "text": "业务规则违反处", "children": [] },
+        { "id": "when-before", "text": "先校验后修改状态", "children": [] }
+      ]
+    },
+    {
+      "id": "cause",
+      "text": "异常链 cause",
+      "children": [
+        { "id": "cause-keep", "text": "包装时传入原异常保留根因", "children": [] }
+      ]
+    },
+    {
+      "id": "layer",
+      "text": "分层转换",
+      "children": [
+        { "id": "layer-map", "text": "边界处转为本层语义异常", "children": [] }
+      ]
+    }
+  ]
+}

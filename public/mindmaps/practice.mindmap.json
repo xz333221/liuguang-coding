@@ -1,0 +1,41 @@
+{
+  "id": "root",
+  "text": "刷题路线:力扣 / 洛谷 / Exercism 怎么用",
+  "children": [
+    {
+      "id": "platform",
+      "text": "平台分工",
+      "children": [
+        { "id": "plat-leetcode", "text": "力扣按主题与难度刷", "children": [] },
+        { "id": "plat-luogu", "text": "洛谷练竞赛与输入输出", "children": [] },
+        { "id": "plat-exercism", "text": "Exercism 有测试与导师反馈", "children": [] }
+      ]
+    },
+    {
+      "id": "order",
+      "text": "主题顺序",
+      "children": [
+        { "id": "order-basic", "text": "数组字符串、链表、栈队列、哈希", "children": [] },
+        { "id": "order-advanced", "text": "树、排序二分、递归回溯", "children": [] },
+        { "id": "order-final", "text": "动态规划、图", "children": [] }
+      ]
+    },
+    {
+      "id": "process",
+      "text": "刷题流程",
+      "children": [
+        { "id": "proc-think", "text": "先独立思考 20 到 30 分钟", "children": [] },
+        { "id": "proc-rewrite", "text": "看题解后合上重写", "children": [] },
+        { "id": "proc-review", "text": "记录错因,定期二刷", "children": [] }
+      ]
+    },
+    {
+      "id": "method",
+      "text": "方法与边界",
+      "children": [
+        { "id": "method-model", "text": "记建模过程,不背题解", "children": [] },
+        { "id": "method-interview", "text": "面试与工程能力考察不同", "children": [] }
+      ]
+    }
+  ]
+}

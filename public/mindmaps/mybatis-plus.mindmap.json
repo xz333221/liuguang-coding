@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "MyBatis 与 MyBatis-Plus 的分工",
+  "children": [
+    {
+      "id": "divide",
+      "text": "职责划分",
+      "children": [
+        { "id": "div-mybatis", "text": "MyBatis 负责 SQL 映射", "children": [] },
+        { "id": "div-mp", "text": "MyBatis-Plus 补通用 CRUD", "children": [] }
+      ]
+    },
+    {
+      "id": "mapper",
+      "text": "Mapper 接口",
+      "children": [
+        { "id": "map-xml", "text": "XML 写复杂 SQL", "children": [] },
+        { "id": "map-anno", "text": "注解写单行 SQL", "children": [] },
+        { "id": "map-scan", "text": "@Mapper 与 @MapperScan", "children": [] }
+      ]
+    },
+    {
+      "id": "base",
+      "text": "BaseMapper 与实体",
+      "children": [
+        { "id": "base-crud", "text": "继承即得单表 CRUD", "children": [] },
+        { "id": "base-anno", "text": "@TableName/@TableId/@TableField", "children": [] },
+        { "id": "base-id", "text": "主键策略 AUTO 与 ASSIGN_ID", "children": [] }
+      ]
+    },
+    {
+      "id": "service",
+      "text": "Service 层",
+      "children": [
+        { "id": "svc-iservice", "text": "IService 定义业务方法", "children": [] },
+        { "id": "svc-impl", "text": "ServiceImpl 是对 Mapper 的薄封装", "children": [] }
+      ]
+    },
+    {
+      "id": "boundary",
+      "text": "能力边界",
+      "children": [
+        { "id": "bd-xml", "text": "join、聚合与复杂映射写 XML", "children": [] },
+        { "id": "bd-query", "text": "复杂查询不用 CRUD 逐表拼装", "children": [] }
+      ]
+    }
+  ]
+}

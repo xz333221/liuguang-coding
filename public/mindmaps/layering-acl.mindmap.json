@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "分层与防腐层",
+  "children": [
+    {
+      "id": "layers",
+      "text": "四层结构",
+      "children": [
+        { "id": "layers-ui", "text": "表现层", "children": [] },
+        { "id": "layers-app", "text": "应用层", "children": [] },
+        { "id": "layers-domain", "text": "领域层", "children": [] },
+        { "id": "layers-infra", "text": "基础设施层", "children": [] }
+      ]
+    },
+    {
+      "id": "dependency",
+      "text": "依赖方向",
+      "children": [
+        { "id": "dep-inward", "text": "依赖指向领域层", "children": [] },
+        { "id": "dep-pure", "text": "领域层不依赖框架", "children": [] },
+        { "id": "dep-repo", "text": "仓储接口在领域层", "children": [] }
+      ]
+    },
+    {
+      "id": "service",
+      "text": "应用服务",
+      "children": [
+        { "id": "service-orchestrate", "text": "编排用例步骤", "children": [] },
+        { "id": "service-no-rules", "text": "不写业务规则", "children": [] },
+        { "id": "service-tx", "text": "控制事务边界", "children": [] }
+      ]
+    },
+    {
+      "id": "acl",
+      "text": "防腐层",
+      "children": [
+        { "id": "acl-isolate", "text": "隔离外部系统模型", "children": [] },
+        { "id": "acl-convert", "text": "转换状态码与单位", "children": [] },
+        { "id": "acl-no-rules", "text": "只转换不写规则", "children": [] }
+      ]
+    },
+    {
+      "id": "mistakes",
+      "text": "常见误区",
+      "children": [
+        { "id": "mistakes-anemic", "text": "贫血模型", "children": [] },
+        { "id": "mistakes-god-service", "text": "Service 包揽一切", "children": [] },
+        { "id": "mistakes-framework", "text": "领域层引入 Spring", "children": [] }
+      ]
+    }
+  ]
+}

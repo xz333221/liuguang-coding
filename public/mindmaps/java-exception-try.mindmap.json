@@ -1,0 +1,47 @@
+{
+  "id": "root",
+  "text": "try-catch-finally 与 try-with-resources",
+  "children": [
+    {
+      "id": "order",
+      "text": "执行顺序",
+      "children": [
+        { "id": "order-try", "text": "抛异常后 try 后续不执行", "children": [] },
+        { "id": "order-catch", "text": "catch 按声明顺序匹配", "children": [] },
+        { "id": "order-finally", "text": "finally 总执行", "children": [] }
+      ]
+    },
+    {
+      "id": "multi",
+      "text": "多 catch 规则",
+      "children": [
+        { "id": "multi-sub", "text": "子类在前,父类在后", "children": [] },
+        { "id": "multi-pipe", "text": "互不继承类型可用 | 合并", "children": [] }
+      ]
+    },
+    {
+      "id": "finally",
+      "text": "finally 的边界",
+      "children": [
+        { "id": "finally-return", "text": "finally 里 return 会覆盖返回值", "children": [] },
+        { "id": "finally-use", "text": "只用于释放资源 / 复位状态", "children": [] }
+      ]
+    },
+    {
+      "id": "twr",
+      "text": "try-with-resources",
+      "children": [
+        { "id": "twr-auto", "text": "AutoCloseable 自动 close", "children": [] },
+        { "id": "twr-rev", "text": "多资源逆序关闭", "children": [] },
+        { "id": "twr-sup", "text": "close 异常记为 suppressed", "children": [] }
+      ]
+    },
+    {
+      "id": "noempty",
+      "text": "禁止空 catch",
+      "children": [
+        { "id": "noempty-log", "text": "至少记录日志或重抛", "children": [] }
+      ]
+    }
+  ]
+}

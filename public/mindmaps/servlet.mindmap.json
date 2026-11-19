@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "Servlet 与请求生命周期",
+  "children": [
+    {
+      "id": "role",
+      "text": "规范三角色",
+      "children": [
+        { "id": "role-servlet", "text": "Servlet 接收请求生成响应", "children": [] },
+        { "id": "role-filter", "text": "Filter 请求链拦截", "children": [] },
+        { "id": "role-listener", "text": "Listener 监听容器事件", "children": [] }
+      ]
+    },
+    {
+      "id": "container",
+      "text": "容器",
+      "children": [
+        { "id": "container-tomcat", "text": "Tomcat 实现 Servlet 规范", "children": [] },
+        { "id": "container-context", "text": "ServletContext 一应用一个", "children": [] },
+        { "id": "container-embedded", "text": "内嵌服务器随应用启动", "children": [] }
+      ]
+    },
+    {
+      "id": "flow",
+      "text": "请求链路",
+      "children": [
+        { "id": "flow-parse", "text": "解析 HTTP 报文", "children": [] },
+        { "id": "flow-filter", "text": "Filter 链前置处理", "children": [] },
+        { "id": "flow-dispatcher", "text": "DispatcherServlet 分派", "children": [] },
+        { "id": "flow-controller", "text": "Controller 与消息转换器", "children": [] }
+      ]
+    },
+    {
+      "id": "layer",
+      "text": "两层拦截",
+      "children": [
+        { "id": "layer-filter", "text": "Filter 在容器层", "children": [] },
+        { "id": "layer-interceptor", "text": "Interceptor 在 MVC 层", "children": [] },
+        { "id": "layer-order", "text": "Filter 先于 Interceptor", "children": [] }
+      ]
+    },
+    {
+      "id": "register",
+      "text": "注册方式",
+      "children": [
+        { "id": "register-component", "text": "@Component 自动注册", "children": [] },
+        { "id": "register-filter", "text": "FilterRegistrationBean 控制路径与顺序", "children": [] },
+        { "id": "register-servlet", "text": "ServletRegistrationBean 注册 Servlet", "children": [] }
+      ]
+    }
+  ]
+}

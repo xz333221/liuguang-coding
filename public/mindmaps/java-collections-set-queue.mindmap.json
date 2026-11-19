@@ -1,0 +1,38 @@
+{
+  "id": "root",
+  "text": "Set 与 Queue / Deque",
+  "children": [
+    {
+      "id": "set",
+      "text": "Set 不重复",
+      "children": [
+        { "id": "set-hash", "text": "HashSet 基于 HashMap", "children": [] },
+        { "id": "set-linked", "text": "LinkedHashSet 插入序", "children": [] },
+        { "id": "set-tree", "text": "TreeSet 排序", "children": [] }
+      ]
+    },
+    {
+      "id": "queue",
+      "text": "Queue 两套 API",
+      "children": [
+        { "id": "q-safe", "text": "offer/poll/peek 返回特殊值", "children": [] },
+        { "id": "q-throw", "text": "add/remove/element 抛异常", "children": [] }
+      ]
+    },
+    {
+      "id": "deque",
+      "text": "Deque / ArrayDeque",
+      "children": [
+        { "id": "dq-stack", "text": "push/pop 作栈", "children": [] },
+        { "id": "dq-best", "text": "ArrayDeque 优于 Stack/LinkedList", "children": [] }
+      ]
+    },
+    {
+      "id": "pq",
+      "text": "PriorityQueue 堆",
+      "children": [
+        { "id": "pq-poll", "text": "poll 按优先级,迭代不有序", "children": [] }
+      ]
+    }
+  ]
+}

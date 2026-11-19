@@ -1,0 +1,43 @@
+{
+  "id": "root",
+  "text": "Optional 与空值处理",
+  "children": [
+    {
+      "id": "role",
+      "text": "定位:返回值容器",
+      "children": [
+        { "id": "role-type", "text": "把可能为空写进类型", "children": [] }
+      ]
+    },
+    {
+      "id": "create",
+      "text": "创建",
+      "children": [
+        { "id": "cre-of", "text": "of 非 null / ofNullable 可 null / empty", "children": [] }
+      ]
+    },
+    {
+      "id": "transform",
+      "text": "转换",
+      "children": [
+        { "id": "tr-map", "text": "map / flatMap / filter", "children": [] }
+      ]
+    },
+    {
+      "id": "get",
+      "text": "取值",
+      "children": [
+        { "id": "get-or", "text": "orElse / orElseThrow / ifPresent", "children": [] },
+        { "id": "get-lazy", "text": "orElseGet 惰性,昂贵默认值用", "children": [] }
+      ]
+    },
+    {
+      "id": "anti",
+      "text": "反模式",
+      "children": [
+        { "id": "anti-isget", "text": "避免 isPresent+get", "children": [] },
+        { "id": "anti-field", "text": "不用作字段/参数/集合元素", "children": [] }
+      ]
+    }
+  ]
+}

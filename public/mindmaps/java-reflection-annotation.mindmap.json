@@ -1,0 +1,47 @@
+{
+  "id": "root",
+  "text": "注解的定义与读取",
+  "children": [
+    {
+      "id": "meta",
+      "text": "注解是元数据",
+      "children": [
+        { "id": "meta-handler", "text": "行为来自处理器,本身不执行", "children": [] }
+      ]
+    },
+    {
+      "id": "def",
+      "text": "@interface 定义",
+      "children": [
+        { "id": "def-type", "text": "属性类型受限", "children": [] },
+        { "id": "def-value", "text": "value 可省名 / default 默认值", "children": [] }
+      ]
+    },
+    {
+      "id": "metaanno",
+      "text": "元注解",
+      "children": [
+        { "id": "ma-target", "text": "@Target 作用位置", "children": [] },
+        { "id": "ma-retention", "text": "@Retention 保留阶段", "children": [] },
+        { "id": "ma-other", "text": "@Documented/@Inherited/@Repeatable", "children": [] }
+      ]
+    },
+    {
+      "id": "retention",
+      "text": "三档保留",
+      "children": [
+        { "id": "ret-src", "text": "SOURCE 编译丢弃", "children": [] },
+        { "id": "ret-cls", "text": "CLASS 字节码(默认)", "children": [] },
+        { "id": "ret-rt", "text": "RUNTIME 可反射读", "children": [] }
+      ]
+    },
+    {
+      "id": "read",
+      "text": "读取与处理",
+      "children": [
+        { "id": "read-reflect", "text": "反射 getAnnotation", "children": [] },
+        { "id": "read-route", "text": "编译期 APT / 运行时反射", "children": [] }
+      ]
+    }
+  ]
+}

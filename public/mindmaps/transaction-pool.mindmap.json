@@ -1,0 +1,61 @@
+{
+  "id": "root",
+  "text": "事务与连接池",
+  "children": [
+    {
+      "id": "acid",
+      "text": "ACID 四性质",
+      "children": [
+        { "id": "acid-a", "text": "原子性:失败全部撤销", "children": [] },
+        { "id": "acid-c", "text": "一致性:约束始终满足", "children": [] },
+        { "id": "acid-i", "text": "隔离性:并发互不干扰", "children": [] },
+        { "id": "acid-d", "text": "持久性:提交落盘不丢", "children": [] }
+      ]
+    },
+    {
+      "id": "commit",
+      "text": "提交方式",
+      "children": [
+        { "id": "cm-auto", "text": "JDBC 默认 autocommit", "children": [] },
+        { "id": "cm-manual", "text": "关闭后显式 commit/rollback", "children": [] },
+        { "id": "cm-finally", "text": "归还连接前恢复默认值", "children": [] }
+      ]
+    },
+    {
+      "id": "proxy",
+      "text": "@Transactional",
+      "children": [
+        { "id": "px-meta", "text": "注解只是元数据", "children": [] },
+        { "id": "px-weave", "text": "代理织入开启与提交", "children": [] },
+        { "id": "px-self", "text": "同类自调用失效", "children": [] }
+      ]
+    },
+    {
+      "id": "prop",
+      "text": "传播行为",
+      "children": [
+        { "id": "pp-req", "text": "REQUIRED 加入或新建", "children": [] },
+        { "id": "pp-new", "text": "REQUIRES_NEW 独立事务", "children": [] },
+        { "id": "pp-nest", "text": "NESTED 回滚到保存点", "children": [] }
+      ]
+    },
+    {
+      "id": "iso",
+      "text": "隔离级别",
+      "children": [
+        { "id": "is-anomaly", "text": "脏读/不可重复读/幻读", "children": [] },
+        { "id": "is-level", "text": "四级逐级加强", "children": [] },
+        { "id": "is-default", "text": "默认值随数据库", "children": [] }
+      ]
+    },
+    {
+      "id": "pool",
+      "text": "连接池",
+      "children": [
+        { "id": "pl-param", "text": "HikariCP 五个核心参数", "children": [] },
+        { "id": "pl-size", "text": "池并非越大越好", "children": [] },
+        { "id": "pl-leak", "text": "leakDetectionThreshold 查泄漏", "children": [] }
+      ]
+    }
+  ]
+}

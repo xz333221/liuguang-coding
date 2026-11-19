@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "聚合根与不变式",
+  "children": [
+    {
+      "id": "types",
+      "text": "实体与值对象",
+      "children": [
+        { "id": "types-entity", "text": "实体按身份区分", "children": [] },
+        { "id": "types-value", "text": "值对象按属性值区分", "children": [] }
+      ]
+    },
+    {
+      "id": "root-node",
+      "text": "聚合与聚合根",
+      "children": [
+        { "id": "root-boundary", "text": "必须一起保持一致的对象", "children": [] },
+        { "id": "root-entry", "text": "聚合根是唯一外部入口", "children": [] }
+      ]
+    },
+    {
+      "id": "invariant",
+      "text": "不变式",
+      "children": [
+        { "id": "inv-always", "text": "任何时刻都必须成立", "children": [] },
+        { "id": "inv-method", "text": "由聚合根方法校验", "children": [] },
+        { "id": "inv-total", "text": "总金额等于明细之和", "children": [] }
+      ]
+    },
+    {
+      "id": "size",
+      "text": "边界设计",
+      "children": [
+        { "id": "size-consistency", "text": "一致性边界即事务边界", "children": [] },
+        { "id": "size-small", "text": "聚合尽量小", "children": [] },
+        { "id": "size-eventual", "text": "跨聚合用最终一致", "children": [] }
+      ]
+    },
+    {
+      "id": "access",
+      "text": "访问与存储",
+      "children": [
+        { "id": "access-readonly", "text": "内部集合只返回只读副本", "children": [] },
+        { "id": "access-repo", "text": "仓储只针对聚合根", "children": [] },
+        { "id": "access-id", "text": "聚合根 ID 用值对象", "children": [] }
+      ]
+    }
+  ]
+}

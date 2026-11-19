@@ -1,0 +1,46 @@
+{
+  "id": "root",
+  "text": "Lambda 与方法引用",
+  "children": [
+    {
+      "id": "pre",
+      "text": "前提:函数式接口",
+      "children": [
+        { "id": "pre-sam", "text": "单一抽象方法", "children": [] },
+        { "id": "pre-infer", "text": "由目标类型推断签名", "children": [] }
+      ]
+    },
+    {
+      "id": "syntax",
+      "text": "语法省略",
+      "children": [
+        { "id": "syn-paren", "text": "单参数省括号", "children": [] },
+        { "id": "syn-body", "text": "单表达式省 {} 与 return", "children": [] }
+      ]
+    },
+    {
+      "id": "capture",
+      "text": "变量捕获",
+      "children": [
+        { "id": "cap-final", "text": "局部变量 effectively final", "children": [] },
+        { "id": "cap-field", "text": "字段不受限", "children": [] }
+      ]
+    },
+    {
+      "id": "ref",
+      "text": "方法引用四种",
+      "children": [
+        { "id": "ref-static", "text": "静态 / 特定对象实例", "children": [] },
+        { "id": "ref-any", "text": "任意对象实例 / 构造器", "children": [] }
+      ]
+    },
+    {
+      "id": "vs",
+      "text": "与匿名类区别",
+      "children": [
+        { "id": "vs-this", "text": "this 指外层", "children": [] },
+        { "id": "vs-byte", "text": "invokedynamic,无额外 class", "children": [] }
+      ]
+    }
+  ]
+}

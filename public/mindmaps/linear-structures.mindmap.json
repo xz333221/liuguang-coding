@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "线性结构:数组 / 链表 / 栈 / 队列",
+  "children": [
+    {
+      "id": "array",
+      "text": "数组",
+      "children": [
+        { "id": "array-access", "text": "连续内存,下标访问 O(1)", "children": [] },
+        { "id": "array-move", "text": "中间插入删除要移动元素 O(n)", "children": [] }
+      ]
+    },
+    {
+      "id": "arraylist",
+      "text": "ArrayList 与 LinkedList",
+      "children": [
+        { "id": "al-grow", "text": "默认容量 10,按 1.5 倍扩容", "children": [] },
+        { "id": "al-choice", "text": "ArrayList 多数场景优于 LinkedList", "children": [] },
+        { "id": "ll-overhead", "text": "链表节点多两个引用且缓存不友好", "children": [] }
+      ]
+    },
+    {
+      "id": "linked",
+      "text": "链表操作",
+      "children": [
+        { "id": "linked-reverse", "text": "prev、cur、next 原地反转", "children": [] },
+        { "id": "linked-cycle", "text": "快慢指针判环,相遇则有环", "children": [] }
+      ]
+    },
+    {
+      "id": "stackqueue",
+      "text": "栈与队列",
+      "children": [
+        { "id": "sq-stack", "text": "栈后进先出,用于括号匹配", "children": [] },
+        { "id": "sq-queue", "text": "队列先进先出,用于 BFS", "children": [] },
+        { "id": "sq-deque", "text": "统一用 ArrayDeque 实现", "children": [] }
+      ]
+    },
+    {
+      "id": "choose",
+      "text": "选型",
+      "children": [
+        { "id": "ch-index", "text": "按下标读、尾部追加选 ArrayList", "children": [] },
+        { "id": "ch-ends", "text": "两端操作用 ArrayDeque", "children": [] }
+      ]
+    }
+  ]
+}

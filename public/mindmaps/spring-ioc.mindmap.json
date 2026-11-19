@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "IoC 与依赖注入",
+  "children": [
+    {
+      "id": "ioc-concepts",
+      "text": "IoC 与 Bean",
+      "children": [
+        { "id": "ioc-control", "text": "容器管理创建与装配", "children": [] },
+        { "id": "ioc-bean", "text": "Bean 由容器管理", "children": [] }
+      ]
+    },
+    {
+      "id": "declare",
+      "text": "声明方式",
+      "children": [
+        { "id": "dec-component", "text": "@Component 家族", "children": [] },
+        { "id": "dec-bean", "text": "@Configuration + @Bean", "children": [] }
+      ]
+    },
+    {
+      "id": "inject",
+      "text": "依赖注入",
+      "children": [
+        { "id": "inj-constructor", "text": "构造器注入优先", "children": [] },
+        { "id": "inj-autowired", "text": "@Autowired 按类型", "children": [] },
+        { "id": "inj-qualifier", "text": "@Qualifier 按名称", "children": [] }
+      ]
+    },
+    {
+      "id": "scope-life",
+      "text": "作用域与生命周期",
+      "children": [
+        { "id": "life-singleton", "text": "singleton 默认作用域", "children": [] },
+        { "id": "life-prototype", "text": "prototype 每次新建", "children": [] },
+        { "id": "life-hooks", "text": "@PostConstruct 与 @PreDestroy", "children": [] }
+      ]
+    },
+    {
+      "id": "cycle",
+      "text": "循环依赖",
+      "children": [
+        { "id": "cycle-error", "text": "构造器注入直接报错", "children": [] },
+        { "id": "cycle-refactor", "text": "拆分职责解除依赖", "children": [] }
+      ]
+    }
+  ]
+}
