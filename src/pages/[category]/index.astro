@@ -3,7 +3,7 @@ import Breadcrumbs from '../../components/kb/Breadcrumbs.astro'
 import CategoryCard from '../../components/kb/CategoryCard.astro'
 import ResourceList from '../../components/kb/ResourceList.astro'
 import TopicRow from '../../components/kb/TopicRow.astro'
-import { findCategory, outlineNumber, visibleCategories } from '../../data/catalog'
+import { findCategory, outlineNumber, pathOf, visibleCategories } from '../../data/catalog'
 import { resourcesOf } from '../../data/resources'
 import {
   categoryPath,
@@ -43,8 +43,12 @@ const children = (meta.children ?? [])
     }
   })
 
-// 空分类时给一个去处:已经有内容的第一个分类
-const suggested = topics[0]
+// 空分类时给一个去处:同一个方向里已经有内容的文章。
+// 不能拿全站第一篇 —— 空的「前端」章节点到 Java 的文章只会让人困惑。
+const rootId = pathOf(meta.id)[0]?.id ?? meta.id
+const suggested = topicsUnder(rootId, topics)[0]
+const isChapter = !meta.numbered && Boolean(outlineNumber(meta.id))
+const childHeading = meta.numbered ? '章节目录' : isChapter ? '本章目录' : '子分类'
 const resourceGroup = resourcesOf(meta.id)
 const description = meta.intro ?? `${meta.name} —— 流光 coding 知识库`
 ---
@@ -65,7 +69,7 @@ const description = meta.intro ?? `${meta.name} —— 流光 coding 知识库`
   {
     children.length > 0 ? (
       <section class="mt-10">
-        <h2 class="text-sm text-muted">{meta.numbered ? '章节目录' : '子分类'}</h2>
+        <h2 class="text-sm text-muted">{childHeading}</h2>
         <div class="mt-4 grid gap-4 sm:grid-cols-2">
           {children.map((child) => (
             <CategoryCard
@@ -100,7 +104,7 @@ const description = meta.intro ?? `${meta.name} —— 流光 coding 知识库`
       </section>
     ) : (
       <section class="mt-10 rounded-[18px] border border-line bg-surface p-6 md:p-7">
-        <h2 class="text-[1.05rem] font-medium">这个方向还在整理</h2>
+        <h2 class="text-[1.05rem] font-medium">{isChapter ? '这一章还在整理' : '这个方向还在整理'}</h2>
         <p class="mt-3 max-w-[32em] text-[0.88rem] leading-relaxed text-muted">
           {meta.note ?? '目录骨架已就位,知识点会按章节陆续写上来。'}
         </p>
