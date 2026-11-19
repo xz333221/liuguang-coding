@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "async / await 与并发控制",
+  "children": [
+    {
+      "id": "async-fn",
+      "text": "async 函数",
+      "children": [
+        { "id": "async-fn-return", "text": "返回值包成 Promise", "children": [] },
+        { "id": "async-fn-sync", "text": "函数体同步开始", "children": [] },
+        { "id": "async-fn-reject", "text": "throw 变成拒绝", "children": [] }
+      ]
+    },
+    {
+      "id": "await",
+      "text": "await 的语义",
+      "children": [
+        { "id": "await-then", "text": "等价于 then 接续", "children": [] },
+        { "id": "await-yield", "text": "非 Promise 也让出一次", "children": [] },
+        { "id": "await-try", "text": "try/catch 接住拒绝", "children": [] }
+      ]
+    },
+    {
+      "id": "concurrency",
+      "text": "串行与并发",
+      "children": [
+        { "id": "concurrency-serial", "text": "for...of 逐个等待", "children": [] },
+        { "id": "concurrency-parallel", "text": "map 加 Promise.all", "children": [] },
+        { "id": "concurrency-pool", "text": "并发池限流", "children": [] }
+      ]
+    },
+    {
+      "id": "pool",
+      "text": "并发池实现",
+      "children": [
+        { "id": "pool-cursor", "text": "共享下标同步取号", "children": [] },
+        { "id": "pool-write", "text": "结果按下标写回", "children": [] },
+        { "id": "pool-fail", "text": "快速失败与全量收集", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfalls",
+      "text": "常见坑",
+      "children": [
+        { "id": "pitfalls-foreach", "text": "forEach 不等待回调", "children": [] },
+        { "id": "pitfalls-swallow", "text": "没人接的拒绝被吞", "children": [] },
+        { "id": "pitfalls-serial", "text": "循环里 await 拖慢", "children": [] }
+      ]
+    }
+  ]
+}

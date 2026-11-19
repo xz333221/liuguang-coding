@@ -1,0 +1,111 @@
+{
+  "id": "root",
+  "text": "容器查询、subgrid 与逻辑属性",
+  "children": [
+    {
+      "id": "container",
+      "text": "容器查询",
+      "children": [
+        {
+          "id": "container-type",
+          "text": "container-type: inline-size",
+          "children": []
+        },
+        {
+          "id": "container-name",
+          "text": "container-name 指定容器",
+          "children": []
+        },
+        {
+          "id": "container-at",
+          "text": "@container 按容器宽度切换",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "subgrid",
+      "text": "subgrid",
+      "children": [
+        {
+          "id": "subgrid-col",
+          "text": "继承父网格列轨道",
+          "children": []
+        },
+        {
+          "id": "subgrid-row",
+          "text": "行方向对齐卡片内容",
+          "children": []
+        },
+        {
+          "id": "subgrid-span",
+          "text": "需跨多个父轨道",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "logical",
+      "text": "逻辑属性",
+      "children": [
+        {
+          "id": "logical-inline",
+          "text": "margin-inline 与 padding-inline",
+          "children": []
+        },
+        {
+          "id": "logical-block",
+          "text": "padding-block 与 inset-block",
+          "children": []
+        },
+        {
+          "id": "logical-writing",
+          "text": "跟随书写模式自动镜像",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "modern",
+      "text": "现代属性",
+      "children": [
+        {
+          "id": "modern-ratio",
+          "text": "aspect-ratio 声明宽高比",
+          "children": []
+        },
+        {
+          "id": "modern-gap",
+          "text": "flex 中直接使用 gap",
+          "children": []
+        },
+        {
+          "id": "modern-has",
+          "text": ":has() 按结构匹配",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "enhance",
+      "text": "渐进增强",
+      "children": [
+        {
+          "id": "enhance-support",
+          "text": "@supports 检测特性",
+          "children": []
+        },
+        {
+          "id": "enhance-base",
+          "text": "基础样式先可用",
+          "children": []
+        },
+        {
+          "id": "enhance-next",
+          "text": "下一章进入 CSS 进阶",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

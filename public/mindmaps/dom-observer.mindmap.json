@@ -1,0 +1,90 @@
+{
+  "id": "root",
+  "text": "IntersectionObserver、ResizeObserver 与 History",
+  "children": [
+    {
+      "id": "io",
+      "text": "IntersectionObserver",
+      "children": [
+        {
+          "id": "io-config",
+          "text": "root 与 rootMargin",
+          "children": []
+        },
+        {
+          "id": "io-threshold",
+          "text": "threshold 跨越才回调",
+          "children": []
+        },
+        {
+          "id": "io-first",
+          "text": "observe 后先回调一次",
+          "children": []
+        },
+        {
+          "id": "io-lazy",
+          "text": "懒加载与无限滚动",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "ro",
+      "text": "ResizeObserver",
+      "children": [
+        {
+          "id": "ro-box",
+          "text": "contentBox 与 borderBox",
+          "children": []
+        },
+        {
+          "id": "ro-timing",
+          "text": "布局后绘制前回调",
+          "children": []
+        },
+        {
+          "id": "ro-loop",
+          "text": "改自身尺寸会成环",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "history",
+      "text": "History API",
+      "children": [
+        {
+          "id": "history-push",
+          "text": "pushState 不触发 popstate",
+          "children": []
+        },
+        {
+          "id": "history-pop",
+          "text": "前进后退才触发 popstate",
+          "children": []
+        },
+        {
+          "id": "history-first",
+          "text": "首次加载要手动渲染",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "scroll",
+      "text": "滚动位置恢复",
+      "children": [
+        {
+          "id": "scroll-restoration",
+          "text": "scrollRestoration 设 manual",
+          "children": []
+        },
+        {
+          "id": "scroll-timing",
+          "text": "渲染完成后再 scrollTo",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

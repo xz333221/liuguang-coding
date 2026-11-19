@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "过渡与关键帧动画",
+  "children": [
+    {
+      "id": "transition",
+      "text": "transition",
+      "children": [
+        { "id": "transition-parts", "text": "属性、时长、缓动、延迟", "children": [] },
+        { "id": "transition-trigger", "text": "仅在状态变化时触发", "children": [] },
+        { "id": "transition-duration", "text": "默认 0s,不写不动", "children": [] }
+      ]
+    },
+    {
+      "id": "cost",
+      "text": "可动画属性的代价",
+      "children": [
+        { "id": "cost-composite", "text": "transform 与 opacity 走合成", "children": [] },
+        { "id": "cost-layout", "text": "width/height/top/left 触发布局", "children": [] },
+        { "id": "cost-paint", "text": "颜色与阴影只重绘", "children": [] }
+      ]
+    },
+    {
+      "id": "animation",
+      "text": "animation",
+      "children": [
+        { "id": "animation-keyframes", "text": "@keyframes 定义关键帧", "children": [] },
+        { "id": "animation-shorthand", "text": "简写顺序与两个时间值", "children": [] },
+        { "id": "animation-fill", "text": "fill-mode 前后填充", "children": [] }
+      ]
+    },
+    {
+      "id": "discrete",
+      "text": "离散控制",
+      "children": [
+        { "id": "discrete-steps", "text": "steps() 逐帧切换", "children": [] },
+        { "id": "discrete-loop", "text": "iteration 与 direction", "children": [] }
+      ]
+    },
+    {
+      "id": "a11y",
+      "text": "无障碍降级",
+      "children": [
+        { "id": "a11y-reduce", "text": "prefers-reduced-motion", "children": [] },
+        { "id": "a11y-event", "text": "接近零时长仍触发事件", "children": [] }
+      ]
+    }
+  ]
+}

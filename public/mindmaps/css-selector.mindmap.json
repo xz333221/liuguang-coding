@@ -1,0 +1,106 @@
+{
+  "id": "root",
+  "text": "选择器、组合器与伪类",
+  "children": [
+    {
+      "id": "include",
+      "text": "引入 CSS 的三种方式",
+      "children": [
+        {
+          "id": "include-link",
+          "text": "外链 link:可缓存、可复用",
+          "children": []
+        },
+        {
+          "id": "include-style",
+          "text": "style 标签:只对当前文档",
+          "children": []
+        },
+        {
+          "id": "include-inline",
+          "text": "行内 style:优先级高但难维护",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "basic",
+      "text": "基本选择器",
+      "children": [
+        {
+          "id": "basic-type",
+          "text": "类型、类、ID",
+          "children": []
+        },
+        {
+          "id": "basic-attr",
+          "text": "属性选择器与通配符",
+          "children": []
+        },
+        {
+          "id": "basic-pseudo",
+          "text": "伪类与伪元素",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "combinator",
+      "text": "组合器",
+      "children": [
+        {
+          "id": "combinator-desc",
+          "text": "后代与子:空格、>",
+          "children": []
+        },
+        {
+          "id": "combinator-sibling",
+          "text": "相邻与通用兄弟:+、~",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pseudo",
+      "text": "伪类与伪元素",
+      "children": [
+        {
+          "id": "pseudo-state",
+          "text": ":hover / :focus-visible",
+          "children": []
+        },
+        {
+          "id": "pseudo-index",
+          "text": ":first-child / :nth-child",
+          "children": []
+        },
+        {
+          "id": "pseudo-element",
+          "text": "::before / ::after 与 content",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "易错点",
+      "children": [
+        {
+          "id": "pitfall-id",
+          "text": "滥用 ID 抬高优先级",
+          "children": []
+        },
+        {
+          "id": "pitfall-deep",
+          "text": "选择器过深难维护",
+          "children": []
+        },
+        {
+          "id": "pitfall-hover",
+          "text": "只靠 hover 传达信息",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

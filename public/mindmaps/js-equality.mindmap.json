@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "相等比较、深浅拷贝与不可变数据",
+  "children": [
+    {
+      "id": "samenes",
+      "text": "三种相等",
+      "children": [
+        { "id": "samenes-strict", "text": "=== 不做转换", "children": [] },
+        { "id": "samenes-is", "text": "Object.is 两处不同", "children": [] },
+        { "id": "samenes-zero", "text": "容器用 SameValueZero", "children": [] }
+      ]
+    },
+    {
+      "id": "loose",
+      "text": "宽松相等",
+      "children": [
+        { "id": "loose-bool", "text": "布尔先转数字", "children": [] },
+        { "id": "loose-null", "text": "null 只等于 undefined", "children": [] },
+        { "id": "loose-usage", "text": "只留 value == null", "children": [] }
+      ]
+    },
+    {
+      "id": "shallow",
+      "text": "浅拷贝",
+      "children": [
+        { "id": "shallow-spread", "text": "展开只复制一层", "children": [] },
+        { "id": "shallow-share", "text": "嵌套对象仍共享", "children": [] },
+        { "id": "shallow-assign", "text": "assign 会触发 setter", "children": [] }
+      ]
+    },
+    {
+      "id": "deep",
+      "text": "深拷贝",
+      "children": [
+        { "id": "deep-clone", "text": "structuredClone", "children": [] },
+        { "id": "deep-limit", "text": "函数与 DOM 会抛错", "children": [] },
+        { "id": "deep-json", "text": "JSON 拷贝丢字段", "children": [] }
+      ]
+    },
+    {
+      "id": "immutable",
+      "text": "不可变更新",
+      "children": [
+        { "id": "immutable-path", "text": "只复制改动路径", "children": [] },
+        { "id": "immutable-freeze", "text": "freeze 只冻一层", "children": [] }
+      ]
+    }
+  ]
+}

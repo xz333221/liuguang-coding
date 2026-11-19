@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "重排、重绘与合成层",
+  "children": [
+    {
+      "id": "cost",
+      "text": "三种代价",
+      "children": [
+        { "id": "cost-layout", "text": "重排改几何", "children": [] },
+        { "id": "cost-paint", "text": "重绘改外观", "children": [] },
+        { "id": "cost-comp", "text": "合成只改变换", "children": [] }
+      ]
+    },
+    {
+      "id": "trigger",
+      "text": "触发重排",
+      "children": [
+        { "id": "trig-geometry", "text": "几何与字体属性", "children": [] },
+        { "id": "trig-read", "text": "读取强制刷新布局", "children": [] },
+        { "id": "trig-range", "text": "脏标记向上扩散", "children": [] }
+      ]
+    },
+    {
+      "id": "thrash",
+      "text": "布局抖动",
+      "children": [
+        { "id": "thrash-mix", "text": "循环里读写交替", "children": [] },
+        { "id": "thrash-split", "text": "先读后写分批", "children": [] },
+        { "id": "thrash-batch", "text": "一次改类名", "children": [] }
+      ]
+    },
+    {
+      "id": "layer",
+      "text": "合成层",
+      "children": [
+        { "id": "layer-promote", "text": "3D 变换与提示", "children": [] },
+        { "id": "layer-only", "text": "变换走合成线程", "children": [] },
+        { "id": "layer-boom", "text": "层爆炸吃显存", "children": [] }
+      ]
+    },
+    {
+      "id": "batch",
+      "text": "批量更新",
+      "children": [
+        { "id": "batch-frag", "text": "片段一次插入", "children": [] },
+        { "id": "batch-raf", "text": "rAF 集中写入", "children": [] },
+        { "id": "batch-css", "text": "动画优先交给 CSS", "children": [] }
+      ]
+    }
+  ]
+}

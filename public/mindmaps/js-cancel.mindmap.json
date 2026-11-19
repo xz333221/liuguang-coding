@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "AbortController 与请求取消",
+  "children": [
+    {
+      "id": "why",
+      "text": "为什么要取消",
+      "children": [
+        { "id": "why-race", "text": "联想输入的竞态", "children": [] },
+        { "id": "why-unmount", "text": "路由切换与卸载", "children": [] },
+        { "id": "why-timeout", "text": "接口超时放弃", "children": [] }
+      ]
+    },
+    {
+      "id": "signal",
+      "text": "取消信号",
+      "children": [
+        { "id": "signal-aborted", "text": "aborted 一经取消恒为真", "children": [] },
+        { "id": "signal-reason", "text": "reason 记录原因", "children": [] },
+        { "id": "signal-once", "text": "一次性，不能复用", "children": [] }
+      ]
+    },
+    {
+      "id": "fetch",
+      "text": "fetch 取消",
+      "children": [
+        { "id": "fetch-signal", "text": "请求与读体都受控", "children": [] },
+        { "id": "fetch-abort", "text": "以 reason 拒绝", "children": [] },
+        { "id": "fetch-clean", "text": "finally 清定时器", "children": [] }
+      ]
+    },
+    {
+      "id": "timeout",
+      "text": "超时与组合",
+      "children": [
+        { "id": "timeout-signal", "text": "AbortSignal.timeout", "children": [] },
+        { "id": "timeout-any", "text": "any 合并多来源", "children": [] },
+        { "id": "timeout-name", "text": "TimeoutError 与 AbortError", "children": [] }
+      ]
+    },
+    {
+      "id": "custom",
+      "text": "自写与坑",
+      "children": [
+        { "id": "custom-check", "text": "先查 aborted", "children": [] },
+        { "id": "custom-share", "text": "共享 controller 的误伤", "children": [] },
+        { "id": "custom-report", "text": "取消不该上报错误", "children": [] }
+      ]
+    }
+  ]
+}

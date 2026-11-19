@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "函数、参数与闭包",
+  "children": [
+    {
+      "id": "forms",
+      "text": "三种写法",
+      "children": [
+        { "id": "forms-decl", "text": "声明整体提升", "children": [] },
+        { "id": "forms-expr", "text": "表达式不提升", "children": [] },
+        { "id": "forms-arrow", "text": "箭头没有 prototype", "children": [] }
+      ]
+    },
+    {
+      "id": "params",
+      "text": "参数",
+      "children": [
+        { "id": "params-default", "text": "默认值调用时求值", "children": [] },
+        { "id": "params-rest", "text": "剩余参数是数组", "children": [] },
+        { "id": "params-arguments", "text": "arguments 是类数组", "children": [] }
+      ]
+    },
+    {
+      "id": "closure",
+      "text": "闭包",
+      "children": [
+        { "id": "closure-binding", "text": "捕获绑定不是值", "children": [] },
+        { "id": "closure-private", "text": "私有状态", "children": [] },
+        { "id": "closure-memo", "text": "缓存与只执行一次", "children": [] }
+      ]
+    },
+    {
+      "id": "memory",
+      "text": "内存",
+      "children": [
+        { "id": "memory-keep", "text": "被引用就不回收", "children": [] },
+        { "id": "memory-leak", "text": "长回调别闭大对象", "children": [] }
+      ]
+    },
+    {
+      "id": "higher-order",
+      "text": "高阶函数",
+      "children": [
+        { "id": "higher-order-shape", "text": "收函数或返回函数", "children": [] },
+        { "id": "higher-order-wrap", "text": "重试与缓存的包装", "children": [] }
+      ]
+    }
+  ]
+}

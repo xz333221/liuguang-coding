@@ -1,0 +1,111 @@
+{
+  "id": "root",
+  "text": "表单、约束校验与 FormData",
+  "children": [
+    {
+      "id": "controls",
+      "text": "控件组织",
+      "children": [
+        {
+          "id": "controls-name",
+          "text": "name 决定提交的键",
+          "children": []
+        },
+        {
+          "id": "controls-elements",
+          "text": "form.elements 按名取",
+          "children": []
+        },
+        {
+          "id": "controls-radio",
+          "text": "同名返回 RadioNodeList",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "constraint",
+      "text": "约束属性",
+      "children": [
+        {
+          "id": "constraint-required",
+          "text": "required、type、pattern",
+          "children": []
+        },
+        {
+          "id": "constraint-range",
+          "text": "min / max / step",
+          "children": []
+        },
+        {
+          "id": "constraint-validity",
+          "text": "validity 汇总失败原因",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "text": "校验 API",
+      "children": [
+        {
+          "id": "api-check",
+          "text": "checkValidity 只返回结果",
+          "children": []
+        },
+        {
+          "id": "api-report",
+          "text": "reportValidity 弹提示",
+          "children": []
+        },
+        {
+          "id": "api-custom",
+          "text": "setCustomValidity 要清空",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "submit",
+      "text": "接管提交",
+      "children": [
+        {
+          "id": "submit-novalidate",
+          "text": "novalidate 关闭原生校验",
+          "children": []
+        },
+        {
+          "id": "submit-event",
+          "text": "submit 事件在通过后触发",
+          "children": []
+        },
+        {
+          "id": "submit-apis",
+          "text": "requestSubmit 与 submit",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "formdata",
+      "text": "FormData 收集",
+      "children": [
+        {
+          "id": "formdata-skip",
+          "text": "禁用、无 name 不参与",
+          "children": []
+        },
+        {
+          "id": "formdata-multi",
+          "text": "多选产生同名多条",
+          "children": []
+        },
+        {
+          "id": "formdata-file",
+          "text": "文件以 File 进入",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

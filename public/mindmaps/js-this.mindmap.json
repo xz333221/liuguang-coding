@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "this 的四种绑定",
+  "children": [
+    {
+      "id": "rules",
+      "text": "四种绑定",
+      "children": [
+        { "id": "rules-default", "text": "默认:全局或 undefined", "children": [] },
+        { "id": "rules-implicit", "text": "隐式:obj.fn", "children": [] },
+        { "id": "rules-explicit", "text": "显式:call 与 bind", "children": [] },
+        { "id": "rules-new", "text": "new:新对象", "children": [] }
+      ]
+    },
+    {
+      "id": "priority",
+      "text": "优先级",
+      "children": [
+        { "id": "priority-new", "text": "new 最高", "children": [] },
+        { "id": "priority-bind", "text": "bind 次之", "children": [] },
+        { "id": "priority-implicit", "text": "隐式再次", "children": [] },
+        { "id": "priority-default", "text": "默认最低", "children": [] }
+      ]
+    },
+    {
+      "id": "lost",
+      "text": "绑定丢失",
+      "children": [
+        { "id": "lost-extract", "text": "方法被摘出来", "children": [] },
+        { "id": "lost-timer", "text": "定时器收到裸函数", "children": [] },
+        { "id": "lost-fix", "text": "箭头或 bind 一次", "children": [] }
+      ]
+    },
+    {
+      "id": "arrow",
+      "text": "箭头函数",
+      "children": [
+        { "id": "arrow-no-own", "text": "没有自己的 this", "children": [] },
+        { "id": "arrow-outer", "text": "看定义处外层", "children": [] },
+        { "id": "arrow-bind", "text": "bind 改不了", "children": [] }
+      ]
+    },
+    {
+      "id": "judge",
+      "text": "判定顺序",
+      "children": [
+        { "id": "judge-arrow", "text": "先排除箭头", "children": [] },
+        { "id": "judge-call", "text": "再看调用最后一步", "children": [] }
+      ]
+    }
+  ]
+}

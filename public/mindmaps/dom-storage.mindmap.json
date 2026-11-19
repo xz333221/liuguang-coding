@@ -1,0 +1,116 @@
+{
+  "id": "root",
+  "text": "存储：Cookie、localStorage 与 IndexedDB",
+  "children": [
+    {
+      "id": "compare",
+      "text": "三套存储怎么选",
+      "children": [
+        {
+          "id": "compare-send",
+          "text": "Cookie 随请求发送",
+          "children": []
+        },
+        {
+          "id": "compare-local",
+          "text": "localStorage 只管本地",
+          "children": []
+        },
+        {
+          "id": "compare-idb",
+          "text": "IndexedDB 存结构化数据",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "cookie",
+      "text": "Cookie 与安全属性",
+      "children": [
+        {
+          "id": "cookie-httponly",
+          "text": "HttpOnly 挡住脚本读取",
+          "children": []
+        },
+        {
+          "id": "cookie-samesite",
+          "text": "SameSite 控制跨站携带",
+          "children": []
+        },
+        {
+          "id": "cookie-scope",
+          "text": "Domain 与 Path 决定范围",
+          "children": []
+        },
+        {
+          "id": "cookie-limit",
+          "text": "4KB 上限,超了静默丢弃",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "cookie-api",
+      "text": "document.cookie 怪癖",
+      "children": [
+        {
+          "id": "cookie-api-read",
+          "text": "读是一整串,无属性",
+          "children": []
+        },
+        {
+          "id": "cookie-api-write",
+          "text": "写一次只能一条",
+          "children": []
+        },
+        {
+          "id": "cookie-api-delete",
+          "text": "删除靠 Max-Age=0",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "local",
+      "text": "localStorage",
+      "children": [
+        {
+          "id": "local-sync",
+          "text": "同步读写会阻塞主线程",
+          "children": []
+        },
+        {
+          "id": "local-quota",
+          "text": "5MB 量级,写满抛异常",
+          "children": []
+        },
+        {
+          "id": "local-event",
+          "text": "storage 只跨标签页触发",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "idb",
+      "text": "IndexedDB",
+      "children": [
+        {
+          "id": "idb-upgrade",
+          "text": "升级只在 onupgradeneeded",
+          "children": []
+        },
+        {
+          "id": "idb-tx",
+          "text": "事务绑在当前任务上",
+          "children": []
+        },
+        {
+          "id": "idb-request",
+          "text": "结果靠 onsuccess 回调",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

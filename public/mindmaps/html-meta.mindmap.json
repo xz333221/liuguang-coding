@@ -1,0 +1,132 @@
+{
+  "id": "root",
+  "text": "meta、viewport 与资源加载顺序",
+  "children": [
+    {
+      "id": "charset",
+      "text": "charset",
+      "children": [
+        {
+          "id": "charset-early",
+          "text": "放在 head 前 1024 字节",
+          "children": []
+        },
+        {
+          "id": "charset-http",
+          "text": "HTTP 头优先,meta 补充",
+          "children": []
+        },
+        {
+          "id": "charset-mojibake",
+          "text": "声明不一致导致乱码",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "viewport",
+      "text": "viewport",
+      "children": [
+        {
+          "id": "viewport-width",
+          "text": "width=device-width",
+          "children": []
+        },
+        {
+          "id": "viewport-scale",
+          "text": "initial-scale=1",
+          "children": []
+        },
+        {
+          "id": "viewport-zoom",
+          "text": "不禁止用户缩放",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "share",
+      "text": "描述与分享",
+      "children": [
+        {
+          "id": "share-description",
+          "text": "description 影响搜索摘要",
+          "children": []
+        },
+        {
+          "id": "share-og",
+          "text": "Open Graph 用 property",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "script",
+      "text": "script 加载",
+      "children": [
+        {
+          "id": "script-block",
+          "text": "普通脚本阻塞解析",
+          "children": []
+        },
+        {
+          "id": "script-defer",
+          "text": "defer 保序延后",
+          "children": []
+        },
+        {
+          "id": "script-async",
+          "text": "async 下载完立即执行",
+          "children": []
+        },
+        {
+          "id": "script-module",
+          "text": "module 默认 defer",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "link",
+      "text": "link 资源",
+      "children": [
+        {
+          "id": "link-stylesheet",
+          "text": "stylesheet 阻塞渲染",
+          "children": []
+        },
+        {
+          "id": "link-preload",
+          "text": "preload 提前下载必需资源",
+          "children": []
+        },
+        {
+          "id": "link-preconnect",
+          "text": "preconnect 提前建连",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "order",
+      "text": "加载顺序",
+      "children": [
+        {
+          "id": "order-parse",
+          "text": "解析与 DOM 构建",
+          "children": []
+        },
+        {
+          "id": "order-css",
+          "text": "CSS 阻塞首次渲染",
+          "children": []
+        },
+        {
+          "id": "order-default",
+          "text": "按首屏需要选择策略",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

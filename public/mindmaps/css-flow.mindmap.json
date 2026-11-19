@@ -1,0 +1,116 @@
+{
+  "id": "root",
+  "text": "文档流与 display",
+  "children": [
+    {
+      "id": "flow",
+      "text": "正常流",
+      "children": [
+        {
+          "id": "flow-block",
+          "text": "块级盒子从上到下堆叠",
+          "children": []
+        },
+        {
+          "id": "flow-inline",
+          "text": "行内盒子从左到右排列",
+          "children": []
+        },
+        {
+          "id": "flow-cb",
+          "text": "包含块是尺寸与定位参照",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "display",
+      "text": "display 取值",
+      "children": [
+        {
+          "id": "display-basic",
+          "text": "block 与 inline",
+          "children": []
+        },
+        {
+          "id": "display-ib",
+          "text": "inline-block 外部行内内部块级",
+          "children": []
+        },
+        {
+          "id": "display-none",
+          "text": "none 移除盒子,visibility 保留占位",
+          "children": []
+        },
+        {
+          "id": "display-root",
+          "text": "flow-root 创建 BFC",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "outflow",
+      "text": "脱离文档流",
+      "children": [
+        {
+          "id": "outflow-float",
+          "text": "float 浮动并影响绕排",
+          "children": []
+        },
+        {
+          "id": "outflow-abs",
+          "text": "absolute 相对定位祖先",
+          "children": []
+        },
+        {
+          "id": "outflow-fixed",
+          "text": "fixed 相对视口",
+          "children": []
+        },
+        {
+          "id": "outflow-cost",
+          "text": "高度塌陷与元素重叠",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "bfc",
+      "text": "BFC",
+      "children": [
+        {
+          "id": "bfc-isolate",
+          "text": "内部布局与外部隔离",
+          "children": []
+        },
+        {
+          "id": "bfc-float",
+          "text": "包住内部浮动",
+          "children": []
+        },
+        {
+          "id": "bfc-margin",
+          "text": "阻止外边距合并",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "compare",
+      "text": "两栏布局对照",
+      "children": [
+        {
+          "id": "compare-float",
+          "text": "float 加 clearfix",
+          "children": []
+        },
+        {
+          "id": "compare-flex",
+          "text": "flex 加 gap 与 min-width: 0",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

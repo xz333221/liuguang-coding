@@ -1,0 +1,96 @@
+{
+  "id": "root",
+  "text": "层叠、优先级与继承",
+  "children": [
+    {
+      "id": "cascade",
+      "text": "层叠的三步比较",
+      "children": [
+        {
+          "id": "cascade-origin",
+          "text": "来源与重要性",
+          "children": []
+        },
+        {
+          "id": "cascade-specificity",
+          "text": "优先级",
+          "children": []
+        },
+        {
+          "id": "cascade-order",
+          "text": "源码顺序",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "origin",
+      "text": "来源与 !important",
+      "children": [
+        {
+          "id": "origin-four",
+          "text": "用户代理、用户、作者、动画",
+          "children": []
+        },
+        {
+          "id": "origin-important",
+          "text": "重要声明反转来源顺序",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "specificity",
+      "text": "优先级",
+      "children": [
+        {
+          "id": "specificity-tuple",
+          "text": "行内、ID、类、类型四元组",
+          "children": []
+        },
+        {
+          "id": "specificity-inline",
+          "text": "行内样式高于选择器",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "inherit",
+      "text": "继承",
+      "children": [
+        {
+          "id": "inherit-default",
+          "text": "文本属性默认继承",
+          "children": []
+        },
+        {
+          "id": "inherit-keywords",
+          "text": "inherit / initial / unset / revert",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "debug",
+      "text": "样式不生效的排查",
+      "children": [
+        {
+          "id": "debug-match",
+          "text": "选择器是否命中",
+          "children": []
+        },
+        {
+          "id": "debug-override",
+          "text": "优先级与源码顺序覆盖",
+          "children": []
+        },
+        {
+          "id": "debug-devtools",
+          "text": "Styles 与 Computed 面板",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "id": "root",
+  "text": "DOM 树与节点操作",
+  "children": [
+    {
+      "id": "tree",
+      "text": "节点树",
+      "children": [
+        {
+          "id": "tree-doc",
+          "text": "document 是整棵树的入口",
+          "children": []
+        },
+        {
+          "id": "tree-type",
+          "text": "Node、Element、Text 的继承关系",
+          "children": []
+        },
+        {
+          "id": "tree-children",
+          "text": "childNodes 含文本,children 只含元素",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "query",
+      "text": "查询元素",
+      "children": [
+        {
+          "id": "query-id",
+          "text": "getElementById 按 id 取单个",
+          "children": []
+        },
+        {
+          "id": "query-selector",
+          "text": "querySelector 取第一个匹配",
+          "children": []
+        },
+        {
+          "id": "query-all",
+          "text": "querySelectorAll 返回静态 NodeList",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "mutate",
+      "text": "增删与替换",
+      "children": [
+        {
+          "id": "mutate-create",
+          "text": "createElement 创建游离节点",
+          "children": []
+        },
+        {
+          "id": "mutate-insert",
+          "text": "append、prepend、before、after",
+          "children": []
+        },
+        {
+          "id": "mutate-remove",
+          "text": "remove 与 replaceWith",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "content",
+      "text": "内容与属性",
+      "children": [
+        {
+          "id": "content-text",
+          "text": "textContent 安全,innerHTML 解析标签",
+          "children": []
+        },
+        {
+          "id": "content-attr",
+          "text": "attribute 字符串与 property 字段",
+          "children": []
+        },
+        {
+          "id": "content-class",
+          "text": "classList 与 dataset",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "batch",
+      "text": "批量操作",
+      "children": [
+        {
+          "id": "batch-fragment",
+          "text": "DocumentFragment 一次插入",
+          "children": []
+        },
+        {
+          "id": "batch-demo",
+          "text": "待办列表的增删示例",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

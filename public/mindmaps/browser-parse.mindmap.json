@@ -1,0 +1,47 @@
+{
+  "id": "root",
+  "text": "解析：DOM、CSSOM 与阻塞",
+  "children": [
+    {
+      "id": "dom",
+      "text": "从字节到 DOM",
+      "children": [
+        { "id": "dom-steps", "text": "字节 → 字符 → 词法 → 节点", "children": [] },
+        { "id": "dom-error", "text": "容错解析与标签修复", "children": [] }
+      ]
+    },
+    {
+      "id": "cssom",
+      "text": "CSSOM 的构建",
+      "children": [
+        { "id": "cssom-block", "text": "样式表阻塞渲染", "children": [] },
+        { "id": "cssom-media", "text": "media 属性解除阻塞", "children": [] }
+      ]
+    },
+    {
+      "id": "script",
+      "text": "脚本的加载时机",
+      "children": [
+        { "id": "script-plain", "text": "同步脚本暂停解析", "children": [] },
+        { "id": "script-defer", "text": "defer 按序、DOM 就绪后执行", "children": [] },
+        { "id": "script-async", "text": "async 下载完即执行", "children": [] },
+        { "id": "script-module", "text": "module 默认 defer", "children": [] }
+      ]
+    },
+    {
+      "id": "scanner",
+      "text": "预加载扫描器",
+      "children": [
+        { "id": "scan-ahead", "text": "提前发现子资源", "children": [] }
+      ]
+    },
+    {
+      "id": "events",
+      "text": "两个就绪事件",
+      "children": [
+        { "id": "ev-dcl", "text": "DOMContentLoaded", "children": [] },
+        { "id": "ev-load", "text": "load 等全部资源", "children": [] }
+      ]
+    }
+  ]
+}

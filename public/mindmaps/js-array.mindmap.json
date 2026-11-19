@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "数组与对象的常用方法",
+  "children": [
+    {
+      "id": "transform",
+      "text": "遍历与转换",
+      "children": [
+        { "id": "transform-map", "text": "map 等长", "children": [] },
+        { "id": "transform-filter", "text": "filter 变短", "children": [] },
+        { "id": "transform-reduce", "text": "reduce 收成一个值", "children": [] }
+      ]
+    },
+    {
+      "id": "search",
+      "text": "查找与判断",
+      "children": [
+        { "id": "search-find", "text": "find 返回元素", "children": [] },
+        { "id": "search-some", "text": "some 与 every 短路", "children": [] },
+        { "id": "search-includes", "text": "includes 认 NaN", "children": [] }
+      ]
+    },
+    {
+      "id": "mutate",
+      "text": "会改原数组",
+      "children": [
+        { "id": "mutate-push", "text": "push 与 splice", "children": [] },
+        { "id": "mutate-state", "text": "改 state 引用", "children": [] },
+        { "id": "mutate-immutable", "text": "toSorted 不变版本", "children": [] }
+      ]
+    },
+    {
+      "id": "sort",
+      "text": "sort",
+      "children": [
+        { "id": "sort-default", "text": "默认按字符串比", "children": [] },
+        { "id": "sort-compare", "text": "数字必传比较函数", "children": [] },
+        { "id": "sort-stable", "text": "ES2019 起稳定", "children": [] }
+      ]
+    },
+    {
+      "id": "object",
+      "text": "对象与遍历",
+      "children": [
+        { "id": "object-entries", "text": "keys 与 entries", "children": [] },
+        { "id": "object-from", "text": "entries 转对象", "children": [] },
+        { "id": "object-forof", "text": "遍历用 for...of", "children": [] }
+      ]
+    }
+  ]
+}

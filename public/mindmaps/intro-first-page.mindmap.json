@@ -1,0 +1,116 @@
+{
+  "id": "root",
+  "text": "第一个页面：结构、样式、行为三件套",
+  "children": [
+    {
+      "id": "parts",
+      "text": "三件套分工",
+      "children": [
+        {
+          "id": "parts-html",
+          "text": "HTML 管结构",
+          "children": []
+        },
+        {
+          "id": "parts-css",
+          "text": "CSS 管样式",
+          "children": []
+        },
+        {
+          "id": "parts-js",
+          "text": "JavaScript 管行为",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "demo",
+      "text": "单文件示例",
+      "children": [
+        {
+          "id": "demo-title",
+          "text": "标题与段落",
+          "children": []
+        },
+        {
+          "id": "demo-count",
+          "text": "按钮与计数节点",
+          "children": []
+        },
+        {
+          "id": "demo-style",
+          "text": "style 里的样式规则",
+          "children": []
+        },
+        {
+          "id": "demo-script",
+          "text": "script 里的点击监听",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "timing",
+      "text": "脚本执行时机",
+      "children": [
+        {
+          "id": "timing-body",
+          "text": "放在 body 末尾",
+          "children": []
+        },
+        {
+          "id": "timing-defer",
+          "text": "head 中加 defer",
+          "children": []
+        },
+        {
+          "id": "timing-module",
+          "text": "模块脚本默认延迟",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "result",
+      "text": "预期结果",
+      "children": [
+        {
+          "id": "result-init",
+          "text": "初始显示 0",
+          "children": []
+        },
+        {
+          "id": "result-click",
+          "text": "点击一次加 1",
+          "children": []
+        },
+        {
+          "id": "result-reset",
+          "text": "刷新回到 0",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "change",
+      "text": "改动实验",
+      "children": [
+        {
+          "id": "change-css",
+          "text": "改颜色只动 CSS",
+          "children": []
+        },
+        {
+          "id": "change-js",
+          "text": "改步长只动 JavaScript",
+          "children": []
+        },
+        {
+          "id": "change-html",
+          "text": "加段落只动 HTML",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

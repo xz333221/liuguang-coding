@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "渲染流水线",
+  "children": [
+    {
+      "id": "style",
+      "text": "样式计算",
+      "children": [
+        { "id": "style-match", "text": "选择器从右向左匹配", "children": [] },
+        { "id": "style-visible", "text": "只保留可见元素", "children": [] },
+        { "id": "style-scope", "text": "改动范围决定开销", "children": [] }
+      ]
+    },
+    {
+      "id": "layout",
+      "text": "布局",
+      "children": [
+        { "id": "layout-units", "text": "相对单位解析成像素", "children": [] },
+        { "id": "layout-flow", "text": "先传约束后报尺寸", "children": [] },
+        { "id": "layout-cost", "text": "表格与多列更贵", "children": [] }
+      ]
+    },
+    {
+      "id": "paint",
+      "text": "绘制",
+      "children": [
+        { "id": "paint-records", "text": "输出绘制指令", "children": [] },
+        { "id": "paint-order", "text": "按层叠顺序排列", "children": [] },
+        { "id": "paint-raster", "text": "像素在光栅化产生", "children": [] }
+      ]
+    },
+    {
+      "id": "composite",
+      "text": "合成",
+      "children": [
+        { "id": "comp-tile", "text": "瓦片分块光栅化", "children": [] },
+        { "id": "comp-thread", "text": "合成线程拼合各层", "children": [] },
+        { "id": "comp-offmain", "text": "主线程不参与合成", "children": [] }
+      ]
+    },
+    {
+      "id": "budget",
+      "text": "帧预算",
+      "children": [
+        { "id": "budget-60", "text": "60Hz 约 16.7ms", "children": [] },
+        { "id": "budget-long", "text": "长任务直接掉帧", "children": [] },
+        { "id": "budget-tools", "text": "三个面板分工排查", "children": [] }
+      ]
+    }
+  ]
+}

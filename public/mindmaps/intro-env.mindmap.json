@@ -1,0 +1,126 @@
+{
+  "id": "root",
+  "text": "开发环境：编辑器、浏览器与 DevTools",
+  "children": [
+    {
+      "id": "editor",
+      "text": "编辑器与插件",
+      "children": [
+        {
+          "id": "editor-vscode",
+          "text": "VS Code:免费、跨平台",
+          "children": []
+        },
+        {
+          "id": "editor-live",
+          "text": "Live Server:保存自动刷新",
+          "children": []
+        },
+        {
+          "id": "editor-prettier",
+          "text": "Prettier:统一格式",
+          "children": []
+        },
+        {
+          "id": "editor-eslint",
+          "text": "ESLint:提示语法与逻辑问题",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "panels",
+      "text": "常用面板",
+      "children": [
+        {
+          "id": "panels-elements",
+          "text": "Elements:DOM 与 CSS 规则",
+          "children": []
+        },
+        {
+          "id": "panels-console",
+          "text": "Console:日志与报错",
+          "children": []
+        },
+        {
+          "id": "panels-network",
+          "text": "Network:请求与耗时",
+          "children": []
+        },
+        {
+          "id": "panels-sources",
+          "text": "Sources:断点调试",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "storage",
+      "text": "数据与缓存",
+      "children": [
+        {
+          "id": "storage-app",
+          "text": "Application:存储总览",
+          "children": []
+        },
+        {
+          "id": "storage-local",
+          "text": "localStorage 与 Cookie",
+          "children": []
+        },
+        {
+          "id": "storage-cache",
+          "text": "Cache Storage",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "server",
+      "text": "本地静态服务器",
+      "children": [
+        {
+          "id": "server-npx",
+          "text": "npx serve .",
+          "children": []
+        },
+        {
+          "id": "server-live",
+          "text": "VS Code Live Server",
+          "children": []
+        },
+        {
+          "id": "server-localhost",
+          "text": "通过 http://localhost 访问",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "encoding",
+      "text": "编码与刷新",
+      "children": [
+        {
+          "id": "encoding-utf8",
+          "text": "文件保存为 UTF-8",
+          "children": []
+        },
+        {
+          "id": "encoding-meta",
+          "text": "meta charset 与文件编码一致",
+          "children": []
+        },
+        {
+          "id": "encoding-hard",
+          "text": "硬刷新绕过缓存",
+          "children": []
+        },
+        {
+          "id": "encoding-file",
+          "text": "file:// 的来源为 null",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

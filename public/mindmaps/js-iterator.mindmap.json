@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "迭代器、生成器与异步迭代",
+  "children": [
+    {
+      "id": "protocols",
+      "text": "迭代协议",
+      "children": [
+        { "id": "protocols-iterable", "text": "Symbol.iterator", "children": [] },
+        { "id": "protocols-next", "text": "next 返回 value 与 done", "children": [] },
+        { "id": "protocols-forof", "text": "for...of 自动调 next", "children": [] }
+      ]
+    },
+    {
+      "id": "custom",
+      "text": "手写可迭代对象",
+      "children": [
+        { "id": "custom-state", "text": "迭代器自带状态", "children": [] },
+        { "id": "custom-return", "text": "返回 this 只能遍历一次", "children": [] },
+        { "id": "custom-expand", "text": "展开与解构复用协议", "children": [] }
+      ]
+    },
+    {
+      "id": "generator",
+      "text": "生成器",
+      "children": [
+        { "id": "generator-yield", "text": "yield 暂停并交出值", "children": [] },
+        { "id": "generator-next", "text": "next 传值回暂停点", "children": [] },
+        { "id": "generator-delegate", "text": "yield* 委托", "children": [] }
+      ]
+    },
+    {
+      "id": "async",
+      "text": "异步迭代",
+      "children": [
+        { "id": "async-gen", "text": "async function* 与 yield", "children": [] },
+        { "id": "async-forawait", "text": "for await...of 消费", "children": [] },
+        { "id": "async-backpressure", "text": "拉取速度决定请求节奏", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfalls",
+      "text": "常见坑",
+      "children": [
+        { "id": "pitfalls-once", "text": "迭代器用完即废", "children": [] },
+        { "id": "pitfalls-break", "text": "break 触发 return", "children": [] },
+        { "id": "pitfalls-mix", "text": "异步迭代不能用 for...of", "children": [] }
+      ]
+    }
+  ]
+}

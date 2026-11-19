@@ -1,0 +1,47 @@
+{
+  "id": "root",
+  "text": "导航：从 URL 到响应",
+  "children": [
+    {
+      "id": "url",
+      "text": "URL 的组成",
+      "children": [
+        { "id": "url-parts", "text": "协议 / 主机 / 端口 / 路径", "children": [] },
+        { "id": "url-encode", "text": "编码与保留字符", "children": [] }
+      ]
+    },
+    {
+      "id": "dns",
+      "text": "DNS 解析",
+      "children": [
+        { "id": "dns-order", "text": "浏览器 → 系统 → 递归服务器", "children": [] },
+        { "id": "dns-cache", "text": "TTL 与多级缓存", "children": [] }
+      ]
+    },
+    {
+      "id": "handshake",
+      "text": "TCP 与 TLS",
+      "children": [
+        { "id": "hs-tcp", "text": "三次握手与队头阻塞", "children": [] },
+        { "id": "hs-tls", "text": "证书校验与密钥协商", "children": [] },
+        { "id": "hs-http", "text": "HTTP/1.1、HTTP/2 与 HTTP/3", "children": [] }
+      ]
+    },
+    {
+      "id": "cache",
+      "text": "HTTP 缓存",
+      "children": [
+        { "id": "cache-strong", "text": "强缓存:Cache-Control", "children": [] },
+        { "id": "cache-negotiate", "text": "协商缓存:ETag 与 304", "children": [] }
+      ]
+    },
+    {
+      "id": "optimize",
+      "text": "链路上的优化",
+      "children": [
+        { "id": "opt-sw", "text": "Service Worker 拦截", "children": [] },
+        { "id": "opt-hint", "text": "preconnect / preload / prefetch", "children": [] }
+      ]
+    }
+  ]
+}

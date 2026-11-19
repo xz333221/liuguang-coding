@@ -1,0 +1,106 @@
+{
+  "id": "root",
+  "text": "单位与颜色：px / em / rem / vw、hsl 与 oklch",
+  "children": [
+    {
+      "id": "length",
+      "text": "长度单位",
+      "children": [
+        {
+          "id": "length-px",
+          "text": "px:CSS 像素",
+          "children": []
+        },
+        {
+          "id": "length-relative",
+          "text": "em、rem 与百分比的基准",
+          "children": []
+        },
+        {
+          "id": "length-viewport",
+          "text": "vw/vh、dvh/svh 与 ch",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "rem",
+      "text": "何时用 rem",
+      "children": [
+        {
+          "id": "rem-font",
+          "text": "字号与全局间距用 rem",
+          "children": []
+        },
+        {
+          "id": "rem-em",
+          "text": "组件内部间距用 em",
+          "children": []
+        },
+        {
+          "id": "rem-px",
+          "text": "边框与细节用 px",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "color",
+      "text": "颜色的写法",
+      "children": [
+        {
+          "id": "color-basic",
+          "text": "关键字、hex、rgb()",
+          "children": []
+        },
+        {
+          "id": "color-hsl",
+          "text": "hsl():色相、饱和度、亮度",
+          "children": []
+        },
+        {
+          "id": "color-oklch",
+          "text": "oklch():感知亮度与色阶",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "alpha",
+      "text": "透明度",
+      "children": [
+        {
+          "id": "alpha-color",
+          "text": "颜色 alpha 只影响颜色",
+          "children": []
+        },
+        {
+          "id": "alpha-opacity",
+          "text": "opacity 影响元素与子树",
+          "children": []
+        },
+        {
+          "id": "alpha-current",
+          "text": "currentColor 复用文字色",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "theme",
+      "text": "主题色示例",
+      "children": [
+        {
+          "id": "theme-base",
+          "text": "背景、正文与链接色",
+          "children": []
+        },
+        {
+          "id": "theme-scale",
+          "text": "同色相调整亮度成色阶",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

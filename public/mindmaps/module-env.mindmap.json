@@ -1,0 +1,42 @@
+{
+  "id": "root",
+  "text": "环境变量与多环境构建",
+  "children": [
+    {
+      "id": "timing",
+      "text": "注入时机",
+      "children": [
+        { "id": "timing-static", "text": "构建时静态替换", "children": [] },
+        { "id": "timing-rebuild", "text": "改值需重新构建", "children": [] },
+        { "id": "timing-browser", "text": "浏览器无 process.env", "children": [] }
+      ]
+    },
+    {
+      "id": "builtin",
+      "text": "内置变量",
+      "children": [
+        { "id": "builtin-mode", "text": "MODE 表示当前模式", "children": [] },
+        { "id": "builtin-base", "text": "BASE_URL 由 base 决定", "children": [] },
+        { "id": "builtin-dev", "text": "DEV 与 PROD 互斥", "children": [] }
+      ]
+    },
+    {
+      "id": "files",
+      "text": "文件优先级",
+      "children": [
+        { "id": "files-env", "text": ".env 放团队默认值", "children": [] },
+        { "id": "files-local", "text": ".local 不入库", "children": [] },
+        { "id": "files-process", "text": "进程变量优先级最高", "children": [] }
+      ]
+    },
+    {
+      "id": "safety",
+      "text": "安全边界",
+      "children": [
+        { "id": "safety-prefix", "text": "只有 VITE_ 进客户端", "children": [] },
+        { "id": "safety-secret", "text": "密钥留在服务端", "children": [] },
+        { "id": "safety-envprefix", "text": "envPrefix 谨慎修改", "children": [] }
+      ]
+    }
+  ]
+}

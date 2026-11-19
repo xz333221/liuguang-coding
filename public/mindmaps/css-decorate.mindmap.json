@@ -1,0 +1,91 @@
+{
+  "id": "root",
+  "text": "背景、边框、圆角与阴影",
+  "children": [
+    {
+      "id": "background",
+      "text": "背景",
+      "children": [
+        {
+          "id": "background-parts",
+          "text": "颜色、图片、位置、尺寸、重复",
+          "children": []
+        },
+        {
+          "id": "background-gradient",
+          "text": "线性与径向渐变",
+          "children": []
+        },
+        {
+          "id": "background-multi",
+          "text": "多层背景按层匹配参数",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "border",
+      "text": "边框与圆角",
+      "children": [
+        {
+          "id": "border-style",
+          "text": "宽度、样式、颜色三部分",
+          "children": []
+        },
+        {
+          "id": "border-radius",
+          "text": "border-radius 与百分比",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "focus",
+      "text": "outline 与焦点",
+      "children": [
+        {
+          "id": "focus-visible",
+          "text": ":focus-visible 键盘焦点",
+          "children": []
+        },
+        {
+          "id": "focus-offset",
+          "text": "outline-offset 留出间隙",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "shadow",
+      "text": "阴影与滤镜",
+      "children": [
+        {
+          "id": "shadow-box",
+          "text": "box-shadow 多层与 inset",
+          "children": []
+        },
+        {
+          "id": "shadow-filter",
+          "text": "filter 与 backdrop-filter",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "clip",
+      "text": "裁剪与示例",
+      "children": [
+        {
+          "id": "clip-overflow",
+          "text": "overflow 配合圆角裁剪",
+          "children": []
+        },
+        {
+          "id": "clip-card",
+          "text": "卡片与按钮样式",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

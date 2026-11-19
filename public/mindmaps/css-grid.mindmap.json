@@ -1,0 +1,116 @@
+{
+  "id": "root",
+  "text": "Grid：轨道、区域与自动布局",
+  "children": [
+    {
+      "id": "track",
+      "text": "轨道定义",
+      "children": [
+        {
+          "id": "track-col",
+          "text": "grid-template-columns",
+          "children": []
+        },
+        {
+          "id": "track-row",
+          "text": "grid-template-rows",
+          "children": []
+        },
+        {
+          "id": "track-fr",
+          "text": "fr 分配剩余空间",
+          "children": []
+        },
+        {
+          "id": "track-minmax",
+          "text": "minmax(0, 1fr) 防止撑破",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "functions",
+      "text": "重复与自适应",
+      "children": [
+        {
+          "id": "functions-repeat",
+          "text": "repeat() 简化轨道",
+          "children": []
+        },
+        {
+          "id": "functions-autofit",
+          "text": "auto-fit 折叠空轨道",
+          "children": []
+        },
+        {
+          "id": "functions-gap",
+          "text": "gap 只作用于轨道之间",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "area",
+      "text": "区域与定位",
+      "children": [
+        {
+          "id": "area-template",
+          "text": "grid-template-areas 画版面",
+          "children": []
+        },
+        {
+          "id": "area-name",
+          "text": "grid-area 引用区域名",
+          "children": []
+        },
+        {
+          "id": "area-line",
+          "text": "网格线编号与 span",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "auto",
+      "text": "自动放置",
+      "children": [
+        {
+          "id": "auto-flow",
+          "text": "grid-auto-flow 控制方向",
+          "children": []
+        },
+        {
+          "id": "auto-rows",
+          "text": "grid-auto-rows 定义隐式轨道",
+          "children": []
+        },
+        {
+          "id": "auto-dense",
+          "text": "dense 回填空洞并改变顺序",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "choose",
+      "text": "Grid 与 Flex 选型",
+      "children": [
+        {
+          "id": "choose-grid",
+          "text": "行和列同时控制用 Grid",
+          "children": []
+        },
+        {
+          "id": "choose-flex",
+          "text": "单行单列分配用 Flex",
+          "children": []
+        },
+        {
+          "id": "choose-nest",
+          "text": "页面骨架 Grid,组件内部 Flex",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

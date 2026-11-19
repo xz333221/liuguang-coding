@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "错误处理与调试",
+  "children": [
+    {
+      "id": "types",
+      "text": "内置类型",
+      "children": [
+        { "id": "types-type", "text": "取属性失败", "children": [] },
+        { "id": "types-range", "text": "RangeError 越界", "children": [] },
+        { "id": "types-syntax", "text": "SyntaxError 解析失败", "children": [] }
+      ]
+    },
+    {
+      "id": "catch",
+      "text": "抛出与捕获",
+      "children": [
+        { "id": "catch-error", "text": "抛 Error 实例", "children": [] },
+        { "id": "catch-known", "text": "只处理认识的错误", "children": [] },
+        { "id": "catch-rethrow", "text": "其余重新抛", "children": [] }
+      ]
+    },
+    {
+      "id": "finally",
+      "text": "finally 的坑",
+      "children": [
+        { "id": "finally-always", "text": "总是执行", "children": [] },
+        { "id": "finally-return", "text": "return 覆盖返回值", "children": [] },
+        { "id": "finally-swallow", "text": "还能吞掉异常", "children": [] }
+      ]
+    },
+    {
+      "id": "custom",
+      "text": "自定义错误",
+      "children": [
+        { "id": "custom-extends", "text": "extends Error", "children": [] },
+        { "id": "custom-name", "text": "改 name", "children": [] },
+        { "id": "custom-cause", "text": "cause 保留原始", "children": [] }
+      ]
+    },
+    {
+      "id": "async",
+      "text": "异步与定位",
+      "children": [
+        { "id": "async-boundary", "text": "异步边界切断 try", "children": [] },
+        { "id": "async-aggregate", "text": "装多个子错误", "children": [] },
+        { "id": "async-stack", "text": "先看 stack 第一行", "children": [] },
+        { "id": "async-breakpoint", "text": "debugger 与 inspect", "children": [] }
+      ]
+    }
+  ]
+}

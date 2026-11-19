@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "transform、3D 与合成",
+  "children": [
+    {
+      "id": "func",
+      "text": "基本函数",
+      "children": [
+        { "id": "func-move", "text": "translate 与 scale", "children": [] },
+        { "id": "func-rotate", "text": "rotate 与 skew", "children": [] },
+        { "id": "func-percent", "text": "百分比参照元素自身", "children": [] }
+      ]
+    },
+    {
+      "id": "order",
+      "text": "原点与顺序",
+      "children": [
+        { "id": "order-origin", "text": "transform-origin 控制围绕点", "children": [] },
+        { "id": "order-right", "text": "最右函数先作用", "children": [] },
+        { "id": "order-diff", "text": "顺序不同落点不同", "children": [] }
+      ]
+    },
+    {
+      "id": "three-d",
+      "text": "3D 变换",
+      "children": [
+        { "id": "three-d-perspective", "text": "perspective 透视距离", "children": [] },
+        { "id": "three-d-style", "text": "preserve-3d 保留三维", "children": [] },
+        { "id": "three-d-backface", "text": "backface-visibility 隐藏背面", "children": [] }
+      ]
+    },
+    {
+      "id": "compositing",
+      "text": "合成层",
+      "children": [
+        { "id": "compositing-will", "text": "will-change 提前提示", "children": [] },
+        { "id": "compositing-temp", "text": "动画前后临时启用", "children": [] },
+        { "id": "compositing-cost", "text": "长期开启占用内存", "children": [] }
+      ]
+    },
+    {
+      "id": "containing",
+      "text": "包含块副作用",
+      "children": [
+        { "id": "containing-fixed", "text": "影响 fixed 后代定位", "children": [] },
+        { "id": "containing-stack", "text": "创建层叠上下文", "children": [] }
+      ]
+    }
+  ]
+}

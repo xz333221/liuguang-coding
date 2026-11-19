@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "对象、原型链与 class",
+  "children": [
+    {
+      "id": "access",
+      "text": "访问属性",
+      "children": [
+        { "id": "access-dot", "text": "点与方括号", "children": [] },
+        { "id": "access-optional", "text": "可选链短路", "children": [] },
+        { "id": "access-nullish", "text": "?? 保留 0 与空串", "children": [] }
+      ]
+    },
+    {
+      "id": "own",
+      "text": "属性归属",
+      "children": [
+        { "id": "own-in", "text": "in 查原型链", "children": [] },
+        { "id": "own-hasown", "text": "hasOwn 只看自身", "children": [] },
+        { "id": "own-keys", "text": "keys 只列可枚举", "children": [] }
+      ]
+    },
+    {
+      "id": "chain",
+      "text": "原型链",
+      "children": [
+        { "id": "chain-lookup", "text": "找不到就向上找", "children": [] },
+        { "id": "chain-end", "text": "终点是 null", "children": [] },
+        { "id": "chain-instanceof", "text": "instanceof 沿链查", "children": [] }
+      ]
+    },
+    {
+      "id": "new",
+      "text": "new 与 class",
+      "children": [
+        { "id": "new-steps", "text": "建对象、连原型、执行", "children": [] },
+        { "id": "new-return", "text": "返回对象则顶掉新对象", "children": [] },
+        { "id": "new-class", "text": "方法挂在 prototype", "children": [] },
+        { "id": "new-private", "text": "# 字段是真私有", "children": [] }
+      ]
+    },
+    {
+      "id": "pollution",
+      "text": "原型污染",
+      "children": [
+        { "id": "pollution-prototype", "text": "不改 Object.prototype", "children": [] },
+        { "id": "pollution-dict", "text": "字典用 create(null)", "children": [] }
+      ]
+    }
+  ]
+}

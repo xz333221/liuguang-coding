@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "定时器、微任务与渲染时机",
+  "children": [
+    {
+      "id": "timer",
+      "text": "定时器语义",
+      "children": [
+        { "id": "timer-atleast", "text": "至少等待，不承诺准时", "children": [] },
+        { "id": "timer-floor", "text": "0 延迟实际约 1ms", "children": [] },
+        { "id": "timer-nested", "text": "嵌套超 5 层强制 4ms", "children": [] }
+      ]
+    },
+    {
+      "id": "delay",
+      "text": "为什么晚到",
+      "children": [
+        { "id": "delay-busy", "text": "主线程被长任务占住", "children": [] },
+        { "id": "delay-split", "text": "拆成分片执行", "children": [] },
+        { "id": "delay-hidden", "text": "后台标签页被节流", "children": [] }
+      ]
+    },
+    {
+      "id": "render",
+      "text": "渲染时机",
+      "children": [
+        { "id": "render-after", "text": "微任务清空之后", "children": [] },
+        { "id": "render-frame", "text": "按帧决定是否渲染", "children": [] },
+        { "id": "render-raf", "text": "rAF 在样式计算之前", "children": [] }
+      ]
+    },
+    {
+      "id": "animation",
+      "text": "帧与动画",
+      "children": [
+        { "id": "animation-raf", "text": "对齐刷新率、后台暂停", "children": [] },
+        { "id": "animation-transform", "text": "位移用 transform", "children": [] },
+        { "id": "animation-compare", "text": "五种调度方式对比", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfalls",
+      "text": "常见坑",
+      "children": [
+        { "id": "pitfalls-drift", "text": "setInterval 节奏漂移", "children": [] },
+        { "id": "pitfalls-recursive", "text": "递归 setTimeout 修法", "children": [] },
+        { "id": "pitfalls-leak", "text": "卸载时忘记清理", "children": [] }
+      ]
+    }
+  ]
+}

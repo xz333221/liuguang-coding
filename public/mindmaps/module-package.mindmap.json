@@ -1,0 +1,51 @@
+{
+  "id": "root",
+  "text": "包管理与语义化版本",
+  "children": [
+    {
+      "id": "manifest",
+      "text": "依赖字段",
+      "children": [
+        { "id": "manifest-deps", "text": "dependencies 进产物", "children": [] },
+        { "id": "manifest-dev", "text": "devDependencies 只开发用", "children": [] },
+        { "id": "manifest-peer", "text": "peerDependencies 要宿主提供", "children": [] }
+      ]
+    },
+    {
+      "id": "semver",
+      "text": "语义化版本",
+      "children": [
+        { "id": "semver-major", "text": "MAJOR 含破坏性改动", "children": [] },
+        { "id": "semver-minor", "text": "MINOR 兼容地加功能", "children": [] },
+        { "id": "semver-patch", "text": "PATCH 兼容地修 bug", "children": [] }
+      ]
+    },
+    {
+      "id": "range",
+      "text": "范围与解析",
+      "children": [
+        { "id": "range-caret", "text": "^ 允许 MINOR 与 PATCH", "children": [] },
+        { "id": "range-tilde", "text": "~ 只允许 PATCH", "children": [] },
+        { "id": "range-zero", "text": "0.x 的区间更严格", "children": [] }
+      ]
+    },
+    {
+      "id": "lock",
+      "text": "锁文件",
+      "children": [
+        { "id": "lock-tree", "text": "记录完整依赖树", "children": [] },
+        { "id": "lock-ci", "text": "npm ci 只按锁安装", "children": [] },
+        { "id": "lock-mismatch", "text": "不一致时直接失败", "children": [] }
+      ]
+    },
+    {
+      "id": "team",
+      "text": "多人协作",
+      "children": [
+        { "id": "team-ls", "text": "npm ls 查重复依赖", "children": [] },
+        { "id": "team-dedupe", "text": "dedupe 只合并兼容版本", "children": [] },
+        { "id": "team-workspaces", "text": "workspaces 单仓多包", "children": [] }
+      ]
+    }
+  ]
+}

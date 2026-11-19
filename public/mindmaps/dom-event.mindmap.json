@@ -1,0 +1,111 @@
+{
+  "id": "root",
+  "text": "事件模型：捕获、冒泡与事件委托",
+  "children": [
+    {
+      "id": "flow",
+      "text": "事件流三阶段",
+      "children": [
+        {
+          "id": "flow-capture",
+          "text": "捕获:window 向下到目标父节点",
+          "children": []
+        },
+        {
+          "id": "flow-target",
+          "text": "目标阶段:event.target",
+          "children": []
+        },
+        {
+          "id": "flow-bubble",
+          "text": "冒泡:目标向上回 window",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "listen",
+      "text": "注册监听",
+      "children": [
+        {
+          "id": "listen-capture",
+          "text": "第三个参数 capture 决定阶段",
+          "children": []
+        },
+        {
+          "id": "listen-options",
+          "text": "once、passive、signal",
+          "children": []
+        },
+        {
+          "id": "listen-remove",
+          "text": "移除需同一个函数引用",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "control",
+      "text": "控制事件",
+      "children": [
+        {
+          "id": "control-target",
+          "text": "target 与 currentTarget",
+          "children": []
+        },
+        {
+          "id": "control-stop",
+          "text": "stopPropagation 阻止传播",
+          "children": []
+        },
+        {
+          "id": "control-prevent",
+          "text": "preventDefault 取消默认行为",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "delegate",
+      "text": "事件委托",
+      "children": [
+        {
+          "id": "delegate-idea",
+          "text": "祖先统一处理子元素事件",
+          "children": []
+        },
+        {
+          "id": "delegate-closest",
+          "text": "closest 向上定位来源",
+          "children": []
+        },
+        {
+          "id": "delegate-dynamic",
+          "text": "新增节点自动生效",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "common",
+      "text": "常用事件",
+      "children": [
+        {
+          "id": "common-ui",
+          "text": "click、input、submit",
+          "children": []
+        },
+        {
+          "id": "common-key",
+          "text": "keydown 与快捷键",
+          "children": []
+        },
+        {
+          "id": "common-scroll",
+          "text": "scroll 配 passive",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

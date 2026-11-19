@@ -1,0 +1,127 @@
+{
+  "id": "root",
+  "text": "表格与表单",
+  "children": [
+    {
+      "id": "table",
+      "text": "表格结构",
+      "children": [
+        {
+          "id": "table-caption",
+          "text": "caption 给表格命名",
+          "children": []
+        },
+        {
+          "id": "table-sections",
+          "text": "thead / tbody / tfoot",
+          "children": []
+        },
+        {
+          "id": "table-scope",
+          "text": "th 的 scope 标明关联",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "text": "表单与提交",
+      "children": [
+        {
+          "id": "form-action",
+          "text": "action 与 method",
+          "children": []
+        },
+        {
+          "id": "form-get-post",
+          "text": "get 与 post 的取舍",
+          "children": []
+        },
+        {
+          "id": "form-name",
+          "text": "name 决定提交的键",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "label",
+      "text": "label 与 input",
+      "children": [
+        {
+          "id": "label-for",
+          "text": "for 关联 id",
+          "children": []
+        },
+        {
+          "id": "label-wrap",
+          "text": "包裹写法",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "input",
+      "text": "input 类型",
+      "children": [
+        {
+          "id": "input-text",
+          "text": "text / email / password / number",
+          "children": []
+        },
+        {
+          "id": "input-choice",
+          "text": "checkbox 与 radio",
+          "children": []
+        },
+        {
+          "id": "input-other",
+          "text": "file 与 date",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "text": "其他控件",
+      "children": [
+        {
+          "id": "controls-select",
+          "text": "select 与 option",
+          "children": []
+        },
+        {
+          "id": "controls-textarea",
+          "text": "textarea 多行文本",
+          "children": []
+        },
+        {
+          "id": "controls-button",
+          "text": "button 的 type",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "validation",
+      "text": "约束校验",
+      "children": [
+        {
+          "id": "validation-attrs",
+          "text": "required / pattern / min / max",
+          "children": []
+        },
+        {
+          "id": "validation-native",
+          "text": "浏览器提交前检查",
+          "children": []
+        },
+        {
+          "id": "validation-server",
+          "text": "服务端仍须复核",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

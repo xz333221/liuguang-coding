@@ -1,0 +1,96 @@
+{
+  "id": "root",
+  "text": "字体、行高与文本排版",
+  "children": [
+    {
+      "id": "font",
+      "text": "字体",
+      "children": [
+        {
+          "id": "font-family",
+          "text": "font-family 回退链与通用族",
+          "children": []
+        },
+        {
+          "id": "font-face",
+          "text": "@font-face 与 font-display",
+          "children": []
+        },
+        {
+          "id": "font-weight",
+          "text": "字重档位与可变字体",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "size",
+      "text": "字号与行高",
+      "children": [
+        {
+          "id": "size-rem",
+          "text": "font-size 用 rem",
+          "children": []
+        },
+        {
+          "id": "size-lineheight",
+          "text": "line-height 无单位值",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "spacing",
+      "text": "字距与对齐",
+      "children": [
+        {
+          "id": "spacing-letter",
+          "text": "letter-spacing",
+          "children": []
+        },
+        {
+          "id": "spacing-align",
+          "text": "text-align 与 text-indent",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "wrap",
+      "text": "空白与换行",
+      "children": [
+        {
+          "id": "wrap-white-space",
+          "text": "white-space 各取值",
+          "children": []
+        },
+        {
+          "id": "wrap-ellipsis",
+          "text": "单行省略号三属性",
+          "children": []
+        },
+        {
+          "id": "wrap-clamp",
+          "text": "多行截断 -webkit-line-clamp",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "readability",
+      "text": "可读性",
+      "children": [
+        {
+          "id": "readability-width",
+          "text": "行宽 45 到 75 字符",
+          "children": []
+        },
+        {
+          "id": "readability-height",
+          "text": "正文行高 1.5 到 1.7",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

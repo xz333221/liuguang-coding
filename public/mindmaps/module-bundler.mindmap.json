@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "构建工具：Vite、Rollup 与 esbuild",
+  "children": [
+    {
+      "id": "dev",
+      "text": "开发期",
+      "children": [
+        { "id": "dev-esm", "text": "原生 ESM 按需编译", "children": [] },
+        { "id": "dev-prebundle", "text": "esbuild 预构建依赖", "children": [] },
+        { "id": "dev-fast", "text": "启动不扫描全量代码", "children": [] }
+      ]
+    },
+    {
+      "id": "prebundle",
+      "text": "依赖预构建",
+      "children": [
+        { "id": "prebundle-cjs", "text": "CommonJS 转成 ESM", "children": [] },
+        { "id": "prebundle-merge", "text": "合并包内多个文件", "children": [] },
+        { "id": "prebundle-config", "text": "include 与 exclude", "children": [] },
+        { "id": "prebundle-reload", "text": "新依赖触发整页刷新", "children": [] }
+      ]
+    },
+    {
+      "id": "build",
+      "text": "生产构建",
+      "children": [
+        { "id": "build-graph", "text": "Rollup 收集依赖图", "children": [] },
+        { "id": "build-shake", "text": "tree-shaking 与分包", "children": [] },
+        { "id": "build-minify", "text": "esbuild 负责压缩", "children": [] }
+      ]
+    },
+    {
+      "id": "config",
+      "text": "配置要点",
+      "children": [
+        { "id": "config-target", "text": "build.target 控制降级", "children": [] },
+        { "id": "config-hash", "text": "产物哈希与缓存", "children": [] },
+        { "id": "config-force", "text": "force 重建依赖缓存", "children": [] }
+      ]
+    },
+    {
+      "id": "interop",
+      "text": "模块互操作",
+      "children": [
+        { "id": "interop-named", "text": "CJS 命名导出可能缺失", "children": [] },
+        { "id": "interop-exports", "text": "exports 限制子路径", "children": [] },
+        { "id": "interop-dual", "text": "双重包分裂状态", "children": [] }
+      ]
+    }
+  ]
+}

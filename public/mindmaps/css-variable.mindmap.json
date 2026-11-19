@@ -1,0 +1,42 @@
+{
+  "id": "root",
+  "text": "自定义属性与主题切换",
+  "children": [
+    {
+      "id": "declare",
+      "text": "声明与读取",
+      "children": [
+        { "id": "declare-def", "text": "--name: value 定义", "children": [] },
+        { "id": "declare-var", "text": "var() 读取,名字区分大小写", "children": [] },
+        { "id": "declare-fallback", "text": "回退值可嵌套", "children": [] }
+      ]
+    },
+    {
+      "id": "scope",
+      "text": "作用域与继承",
+      "children": [
+        { "id": "scope-inherit", "text": "沿 DOM 树继承", "children": [] },
+        { "id": "scope-root", "text": ":root 放全局令牌", "children": [] },
+        { "id": "scope-local", "text": "后代重声明只影响子树", "children": [] }
+      ]
+    },
+    {
+      "id": "theme",
+      "text": "主题切换",
+      "children": [
+        { "id": "theme-data", "text": "data-theme 显式选择", "children": [] },
+        { "id": "theme-media", "text": "prefers-color-scheme 跟随系统", "children": [] },
+        { "id": "theme-scheme", "text": "color-scheme 控制控件配色", "children": [] }
+      ]
+    },
+    {
+      "id": "runtime",
+      "text": "运行时解析",
+      "children": [
+        { "id": "runtime-resolve", "text": "计算值阶段替换", "children": [] },
+        { "id": "runtime-js", "text": "setProperty 与 getComputedStyle", "children": [] },
+        { "id": "runtime-property", "text": "@property 注册类型", "children": [] }
+      ]
+    }
+  ]
+}

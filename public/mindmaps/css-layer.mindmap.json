@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "@layer、@scope 与样式隔离",
+  "children": [
+    {
+      "id": "order",
+      "text": "层顺序",
+      "children": [
+        { "id": "order-declare", "text": "先声明顺序再写规则", "children": [] },
+        { "id": "order-later", "text": "后层覆盖前层", "children": [] },
+        { "id": "order-nested", "text": "子层只在父层内排序", "children": [] }
+      ]
+    },
+    {
+      "id": "priority",
+      "text": "优先级细则",
+      "children": [
+        { "id": "priority-unlayered", "text": "未分层普通声明最强", "children": [] },
+        { "id": "priority-important", "text": "!important 让层顺序反转", "children": [] },
+        { "id": "priority-revert", "text": "revert-layer 回退到前一层", "children": [] }
+      ]
+    },
+    {
+      "id": "vendor",
+      "text": "第三方样式",
+      "children": [
+        { "id": "vendor-import", "text": "@import ... layer()", "children": [] },
+        { "id": "vendor-plan", "text": "vendor 层排在前面", "children": [] }
+      ]
+    },
+    {
+      "id": "scope",
+      "text": "@scope",
+      "children": [
+        { "id": "scope-boundary", "text": "上下边界限制匹配范围", "children": [] },
+        { "id": "scope-weight", "text": "不增加选择器权重", "children": [] },
+        { "id": "scope-support", "text": "按浏览器支持渐进增强", "children": [] }
+      ]
+    },
+    {
+      "id": "shadow",
+      "text": "隔离层次",
+      "children": [
+        { "id": "shadow-dom", "text": "Shadow DOM 浏览器级封装", "children": [] },
+        { "id": "shadow-channel", "text": "可继承属性与 ::part 穿透", "children": [] }
+      ]
+    }
+  ]
+}

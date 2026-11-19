@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "调用栈、任务队列与事件循环",
+  "children": [
+    {
+      "id": "stack",
+      "text": "调用栈",
+      "children": [
+        { "id": "stack-frame", "text": "调用压帧、返回弹出", "children": [] },
+        { "id": "stack-empty", "text": "栈空才取下一个任务", "children": [] },
+        { "id": "stack-error", "text": "栈外的错接不住", "children": [] }
+      ]
+    },
+    {
+      "id": "queues",
+      "text": "两类队列",
+      "children": [
+        { "id": "queues-task", "text": "宏任务：定时器、I/O、事件", "children": [] },
+        { "id": "queues-micro", "text": "微任务：then、queueMicrotask", "children": [] },
+        { "id": "queues-order", "text": "宏任务后清空微任务", "children": [] }
+      ]
+    },
+    {
+      "id": "loop",
+      "text": "一轮循环",
+      "children": [
+        { "id": "loop-run", "text": "运行至完成不被打断", "children": [] },
+        { "id": "loop-render", "text": "清空微任务后才可能渲染", "children": [] },
+        { "id": "loop-paint", "text": "一帧内多次改样式只算一次", "children": [] }
+      ]
+    },
+    {
+      "id": "starve",
+      "text": "微任务饥饿",
+      "children": [
+        { "id": "starve-cause", "text": "不断产生新微任务", "children": [] },
+        { "id": "starve-sign", "text": "页面卡死且不报错", "children": [] },
+        { "id": "starve-find", "text": "Performance 看长任务", "children": [] }
+      ]
+    },
+    {
+      "id": "node",
+      "text": "Node 的差异",
+      "children": [
+        { "id": "node-tick", "text": "nextTick 先于 Promise", "children": [] },
+        { "id": "node-check", "text": "setImmediate 在 check 阶段", "children": [] }
+      ]
+    }
+  ]
+}

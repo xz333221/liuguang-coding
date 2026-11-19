@@ -1,0 +1,59 @@
+{
+  "id": "root",
+  "text": "样式架构：BEM、CSS Modules 与原子化",
+  "children": [
+    {
+      "id": "problems",
+      "text": "核心问题",
+      "children": [
+        { "id": "problems-namespace", "text": "全局命名空间冲突", "children": [] },
+        { "id": "problems-order", "text": "覆盖顺序不可控", "children": [] },
+        { "id": "problems-boundary", "text": "组件间缺少复用边界", "children": [] }
+      ]
+    },
+    {
+      "id": "bem",
+      "text": "BEM",
+      "children": [
+        { "id": "bem-parts", "text": "Block/Element/Modifier", "children": [] },
+        { "id": "bem-flat", "text": "Element 只挂一层", "children": [] },
+        { "id": "bem-modifier", "text": "Modifier 只改外观", "children": [] }
+      ]
+    },
+    {
+      "id": "modules",
+      "text": "CSS Modules",
+      "children": [
+        { "id": "modules-local", "text": "构建期生成局部类名", "children": [] },
+        { "id": "modules-compose", "text": "composes 组合类名", "children": [] },
+        { "id": "modules-global", "text": ":global 声明全局类", "children": [] }
+      ]
+    },
+    {
+      "id": "utility",
+      "text": "原子化",
+      "children": [
+        { "id": "utility-fixed", "text": "固定工具类组合", "children": [] },
+        { "id": "utility-markup", "text": "标签变长,复杂处封装组件", "children": [] },
+        { "id": "utility-dynamic", "text": "动态类名须为完整字符串", "children": [] }
+      ]
+    },
+    {
+      "id": "organize",
+      "text": "组织方式",
+      "children": [
+        { "id": "organize-token", "text": "设计令牌集中取值", "children": [] },
+        { "id": "organize-layer", "text": "@layer 固定覆盖顺序", "children": [] },
+        { "id": "organize-dir", "text": "令牌、重置、基础、组件、工具类", "children": [] }
+      ]
+    },
+    {
+      "id": "css-in-js",
+      "text": "CSS-in-JS",
+      "children": [
+        { "id": "css-in-js-runtime", "text": "运行期生成与注入开销", "children": [] },
+        { "id": "css-in-js-build", "text": "构建期抽取为零运行期", "children": [] }
+      ]
+    }
+  ]
+}

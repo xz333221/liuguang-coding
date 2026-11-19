@@ -1,0 +1,42 @@
+{
+  "id": "root",
+  "text": "规范与质量：ESLint、Prettier 与 Git 钩子",
+  "children": [
+    {
+      "id": "duty",
+      "text": "工具分工",
+      "children": [
+        { "id": "duty-eslint", "text": "ESLint 查可疑代码", "children": [] },
+        { "id": "duty-prettier", "text": "Prettier 只重排格式", "children": [] },
+        { "id": "duty-conflict", "text": "config-prettier 关冲突", "children": [] }
+      ]
+    },
+    {
+      "id": "flat",
+      "text": "flat config",
+      "children": [
+        { "id": "flat-file", "text": "eslint.config.js 导出数组", "children": [] },
+        { "id": "flat-files", "text": "files 按类型生效", "children": [] },
+        { "id": "flat-ignores", "text": "ignores 写在配置里", "children": [] }
+      ]
+    },
+    {
+      "id": "hook",
+      "text": "提交钩子",
+      "children": [
+        { "id": "hook-staged", "text": "lint-staged 只看暂存", "children": [] },
+        { "id": "hook-install", "text": "simple-git-hooks 或 husky", "children": [] },
+        { "id": "hook-restage", "text": "修完自动重新暂存", "children": [] }
+      ]
+    },
+    {
+      "id": "ci",
+      "text": "CI 兜底",
+      "children": [
+        { "id": "ci-warnings", "text": "max-warnings 设为 0", "children": [] },
+        { "id": "ci-check", "text": "prettier --check 只比对", "children": [] },
+        { "id": "ci-skip", "text": "钩子可被 --no-verify 跳过", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "同源与跨域",
+  "children": [
+    {
+      "id": "origin",
+      "text": "源的判定",
+      "children": [
+        { "id": "origin-three", "text": "协议 主机 端口", "children": [] },
+        { "id": "origin-path", "text": "路径不参与", "children": [] },
+        { "id": "origin-site", "text": "站点与源不同", "children": [] }
+      ]
+    },
+    {
+      "id": "policy",
+      "text": "同源策略",
+      "children": [
+        { "id": "policy-read", "text": "限制读取不拦发送", "children": [] },
+        { "id": "policy-store", "text": "存储按源隔离", "children": [] },
+        { "id": "policy-canvas", "text": "跨源画布被污染", "children": [] }
+      ]
+    },
+    {
+      "id": "cors",
+      "text": "CORS",
+      "children": [
+        { "id": "cors-simple", "text": "简单请求直接发", "children": [] },
+        { "id": "cors-preflight", "text": "OPTIONS 预检", "children": [] },
+        { "id": "cors-credential", "text": "凭证不能用星号", "children": [] },
+        { "id": "cors-expose", "text": "自定义头要暴露", "children": [] }
+      ]
+    },
+    {
+      "id": "iframe",
+      "text": "iframe 沙箱",
+      "children": [
+        { "id": "iframe-token", "text": "token 逐项放开", "children": [] },
+        { "id": "iframe-escape", "text": "脚本加同源会逃逸", "children": [] },
+        { "id": "iframe-opaque", "text": "不透明源无存储", "children": [] }
+      ]
+    },
+    {
+      "id": "channel",
+      "text": "跨源通信",
+      "children": [
+        { "id": "chan-check", "text": "校验来源与窗口", "children": [] },
+        { "id": "chan-target", "text": "目标源不写星号", "children": [] },
+        { "id": "chan-isolate", "text": "隔离才能共享内存", "children": [] }
+      ]
+    }
+  ]
+}

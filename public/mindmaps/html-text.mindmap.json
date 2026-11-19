@@ -1,0 +1,127 @@
+{
+  "id": "root",
+  "text": "内容标签：标题、段落、列表、链接与图片",
+  "children": [
+    {
+      "id": "heading",
+      "text": "标题",
+      "children": [
+        {
+          "id": "heading-level",
+          "text": "h1 到 h6 表示层级",
+          "children": []
+        },
+        {
+          "id": "heading-rule",
+          "text": "一页一个 h1,不跳级",
+          "children": []
+        },
+        {
+          "id": "heading-style",
+          "text": "字号交给 CSS",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "paragraph",
+      "text": "段落与换行",
+      "children": [
+        {
+          "id": "paragraph-p",
+          "text": "p 表示段落",
+          "children": []
+        },
+        {
+          "id": "paragraph-br",
+          "text": "br 只用于段内换行",
+          "children": []
+        },
+        {
+          "id": "paragraph-space",
+          "text": "连续空白折叠",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "list",
+      "text": "列表",
+      "children": [
+        {
+          "id": "list-ul-ol",
+          "text": "ul 与 ol",
+          "children": []
+        },
+        {
+          "id": "list-dl",
+          "text": "dl / dt / dd",
+          "children": []
+        },
+        {
+          "id": "list-nest",
+          "text": "嵌套列表放在 li 内",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "emphasis",
+      "text": "强调",
+      "children": [
+        {
+          "id": "emphasis-strong-em",
+          "text": "strong 与 em 带语义",
+          "children": []
+        },
+        {
+          "id": "emphasis-b-i",
+          "text": "b 与 i 只改字形",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "link-image",
+      "text": "链接与图片",
+      "children": [
+        {
+          "id": "link-href",
+          "text": "href 与页内锚点",
+          "children": []
+        },
+        {
+          "id": "link-target",
+          "text": "target=\"_blank\" 配 rel=\"noopener\"",
+          "children": []
+        },
+        {
+          "id": "image-attrs",
+          "text": "src、alt 与 width / height",
+          "children": []
+        },
+        {
+          "id": "image-lazy",
+          "text": "loading=\"lazy\"",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "path-entity",
+      "text": "路径与实体",
+      "children": [
+        {
+          "id": "path-types",
+          "text": "相对、站点绝对与完整 URL",
+          "children": []
+        },
+        {
+          "id": "entity-chars",
+          "text": "保留字符用实体显示",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

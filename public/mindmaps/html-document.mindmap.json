@@ -1,0 +1,106 @@
+{
+  "id": "root",
+  "text": "文档结构：doctype、head 与 body",
+  "children": [
+    {
+      "id": "doctype",
+      "text": "doctype",
+      "children": [
+        {
+          "id": "doctype-mode",
+          "text": "标准模式与怪异模式",
+          "children": []
+        },
+        {
+          "id": "doctype-write",
+          "text": "写法与放置位置",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "parts",
+      "text": "三个顶层部分",
+      "children": [
+        {
+          "id": "parts-html",
+          "text": "html 根元素与 lang",
+          "children": []
+        },
+        {
+          "id": "parts-head",
+          "text": "head:元信息容器",
+          "children": []
+        },
+        {
+          "id": "parts-body",
+          "text": "body:可见内容",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "head",
+      "text": "head 常见声明",
+      "children": [
+        {
+          "id": "head-title",
+          "text": "title 页面标题",
+          "children": []
+        },
+        {
+          "id": "head-meta",
+          "text": "charset 与 viewport",
+          "children": []
+        },
+        {
+          "id": "head-resource",
+          "text": "link 与 script",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "syntax",
+      "text": "标签与属性语法",
+      "children": [
+        {
+          "id": "syntax-attr",
+          "text": "属性名与属性值",
+          "children": []
+        },
+        {
+          "id": "syntax-boolean",
+          "text": "布尔属性只靠出现",
+          "children": []
+        },
+        {
+          "id": "syntax-nest",
+          "text": "嵌套与闭合规则",
+          "children": []
+        },
+        {
+          "id": "syntax-void",
+          "text": "空元素与注释",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "skeleton",
+      "text": "完整骨架",
+      "children": [
+        {
+          "id": "skeleton-code",
+          "text": "doctype 加 head 与 body",
+          "children": []
+        },
+        {
+          "id": "skeleton-result",
+          "text": "浏览器中的预期显示",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

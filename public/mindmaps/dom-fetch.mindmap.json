@@ -1,0 +1,111 @@
+{
+  "id": "root",
+  "text": "fetch、响应流与上传下载",
+  "children": [
+    {
+      "id": "fail",
+      "text": "失败判定",
+      "children": [
+        {
+          "id": "fail-reject",
+          "text": "只有网络与 CORS 失败才 reject",
+          "children": []
+        },
+        {
+          "id": "fail-ok",
+          "text": "response.ok 判 2xx",
+          "children": []
+        },
+        {
+          "id": "fail-opaque",
+          "text": "no-cors 拿到 opaque 响应",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "request",
+      "text": "请求配置",
+      "children": [
+        {
+          "id": "request-method",
+          "text": "method 与 body 限制",
+          "children": []
+        },
+        {
+          "id": "request-credentials",
+          "text": "跨域带 Cookie 用 include",
+          "children": []
+        },
+        {
+          "id": "request-json",
+          "text": "JSON 要自己序列化与声明",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "stream",
+      "text": "响应流",
+      "children": [
+        {
+          "id": "stream-once",
+          "text": "body 只能读一次",
+          "children": []
+        },
+        {
+          "id": "stream-reader",
+          "text": "getReader 逐块读取",
+          "children": []
+        },
+        {
+          "id": "stream-progress",
+          "text": "进度依赖 Content-Length",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "abort",
+      "text": "取消请求",
+      "children": [
+        {
+          "id": "abort-signal",
+          "text": "AbortSignal 传入 fetch",
+          "children": []
+        },
+        {
+          "id": "abort-error",
+          "text": "AbortError 单独处理",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "transfer",
+      "text": "上传与下载",
+      "children": [
+        {
+          "id": "transfer-upload",
+          "text": "FormData 不设 Content-Type",
+          "children": []
+        },
+        {
+          "id": "transfer-progress",
+          "text": "上传进度只能用 XHR",
+          "children": []
+        },
+        {
+          "id": "transfer-blob",
+          "text": "Blob 加 createObjectURL",
+          "children": []
+        },
+        {
+          "id": "transfer-revoke",
+          "text": "用完要 revokeObjectURL",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

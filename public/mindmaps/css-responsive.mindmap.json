@@ -1,0 +1,106 @@
+{
+  "id": "root",
+  "text": "响应式：媒体查询、移动优先与视口",
+  "children": [
+    {
+      "id": "viewport",
+      "text": "视口基础",
+      "children": [
+        {
+          "id": "viewport-meta",
+          "text": "width=device-width 与初始缩放",
+          "children": []
+        },
+        {
+          "id": "viewport-default",
+          "text": "默认 980px 布局视口导致缩小",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "media",
+      "text": "媒体查询",
+      "children": [
+        {
+          "id": "media-syntax",
+          "text": "min-width 与 max-width",
+          "children": []
+        },
+        {
+          "id": "media-logic",
+          "text": "and、逗号与 not",
+          "children": []
+        },
+        {
+          "id": "media-range",
+          "text": "区间语法",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "mobile",
+      "text": "移动优先",
+      "children": [
+        {
+          "id": "mobile-base",
+          "text": "基础样式面向最小屏幕",
+          "children": []
+        },
+        {
+          "id": "mobile-enhance",
+          "text": "min-width 逐级增强",
+          "children": []
+        },
+        {
+          "id": "mobile-breakpoint",
+          "text": "断点按内容断裂点选择",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "fluid",
+      "text": "流式尺寸",
+      "children": [
+        {
+          "id": "fluid-fr",
+          "text": "fr、百分比与 minmax",
+          "children": []
+        },
+        {
+          "id": "fluid-clamp",
+          "text": "clamp() 连续插值",
+          "children": []
+        },
+        {
+          "id": "fluid-image",
+          "text": "图片 max-width: 100%",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "interaction",
+      "text": "交互与检测",
+      "children": [
+        {
+          "id": "interaction-touch",
+          "text": "触控目标不小于 44×44",
+          "children": []
+        },
+        {
+          "id": "interaction-pointer",
+          "text": "pointer 与 hover 能力查询",
+          "children": []
+        },
+        {
+          "id": "interaction-ua",
+          "text": "不按设备型号写分支",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

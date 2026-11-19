@@ -1,0 +1,116 @@
+{
+  "id": "root",
+  "text": "定位、层叠上下文与 z-index",
+  "children": [
+    {
+      "id": "position",
+      "text": "五种定位",
+      "children": [
+        {
+          "id": "position-static",
+          "text": "static 默认不定位",
+          "children": []
+        },
+        {
+          "id": "position-relative",
+          "text": "relative 保留原位置",
+          "children": []
+        },
+        {
+          "id": "position-absolute",
+          "text": "absolute 相对定位祖先",
+          "children": []
+        },
+        {
+          "id": "position-fixed",
+          "text": "fixed 相对视口",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "sticky",
+      "text": "sticky 条件",
+      "children": [
+        {
+          "id": "sticky-threshold",
+          "text": "必须指定 top 等阈值",
+          "children": []
+        },
+        {
+          "id": "sticky-scroll",
+          "text": "需要最近的滚动祖先",
+          "children": []
+        },
+        {
+          "id": "sticky-parent",
+          "text": "父容器高度决定可固定区间",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "containing",
+      "text": "包含块与 inset",
+      "children": [
+        {
+          "id": "containing-block",
+          "text": "包含块是定位参照矩形",
+          "children": []
+        },
+        {
+          "id": "containing-inset",
+          "text": "inset: 0 铺满包含块",
+          "children": []
+        },
+        {
+          "id": "containing-center",
+          "text": "inset: 0 加 margin: auto 居中",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "stacking",
+      "text": "层叠上下文",
+      "children": [
+        {
+          "id": "stacking-create",
+          "text": "transform、opacity、isolation 等会创建",
+          "children": []
+        },
+        {
+          "id": "stacking-scope",
+          "text": "z-index 只在上下文内比较",
+          "children": []
+        },
+        {
+          "id": "stacking-fail",
+          "text": "9999 压不住更高层级的父级",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "zindex",
+      "text": "z-index 生效范围",
+      "children": [
+        {
+          "id": "zindex-positioned",
+          "text": "定位元素参与层叠",
+          "children": []
+        },
+        {
+          "id": "zindex-items",
+          "text": "Flex 与 Grid 子项参与层叠",
+          "children": []
+        },
+        {
+          "id": "zindex-static",
+          "text": "static 元素写 z-index 无效",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

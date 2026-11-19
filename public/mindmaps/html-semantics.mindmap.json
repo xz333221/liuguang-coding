@@ -1,0 +1,137 @@
+{
+  "id": "root",
+  "text": "语义化：landmark、alt 与可访问名称",
+  "children": [
+    {
+      "id": "benefit",
+      "text": "语义化的收益",
+      "children": [
+        {
+          "id": "benefit-read",
+          "text": "可读性与可维护性",
+          "children": []
+        },
+        {
+          "id": "benefit-seo",
+          "text": "标题层级与链接结构",
+          "children": []
+        },
+        {
+          "id": "benefit-at",
+          "text": "辅助技术生成大纲",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "layout",
+      "text": "整页骨架",
+      "children": [
+        {
+          "id": "layout-header-nav",
+          "text": "header 与 nav",
+          "children": []
+        },
+        {
+          "id": "layout-main",
+          "text": "main 只能有一个",
+          "children": []
+        },
+        {
+          "id": "layout-article-section",
+          "text": "article 与 section",
+          "children": []
+        },
+        {
+          "id": "layout-aside-footer",
+          "text": "aside 与 footer",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "landmark",
+      "text": "landmark 与跳过导航",
+      "children": [
+        {
+          "id": "landmark-map",
+          "text": "结构元素映射为 landmark",
+          "children": []
+        },
+        {
+          "id": "landmark-skip",
+          "text": "跳过导航链接",
+          "children": []
+        },
+        {
+          "id": "landmark-multi-nav",
+          "text": "多个 nav 用 aria-label 区分",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "figure",
+      "text": "figure 与 alt",
+      "children": [
+        {
+          "id": "figure-caption",
+          "text": "figcaption 提供可见说明",
+          "children": []
+        },
+        {
+          "id": "figure-alt",
+          "text": "alt 描述内容与目的",
+          "children": []
+        },
+        {
+          "id": "figure-decorative",
+          "text": "装饰图 alt=\"\"",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "name",
+      "text": "可访问名称",
+      "children": [
+        {
+          "id": "name-visible",
+          "text": "可见文本优先",
+          "children": []
+        },
+        {
+          "id": "name-sources",
+          "text": "label、alt 与 aria-label",
+          "children": []
+        },
+        {
+          "id": "name-button",
+          "text": "按钮用 button",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "mistakes",
+      "text": "常见错误",
+      "children": [
+        {
+          "id": "mistakes-div",
+          "text": "整页滥用 div",
+          "children": []
+        },
+        {
+          "id": "mistakes-main",
+          "text": "多个 main 或 h1 跳级",
+          "children": []
+        },
+        {
+          "id": "mistakes-fake-button",
+          "text": "div 模拟按钮",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

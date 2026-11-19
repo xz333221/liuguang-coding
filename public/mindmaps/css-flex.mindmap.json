@@ -1,0 +1,116 @@
+{
+  "id": "root",
+  "text": "Flexbox：主轴、换行与弹性",
+  "children": [
+    {
+      "id": "axis",
+      "text": "两条轴",
+      "children": [
+        {
+          "id": "axis-main",
+          "text": "主轴由 flex-direction 决定",
+          "children": []
+        },
+        {
+          "id": "axis-cross",
+          "text": "交叉轴与主轴垂直",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "container",
+      "text": "容器属性",
+      "children": [
+        {
+          "id": "container-justify",
+          "text": "justify-content 分配主轴空间",
+          "children": []
+        },
+        {
+          "id": "container-align",
+          "text": "align-items 对齐交叉轴",
+          "children": []
+        },
+        {
+          "id": "container-wrap",
+          "text": "flex-wrap 与 align-content",
+          "children": []
+        },
+        {
+          "id": "container-gap",
+          "text": "gap 控制项目间距",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "item",
+      "text": "项目伸缩",
+      "children": [
+        {
+          "id": "item-grow",
+          "text": "flex-grow 分配剩余空间",
+          "children": []
+        },
+        {
+          "id": "item-shrink",
+          "text": "flex-shrink 控制收缩比例",
+          "children": []
+        },
+        {
+          "id": "item-basis",
+          "text": "flex-basis 优先于 width",
+          "children": []
+        },
+        {
+          "id": "item-shorthand",
+          "text": "flex: 1 等于 1 1 0%",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "layouts",
+      "text": "常见布局",
+      "children": [
+        {
+          "id": "layouts-center",
+          "text": "居中",
+          "children": []
+        },
+        {
+          "id": "layouts-nav",
+          "text": "导航栏与自动推右",
+          "children": []
+        },
+        {
+          "id": "layouts-equal",
+          "text": "等高分栏",
+          "children": []
+        },
+        {
+          "id": "layouts-holy",
+          "text": "圣杯三栏",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "溢出陷阱",
+      "children": [
+        {
+          "id": "pitfall-min",
+          "text": "min-width: auto 阻止收缩",
+          "children": []
+        },
+        {
+          "id": "pitfall-fix",
+          "text": "min-width: 0 配合省略号",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "id": "root",
+  "text": "盒模型与 box-sizing",
+  "children": [
+    {
+      "id": "layers",
+      "text": "盒子的四个区域",
+      "children": [
+        {
+          "id": "layers-content",
+          "text": "content 与 padding",
+          "children": []
+        },
+        {
+          "id": "layers-border",
+          "text": "border 与 margin",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "sizing",
+      "text": "box-sizing",
+      "children": [
+        {
+          "id": "sizing-content",
+          "text": "content-box:width 只算内容",
+          "children": []
+        },
+        {
+          "id": "sizing-border",
+          "text": "border-box:width 含内边距与边框",
+          "children": []
+        },
+        {
+          "id": "sizing-reset",
+          "text": "全局 border-box 重置",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "display",
+      "text": "块级与行内盒",
+      "children": [
+        {
+          "id": "display-block",
+          "text": "块级独占一行、可设宽高",
+          "children": []
+        },
+        {
+          "id": "display-inline",
+          "text": "行内随文字流、宽高不生效",
+          "children": []
+        },
+        {
+          "id": "display-inline-block",
+          "text": "inline-block 兼顾两者",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "collapse",
+      "text": "margin 折叠",
+      "children": [
+        {
+          "id": "collapse-sibling",
+          "text": "相邻兄弟取较大值",
+          "children": []
+        },
+        {
+          "id": "collapse-parent",
+          "text": "父子之间穿出父元素",
+          "children": []
+        },
+        {
+          "id": "collapse-fix",
+          "text": "flow-root 与 Flex/Grid 规避",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "overflow",
+      "text": "尺寸与溢出",
+      "children": [
+        {
+          "id": "overflow-minmax",
+          "text": "min/max 限制尺寸",
+          "children": []
+        },
+        {
+          "id": "overflow-value",
+          "text": "overflow:visible/hidden/scroll/auto",
+          "children": []
+        },
+        {
+          "id": "overflow-devtools",
+          "text": "DevTools 盒模型图",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

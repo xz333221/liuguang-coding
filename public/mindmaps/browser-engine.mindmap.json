@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "V8 与内存",
+  "children": [
+    {
+      "id": "exec",
+      "text": "执行流程",
+      "children": [
+        { "id": "exec-ast", "text": "解析成 AST", "children": [] },
+        { "id": "exec-ignition", "text": "Ignition 跑字节码", "children": [] },
+        { "id": "exec-turbofan", "text": "TurboFan 优化热点", "children": [] },
+        { "id": "exec-shape", "text": "隐藏类稳定才快", "children": [] }
+      ]
+    },
+    {
+      "id": "gen",
+      "text": "堆的分代",
+      "children": [
+        { "id": "gen-young", "text": "新生代跑 Scavenge", "children": [] },
+        { "id": "gen-promote", "text": "存活一轮即晋升", "children": [] },
+        { "id": "gen-old", "text": "老生代标记整理", "children": [] }
+      ]
+    },
+    {
+      "id": "leak",
+      "text": "泄漏成因",
+      "children": [
+        { "id": "leak-global", "text": "意外的全局变量", "children": [] },
+        { "id": "leak-timer", "text": "定时器与监听未清", "children": [] },
+        { "id": "leak-detached", "text": "节点移除仍被引用", "children": [] }
+      ]
+    },
+    {
+      "id": "weak",
+      "text": "弱引用",
+      "children": [
+        { "id": "weak-map", "text": "WeakMap 键不保活", "children": [] },
+        { "id": "weak-ref", "text": "WeakRef 时机不定", "children": [] },
+        { "id": "weak-registry", "text": "回收回调不可依赖", "children": [] }
+      ]
+    },
+    {
+      "id": "tools",
+      "text": "排查工具",
+      "children": [
+        { "id": "tools-snapshot", "text": "三快照对比", "children": [] },
+        { "id": "tools-retainer", "text": "引用链往上找", "children": [] },
+        { "id": "tools-memory", "text": "内存数值非标准", "children": [] }
+      ]
+    }
+  ]
+}

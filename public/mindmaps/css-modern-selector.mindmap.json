@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": ":has / :is / :where 与现代选择器",
+  "children": [
+    {
+      "id": "is-where",
+      "text": ":is 与 :where",
+      "children": [
+        { "id": "is-where-list", "text": "参数列表合并选择器", "children": [] },
+        { "id": "is-where-weight", "text": "最高权重与零权重", "children": [] },
+        { "id": "is-where-base", "text": "基础样式用 :where", "children": [] }
+      ]
+    },
+    {
+      "id": "has",
+      "text": ":has",
+      "children": [
+        { "id": "has-parent", "text": "按后代状态选父元素", "children": [] },
+        { "id": "has-sibling", "text": "按后续兄弟状态匹配", "children": [] },
+        { "id": "has-cost", "text": "收窄参数控制成本", "children": [] }
+      ]
+    },
+    {
+      "id": "not-nth",
+      "text": ":not 与 :nth-child",
+      "children": [
+        { "id": "not-nth-list", "text": ":not() 接受选择器列表", "children": [] },
+        { "id": "not-nth-of", "text": "An+B of S 限定计数范围", "children": [] }
+      ]
+    },
+    {
+      "id": "combinator",
+      "text": "关系选择器",
+      "children": [
+        { "id": "combinator-symbols", "text": "后代、>、+、~", "children": [] },
+        { "id": "combinator-has", "text": "与 :has 组合表达状态", "children": [] }
+      ]
+    },
+    {
+      "id": "enhance",
+      "text": "渐进增强",
+      "children": [
+        { "id": "enhance-drop", "text": "旧浏览器丢弃整条规则", "children": [] },
+        { "id": "enhance-order", "text": "基础样式在前,增强在后", "children": [] }
+      ]
+    }
+  ]
+}

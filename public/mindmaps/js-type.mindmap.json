@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "值与类型：原始类型、对象与类型转换",
+  "children": [
+    {
+      "id": "kinds",
+      "text": "类型清单",
+      "children": [
+        { "id": "kinds-primitive", "text": "七个原始类型", "children": [] },
+        { "id": "kinds-object", "text": "其余都是对象", "children": [] },
+        { "id": "kinds-typeof", "text": "typeof 的两个盲区", "children": [] }
+      ]
+    },
+    {
+      "id": "storage",
+      "text": "变量里存什么",
+      "children": [
+        { "id": "storage-value", "text": "原始值各存一份", "children": [] },
+        { "id": "storage-ref", "text": "对象复制引用", "children": [] }
+      ]
+    },
+    {
+      "id": "boxing",
+      "text": "装箱",
+      "children": [
+        { "id": "boxing-temp", "text": "临时包装对象", "children": [] },
+        { "id": "boxing-lost", "text": "属性赋值留不住", "children": [] }
+      ]
+    },
+    {
+      "id": "convert",
+      "text": "类型转换",
+      "children": [
+        { "id": "convert-explicit", "text": "Number 与 parseInt", "children": [] },
+        { "id": "convert-falsy", "text": "假值只有八个", "children": [] },
+        { "id": "convert-plus", "text": "+ 遇到字符串就拼接", "children": [] }
+      ]
+    },
+    {
+      "id": "detect",
+      "text": "判类型",
+      "children": [
+        { "id": "detect-array", "text": "Array.isArray", "children": [] },
+        { "id": "detect-nan", "text": "Number.isNaN", "children": [] },
+        { "id": "detect-tag", "text": "toString 拿标签", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "id": "root",
+  "text": "这份知识库怎么读（学习路线）",
+  "children": [
+    {
+      "id": "tree",
+      "text": "目录怎么用",
+      "children": [
+        {
+          "id": "tree-layers",
+          "text": "方向 → 章 → 节 → 小节",
+          "children": []
+        },
+        {
+          "id": "tree-number",
+          "text": "编号即建议的阅读顺序",
+          "children": []
+        },
+        {
+          "id": "tree-wip",
+          "text": "筹备中表示这一节还没写",
+          "children": []
+        },
+        {
+          "id": "tree-extra",
+          "text": "术语悬停、思维导图与问这篇",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "route",
+      "text": "20 章七段",
+      "children": [
+        {
+          "id": "route-base",
+          "text": "结构与样式:第 2-5 章",
+          "children": []
+        },
+        {
+          "id": "route-js",
+          "text": "JavaScript 与浏览器:第 6-9 章",
+          "children": []
+        },
+        {
+          "id": "route-eng",
+          "text": "工程化与框架:第 10-13 章",
+          "children": []
+        },
+        {
+          "id": "route-quality",
+          "text": "质量与实战:第 14-20 章",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "entry",
+      "text": "四种入口",
+      "children": [
+        {
+          "id": "entry-zero",
+          "text": "零基础:从第 1 章按编号走",
+          "children": []
+        },
+        {
+          "id": "entry-js",
+          "text": "会一点 JavaScript:从 2、3、4、6 进入",
+          "children": []
+        },
+        {
+          "id": "entry-backend",
+          "text": "后端转前端:压缩第 9 章",
+          "children": []
+        },
+        {
+          "id": "entry-page",
+          "text": "只想做页面:读 2 到 8",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "practice",
+      "text": "练习方法",
+      "children": [
+        {
+          "id": "practice-run",
+          "text": "代码原样运行一遍",
+          "children": []
+        },
+        {
+          "id": "practice-change",
+          "text": "结构、样式、行为各改一处",
+          "children": []
+        },
+        {
+          "id": "practice-devtools",
+          "text": "用 DevTools 验证结果",
+          "children": []
+        },
+        {
+          "id": "practice-page",
+          "text": "每章做一个小页面",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "text": "下一步",
+      "children": [
+        {
+          "id": "next-html",
+          "text": "进入第 2 章 HTML",
+          "children": []
+        },
+        {
+          "id": "next-structure",
+          "text": "先把结构写对",
+          "children": []
+        },
+        {
+          "id": "next-style",
+          "text": "再学样式与行为",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

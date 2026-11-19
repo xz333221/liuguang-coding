@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "变量、作用域与提升",
+  "children": [
+    {
+      "id": "scope",
+      "text": "三种作用域",
+      "children": [
+        { "id": "scope-global", "text": "全局", "children": [] },
+        { "id": "scope-function", "text": "函数作用域", "children": [] },
+        { "id": "scope-block", "text": "块级作用域", "children": [] }
+      ]
+    },
+    {
+      "id": "declare",
+      "text": "三种声明",
+      "children": [
+        { "id": "declare-var", "text": "var 量在函数里", "children": [] },
+        { "id": "declare-let", "text": "let 跟着块走", "children": [] },
+        { "id": "declare-const", "text": "const 锁绑定", "children": [] }
+      ]
+    },
+    {
+      "id": "hoist",
+      "text": "提升",
+      "children": [
+        { "id": "hoist-var", "text": "var 得到 undefined", "children": [] },
+        { "id": "hoist-fn", "text": "函数声明整体提升", "children": [] },
+        { "id": "hoist-expr", "text": "表达式只提名字", "children": [] }
+      ]
+    },
+    {
+      "id": "tdz",
+      "text": "暂时性死区",
+      "children": [
+        { "id": "tdz-access", "text": "声明前访问报错", "children": [] },
+        { "id": "tdz-typeof", "text": "typeof 也躲不过", "children": [] },
+        { "id": "tdz-default", "text": "默认参数同样受限", "children": [] }
+      ]
+    },
+    {
+      "id": "loop",
+      "text": "循环与作用域链",
+      "children": [
+        { "id": "loop-per-iteration", "text": "for 加 let 每轮新建", "children": [] },
+        { "id": "loop-chain", "text": "找不到就往外一层", "children": [] }
+      ]
+    }
+  ]
+}

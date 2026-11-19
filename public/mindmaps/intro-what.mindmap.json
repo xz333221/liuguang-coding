@@ -1,0 +1,126 @@
+{
+  "id": "root",
+  "text": "前端是什么：从输入 URL 到看见页面",
+  "children": [
+    {
+      "id": "work",
+      "text": "前端的三项工作",
+      "children": [
+        {
+          "id": "work-html",
+          "text": "结构:HTML 描述页面有什么",
+          "children": []
+        },
+        {
+          "id": "work-css",
+          "text": "样式:CSS 决定长什么样",
+          "children": []
+        },
+        {
+          "id": "work-js",
+          "text": "行为:JavaScript 响应用户操作",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "request",
+      "text": "从输入 URL 到响应",
+      "children": [
+        {
+          "id": "request-url",
+          "text": "URL 解析:协议、主机、路径",
+          "children": []
+        },
+        {
+          "id": "request-dns",
+          "text": "DNS 把主机名换成 IP",
+          "children": []
+        },
+        {
+          "id": "request-conn",
+          "text": "TCP 握手,HTTPS 再加 TLS",
+          "children": []
+        },
+        {
+          "id": "request-http",
+          "text": "HTTP 请求与响应",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "render",
+      "text": "从响应到看见页面",
+      "children": [
+        {
+          "id": "render-parse",
+          "text": "解析 HTML 与 CSS",
+          "children": []
+        },
+        {
+          "id": "render-tree",
+          "text": "构建渲染树",
+          "children": []
+        },
+        {
+          "id": "render-layout",
+          "text": "布局与绘制",
+          "children": []
+        },
+        {
+          "id": "render-js",
+          "text": "执行 JavaScript",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "mode",
+      "text": "两种渲染方式",
+      "children": [
+        {
+          "id": "mode-ssr",
+          "text": "服务端渲染返回含内容的 HTML",
+          "children": []
+        },
+        {
+          "id": "mode-csr",
+          "text": "客户端渲染由脚本生成页面",
+          "children": []
+        },
+        {
+          "id": "mode-mix",
+          "text": "现代框架常混合使用",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "team",
+      "text": "协作分工",
+      "children": [
+        {
+          "id": "team-product",
+          "text": "产品定义需求与流程",
+          "children": []
+        },
+        {
+          "id": "team-ui",
+          "text": "UI 输出视觉与交互稿",
+          "children": []
+        },
+        {
+          "id": "team-fe",
+          "text": "前端实现可运行页面",
+          "children": []
+        },
+        {
+          "id": "team-be",
+          "text": "后端提供数据与业务规则",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "id": "root",
+  "text": "模块化：IIFE、CommonJS 与 ESM",
+  "children": [
+    {
+      "id": "global",
+      "text": "全局脚本与 IIFE",
+      "children": [
+        {
+          "id": "global-pollution",
+          "text": "多个 script 共享全局命名空间",
+          "children": []
+        },
+        {
+          "id": "global-iife",
+          "text": "IIFE 用函数作用域隔离私有变量",
+          "children": []
+        },
+        {
+          "id": "global-order",
+          "text": "依赖顺序只能靠约定维护",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "cjs",
+      "text": "CommonJS",
+      "children": [
+        {
+          "id": "cjs-api",
+          "text": "require 与 module.exports",
+          "children": []
+        },
+        {
+          "id": "cjs-sync",
+          "text": "同步加载,适合服务端本地文件",
+          "children": []
+        },
+        {
+          "id": "cjs-cache",
+          "text": "模块只执行一次并缓存导出对象",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "amd",
+      "text": "AMD",
+      "children": [
+        {
+          "id": "amd-define",
+          "text": "define 声明模块与依赖",
+          "children": []
+        },
+        {
+          "id": "amd-async",
+          "text": "浏览器端异步加载",
+          "children": []
+        },
+        {
+          "id": "amd-legacy",
+          "text": "现已由 ESM 与构建工具取代",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "esm",
+      "text": "ESM",
+      "children": [
+        {
+          "id": "esm-static",
+          "text": "import / export 静态声明",
+          "children": []
+        },
+        {
+          "id": "esm-binding",
+          "text": "实时绑定与顶层 await",
+          "children": []
+        },
+        {
+          "id": "esm-dynamic",
+          "text": "动态 import() 返回 Promise",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "interop",
+      "text": "互操作与浏览器",
+      "children": [
+        {
+          "id": "interop-script",
+          "text": "script type=module 默认 defer",
+          "children": []
+        },
+        {
+          "id": "interop-limit",
+          "text": "双向导入的限制与静态分析",
+          "children": []
+        },
+        {
+          "id": "interop-tool",
+          "text": "构建工具统一模块格式",
+          "children": []
+        }
+      ]
+    }
+  ]
+}
