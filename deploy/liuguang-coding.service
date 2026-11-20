@@ -1,3 +1,6 @@
+# 【留档】旧 Linux 机器的 systemd 单元。2026-11 起线上换到 Windows 机器(nginx 反代 + node 读 dist),
+# 发布用 scripts/deploy-on-windows.ps1;这个文件只在将来重建 Linux 环境时参考。
+
 [Unit]
 Description=liuguang-coding 知识库(站点 + 问答接口)
 Documentation=https://github.com/xz333221/liuguang-coding

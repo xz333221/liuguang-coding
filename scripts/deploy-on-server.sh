@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# 【留档】旧 Linux 机器已下线(2026-11)。现在的线上是一台 Windows 机器,没有 bash / systemd,
+# 发布请用 scripts/deploy-on-windows.ps1。这个脚本只在将来重建 Linux 环境时参考。
+#
 # 在服务器上跑这个脚本:拉代码 → 装依赖 → 构建站点 → 重启服务 → 健康检查。
 #
 #   APP_DIR=/opt/liuguang-coding SERVICE=liuguang-coding bash scripts/deploy-on-server.sh

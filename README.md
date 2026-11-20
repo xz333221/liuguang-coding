@@ -252,10 +252,11 @@ server/
   chat.mjs                  问答接口(SSE 透传、限流、模型解析)
   store.mjs                 模型配置:全局落盘(0600)+ 按用户的 MySQL 表
 deploy/
-  liuguang-coding.service   systemd 单元示例
+  liuguang-coding.service   systemd 单元示例(旧 Linux 机器,已下线,留档)
   nginx.conf.sample         coding.flowdash.cn 反代示例(SSE 关缓冲)
 scripts/
-  deploy-on-server.sh       服务器上的一键发布
+  deploy-on-windows.ps1     现在的发布脚本:拉取 → 清缓存 → 构建 → 健康检查(Windows)
+  deploy-on-server.sh       旧 Linux 发布脚本(依赖 bash + systemd,已下线,留档)
   mock-llm.mjs              假模型接口,本地验收
   check-live.mjs            线上/本地健康检查
   fetch-photos.mjs          拉落地页照片
@@ -311,27 +312,43 @@ coding.flowdash.cn ──nginx──> 127.0.0.1:8787  server/index.mjs
 | `POST/GET/DELETE /api/ai-model/models[/saved]` | `server/store.mjs` | 登录用户存 MySQL `model_configs`(按用户),匿名存全局落盘(`server/data/models.json`,权限 0600,已 gitignore),给浏览器只回掩码 |
 | `GET /providers`、`GET /models?endpoint=`、`POST /test` | `ai-model-form/server` | 供应商预设、实时模型列表、连接测试,直接复用你那个中间件 |
 
-首次部署:
+首次部署(Windows,当前线上):
 
-```bash
-# 服务器上
-git clone git@github.com:xz333221/liuguang-coding.git /opt/liuguang-coding
-cd /opt/liuguang-coding
-sudo cp deploy/liuguang-coding.service /etc/systemd/system/
-sudo systemctl daemon-reload && sudo systemctl enable --now liuguang-coding
-sudo cp deploy/nginx.conf.sample /etc/nginx/sites-enabled/coding.flowdash.cn.conf  # 按需改证书路径
-sudo nginx -t && sudo systemctl reload nginx
+```powershell
+git clone git@github.com:xz333221/liuguang-coding.git C:\workspace\github_workspace\liuguang-coding
+cd C:\workspace\github_workspace\liuguang-coding
+npm ci
+copy .env.example .env      # 填 MySQL 连接;不配也能起,只是登录/云同步/用户模型不可用
+npm run build
+pm2 start server/index.mjs --name liuguang-coding   # 或直接 node server/index.mjs
+```
+
+nginx 侧只在 `conf/sites/coding.conf` 里反代到 `127.0.0.1:8787`,SSE 要关缓冲:
+
+```nginx
+location / {
+  proxy_pass http://127.0.0.1:8787;
+  proxy_http_version 1.1;
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_buffering off;          # /api/chat 是 SSE,不关会攒着不发
+  proxy_read_timeout 300s;
+}
 ```
 
 以后每次发布:
 
-```bash
-APP_DIR=/opt/liuguang-coding bash scripts/deploy-on-server.sh
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\deploy-on-windows.ps1
 ```
 
-这个脚本做四件事:拉 `main`、`npm ci`、用 `PUBLIC_CHAT_PROXY=/api/chat PUBLIC_MODEL_API=/api/ai-model` 构建站点、重启服务并做健康检查。
+这个脚本做六件事:检查工作区是否干净(dirty 就停下)→ `git pull --ff-only origin main` → 删掉 `node_modules\.astro\data-store.json`(不删的话 Astro 可能拿旧正文构建)→ `npm ci` → 带 `PUBLIC_CHAT_PROXY=/api/chat`、`PUBLIC_MODEL_API=/api/ai-model` 构建 → 请求 `/api/health`,服务没响应就先试 `pm2 restart`,再退到后台起 `node server/index.mjs`。日志落在 `logs\deploy-<时间戳>.log`。
 
-可选环境变量(`deploy/liuguang-coding.service` 里已指到 `/opt/liuguang-coding/.env.server`,该文件不进仓库):
+常用开关:`-SkipInstall`(没改依赖时省三四分钟)、`-SkipBuild`、`-SkipHealth`、`-Port 8787`、`-AllowDirty`(带着本地改动发布)。`-AppDir` 不给时用脚本所在仓库。
+
+> **旧 Linux 机器已下线**(2026-11)。`deploy/liuguang-coding.service`、`deploy/nginx.conf.sample` 与 `scripts/deploy-on-server.sh` 都依赖 systemd + bash,只作留档;在那台机器上跑会报 `'bash' 不是内部或外部命令`,第 4 步 `sudo systemctl restart` 也不存在。历史命令是 `APP_DIR=/opt/liuguang-coding bash scripts/deploy-on-server.sh`。
+
+可选环境变量(Windows 上放仓库根 `.env`,不进仓库):
 
 | 变量 | 用途 |
 | --- | --- |
@@ -339,7 +356,7 @@ APP_DIR=/opt/liuguang-coding bash scripts/deploy-on-server.sh
 | `ALLOWED_ORIGIN` | 只有跨域部署才需要;同源留空 |
 | `RATE_LIMIT` / `MAX_TOKENS` | 限流条数与单次回答上限 |
 | `UPSTREAM_BASE_URL` / `UPSTREAM_API_KEY` / `DEFAULT_MODEL` | 仓库里一条模型都没有时的兜底 |
-| `DB_HOST` / `DB_PORT` / `DB_USER` / `DB_PASSWORD` / `DB_NAME` | MySQL 连接(库默认 `liuguang_coding`,不存在会自动建)。本地开发放仓库根 `.env`(不进仓库),服务器放 `.env.server` |
+| `DB_HOST` / `DB_PORT` / `DB_USER` / `DB_PASSWORD` / `DB_NAME` | MySQL 连接(库默认 `liuguang_coding`,不存在会自动建)。本地和服务器都放仓库根 `.env`(模板见 `.env.example`,不进仓库) |
 
 ## 已知边界
 
