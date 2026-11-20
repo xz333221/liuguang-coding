@@ -66,15 +66,45 @@ if (-not $AppDir) {
 }
 $AppDir = [System.IO.Path]::GetFullPath($AppDir)
 
-function Write-Step {
-    param([int]$Index, [string]$Text)
-    Write-Host ''
-    Write-Host ("==> [{0}] {1}" -f $Index, $Text) -ForegroundColor Cyan
+# 状态行同时写进日志:脚本常以后台隐藏窗口跑,只看日志时得知道走到哪一步、有没有失败。
+$script:logPath = $null
+
+function Write-LogLine {
+    param([string]$Text)
+    if (-not $script:logPath) { return }
+    try {
+        Add-Content -Path $script:logPath -Value $Text -Encoding utf8
+    }
+    catch {
+        # 日志写不进去不该影响发布本身。
+    }
 }
 
-function Write-Ok   { param([string]$Text) Write-Host ("    " + $Text) -ForegroundColor Green }
-function Write-Warn { param([string]$Text) Write-Host ("    " + $Text) -ForegroundColor Yellow }
-function Write-Err  { param([string]$Text) Write-Host ("    " + $Text) -ForegroundColor Red }
+function Write-Step {
+    param([int]$Index, [string]$Text)
+    $line = ("==> [{0}] {1}" -f $Index, $Text)
+    Write-Host ''
+    Write-Host $line -ForegroundColor Cyan
+    Write-LogLine $line
+}
+
+function Write-Ok {
+    param([string]$Text)
+    Write-Host ("    " + $Text) -ForegroundColor Green
+    Write-LogLine ("    OK  " + $Text)
+}
+
+function Write-Warn {
+    param([string]$Text)
+    Write-Host ("    " + $Text) -ForegroundColor Yellow
+    Write-LogLine ("    WARN " + $Text)
+}
+
+function Write-Err {
+    param([string]$Text)
+    Write-Host ("    " + $Text) -ForegroundColor Red
+    Write-LogLine ("    ERR " + $Text)
+}
 
 # 跑一个外部命令并收集输出。PS 5.1 里 `2>&1` 会把 stderr 变成 ErrorRecord,
 # 全局 ErrorActionPreference=Stop 时直接抛异常,所以这里临时降成 Continue,
@@ -194,7 +224,9 @@ try {
     $logDir = Join-Path $AppDir 'logs'
     if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
     $logFile = Join-Path $logDir ("deploy-" + (Get-Date -Format 'yyyyMMdd-HHmmss') + ".log")
+    $script:logPath = $logFile
     Write-Host ("日志: " + $logFile)
+    Write-LogLine ("# 发布开始 " + (Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + "  " + $AppDir)
 
     # ---------- 1. 工作区干净检查 ----------
     Write-Step 1 '检查工作区'
@@ -334,6 +366,7 @@ try {
     Write-Host ''
     Write-Host '    静态站点由 express.static 直读 dist,构建完即时生效,一般不用重启进程。'
     Write-Host ''
+    Write-LogLine ("# 发布成功 " + (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'))
 }
 catch {
     Write-Host ''
