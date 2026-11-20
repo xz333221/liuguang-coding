@@ -1,0 +1,36 @@
+{
+  "id": "root",
+  "text": "内存区域：堆 / 栈 / 方法区",
+  "children": [
+    {
+      "id": "private",
+      "text": "线程私有",
+      "children": [
+        { "id": "pr-pc", "text": "PC 不 OOM", "children": [] },
+        { "id": "pr-stack", "text": "虚拟机栈:栈帧,深递归 SOE", "children": [] }
+      ]
+    },
+    {
+      "id": "shared",
+      "text": "线程共享",
+      "children": [
+        { "id": "sh-heap", "text": "堆:对象分代,heap OOM", "children": [] },
+        { "id": "sh-meta", "text": "方法区:JDK8 元空间本地内存", "children": [] }
+      ]
+    },
+    {
+      "id": "loc",
+      "text": "引用在栈对象在堆",
+      "children": [
+        { "id": "loc-reach", "text": "可达性决定回收", "children": [] }
+      ]
+    },
+    {
+      "id": "oom",
+      "text": "溢出对照",
+      "children": [
+        { "id": "oom-map", "text": "SOE→栈 / heap→堆 / Metaspace→类 / Direct→堆外", "children": [] }
+      ]
+    }
+  ]
+}

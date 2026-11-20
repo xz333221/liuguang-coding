@@ -1,0 +1,39 @@
+{
+  "id": "root",
+  "text": "GC 与常见收集器",
+  "children": [
+    {
+      "id": "live",
+      "text": "判活",
+      "children": [
+        { "id": "lv-reach", "text": "可达性分析 GC Roots", "children": [] },
+        { "id": "lv-refs", "text": "强 / 软 / 弱 / 虚引用", "children": [] }
+      ]
+    },
+    {
+      "id": "gen",
+      "text": "分代回收",
+      "children": [
+        { "id": "gen-young", "text": "新生代复制(朝生夕死)", "children": [] },
+        { "id": "gen-old", "text": "老年代标记整理(难死)", "children": [] }
+      ]
+    },
+    {
+      "id": "collectors",
+      "text": "收集器",
+      "children": [
+        { "id": "co-parallel", "text": "Parallel 吞吐", "children": [] },
+        { "id": "co-g1", "text": "G1 可预测停顿(默认)", "children": [] },
+        { "id": "co-zgc", "text": "ZGC 超低延迟;CMS 已移除", "children": [] }
+      ]
+    },
+    {
+      "id": "tune",
+      "text": "调优",
+      "children": [
+        { "id": "tu-stw", "text": "STW;吞吐 vs 延迟取舍", "children": [] },
+        { "id": "tu-log", "text": "先定目标,-Xlog:gc* 观察", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "id": "root",
+  "text": "Spring Boot 项目结构与启动流程",
+  "children": [
+    {
+      "id": "core",
+      "text": "三核心能力",
+      "children": [
+        { "id": "co-starter", "text": "starter 聚合依赖", "children": [] },
+        { "id": "co-auto", "text": "自动配置按 classpath 装配", "children": [] },
+        { "id": "co-embed", "text": "内嵌服务器可执行 jar", "children": [] }
+      ]
+    },
+    {
+      "id": "anno",
+      "text": "启动类",
+      "children": [
+        { "id": "an-combo", "text": "Configuration+EnableAutoConfig+ComponentScan", "children": [] },
+        { "id": "an-root", "text": "启动类放根包保证扫描", "children": [] }
+      ]
+    },
+    {
+      "id": "layout",
+      "text": "分层目录",
+      "children": [
+        { "id": "la-dir", "text": "controller/service/repository/domain", "children": [] },
+        { "id": "la-dep", "text": "依赖方向单向", "children": [] }
+      ]
+    },
+    {
+      "id": "startup",
+      "text": "启动流程",
+      "children": [
+        { "id": "st-refresh", "text": "Environment→容器 refresh→内嵌服务器→Ready", "children": [] },
+        { "id": "st-debug", "text": "--debug 看自动配置报告", "children": [] }
+      ]
+    }
+  ]
+}

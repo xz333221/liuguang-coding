@@ -1,0 +1,37 @@
+{
+  "id": "root",
+  "text": "多模块与生命周期",
+  "children": [
+    {
+      "id": "agg",
+      "text": "聚合 modules",
+      "children": [
+        { "id": "ag-pom", "text": "packaging=pom + modules", "children": [] },
+        { "id": "ag-reactor", "text": "reactor 拓扑序一次构建", "children": [] }
+      ]
+    },
+    {
+      "id": "inherit",
+      "text": "继承 parent",
+      "children": [
+        { "id": "in-reuse", "text": "复用配置 / dependencyManagement 锁版本", "children": [] },
+        { "id": "in-vs", "text": "聚合=一起构建,继承=复用配置", "children": [] }
+      ]
+    },
+    {
+      "id": "reactor",
+      "text": "reactor 控制",
+      "children": [
+        { "id": "re-pl", "text": "-pl/-am 子集及上游,-rf 恢复", "children": [] },
+        { "id": "re-install", "text": "模块间引用需上游 install", "children": [] }
+      ]
+    },
+    {
+      "id": "version",
+      "text": "版本实践",
+      "children": [
+        { "id": "ve-bom", "text": "版本集中父/BOM,子不写 version", "children": [] }
+      ]
+    }
+  ]
+}

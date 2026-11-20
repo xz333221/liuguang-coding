@@ -1,0 +1,44 @@
+{
+  "id": "root",
+  "text": "Web 层：Controller / 参数绑定 / 统一返回",
+  "children": [
+    {
+      "id": "controller",
+      "text": "控制器与路由",
+      "children": [
+        { "id": "ct-rest", "text": "@RestController 返回 JSON", "children": [] },
+        { "id": "ct-map", "text": "@*Mapping 映射 HTTP 方法", "children": [] }
+      ]
+    },
+    {
+      "id": "bind",
+      "text": "参数绑定",
+      "children": [
+        { "id": "bd-path", "text": "PathVariable / RequestParam / RequestBody", "children": [] }
+      ]
+    },
+    {
+      "id": "valid",
+      "text": "校验",
+      "children": [
+        { "id": "va-valid", "text": "@Valid + Bean Validation", "children": [] }
+      ]
+    },
+    {
+      "id": "result",
+      "text": "统一返回",
+      "children": [
+        { "id": "rs-body", "text": "Result(code/message/data)", "children": [] },
+        { "id": "rs-split", "text": "HTTP 状态与业务 code 分工", "children": [] }
+      ]
+    },
+    {
+      "id": "exception",
+      "text": "全局异常",
+      "children": [
+        { "id": "ex-advice", "text": "@RestControllerAdvice 集中处理", "children": [] },
+        { "id": "ex-safe", "text": "未知错误记日志不暴露堆栈", "children": [] }
+      ]
+    }
+  ]
+}

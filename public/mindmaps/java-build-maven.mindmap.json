@@ -1,0 +1,43 @@
+{
+  "id": "root",
+  "text": "Maven 与 pom.xml",
+  "children": [
+    {
+      "id": "gav",
+      "text": "坐标 GAV",
+      "children": [
+        { "id": "gav-three", "text": "groupId / artifactId / version", "children": [] },
+        { "id": "gav-path", "text": "仓库按坐标路径存放", "children": [] }
+      ]
+    },
+    {
+      "id": "pom",
+      "text": "pom 骨架",
+      "children": [
+        { "id": "pom-deps", "text": "dependencies / properties / plugins", "children": [] }
+      ]
+    },
+    {
+      "id": "layout",
+      "text": "标准目录",
+      "children": [
+        { "id": "lay-conv", "text": "main/test java+resources,约定优于配置", "children": [] }
+      ]
+    },
+    {
+      "id": "lifecycle",
+      "text": "三套生命周期",
+      "children": [
+        { "id": "lc-default", "text": "clean / default / site", "children": [] },
+        { "id": "lc-plugin", "text": "阶段由插件 goal 执行", "children": [] }
+      ]
+    },
+    {
+      "id": "repo",
+      "text": "仓库",
+      "children": [
+        { "id": "rp-local", "text": "本地缓存,SNAPSHOT 检查更新", "children": [] }
+      ]
+    }
+  ]
+}

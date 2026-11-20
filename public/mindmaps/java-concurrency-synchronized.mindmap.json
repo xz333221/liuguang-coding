@@ -1,0 +1,45 @@
+{
+  "id": "root",
+  "text": "synchronized 与锁",
+  "children": [
+    {
+      "id": "race",
+      "text": "竞态",
+      "children": [
+        { "id": "race-rmw", "text": "读-改-写非原子,丢失更新", "children": [] }
+      ]
+    },
+    {
+      "id": "lockobj",
+      "text": "锁对象",
+      "children": [
+        { "id": "lo-this", "text": "实例方法锁 this", "children": [] },
+        { "id": "lo-class", "text": "静态方法锁 Class", "children": [] },
+        { "id": "lo-block", "text": "同步块锁指定 obj", "children": [] }
+      ]
+    },
+    {
+      "id": "reentrant",
+      "text": "可重入 + 可见性",
+      "children": [
+        { "id": "re-count", "text": "同线程重入计数", "children": [] },
+        { "id": "re-vis", "text": "释放刷回 / 获取重读", "children": [] }
+      ]
+    },
+    {
+      "id": "upgrade",
+      "text": "锁升级",
+      "children": [
+        { "id": "up-chain", "text": "偏向→轻量→重量", "children": [] }
+      ]
+    },
+    {
+      "id": "deadlock",
+      "text": "死锁",
+      "children": [
+        { "id": "dl-four", "text": "互斥/持有等待/不剥夺/循环等待", "children": [] },
+        { "id": "dl-order", "text": "固定加锁顺序预防", "children": [] }
+      ]
+    }
+  ]
+}

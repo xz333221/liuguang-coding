@@ -1,120 +1,62 @@
 ---
 title: 自动配置与 starter
-summary: '自动配置把常见组件的 Bean 定义收进条件化配置类,由 @EnableAutoConfiguration 通过 AutoConfiguration.imports 加载;@ConditionalOnClass、@ConditionalOnMissingBean、@ConditionalOnProperty 决定是否生效,自定义 Bean 或配置属性可以覆盖默认值。'
+summary: '自动配置类按 @Conditional 条件(classpath/Bean/配置)注册默认 Bean;@EnableAutoConfiguration 导入 AutoConfiguration.imports;starter 是依赖聚合+自动配置的打包;用户自定义 Bean 优先于自动配置。'
 category: java
 node: java-spring-autoconfig
 order: 71
 level: 进阶
-tags: [自动配置, starter, 条件注解, AutoConfiguration.imports]
-updated: 2026-11-19
-mindmap: spring-autoconfig.mindmap.json
-terms: ["auto-configuration", "starter", "bean"]
+tags: [自动配置, Conditional, starter, BOM, 条件装配]
+updated: 2026-11-18
+mindmap: java-spring-autoconfig.mindmap.json
+terms: ["auto-configuration", "starter", "bean", "spring-boot"]
 sources:
-  - title: Spring Boot Reference Documentation
-    url: https://docs.spring.io/spring-boot/reference/index.html
-    note: 自动配置、条件注解与 starter 的官方说明。
-  - title: Spring Boot 项目主页
-    url: https://spring.io/projects/spring-boot
-    note: 版本与项目资料入口。
+  - title: Spring Boot Reference · Auto-configuration
+    url: https://docs.spring.io/spring-boot/reference/features/developing-auto-configuration.html
+    note: 自动配置类、条件注解与加载机制的官方依据。
+  - title: Spring Boot Reference · Starters
+    url: https://docs.spring.io/spring-boot/reference/using/build-systems.html#using.build-systems.starters
+    note: starter 命名与依赖聚合的参照。
 ---
 
-上一篇的 Bean 都由 @Component 或 @Bean 显式声明。实际项目只引入 spring-boot-starter-web 就得到 Jackson、内嵌 Tomcat 等组件,这些 Bean 来自自动配置(auto-configuration)。这篇说明它如何注册、何时生效,以及 starter 如何组织。
+引入 spring-boot-starter-web 就能跑 Web,不用写一行 MVC 配置——背后是自动配置。这一篇讲它怎么"按条件装配",以及 starter 到底是什么。
 
-## 自动配置解决什么
+## 自动配置的本质
 
-自动配置是一组条件化的 @Configuration 类:类路径上出现某个库、缺少某个 Bean、配置了某个属性时,才注册对应的 Bean。@EnableAutoConfiguration 负责收集候选配置类并交给容器处理。
+自动配置是一批带 @Configuration 的类(如 DispatcherServletAutoConfiguration、JacksonAutoConfiguration),每个用 **@Conditional 派生注解**声明生效条件:
 
-它读取一份固定的注册清单,逐个判断条件,不会扫描第三方 jar 里的所有类。条件不满足的配置类被跳过,满足的才导入。
+- @ConditionalOnClass:classpath 有某类才生效(有 DispatcherServlet 才配 MVC);
+- @ConditionalOnMissingBean:容器没有用户自定义的同类型 Bean 才注册默认(用户优先);
+- @ConditionalOnProperty:配置项满足才生效;
+- @ConditionalOnWebApplication:Web 环境才生效。
 
-## 注册清单的位置
+故"引入依赖→classpath 有类→条件满足→注册默认 Bean";用户自己定义了同类型 Bean,@ConditionalOnMissingBean 让自动配置退让。**约定默认,自定义覆盖**。
 
-Spring Boot 2.7 之前,清单写在 META-INF/spring.factories:
+## 加载机制
 
-```text
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.example.autoconfigure.StorageAutoConfiguration
-```
+@EnableAutoConfiguration 通过 @Import(AutoConfigurationImportSelector)读取各 jar 的 `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`(Boot 2.7+ 取代 spring.factories),列出自动配置类全名,按条件过滤后注册。
 
-2.7 起改用专用文件,3.x 只读新位置:
+排除某自动配置:@SpringBootApplication(exclude = DataSourceAutoConfiguration.class) 或 spring.autoconfigure.exclude 配置。
 
-```text
-META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
-```
+## starter 是什么
 
-文件内容是配置类全限定名,一行一个:
+starter 是一个**依赖描述符**(pom),聚合某功能所需的全部依赖 + 对应自动配置模块。如 spring-boot-starter-data-jpa 拉入 Hibernate、Spring Data JPA、HikariCP、事务等,版本由 spring-boot-dependencies BOM 锁定。
 
-```text
-com.example.autoconfigure.StorageAutoConfiguration
-com.example.autoconfigure.MetricsAutoConfiguration
-```
+命名约定:官方 spring-boot-starter-{name};第三方 {name}-spring-boot-starter。自定义 starter = 自动配置类 + imports 文件 + 依赖聚合 pom,供他人引入即用。
 
-2.7 同时支持两种位置,3.x 移除了对 spring.factories 中自动配置条目的读取。自动配置应统一写在 imports 文件。
+## 观察自动配置
 
-## 条件注解
+启动加 --debug 或 logging.level.org.springframework.boot.autoconfigure=DEBUG,打印 **CONDITIONS EVALUATION REPORT**:Positive matches(生效及原因)、Negative matches(未生效及缺什么条件)、Exclusions。排查"为什么某 Bean 没注册/注册了意外默认"首选此报告。
 
-自动配置类上的条件注解决定是否生效,常用三个:
+## 配置属性绑定
 
-- @ConditionalOnClass:类路径存在指定类时生效;
-- @ConditionalOnMissingBean:容器中没有指定类型的 Bean 时生效,为用户自定义留出覆盖空间;
-- @ConditionalOnProperty:配置属性满足指定值时生效。
-
-```java
-@AutoConfiguration
-@ConditionalOnClass(StorageClient.class)
-@ConditionalOnProperty(prefix = "storage", name = "enabled", havingValue = "true")
-public class StorageAutoConfiguration {
-
-    @Bean
-    @ConditionalOnMissingBean
-    public StorageClient storageClient(StorageProperties properties) {
-        return new StorageClient(properties.getEndpoint());
-    }
-}
-```
-
-@AutoConfiguration 是 @Configuration 的专用形式,标记这是一个自动配置类。@ConditionalOnMissingBean 让用户在项目里声明同类型 Bean 时,默认实现自动退让。
-
-## 配置顺序
-
-多个自动配置之间存在先后依赖,用 @AutoConfigureBefore、@AutoConfigureAfter、@AutoConfigureOrder 声明。例如数据源要先于 JPA 配置,缓存管理器要先于使用它的组件。顺序只影响自动配置类之间的处理次序,不影响普通 @Component 的扫描。
-
-## 自定义 starter 的最小结构
-
-starter 由两个模块组成:
-
-```text
-storage-spring-boot-autoconfigure/   配置类、属性类、imports 文件
-storage-spring-boot-starter/         只含依赖声明,依赖上面的模块
-```
-
-autoconfigure 模块放 StorageAutoConfiguration、StorageProperties 与注册文件;starter 模块的 pom 依赖 autoconfigure,并引入第三方库:
-
-```xml
-<dependency>
-    <groupId>com.example</groupId>
-    <artifactId>storage-spring-boot-autoconfigure</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
-
-使用方只引入 starter,就同时获得库与自动配置。小项目可以把两者合并成一个模块,拆开是为了让 autoconfigure 能被其他 starter 复用。
-
-## 查看与覆盖
-
-启动时加 --debug 会在控制台输出条件评估报告(ConditionEvaluationReport),列出哪些自动配置生效、哪些被跳过以及原因。测试中可以通过 ConditionEvaluationReport.get(ConfigurableListableBeanFactory) 读取 PositiveMatches 与 NegativeMatches。
-
-覆盖自动配置有两条路径:
-
-1. 自定义 Bean:在项目里声明同类型 Bean,@ConditionalOnMissingBean 使默认配置退让;
-2. 配置属性:在 application.yml 中修改前缀属性,例如 storage.enabled 与 storage.endpoint,无需替换 Bean。
-
-配置属性的加载与多环境在「配置管理与多环境」一篇展开,这里先掌握这两个覆盖入口。
+自动配置类常配合 @ConfigurationProperties(prefix="spring.datasource") 把 application.yml 绑定到属性对象,用户改配置即改默认 Bean 行为,无需改代码。
 
 ## 小结
 
-- 自动配置是按条件生效的 @Configuration 类,由 @EnableAutoConfiguration 收集;
-- Spring Boot 2.7 起注册清单位于 AutoConfiguration.imports,一行一个配置类;
-- @ConditionalOnClass、@ConditionalOnMissingBean、@ConditionalOnProperty 控制生效条件;
-- @AutoConfigureBefore/@AutoConfigureAfter 调整自动配置之间的顺序;
-- starter 通常拆为 autoconfigure 与 starter 两个模块;
-- --debug 查看条件评估报告,自定义 Bean 或配置属性可覆盖默认值。
+- 自动配置 = @Configuration + @Conditional(OnClass/OnMissingBean/OnProperty);
+- 用户 Bean 优先,自动配置退让;约定默认可覆盖;
+- @EnableAutoConfiguration 读 AutoConfiguration.imports 加载;
+- starter = 依赖聚合 + 自动配置,BOM 锁版本;
+- --debug 看条件报告定位装配;@ConfigurationProperties 绑定配置。
+
+下一篇讲 Web 层:Controller、参数绑定、统一返回与异常处理。

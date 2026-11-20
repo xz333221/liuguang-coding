@@ -1,0 +1,38 @@
+{
+  "id": "root",
+  "text": "自动配置与 starter",
+  "children": [
+    {
+      "id": "conditional",
+      "text": "条件装配",
+      "children": [
+        { "id": "cd-class", "text": "OnClass / OnMissingBean / OnProperty", "children": [] },
+        { "id": "cd-user", "text": "用户 Bean 优先,自动配置退让", "children": [] }
+      ]
+    },
+    {
+      "id": "load",
+      "text": "加载机制",
+      "children": [
+        { "id": "ld-imports", "text": "读 AutoConfiguration.imports", "children": [] },
+        { "id": "ld-exclude", "text": "exclude 排除某自动配置", "children": [] }
+      ]
+    },
+    {
+      "id": "starter",
+      "text": "starter",
+      "children": [
+        { "id": "st-agg", "text": "依赖聚合 + 自动配置,BOM 锁版本", "children": [] },
+        { "id": "st-name", "text": "官方/第三方命名约定", "children": [] }
+      ]
+    },
+    {
+      "id": "observe",
+      "text": "观察与绑定",
+      "children": [
+        { "id": "ob-report", "text": "--debug 条件报告", "children": [] },
+        { "id": "ob-props", "text": "@ConfigurationProperties 绑定", "children": [] }
+      ]
+    }
+  ]
+}

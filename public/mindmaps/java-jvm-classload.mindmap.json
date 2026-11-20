@@ -1,0 +1,37 @@
+{
+  "id": "root",
+  "text": "类加载机制",
+  "children": [
+    {
+      "id": "phases",
+      "text": "五阶段",
+      "children": [
+        { "id": "ph-prep", "text": "准备赋零值", "children": [] },
+        { "id": "ph-init", "text": "初始化 clinit 线程安全", "children": [] }
+      ]
+    },
+    {
+      "id": "trigger",
+      "text": "初始化时机",
+      "children": [
+        { "id": "tr-active", "text": "new / 静态 / 反射 / 子类 / 主类", "children": [] },
+        { "id": "tr-passive", "text": "父类静态 / 数组 / final 常量不触发", "children": [] }
+      ]
+    },
+    {
+      "id": "delegate",
+      "text": "双亲委派",
+      "children": [
+        { "id": "dg-why", "text": "核心类唯一与安全", "children": [] },
+        { "id": "dg-break", "text": "SPI 上下文 / 热部署隔离打破", "children": [] }
+      ]
+    },
+    {
+      "id": "custom",
+      "text": "自定义加载器",
+      "children": [
+        { "id": "cu-find", "text": "重写 findClass 保留委派", "children": [] }
+      ]
+    }
+  ]
+}

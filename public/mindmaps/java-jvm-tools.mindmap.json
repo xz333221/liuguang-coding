@@ -1,0 +1,44 @@
+{
+  "id": "root",
+  "text": "排查命令与常用参数",
+  "children": [
+    {
+      "id": "jps",
+      "text": "jps 找进程",
+      "children": [
+        { "id": "jps-l", "text": "-l 主类 / -v 参数", "children": [] }
+      ]
+    },
+    {
+      "id": "jstack",
+      "text": "jstack 线程栈",
+      "children": [
+        { "id": "js-cpu", "text": "top -Hp + nid 定位高 CPU", "children": [] },
+        { "id": "js-dead", "text": "死锁 / BLOCKED 分析", "children": [] }
+      ]
+    },
+    {
+      "id": "jmap",
+      "text": "jmap 堆与 dump",
+      "children": [
+        { "id": "jm-histo", "text": "histo:live 直方图", "children": [] },
+        { "id": "jm-mat", "text": "dump + MAT 支配树找泄漏", "children": [] }
+      ]
+    },
+    {
+      "id": "jstat",
+      "text": "jstat GC 统计",
+      "children": [
+        { "id": "jt-gcutil", "text": "gcutil 看 FGC 与 O 区", "children": [] }
+      ]
+    },
+    {
+      "id": "params",
+      "text": "线上必备",
+      "children": [
+        { "id": "pa-dump", "text": "OOM 自动 dump + GC 日志滚动", "children": [] },
+        { "id": "pa-arthas", "text": "Arthas 在线诊断", "children": [] }
+      ]
+    }
+  ]
+}

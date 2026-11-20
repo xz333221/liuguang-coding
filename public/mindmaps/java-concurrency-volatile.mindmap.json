@@ -1,0 +1,38 @@
+{
+  "id": "root",
+  "text": "volatile 与 JMM 入门",
+  "children": [
+    {
+      "id": "jmm",
+      "text": "JMM 三问题",
+      "children": [
+        { "id": "jmm-vis", "text": "可见性:工作内存旧值", "children": [] },
+        { "id": "jmm-order", "text": "有序性:重排序", "children": [] },
+        { "id": "jmm-atom", "text": "原子性:复合操作非原子", "children": [] }
+      ]
+    },
+    {
+      "id": "volatile",
+      "text": "volatile 两保证",
+      "children": [
+        { "id": "vol-vis", "text": "可见性:写刷回读主存", "children": [] },
+        { "id": "vol-order", "text": "禁重排:内存屏障", "children": [] },
+        { "id": "vol-noatom", "text": "不保证 i++ 原子", "children": [] }
+      ]
+    },
+    {
+      "id": "hb",
+      "text": "happens-before",
+      "children": [
+        { "id": "hb-rules", "text": "锁 / volatile / start / join / 传递", "children": [] }
+      ]
+    },
+    {
+      "id": "dcl",
+      "text": "双重检查单例",
+      "children": [
+        { "id": "dcl-vol", "text": "instance 必须 volatile 防半初始化", "children": [] }
+      ]
+    }
+  ]
+}

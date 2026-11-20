@@ -1,0 +1,43 @@
+{
+  "id": "root",
+  "text": "并发集合与原子类",
+  "children": [
+    {
+      "id": "chm",
+      "text": "ConcurrentHashMap",
+      "children": [
+        { "id": "chm-jdk8", "text": "CAS + 桶级 synchronized,读无锁", "children": [] },
+        { "id": "chm-api", "text": "复合用 merge / compute", "children": [] }
+      ]
+    },
+    {
+      "id": "cow",
+      "text": "CopyOnWriteArrayList",
+      "children": [
+        { "id": "cow-copy", "text": "写复制读无锁,读多写少", "children": [] }
+      ]
+    },
+    {
+      "id": "cas",
+      "text": "原子类与 CAS",
+      "children": [
+        { "id": "cas-cmp", "text": "比较并交换,自旋重试", "children": [] },
+        { "id": "cas-aba", "text": "ABA 用版本号;单变量限制", "children": [] }
+      ]
+    },
+    {
+      "id": "adder",
+      "text": "LongAdder",
+      "children": [
+        { "id": "adder-cell", "text": "分段累加高竞争优,sum 弱一致", "children": [] }
+      ]
+    },
+    {
+      "id": "bq",
+      "text": "BlockingQueue",
+      "children": [
+        { "id": "bq-pc", "text": "put/take 阻塞,生产者消费者", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "root",
+  "text": "线程池与 Executor",
+  "children": [
+    {
+      "id": "why",
+      "text": "池化收益",
+      "children": [
+        { "id": "why-reuse", "text": "复用 / 控并发 / 缓冲 / 统一管理", "children": [] }
+      ]
+    },
+    {
+      "id": "params",
+      "text": "七参数",
+      "children": [
+        { "id": "p-core", "text": "core / max / keepAlive", "children": [] },
+        { "id": "p-queue", "text": "有界 workQueue / 工厂 / 拒绝策略", "children": [] }
+      ]
+    },
+    {
+      "id": "flow",
+      "text": "任务流转",
+      "children": [
+        { "id": "flow-order", "text": "核心→队列→最大→拒绝", "children": [] },
+        { "id": "flow-unbounded", "text": "无界队列使 max 失效", "children": [] }
+      ]
+    },
+    {
+      "id": "reject",
+      "text": "拒绝策略",
+      "children": [
+        { "id": "rej-abort", "text": "Abort 默认 / CallerRuns 反压", "children": [] },
+        { "id": "rej-discard", "text": "Discard 慎用", "children": [] }
+      ]
+    },
+    {
+      "id": "config",
+      "text": "配置",
+      "children": [
+        { "id": "cfg-cpu", "text": "CPU ≈ 核+1,IO ≈ 2×核 压测", "children": [] },
+        { "id": "cfg-noexec", "text": "禁 Executors 工厂,手动构造", "children": [] }
+      ]
+    }
+  ]
+}

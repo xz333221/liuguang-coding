@@ -1,0 +1,37 @@
+{
+  "id": "root",
+  "text": "IoC 与依赖注入",
+  "children": [
+    {
+      "id": "ioc",
+      "text": "IoC 与 Bean",
+      "children": [
+        { "id": "ioc-container", "text": "容器管创建/装配/生命周期", "children": [] },
+        { "id": "ioc-reg", "text": "扫描 / @Bean / 自动配置", "children": [] }
+      ]
+    },
+    {
+      "id": "di",
+      "text": "注入方式",
+      "children": [
+        { "id": "di-ctor", "text": "构造器推荐:不可变/易测", "children": [] },
+        { "id": "di-field", "text": "字段注入不推荐", "children": [] }
+      ]
+    },
+    {
+      "id": "scope",
+      "text": "作用域",
+      "children": [
+        { "id": "sc-single", "text": "singleton / prototype / request", "children": [] },
+        { "id": "sc-proto", "text": "单例注 prototype 需 provider", "children": [] }
+      ]
+    },
+    {
+      "id": "cycle",
+      "text": "循环依赖",
+      "children": [
+        { "id": "cy-ctor", "text": "构造器循环无解,优先重构", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "id": "root",
+  "text": "单元测试：JUnit 与 Mockito",
+  "children": [
+    {
+      "id": "junit",
+      "text": "JUnit 5",
+      "children": [
+        { "id": "ju-anno", "text": "@Test / 断言 / 生命周期", "children": [] },
+        { "id": "ju-param", "text": "@ParameterizedTest 数据驱动", "children": [] }
+      ]
+    },
+    {
+      "id": "mockito",
+      "text": "Mockito",
+      "children": [
+        { "id": "mo-mock", "text": "@Mock / @InjectMocks 隔离", "children": [] },
+        { "id": "mo-stub", "text": "when 打桩 / verify 验证", "children": [] }
+      ]
+    },
+    {
+      "id": "principles",
+      "text": "测试原则",
+      "children": [
+        { "id": "pr-indep", "text": "独立可重复,注入 Clock/Random", "children": [] },
+        { "id": "pr-bound", "text": "覆盖边界异常,测行为不测实现", "children": [] }
+      ]
+    },
+    {
+      "id": "maven",
+      "text": "Maven 集成",
+      "children": [
+        { "id": "mv-sure", "text": "surefire 跑测试 / JaCoCo 覆盖率参考", "children": [] }
+      ]
+    }
+  ]
+}

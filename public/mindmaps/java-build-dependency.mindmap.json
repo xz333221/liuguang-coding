@@ -1,0 +1,45 @@
+{
+  "id": "root",
+  "text": "依赖坐标、scope 与冲突仲裁",
+  "children": [
+    {
+      "id": "scope",
+      "text": "六种 scope",
+      "children": [
+        { "id": "sc-compile", "text": "compile 默认全可见可传递", "children": [] },
+        { "id": "sc-provided", "text": "provided 容器提供 / runtime 运行可见", "children": [] },
+        { "id": "sc-test", "text": "test 仅测试 / import 导 BOM", "children": [] }
+      ]
+    },
+    {
+      "id": "transitive",
+      "text": "传递依赖",
+      "children": [
+        { "id": "tr-auto", "text": "自动引入,scope 降级", "children": [] }
+      ]
+    },
+    {
+      "id": "mediation",
+      "text": "冲突仲裁",
+      "children": [
+        { "id": "md-near", "text": "最近优先 + 声明优先", "children": [] },
+        { "id": "md-risk", "text": "仲裁错版本→运行时 NoSuchMethod", "children": [] }
+      ]
+    },
+    {
+      "id": "manage",
+      "text": "版本管理",
+      "children": [
+        { "id": "mg-dm", "text": "dependencyManagement 锁版本不引入", "children": [] },
+        { "id": "mg-excl", "text": "exclusions 精确排除", "children": [] }
+      ]
+    },
+    {
+      "id": "diag",
+      "text": "定位",
+      "children": [
+        { "id": "dg-tree", "text": "dependency:tree -Dverbose / analyze", "children": [] }
+      ]
+    }
+  ]
+}

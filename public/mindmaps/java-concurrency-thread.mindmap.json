@@ -1,0 +1,46 @@
+{
+  "id": "root",
+  "text": "线程的创建与状态",
+  "children": [
+    {
+      "id": "create",
+      "text": "三种创建",
+      "children": [
+        { "id": "cre-runnable", "text": "Runnable 解耦(推荐)", "children": [] },
+        { "id": "cre-callable", "text": "Callable+FutureTask 有返回值", "children": [] }
+      ]
+    },
+    {
+      "id": "start",
+      "text": "start vs run",
+      "children": [
+        { "id": "st-new", "text": "start 开新线程,run 当前调用", "children": [] },
+        { "id": "st-once", "text": "start 仅一次", "children": [] }
+      ]
+    },
+    {
+      "id": "state",
+      "text": "六态",
+      "children": [
+        { "id": "st-runnable", "text": "RUNNABLE 含就绪+运行", "children": [] },
+        { "id": "st-blocked", "text": "BLOCKED 等 monitor 锁", "children": [] },
+        { "id": "st-wait", "text": "WAITING / TIMED_WAITING", "children": [] }
+      ]
+    },
+    {
+      "id": "methods",
+      "text": "sleep/join/yield",
+      "children": [
+        { "id": "m-sleep", "text": "sleep 不释放锁,wait 释放", "children": [] }
+      ]
+    },
+    {
+      "id": "interrupt",
+      "text": "协作式中断",
+      "children": [
+        { "id": "int-flag", "text": "interrupt 置标志,自行检查退出", "children": [] },
+        { "id": "int-restore", "text": "InterruptedException 后恢复标志", "children": [] }
+      ]
+    }
+  ]
+}

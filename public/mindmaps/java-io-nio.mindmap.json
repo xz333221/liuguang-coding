@@ -1,0 +1,39 @@
+{
+  "id": "root",
+  "text": "NIO:Buffer / Channel / Selector",
+  "children": [
+    {
+      "id": "buffer",
+      "text": "Buffer 三指针",
+      "children": [
+        { "id": "buf-ptr", "text": "capacity / position / limit", "children": [] },
+        { "id": "buf-flip", "text": "flip 切读,clear/compact 复位", "children": [] }
+      ]
+    },
+    {
+      "id": "channel",
+      "text": "Channel 双向",
+      "children": [
+        { "id": "ch-file", "text": "FileChannel 映射/零拷贝", "children": [] },
+        { "id": "ch-socket", "text": "Socket/DatagramChannel 可非阻塞", "children": [] }
+      ]
+    },
+    {
+      "id": "selector",
+      "text": "Selector 多路复用",
+      "children": [
+        { "id": "sel-reg", "text": "非阻塞通道注册事件", "children": [] },
+        { "id": "sel-loop", "text": "select 循环处理就绪 key", "children": [] },
+        { "id": "sel-remove", "text": "处理后移除 key", "children": [] }
+      ]
+    },
+    {
+      "id": "vs",
+      "text": "BIO vs NIO",
+      "children": [
+        { "id": "vs-thread", "text": "一连接一线程 vs 单线程多路", "children": [] },
+        { "id": "vs-netty", "text": "业务用 Netty 封装", "children": [] }
+      ]
+    }
+  ]
+}

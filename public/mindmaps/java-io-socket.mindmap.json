@@ -1,0 +1,37 @@
+{
+  "id": "root",
+  "text": "网络编程:Socket 与 HTTP 客户端",
+  "children": [
+    {
+      "id": "tcp",
+      "text": "TCP Socket",
+      "children": [
+        { "id": "tcp-conn", "text": "面向连接可靠有序", "children": [] },
+        { "id": "tcp-block", "text": "accept/read 阻塞,设超时", "children": [] }
+      ]
+    },
+    {
+      "id": "udp",
+      "text": "UDP Datagram",
+      "children": [
+        { "id": "udp-less", "text": "无连接数据报,不保证可靠", "children": [] }
+      ]
+    },
+    {
+      "id": "http",
+      "text": "HttpClient(JDK11)",
+      "children": [
+        { "id": "http-h2", "text": "HTTP/2 + 同步/异步", "children": [] },
+        { "id": "http-body", "text": "BodyPublishers / BodyHandlers", "children": [] },
+        { "id": "http-reuse", "text": "客户端复用", "children": [] }
+      ]
+    },
+    {
+      "id": "choose",
+      "text": "选型",
+      "children": [
+        { "id": "ch-okhttp", "text": "复杂需求 OkHttp;自定义协议 Netty", "children": [] }
+      ]
+    }
+  ]
+}
