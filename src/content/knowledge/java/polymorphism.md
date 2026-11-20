@@ -43,6 +43,16 @@ class Student extends Person {
 
 `@Override` 注解不是必需的,但强烈建议写:它让编译器帮你检查「你以为在覆写,其实签名写错了」。比如手误把 run() 写成 run(String s),没有注解时编译器当它是新增的重载方法,一声不吭;加了注解,当场报错。覆写时漏写注解不犯法,但排查这种 bug 的时间远超敲这几个字符。
 
+```mermaid
+flowchart TD
+  A["Person p = new Student()"] --> B["p 的声明类型是 Person"]
+  A --> C["p 实际指向 Student 实例"]
+  B --> D["编译期:只检查 Person 有没有 run()"]
+  C --> E["运行期:p.run() 按实际类型查 Student.run()"]
+  D --> F["方法调用通过"]
+  E --> G["执行的是子类实现"]
+```
+
 ## 运行期才定调哪个
 
 ```java

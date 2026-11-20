@@ -38,6 +38,15 @@ System.out.println(a.getClass() == b.getClass());   // true
 
 擦除后,编译器在取值处自动插入强转(把 Object 转回声明的类型),所以源码里看不到强转,字节码里有。
 
+```mermaid
+flowchart LR
+  S["源码:声明 List 里装 String"] -->|javac 擦除类型参数| E["字节码:只剩裸 List"]
+  S2["源码:String get(int)"] -->|擦除成上界| E2["字节码:Object get(int)"]
+  E --> R["运行时拿不到 String 这个信息"]
+  E2 --> B["编译器补一个桥方法 String get(int)"]
+  B --> R2["调用方看到的仍是 String"]
+```
+
 ## 桥方法:擦除后如何保持多态
 
 擦除会破坏覆写关系。例如:

@@ -88,6 +88,48 @@ while (true) {
 
 这就是 Reactor 模型的雏形,Netty、Tomcat NIO connector 都建立在此之上。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 300" role="img" aria-label="一个 Selector 由一个线程轮询多个 Channel,每个 Channel 都配一个 Buffer">
+    <defs>
+      <marker id="nioArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" />
+      </marker>
+    </defs>
+    <rect x="6" y="6" width="748" height="288" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <rect x="32" y="108" width="158" height="84" rx="12" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="111" y="138" font-size="14" font-weight="700" fill="var(--ink)" text-anchor="middle">Selector</text>
+    <text x="111" y="158" font-size="11" fill="var(--muted)" text-anchor="middle">一个线程轮询</text>
+    <text x="111" y="176" font-size="11" fill="var(--muted)" text-anchor="middle">只处理就绪的</text>
+    <line x1="196" y1="150" x2="312" y2="80" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#nioArrow)" />
+    <line x1="196" y1="150" x2="312" y2="150" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#nioArrow)" />
+    <line x1="196" y1="150" x2="312" y2="220" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#nioArrow)" />
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+      <rect x="316" y="56" width="170" height="48" rx="10" fill="var(--canvas)" stroke="var(--line)" />
+      <text x="401" y="76" font-size="12" fill="var(--ink)" text-anchor="middle">SocketChannel</text>
+      <text x="401" y="94" font-size="11" fill="var(--muted)" text-anchor="middle">非阻塞</text>
+      <rect x="316" y="126" width="170" height="48" rx="10" fill="var(--canvas)" stroke="var(--line)" />
+      <text x="401" y="146" font-size="12" fill="var(--ink)" text-anchor="middle">SocketChannel</text>
+      <text x="401" y="164" font-size="11" fill="var(--muted)" text-anchor="middle">非阻塞</text>
+      <rect x="316" y="196" width="170" height="48" rx="10" fill="var(--canvas)" stroke="var(--line)" />
+      <text x="401" y="216" font-size="12" fill="var(--ink)" text-anchor="middle">ServerSocketChannel</text>
+      <text x="401" y="234" font-size="11" fill="var(--muted)" text-anchor="middle">注册 OP_ACCEPT</text>
+    </g>
+    <line x1="490" y1="80" x2="524" y2="80" stroke="var(--muted)" stroke-width="1.3" marker-end="url(#nioArrow)" />
+    <line x1="490" y1="150" x2="524" y2="150" stroke="var(--muted)" stroke-width="1.3" marker-end="url(#nioArrow)" />
+    <line x1="490" y1="220" x2="524" y2="220" stroke="var(--muted)" stroke-width="1.3" marker-end="url(#nioArrow)" />
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+      <rect x="528" y="62" width="190" height="36" rx="9" fill="var(--canvas)" stroke="var(--line)" />
+      <text x="623" y="85" font-size="11.5" fill="var(--ink)" text-anchor="middle">Buffer(读)</text>
+      <rect x="528" y="132" width="190" height="36" rx="9" fill="var(--canvas)" stroke="var(--line)" />
+      <text x="623" y="155" font-size="11.5" fill="var(--ink)" text-anchor="middle">Buffer(写)</text>
+      <rect x="528" y="202" width="190" height="36" rx="9" fill="var(--canvas)" stroke="var(--line)" />
+      <text x="623" y="225" font-size="11.5" fill="var(--ink)" text-anchor="middle">新连接 → 注册进 Selector</text>
+    </g>
+    <text x="32" y="262" font-size="12" fill="var(--muted)">数据只能通过 Buffer 进出 Channel;Channel 双向,Buffer 靠 flip() 在写模式和读模式之间切换。</text>
+  </svg>
+  <figcaption>NIO 的重点不是「不阻塞」,而是「一个线程能等很多个连接」。</figcaption>
+</figure>
+
 ## BIO vs NIO
 
 | 维度 | BIO | NIO |

@@ -42,6 +42,38 @@ void m() {
 
 方法返回栈帧弹出,u 引用消失;堆对象若无其它引用可达,下次 GC 回收。这解释了"引用在栈、对象在堆"与 pass-by-value 的关系(第 3 章)。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 320" role="img" aria-label="JVM 运行时数据区分为线程私有的栈与共享的堆、方法区">
+    <rect x="6" y="6" width="748" height="308" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <rect x="32" y="32" width="300" height="244" rx="14" fill="var(--canvas)" stroke="var(--line-strong)" />
+    <text x="56" y="58" font-size="13" font-weight="700" fill="var(--ink)">线程私有</text>
+    <text x="140" y="58" font-size="11" fill="var(--muted)">每个线程各一份</text>
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+      <rect x="52" y="72" width="260" height="54" rx="10" fill="var(--panel)" stroke="var(--line)" />
+      <text x="182" y="94" font-size="12" fill="var(--ink)" text-anchor="middle">程序计数器</text>
+      <text x="182" y="112" font-size="10.5" fill="var(--muted)" text-anchor="middle">当前执行到哪条指令</text>
+      <rect x="52" y="138" width="260" height="54" rx="10" fill="var(--panel)" stroke="var(--line)" />
+      <text x="182" y="160" font-size="12" fill="var(--ink)" text-anchor="middle">虚拟机栈</text>
+      <text x="182" y="178" font-size="10.5" fill="var(--muted)" text-anchor="middle">栈帧:局部变量、操作数栈</text>
+      <rect x="52" y="204" width="260" height="54" rx="10" fill="var(--panel)" stroke="var(--line)" />
+      <text x="182" y="226" font-size="12" fill="var(--ink)" text-anchor="middle">本地方法栈</text>
+      <text x="182" y="244" font-size="10.5" fill="var(--muted)" text-anchor="middle">native 方法用</text>
+    </g>
+    <rect x="356" y="32" width="372" height="244" rx="14" fill="var(--canvas)" stroke="var(--line-strong)" />
+    <text x="380" y="58" font-size="13" font-weight="700" fill="var(--ink)">线程共享</text>
+    <text x="452" y="58" font-size="11" fill="var(--muted)">整个进程一份</text>
+    <rect x="380" y="72" width="324" height="96" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="542" y="102" font-size="12.5" font-weight="700" fill="var(--ink)" text-anchor="middle">堆</text>
+    <text x="542" y="124" font-size="11" fill="var(--muted)" text-anchor="middle">几乎所有的对象实例与数组</text>
+    <text x="542" y="146" font-size="11" fill="var(--muted)" text-anchor="middle">GC 的主战场</text>
+    <rect x="380" y="180" width="324" height="78" rx="10" fill="var(--panel)" stroke="var(--line)" />
+    <text x="542" y="206" font-size="12.5" fill="var(--ink)" text-anchor="middle">方法区 / 元空间</text>
+    <text x="542" y="228" font-size="11" fill="var(--muted)" text-anchor="middle">类元信息、运行时常量池、静态变量</text>
+    <text x="32" y="304" font-size="12" fill="var(--muted)">栈溢出抛 StackOverflowError;堆与方法区不足抛 OutOfMemoryError,两者的排查手段完全不同。</text>
+  </svg>
+  <figcaption>私有区随线程生死,共享区随进程生死;问「变量存在哪」之前先分清楚是哪种变量。</figcaption>
+</figure>
+
 ## 直接内存
 
 NIO 的 DirectByteBuffer 分配**堆外直接内存**,-XX:MaxDirectMemorySize 限制,不受 -Xmx 约束但受物理内存限制;泄漏同样 OOM: Direct buffer memory。零拷贝场景用它减少堆内外复制。

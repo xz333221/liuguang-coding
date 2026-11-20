@@ -58,6 +58,41 @@ System.out.println(s1 == s4);   // false
 
 规律:**编译期确定的字符串内容进池,运行期拼出来的不进池,new 出来的不进池。**
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 310" role="img" aria-label="两个字面量指向常量池里的同一个对象,new 出来的字符串指向堆上另一个对象">
+    <defs>
+      <marker id="poolArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" />
+      </marker>
+    </defs>
+    <rect x="6" y="6" width="748" height="298" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <rect x="430" y="40" width="290" height="100" rx="14" fill="var(--canvas)" stroke="var(--line-strong)" />
+    <text x="452" y="66" font-size="13" font-weight="700" fill="var(--ink)">字符串常量池</text>
+    <rect x="540" y="80" width="120" height="42" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="600" y="107" font-size="14" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--ink)" text-anchor="middle">"hello"</text>
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" text-anchor="middle">
+      <rect x="40" y="52" width="96" height="36" rx="10" fill="var(--canvas)" stroke="var(--line)" />
+      <text x="88" y="75" fill="var(--ink)">s1</text>
+      <rect x="40" y="98" width="96" height="36" rx="10" fill="var(--canvas)" stroke="var(--line)" />
+      <text x="88" y="121" fill="var(--ink)">s2</text>
+      <rect x="40" y="206" width="96" height="36" rx="10" fill="var(--canvas)" stroke="var(--line)" />
+      <text x="88" y="229" fill="var(--ink)">s3</text>
+    </g>
+    <line x1="140" y1="70" x2="534" y2="96" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#poolArrow)" />
+    <line x1="140" y1="116" x2="534" y2="104" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#poolArrow)" />
+    <text x="190" y="88" font-size="11" fill="var(--muted)">字面量:直接进池</text>
+    <rect x="430" y="176" width="290" height="104" rx="14" fill="var(--canvas)" stroke="var(--line-strong)" />
+    <text x="452" y="200" font-size="13" font-weight="700" fill="var(--ink)">堆</text>
+    <rect x="478" y="212" width="180" height="48" rx="10" fill="var(--panel)" stroke="var(--line)" />
+    <text x="568" y="234" font-size="13" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--ink)" text-anchor="middle">String 对象</text>
+    <text x="568" y="250" font-size="11" fill="var(--muted)" text-anchor="middle">每次 new 都是新的一份</text>
+    <line x1="140" y1="224" x2="470" y2="232" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#poolArrow)" />
+    <text x="190" y="242" font-size="11" fill="var(--muted)">new String("hello")</text>
+    <text x="32" y="292" font-size="12.5" fill="var(--ink)">内容相同不等于同一个对象:s1 == s2 为 true,s1 == s3 为 false,但三者 equals 互等。</text>
+  </svg>
+  <figcaption>字面量共用池里那一个,<code>new</code> 出来的各自一份;比内容永远用 <code>equals</code>。</figcaption>
+</figure>
+
 ## intern():手动登记进池
 
 运行期拼出的字符串,可以调 intern() 登记进池:

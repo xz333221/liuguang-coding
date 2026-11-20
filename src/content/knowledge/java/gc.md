@@ -48,6 +48,35 @@ JVM 用**可达性分析**:从一组 **GC Roots**(栈帧局部变量、静态变
 
 G1 把堆划成等大 Region(Eden/Survivor/Old/Humongous),按"回收收益/成本"排序选 Region 回收(Garbage First),用停顿目标模型控制每次回收范围。ZGC 几乎全并发,停顿不随堆增大。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 280" role="img" aria-label="堆分为 Eden、两个 Survivor 和老年代,存活对象逐步晋升">
+    <defs>
+      <marker id="gcArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" />
+      </marker>
+    </defs>
+    <rect x="6" y="6" width="748" height="268" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <text x="32" y="36" font-size="12.5" fill="var(--muted)">堆</text>
+    <rect x="32" y="48" width="696" height="104" rx="12" fill="var(--canvas)" stroke="var(--line-strong)" />
+    <rect x="48" y="64" width="236" height="72" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="166" y="94" font-size="12.5" font-weight="700" fill="var(--ink)" text-anchor="middle">Eden</text>
+    <text x="166" y="116" font-size="11" fill="var(--muted)" text-anchor="middle">新对象先放这</text>
+    <rect x="292" y="64" width="88" height="72" rx="8" fill="var(--panel)" stroke="var(--line)" />
+    <text x="336" y="94" font-size="12" fill="var(--ink)" text-anchor="middle">S0</text>
+    <text x="336" y="114" font-size="10.5" fill="var(--muted)" text-anchor="middle">存活区</text>
+    <rect x="388" y="64" width="88" height="72" rx="8" fill="var(--panel)" stroke="var(--line)" />
+    <text x="432" y="94" font-size="12" fill="var(--ink)" text-anchor="middle">S1</text>
+    <text x="432" y="114" font-size="10.5" fill="var(--muted)" text-anchor="middle">存活区</text>
+    <rect x="484" y="64" width="228" height="72" rx="8" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="598" y="94" font-size="12.5" font-weight="700" fill="var(--ink)" text-anchor="middle">Old(老年代)</text>
+    <text x="598" y="116" font-size="11" fill="var(--muted)" text-anchor="middle">活过多次 GC 的对象</text>
+    <text x="32" y="186" font-size="12" fill="var(--ink)">Minor GC:回收 Eden 与一个 Survivor,活下来的复制到另一个 Survivor,年龄 +1。</text>
+    <text x="32" y="212" font-size="12" fill="var(--muted)">年龄到阈值(默认 15)或 Survivor 装不下,就晋升到 Old;Old 满触发 Full GC,STW 更长。</text>
+    <text x="32" y="248" font-size="12" fill="var(--muted)">分代的依据是弱代假说:绝大多数对象朝生夕死,少数活得久的会一直活下去。</text>
+  </svg>
+  <figcaption>调优的本质是让多数对象死在 Eden,别让它们熬到老年代。</figcaption>
+</figure>
+
 ## STW 与调优目标
 
 Stop-The-World:GC 某些阶段暂停所有应用线程。调优两目标互斥:**吞吐**(应用时间/总时间,Parallel)vs **延迟**(单次停顿短,G1/ZGC)。先定目标再选收集器与参数,不要盲目调。常见参数:-Xms/-Xmx 设相同避免扩缩抖动、-XX:+UseG1GC、-XX:MaxGCPauseMillis=200、-Xlog:gc* 观察日志。

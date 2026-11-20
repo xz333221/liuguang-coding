@@ -48,6 +48,16 @@ Stream.iterate(0, n -> n + 1); // 无限流,需 limit
 IntStream.range(0, 10);        // 基本类型流
 ```
 
+```mermaid
+flowchart LR
+  S["源:list.stream()"] --> A["中间操作:map"]
+  A --> B["中间操作:filter"]
+  B --> C["中间操作:sorted"]
+  C -->|"到这里什么都没执行"| T["终端操作:collect"]
+  T --> R["结果:新的集合或值"]
+  T --> F["源头被消费掉,流不能再用"]
+```
+
 ## 中间操作:惰性
 
 中间操作返回新 Stream,**不立即执行**,直到遇到终端操作才整条流水线一起跑(惰性求值)。这让短路成为可能:

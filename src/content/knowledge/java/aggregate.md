@@ -106,6 +106,35 @@ public class Order {                                  // 聚合根
 
 注意 `total()` 是**现算**的,不是存字段。存字段就要维护一致性:加明细要加金额、删明细要减金额、改单价要重算——三处任何一处漏了,数据就错了。能现算的就不存,这是消除不变式维护成本最有效的一招。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 270" role="img" aria-label="聚合边界内是聚合根与它的内部对象,外部只能通过聚合根访问">
+    <defs>
+      <marker id="aggArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" />
+      </marker>
+    </defs>
+    <rect x="6" y="6" width="748" height="258" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <rect x="236" y="40" width="388" height="204" rx="16" fill="var(--canvas)" stroke="var(--line-strong)" stroke-dasharray="7 5" />
+    <text x="256" y="62" font-size="11.5" fill="var(--muted)">聚合边界 = 一致性边界 = 事务边界</text>
+    <rect x="262" y="72" width="336" height="44" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="430" y="100" font-size="12.5" font-weight="700" fill="var(--ink)" text-anchor="middle">Order(聚合根,唯一入口)</text>
+    <rect x="262" y="132" width="336" height="38" rx="10" fill="var(--panel)" stroke="var(--line)" />
+    <text x="430" y="156" font-size="12" fill="var(--muted)" text-anchor="middle">List&lt;OrderItem&gt;(内部对象,只读视图)</text>
+    <rect x="262" y="186" width="336" height="38" rx="10" fill="var(--panel)" stroke="var(--line)" />
+    <text x="430" y="210" font-size="12" fill="var(--muted)" text-anchor="middle">Money / OrderId(值对象)</text>
+    <line x1="430" y1="116" x2="430" y2="126" stroke="var(--muted)" stroke-width="1.4" />
+    <line x1="430" y1="170" x2="430" y2="180" stroke="var(--muted)" stroke-width="1.4" />
+    <text x="36" y="86" font-size="12" fill="var(--ink)">外部代码</text>
+    <line x1="104" y1="96" x2="256" y2="96" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#aggArrow)" />
+    <text x="36" y="122" font-size="11" fill="var(--muted)">只能调根的方法</text>
+    <text x="36" y="176" font-size="11.5" fill="var(--wrong)">直接改明细:规则失守</text>
+    <text x="648" y="86" font-size="11.5" fill="var(--ink)">OrderRepository</text>
+    <text x="648" y="108" font-size="11" fill="var(--muted)">只存根</text>
+    <line x1="644" y1="96" x2="606" y2="96" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#aggArrow)" />
+  </svg>
+  <figcaption>能拿到手的只有聚合根;内部集合给只读视图,仓储也只认根。</figcaption>
+</figure>
+
 ## 不变式:任何时候都必须成立
 
 上面代码里的 `ensureMutable()`、明细上限、空订单不能支付,都是不变式。判断标准很简单:**这条规则被违反时,数据就是错的**,而不是「业务上不太合理」。

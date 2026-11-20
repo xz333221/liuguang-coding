@@ -74,6 +74,17 @@ SpringApplication.run 大致:
 
 启动失败常见:端口占用、Bean 循环依赖、自动配置条件不满足、配置缺失。看启动日志的 CONDITIONS EVALUATION REPORT(--debug)定位自动配置为何生效/不生效。
 
+```mermaid
+flowchart TD
+  A["SpringApplication.run(启动类, args)"] --> B["推断应用类型:SERVLET / REACTIVE / NONE"]
+  B --> C["准备 Environment:命令行 → 系统属性 → application.yml"]
+  C --> D["创建 ApplicationContext"]
+  D --> E["refresh:扫组件 → 执行自动配置 → 实例化并注入 Bean"]
+  E --> F["启动内嵌 Tomcat,注册 DispatcherServlet"]
+  F --> G["发布 ApplicationReadyEvent,执行 Runner"]
+  E -.->|条件不满足或依赖循环| X["启动失败,看 --debug 的条件评估报告"]
+```
+
 ## 配置文件位置
 
 application.yml/properties 在 src/main/resources;多环境 application-{profile}.yml;外部化配置优先级见第 5 篇。

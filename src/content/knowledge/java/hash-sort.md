@@ -113,6 +113,37 @@ void mergeSort(int[] a, int lo, int hi, int[] tmp) {
 
 `a[i] <= a[j]` 里的 `<=` 是稳定性的关键:相等时先取左边,相对顺序才不变。写成 `<` 就不稳定了。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 262" role="img" aria-label="快排先分区再递归,归并先分半再合并">
+    <defs>
+      <marker id="sortArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" />
+      </marker>
+    </defs>
+    <rect x="6" y="6" width="748" height="250" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <text x="32" y="36" font-size="12.5" font-weight="700" fill="var(--ink)">快排:先分区,再递归两段</text>
+    <rect x="60" y="48" width="150" height="44" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="135" y="75" font-size="12" fill="var(--ink)" text-anchor="middle">&lt; 基准</text>
+    <rect x="218" y="48" width="90" height="44" rx="8" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="263" y="75" font-size="12" fill="var(--ink)" text-anchor="middle">基准</text>
+    <rect x="316" y="48" width="170" height="44" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="401" y="75" font-size="12" fill="var(--ink)" text-anchor="middle">≥ 基准</text>
+    <text x="506" y="75" font-size="11.5" fill="var(--muted)">一次分区 O(n),原地交换</text>
+    <text x="32" y="118" font-size="11.5" fill="var(--muted)">平均分 log n 层 → O(n log n);基准总选到最值时退化成 O(n²)。</text>
+    <text x="32" y="166" font-size="12.5" font-weight="700" fill="var(--ink)">归并:先分半,再合并</text>
+    <rect x="60" y="178" width="150" height="44" rx="8" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="135" y="205" font-size="12" fill="var(--ink)" text-anchor="middle">前半:已有序</text>
+    <rect x="218" y="178" width="150" height="44" rx="8" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="293" y="205" font-size="12" fill="var(--ink)" text-anchor="middle">后半:已有序</text>
+    <line x1="374" y1="200" x2="414" y2="200" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#sortArrow)" />
+    <rect x="420" y="178" width="180" height="44" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="510" y="205" font-size="12" fill="var(--ink)" text-anchor="middle">合并:整体有序</text>
+    <text x="614" y="205" font-size="11.5" fill="var(--muted)">需 O(n) 辅助数组</text>
+    <text x="32" y="246" font-size="11.5" fill="var(--muted)">两者都是 O(n log n);快排空间省但不稳定,归并稳定但费内存——对象排序要稳定,所以 JDK 用 TimSort。</text>
+  </svg>
+  <figcaption>一个「先切开再各自处理」,一个「先各自排好再合」;方向相反,量级相同。</figcaption>
+</figure>
+
 ## Java 的 sort 用的是哪个
 
 `Arrays.sort` 对**基本类型**用双轴快速排序(Dual-Pivot Quicksort):不用稳定,因为 `int` 相等的元素没有区别,不稳定也不影响结果,而快排更省空间。

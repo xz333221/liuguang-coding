@@ -43,6 +43,17 @@ starter 是一个**依赖描述符**(pom),聚合某功能所需的全部依赖 +
 
 命名约定:官方 spring-boot-starter-{name};第三方 {name}-spring-boot-starter。自定义 starter = 自动配置类 + imports 文件 + 依赖聚合 pom,供他人引入即用。
 
+```mermaid
+flowchart TD
+  S["@SpringBootApplication"] --> I["@EnableAutoConfiguration 读出 AutoConfiguration.imports"]
+  I --> L["加载候选配置类:DataSourceAutoConfiguration 等"]
+  L --> C{"条件注解是否满足?"}
+  C -->|classpath 有驱动、缺 DataSource Bean| B["注册默认 Bean"]
+  C -->|已存在同类 Bean| X["跳过,你的配置优先生效"]
+  C -->|缺必需的类| Y["整类跳过,不报错"]
+  B --> P["@ConfigurationProperties 把配置绑上去"]
+```
+
 ## 观察自动配置
 
 启动加 --debug 或 logging.level.org.springframework.boot.autoconfigure=DEBUG,打印 **CONDITIONS EVALUATION REPORT**:Positive matches(生效及原因)、Negative matches(未生效及缺什么条件)、Exclusions。排查"为什么某 Bean 没注册/注册了意外默认"首选此报告。

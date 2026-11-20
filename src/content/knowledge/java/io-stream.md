@@ -88,6 +88,24 @@ new DataInputStream(new BufferedInputStream(new FileInputStream("a.bin")));
 
 每层只加一种能力,自由组合。这与第 15 章装饰器模式是同一结构。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 300" role="img" aria-label="IO 流层层包装:DataInputStream 包着 BufferedInputStream,再包着 FileInputStream">
+    <rect x="6" y="6" width="748" height="288" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <text x="32" y="40" font-size="12.5" fill="var(--muted)">一个读取链的嵌套关系:外层向内层要数据</text>
+    <rect x="32" y="58" width="696" height="170" rx="14" fill="var(--canvas)" stroke="var(--line-strong)" />
+    <text x="56" y="84" font-size="12.5" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--ink)">DataInputStream</text>
+    <text x="56" y="102" font-size="11" fill="var(--muted)">读 int / double 这类基本类型</text>
+    <rect x="64" y="112" width="636" height="100" rx="12" fill="var(--panel)" stroke="var(--line)" />
+    <text x="88" y="138" font-size="12.5" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--ink)">BufferedInputStream</text>
+    <text x="88" y="156" font-size="11" fill="var(--muted)">攒够一块再读,减少系统调用</text>
+    <rect x="96" y="166" width="576" height="34" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="110" y="188" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--ink)">FileInputStream:最内层,字节真正的来源</text>
+    <text x="32" y="256" font-size="12" fill="var(--ink)">关闭只关最外层:包装流会连带关掉它包着的那一层。</text>
+    <text x="32" y="280" font-size="12" fill="var(--muted)">写入方向同理:先 Buffered 再 Data,flush 时数据才真正落到文件。</text>
+  </svg>
+  <figcaption>装饰器模式:每层只加一种能力,自由组合,顺序换一种就是一个新组合。</figcaption>
+</figure>
+
 ## flush 与 close
 
 - **flush**:把缓冲区数据强制写出,流仍可继续用;

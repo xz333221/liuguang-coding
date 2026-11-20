@@ -78,6 +78,16 @@ target/            构建输出
 
 遵循约定就无需配置路径;偏离才要显式声明。
 
+```mermaid
+flowchart TD
+  V["validate 校验工程"] --> C["compile 编译主源码"]
+  C --> T["test 跑单元测试"]
+  T --> P["package 打成 jar / war"]
+  P --> I["install 装进本地仓库"]
+  I --> D["deploy 推到远程仓库"]
+  T -.->|测试失败| F["构建中断,后面的阶段不执行"]
+```
+
 ## 三套生命周期
 
 - **clean**:pre-clean → clean → post-clean,清理 target;

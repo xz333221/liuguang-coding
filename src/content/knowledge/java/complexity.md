@@ -73,6 +73,35 @@ for (int i = 1; i < n; i *= 2)
 
 递归要写递推式,或者画递归树。归并排序 `T(n) = 2T(n/2) + O(n)`,每层总代价 O(n),共 log n 层,合计 O(n log n)。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 300" role="img" aria-label="五种常见复杂度随输入规模增长的曲线对比">
+    <rect x="6" y="6" width="748" height="288" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <line x1="70" y1="240" x2="352" y2="240" stroke="var(--line-strong)" stroke-width="1.2" />
+    <line x1="70" y1="240" x2="70" y2="48" stroke="var(--line-strong)" stroke-width="1.2" />
+    <text x="356" y="244" font-size="11" fill="var(--muted)">n</text>
+    <text x="40" y="44" font-size="11" fill="var(--muted)">代价</text>
+    <path d="M70 214 L340 214" stroke="var(--muted)" stroke-width="2" fill="none" />
+    <path d="M70 214 C150 198 240 182 340 172" stroke="var(--accent)" stroke-opacity="0.45" stroke-width="2" fill="none" />
+    <path d="M70 214 L340 110" stroke="var(--accent)" stroke-width="2" fill="none" />
+    <path d="M70 214 C160 200 260 150 340 84" stroke="var(--highlight)" stroke-width="2" fill="none" />
+    <path d="M70 214 C120 210 220 150 285 58" stroke="var(--wrong)" stroke-width="2" fill="none" />
+    <g font-size="11.5">
+      <line x1="392" y1="80" x2="416" y2="80" stroke="var(--muted)" stroke-width="2" />
+      <text x="426" y="84" fill="var(--ink)">O(1) 常数:数组下标、哈希查找</text>
+      <line x1="392" y1="116" x2="416" y2="116" stroke="var(--accent)" stroke-opacity="0.45" stroke-width="2" />
+      <text x="426" y="120" fill="var(--ink)">O(log n) 二分、平衡树高度</text>
+      <line x1="392" y1="152" x2="416" y2="152" stroke="var(--accent)" stroke-width="2" />
+      <text x="426" y="156" fill="var(--ink)">O(n) 一次遍历</text>
+      <line x1="392" y1="188" x2="416" y2="188" stroke="var(--highlight)" stroke-width="2" />
+      <text x="426" y="192" fill="var(--ink)">O(n log n) 排序、分治</text>
+      <line x1="392" y1="224" x2="416" y2="224" stroke="var(--wrong)" stroke-width="2" />
+      <text x="426" y="228" fill="var(--ink)">O(n²) 双重循环、冒泡</text>
+    </g>
+    <text x="32" y="278" font-size="12" fill="var(--muted)">n 从 10³ 涨到 10⁶,O(n²) 从 10⁶ 涨到 10¹²,差六个数量级;O(n log n) 只涨了约 6.7 倍。</text>
+  </svg>
+  <figcaption>曲线陡不陡,决定数据量涨十倍时你是「多跑一会儿」还是「直接超时」。</figcaption>
+</figure>
+
 ## 常见量级与直觉
 
 | 量级 | n = 10⁶ 时的操作数 | 典型来源 |

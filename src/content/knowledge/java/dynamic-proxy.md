@@ -68,6 +68,36 @@ proxy.find(1);   // 触发 invoke,织入日志
 
 限制:**目标必须有接口**,代理类实现的是接口而非继承目标类。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 250" role="img" aria-label="调用方调用代理对象,代理把调用转给 InvocationHandler,再由处理器调用目标对象">
+    <defs>
+      <marker id="pxArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" />
+      </marker>
+    </defs>
+    <rect x="6" y="6" width="748" height="238" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <rect x="32" y="96" width="120" height="60" rx="12" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="92" y="122" font-size="13" fill="var(--ink)" text-anchor="middle">调用方</text>
+    <text x="92" y="140" font-size="11" fill="var(--muted)" text-anchor="middle">只认识接口</text>
+    <line x1="156" y1="126" x2="212" y2="126" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#pxArrow)" />
+    <rect x="216" y="86" width="160" height="80" rx="12" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="296" y="114" font-size="13" font-weight="700" fill="var(--ink)" text-anchor="middle">代理对象</text>
+    <text x="296" y="134" font-size="11" fill="var(--muted)" text-anchor="middle">运行时生成,实现同一接口</text>
+    <text x="296" y="152" font-size="11" fill="var(--muted)" text-anchor="middle">$Proxy0</text>
+    <line x1="380" y1="126" x2="436" y2="126" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#pxArrow)" />
+    <rect x="440" y="86" width="170" height="80" rx="12" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="525" y="112" font-size="13" font-weight="700" fill="var(--ink)" text-anchor="middle">InvocationHandler</text>
+    <text x="525" y="132" font-size="11" fill="var(--muted)" text-anchor="middle">invoke(proxy, method, args)</text>
+    <text x="525" y="150" font-size="11" fill="var(--muted)" text-anchor="middle">日志 / 事务 / 鉴权写在这</text>
+    <line x1="614" y1="126" x2="654" y2="126" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#pxArrow)" />
+    <rect x="658" y="96" width="66" height="60" rx="12" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="691" y="122" font-size="12" fill="var(--ink)" text-anchor="middle">目标</text>
+    <text x="691" y="140" font-size="11" fill="var(--muted)" text-anchor="middle">真实实现</text>
+    <text x="32" y="206" font-size="12" fill="var(--muted)">同一个 handler 可以处理任意接口,转发逻辑只写一次;CGLIB 走的是生成子类覆写方法,链路相同但不需要接口。</text>
+  </svg>
+  <figcaption>动态代理把「转发 + 增强」收在一个处理器里,Spring 的事务与缓存注解就挂在这个位置。</figcaption>
+</figure>
+
 ## CGLIB:基于子类
 
 无接口时,JDK 代理无能为力。CGLIB(及 ByteBuddy)在运行时**生成目标类的子类**,覆写方法织入逻辑,再委托父类方法:

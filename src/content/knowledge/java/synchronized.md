@@ -53,6 +53,36 @@ synchronized (lock) {   // 显式指定锁对象
 
 两个不同实例的同步方法不互斥(锁不同 this);静态与实例同步方法也不互斥(锁 Class vs this)。选择锁对象时要确保所有访问共享状态的线程用**同一个**锁。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 270" role="img" aria-label="两个线程争抢同一个对象锁,同一时刻只有一个线程能进入临界区">
+    <defs>
+      <marker id="syncArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" />
+      </marker>
+    </defs>
+    <rect x="6" y="6" width="748" height="258" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <rect x="40" y="60" width="150" height="52" rx="12" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="115" y="82" font-size="13" fill="var(--ink)" text-anchor="middle">线程 A</text>
+    <text x="115" y="100" font-size="11" fill="var(--muted)" text-anchor="middle">已抢占</text>
+    <rect x="40" y="166" width="150" height="52" rx="12" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="115" y="188" font-size="13" fill="var(--ink)" text-anchor="middle">线程 B</text>
+    <text x="115" y="206" font-size="11" fill="var(--muted)" text-anchor="middle">阻塞等锁</text>
+    <rect x="280" y="88" width="200" height="96" rx="14" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="380" y="118" font-size="14" font-weight="700" fill="var(--ink)" text-anchor="middle">对象锁 monitor</text>
+    <text x="380" y="140" font-size="11.5" fill="var(--muted)" text-anchor="middle">owner = 线程 A</text>
+    <text x="380" y="160" font-size="11.5" fill="var(--muted)" text-anchor="middle">重入计数 = 1</text>
+    <line x1="194" y1="88" x2="274" y2="112" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#syncArrow)" />
+    <line x1="194" y1="190" x2="274" y2="162" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#syncArrow)" />
+    <rect x="540" y="88" width="180" height="96" rx="14" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="630" y="118" font-size="12.5" fill="var(--ink)" text-anchor="middle">临界区</text>
+    <text x="630" y="140" font-size="11" fill="var(--muted)" text-anchor="middle">同一时刻只放一个线程</text>
+    <text x="630" y="160" font-size="11" fill="var(--muted)" text-anchor="middle">出去之后才轮到下一个</text>
+    <line x1="484" y1="136" x2="532" y2="136" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#syncArrow)" />
+    <text x="40" y="240" font-size="12" fill="var(--muted)">锁的是对象(monitor),不是代码块;想清楚多个线程争的是不是同一个对象,决定它到底锁没锁住。</text>
+  </svg>
+  <figcaption>互斥的本质是「同一时刻只有一个持有者」,其余线程在入口排队。</figcaption>
+</figure>
+
 ## 可重入
 
 synchronized 是**可重入锁**:同一线程已持有锁时,再次进入该锁的同步块不会死锁,内部计数加一,退出减一,归零释放。这允许同步方法调用本类其它同步方法:

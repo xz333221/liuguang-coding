@@ -23,6 +23,48 @@ sources:
 
 一个变量装一个值,要装一组同类型的值,用数组。这一篇讲数组怎么定义、怎么取、怎么遍历,以及它作为引用类型最重要的一个性质。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 250" role="img" aria-label="数组变量持有引用,指向堆上一段连续内存,下标从 0 开始">
+    <defs>
+      <marker id="arrArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" />
+      </marker>
+    </defs>
+    <rect x="6" y="6" width="748" height="238" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <text x="32" y="40" font-size="12" fill="var(--muted)">栈</text>
+    <text x="250" y="40" font-size="12" fill="var(--muted)">堆:一段连续内存</text>
+    <rect x="32" y="56" width="130" height="64" rx="12" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="97" y="82" font-size="14" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--ink)" text-anchor="middle">int[] a</text>
+    <text x="97" y="102" font-size="11" fill="var(--muted)" text-anchor="middle">只是一个引用</text>
+    <line x1="166" y1="88" x2="244" y2="88" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#arrArrow)" />
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" text-anchor="middle">
+      <rect x="250" y="56" width="64" height="64" rx="8" fill="var(--canvas)" stroke="var(--line)" />
+      <rect x="314" y="56" width="64" height="64" rx="8" fill="var(--canvas)" stroke="var(--line)" />
+      <rect x="378" y="56" width="64" height="64" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+      <rect x="442" y="56" width="64" height="64" rx="8" fill="var(--canvas)" stroke="var(--line)" />
+      <rect x="506" y="56" width="64" height="64" rx="8" fill="var(--canvas)" stroke="var(--line)" />
+      <g fill="var(--muted)" font-size="11">
+        <text x="282" y="74">0</text>
+        <text x="346" y="74">1</text>
+        <text x="410" y="74">2</text>
+        <text x="474" y="74">3</text>
+        <text x="538" y="74">4</text>
+      </g>
+      <g fill="var(--ink)" font-size="17">
+        <text x="282" y="104">3</text>
+        <text x="346" y="104">1</text>
+        <text x="410" y="104">4</text>
+        <text x="474" y="104">1</text>
+        <text x="538" y="104">5</text>
+      </g>
+    </g>
+    <text x="594" y="94" font-size="11" fill="var(--muted)">长度 5</text>
+    <text x="32" y="168" font-size="12.5" fill="var(--ink)">a[2] 的地址 = 首地址 + 2 × 4 字节。一次乘法就能算出来,所以随机访问是 O(1)。</text>
+    <text x="32" y="200" font-size="12.5" fill="var(--muted)">扩容只能新建一个更大的数组,把旧元素逐个复制过去:代价 O(n),而且旧数组要等 GC 回收。</text>
+  </svg>
+  <figcaption>数组变量是引用,数据在堆上连续存放;下标就是偏移量,所以读得快、插入慢。</figcaption>
+</figure>
+
 ## 定义与初始化
 
 两种写法:

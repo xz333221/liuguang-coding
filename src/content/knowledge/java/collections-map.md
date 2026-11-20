@@ -51,6 +51,59 @@ get 同理:定位桶 → 桶内 equals 比对 → 命中返回 value。
 
 平均 put/get O(1);最坏(全部冲突)O(log n)(树化后)。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 330" role="img" aria-label="HashMap 的数组加链表结构,冲突的键挂在同一个桶下面,过长会转成红黑树">
+    <defs>
+      <marker id="mapArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" />
+      </marker>
+    </defs>
+    <rect x="6" y="6" width="748" height="318" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <text x="32" y="36" font-size="13" font-weight="700" fill="var(--ink)">table:Node 数组,下标 = hash(key) &amp; (长度 - 1)</text>
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" text-anchor="middle">
+      <g fill="var(--muted)" font-size="11">
+        <text x="86" y="66">0</text>
+        <text x="166" y="66">1</text>
+        <text x="246" y="66">2</text>
+        <text x="326" y="66">3</text>
+        <text x="406" y="66">4</text>
+        <text x="486" y="66">5</text>
+        <text x="566" y="66">6</text>
+        <text x="646" y="66">7</text>
+      </g>
+      <g fill="var(--canvas)" stroke="var(--line)">
+        <rect x="48" y="76" width="76" height="40" rx="8" />
+        <rect x="128" y="76" width="76" height="40" rx="8" />
+        <rect x="208" y="76" width="76" height="40" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+        <rect x="288" y="76" width="76" height="40" rx="8" />
+        <rect x="368" y="76" width="76" height="40" rx="8" />
+        <rect x="448" y="76" width="76" height="40" rx="8" />
+        <rect x="528" y="76" width="76" height="40" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+        <rect x="608" y="76" width="76" height="40" rx="8" />
+      </g>
+    </g>
+    <line x1="246" y1="118" x2="246" y2="146" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#mapArrow)" />
+    <rect x="208" y="148" width="76" height="38" rx="8" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="246" y="172" font-size="11.5" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--ink)" text-anchor="middle">k1 → v1</text>
+    <line x1="246" y1="188" x2="246" y2="214" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#mapArrow)" />
+    <rect x="208" y="216" width="76" height="38" rx="8" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="246" y="240" font-size="11.5" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--ink)" text-anchor="middle">k2 → v2</text>
+    <text x="246" y="276" font-size="11" fill="var(--muted)" text-anchor="middle">链表:冲突了就往后挂</text>
+    <line x1="566" y1="118" x2="566" y2="146" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#mapArrow)" />
+    <rect x="528" y="148" width="76" height="34" rx="8" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="566" y="170" font-size="11" fill="var(--ink)" text-anchor="middle">树根</text>
+    <line x1="566" y1="184" x2="530" y2="208" stroke="var(--muted)" stroke-width="1.2" />
+    <line x1="566" y1="184" x2="602" y2="208" stroke="var(--muted)" stroke-width="1.2" />
+    <rect x="494" y="210" width="66" height="30" rx="8" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="527" y="230" font-size="11" fill="var(--muted)" text-anchor="middle">左</text>
+    <rect x="570" y="210" width="66" height="30" rx="8" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="603" y="230" font-size="11" fill="var(--muted)" text-anchor="middle">右</text>
+    <text x="566" y="276" font-size="11" fill="var(--muted)" text-anchor="middle">链表 &gt; 8 且容量 ≥ 64:转红黑树</text>
+    <text x="32" y="304" font-size="12" fill="var(--muted)">负载因子 0.75:元素数超过 容量 × 0.75 就翻倍扩容,所有 key 重新算下标(rehash)。</text>
+  </svg>
+  <figcaption>平均 O(1) 来自「先算桶再比一次」;桶里挂得太多就退化成链表,所以有转树与扩容两道保险。</figcaption>
+</figure>
+
 ## key 的契约:hashCode 与 equals
 
 HashMap 依赖第 3 章的契约:equals 相等的 key 必须 hashCode 相等。用自定义类作 key 时务必同时覆写两者,且**作 key 期间不要修改参与 hashCode 的字段**,否则定位到的桶变了,存得进取不出。

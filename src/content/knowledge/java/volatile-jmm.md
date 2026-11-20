@@ -45,6 +45,36 @@ volatile boolean running = true;   // 一个线程写,其它线程读,合适
 
 典型适用:状态标志、一次性发布的安全引用。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 300" role="img" aria-label="每个线程有自己的工作内存副本,volatile 强制读写都落到主内存">
+    <defs>
+      <marker id="jmmArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" />
+      </marker>
+    </defs>
+    <rect x="6" y="6" width="748" height="288" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <rect x="272" y="34" width="216" height="72" rx="12" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="380" y="62" font-size="13" font-weight="700" fill="var(--ink)" text-anchor="middle">主内存</text>
+    <text x="380" y="84" font-size="12" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--muted)" text-anchor="middle">flag = false</text>
+    <rect x="40" y="176" width="210" height="86" rx="12" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="145" y="202" font-size="13" fill="var(--ink)" text-anchor="middle">线程 A 的工作内存</text>
+    <text x="145" y="226" font-size="11.5" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--muted)" text-anchor="middle">flag 副本</text>
+    <text x="145" y="248" font-size="11" fill="var(--muted)" text-anchor="middle">不 volatile 时可能一直是旧值</text>
+    <rect x="510" y="176" width="210" height="86" rx="12" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="615" y="202" font-size="13" fill="var(--ink)" text-anchor="middle">线程 B 的工作内存</text>
+    <text x="615" y="226" font-size="11.5" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--muted)" text-anchor="middle">flag 副本</text>
+    <text x="615" y="248" font-size="11" fill="var(--muted)" text-anchor="middle">改了之后没同步回去</text>
+    <line x1="150" y1="172" x2="290" y2="110" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#jmmArrow)" />
+    <line x1="296" y1="120" x2="156" y2="182" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#jmmArrow)" />
+    <line x1="610" y1="172" x2="470" y2="110" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#jmmArrow)" />
+    <line x1="464" y1="120" x2="604" y2="182" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#jmmArrow)" />
+    <text x="176" y="140" font-size="11" fill="var(--muted)">read / load</text>
+    <text x="520" y="140" font-size="11" fill="var(--muted)">write / store</text>
+    <text x="380" y="134" font-size="11" fill="var(--muted)" text-anchor="middle">volatile:读写都直接过主内存</text>
+  </svg>
+  <figcaption>可见性问题来自「副本各存一份」;volatile 保证写入立刻回到主内存、读取强制重新拉取。</figcaption>
+</figure>
+
 ## happens-before:可见性的判据
 
 JMM 用 happens-before 关系定义"一个操作的结果对另一个操作可见"。常用规则:

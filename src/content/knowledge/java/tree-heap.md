@@ -112,6 +112,75 @@ BST 删除节点分三种情况:叶子直接删;只有一个孩子用孩子顶�
 
 两个操作最多走树高,所以是 O(log n)。建堆用「从最后一个非叶节点往前逐个下沉」,整体是 O(n),不是 O(n log n)。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 330" role="img" aria-label="完全二叉树可以直接存放在数组里,父节点与孩子节点下标有固定关系">
+    <rect x="6" y="6" width="748" height="318" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <text x="32" y="34" font-size="12" fill="var(--muted)">小顶堆:每个节点都不大于自己的孩子,堆顶就是最小值</text>
+    <g stroke="var(--line-strong)" stroke-width="1.3">
+      <line x1="210" y1="92" x2="120" y2="118" />
+      <line x1="210" y1="92" x2="300" y2="118" />
+      <line x1="120" y1="162" x2="60" y2="188" />
+      <line x1="120" y1="162" x2="180" y2="188" />
+      <line x1="300" y1="162" x2="240" y2="188" />
+      <line x1="300" y1="162" x2="360" y2="188" />
+    </g>
+    <g text-anchor="middle">
+      <g fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55">
+        <circle cx="210" cy="70" r="22" />
+        <circle cx="120" cy="140" r="22" />
+        <circle cx="300" cy="140" r="22" />
+      </g>
+      <g fill="var(--canvas)" stroke="var(--line)">
+        <circle cx="60" cy="210" r="22" />
+        <circle cx="180" cy="210" r="22" />
+        <circle cx="240" cy="210" r="22" />
+        <circle cx="360" cy="210" r="22" />
+      </g>
+      <g font-size="13" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--ink)">
+        <text x="210" y="75">1</text>
+        <text x="120" y="145">3</text>
+        <text x="300" y="145">2</text>
+        <text x="60" y="215">7</text>
+        <text x="180" y="215">5</text>
+        <text x="240" y="215">9</text>
+        <text x="360" y="215">4</text>
+      </g>
+    </g>
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" text-anchor="middle">
+      <g fill="var(--canvas)" stroke="var(--line)">
+        <rect x="60" y="262" width="60" height="42" rx="8" />
+        <rect x="124" y="262" width="60" height="42" rx="8" />
+        <rect x="188" y="262" width="60" height="42" rx="8" />
+        <rect x="252" y="262" width="60" height="42" rx="8" />
+        <rect x="316" y="262" width="60" height="42" rx="8" />
+        <rect x="380" y="262" width="60" height="42" rx="8" />
+        <rect x="444" y="262" width="60" height="42" rx="8" />
+      </g>
+      <g font-size="12" fill="var(--ink)">
+        <text x="90" y="288">1</text>
+        <text x="154" y="288">3</text>
+        <text x="218" y="288">2</text>
+        <text x="282" y="288">7</text>
+        <text x="346" y="288">5</text>
+        <text x="410" y="288">9</text>
+        <text x="474" y="288">4</text>
+      </g>
+      <g font-size="10" fill="var(--muted)">
+        <text x="90" y="302">0</text>
+        <text x="154" y="302">1</text>
+        <text x="218" y="302">2</text>
+        <text x="282" y="302">3</text>
+        <text x="346" y="302">4</text>
+        <text x="410" y="302">5</text>
+        <text x="474" y="302">6</text>
+      </g>
+    </g>
+    <text x="534" y="280" font-size="11.5" fill="var(--ink)">父 i 的孩子:2i+1、2i+2</text>
+    <text x="534" y="302" font-size="11.5" fill="var(--ink)">孩子 j 的父:(j-1)/2</text>
+  </svg>
+  <figcaption>不用指针也能表达层次:下标就是位置,所以堆用数组存最省内存。</figcaption>
+</figure>
+
 ## PriorityQueue
 
 Java 的 `PriorityQueue` 就是小顶堆:

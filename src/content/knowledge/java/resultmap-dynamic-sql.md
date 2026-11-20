@@ -94,6 +94,38 @@ sources:
 
 判断标准:列表查询用嵌套结果(join),详情查询才用嵌套查询。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 290" role="img" aria-label="嵌套结果用一条 join 查询,嵌套查询是一条主查询加 N 条子查询">
+    <rect x="6" y="6" width="748" height="278" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <rect x="32" y="36" width="340" height="212" rx="14" fill="var(--canvas)" stroke="var(--line-strong)" />
+    <text x="52" y="62" font-size="13" font-weight="700" fill="var(--ink)">嵌套结果:一条 join</text>
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11">
+      <rect x="52" y="76" width="300" height="26" rx="6" fill="var(--panel)" stroke="var(--line)" />
+      <text x="64" y="94" fill="var(--muted)">order 1 | item 甲</text>
+      <rect x="52" y="108" width="300" height="26" rx="6" fill="var(--panel)" stroke="var(--line)" />
+      <text x="64" y="126" fill="var(--muted)">order 1 | item 乙</text>
+      <rect x="52" y="140" width="300" height="26" rx="6" fill="var(--panel)" stroke="var(--line)" />
+      <text x="64" y="158" fill="var(--muted)">order 1 | item 丙</text>
+    </g>
+    <text x="52" y="192" font-size="11" fill="var(--muted)">同一个 id 的行,由 resultMap 按 &lt;id&gt; 合并</text>
+    <text x="52" y="220" font-size="12" fill="var(--ink)">结果:1 个 Order,items 里 3 条</text>
+    <rect x="388" y="36" width="340" height="212" rx="14" fill="var(--canvas)" stroke="var(--line-strong)" />
+    <text x="408" y="62" font-size="13" font-weight="700" fill="var(--ink)">嵌套查询:1 + N 条</text>
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11">
+      <rect x="408" y="76" width="300" height="26" rx="6" fill="var(--panel)" stroke="var(--line)" />
+      <text x="420" y="94" fill="var(--muted)">1. 查订单列表</text>
+      <rect x="408" y="108" width="300" height="26" rx="6" fill="var(--panel)" stroke="var(--line)" />
+      <text x="420" y="126" fill="var(--muted)">2. 订单 1 → 查明细</text>
+      <rect x="408" y="140" width="300" height="26" rx="6" fill="var(--panel)" stroke="var(--line)" />
+      <text x="420" y="158" fill="var(--muted)">3. 订单 2 → 查明细</text>
+    </g>
+    <text x="408" y="192" font-size="11" fill="var(--muted)">4. 订单 3 → 查明细 …… 一共 N 次往返</text>
+    <text x="408" y="220" font-size="12" fill="var(--ink)">结果一样,数据库被打 N+1 次</text>
+    <text x="32" y="272" font-size="12" fill="var(--muted)">列表接口用左边;详情页数据量小,右边配懒加载也能接受。</text>
+  </svg>
+  <figcaption>N+1 不是「写法错」,而是「每条订单都多一次往返」——数据量一大就现原形。</figcaption>
+</figure>
+
 ## typeAlias
 
 `resultType` 里写全限定名太长,可以注册别名:

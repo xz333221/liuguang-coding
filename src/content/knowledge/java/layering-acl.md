@@ -131,6 +131,36 @@ public class LegacyStockAdapter implements StockPort {
 
 它**只转换,不写业务规则**。如果适配器里开始出现「库存小于 10 就预警」这种判断,那说明规则放错地方了——应该放在领域层,由它接收 `StockInfo` 之后决定。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 250" role="img" aria-label="防腐层把外部系统的响应转换成本上下文的领域对象">
+    <defs>
+      <marker id="aclArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" />
+      </marker>
+    </defs>
+    <rect x="6" y="6" width="748" height="238" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <rect x="32" y="60" width="216" height="110" rx="12" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="140" y="84" font-size="12" fill="var(--muted)" text-anchor="middle">外部系统</text>
+    <text x="140" y="108" font-size="11" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--ink)" text-anchor="middle">LegacyStockResp</text>
+    <text x="140" y="128" font-size="11" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--muted)" text-anchor="middle">s=3, q=120, u="pcs"</text>
+    <text x="140" y="152" font-size="10.5" fill="var(--muted)" text-anchor="middle">字段缩写,状态码是数字</text>
+    <line x1="256" y1="115" x2="300" y2="115" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#aclArrow)" />
+    <rect x="306" y="52" width="160" height="126" rx="12" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="386" y="80" font-size="12.5" font-weight="700" fill="var(--ink)" text-anchor="middle">防腐层</text>
+    <text x="386" y="104" font-size="11" fill="var(--muted)" text-anchor="middle">3 → AVAILABLE</text>
+    <text x="386" y="126" font-size="11" fill="var(--muted)" text-anchor="middle">分 → 元,磅 → 千克</text>
+    <text x="386" y="148" font-size="11" fill="var(--muted)" text-anchor="middle">异常 → 本上下文错误</text>
+    <line x1="474" y1="115" x2="518" y2="115" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#aclArrow)" />
+    <rect x="524" y="60" width="204" height="110" rx="12" fill="var(--canvas)" stroke="var(--line-strong)" />
+    <text x="626" y="84" font-size="12" fill="var(--muted)" text-anchor="middle">领域层</text>
+    <text x="626" y="108" font-size="11" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--ink)" text-anchor="middle">StockInfo</text>
+    <text x="626" y="128" font-size="11" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--muted)" text-anchor="middle">sku, qty, StockState</text>
+    <text x="626" y="152" font-size="10.5" fill="var(--muted)" text-anchor="middle">只说业务语言</text>
+    <text x="32" y="210" font-size="12" fill="var(--muted)">适配器只做翻译:不在这里判断「库存低于 10 就预警」,那是领域层的规则。</text>
+  </svg>
+  <figcaption>外部字段名留在适配器里,领域层永远看不到 <code>s</code> / <code>q</code> 这种缩写。</figcaption>
+</figure>
+
 ## 常见误区
 
 - **表现层直接调仓储**。Controller → Repository 跳过了应用层,事务边界和事件发布都没了。小项目偶尔图快,代价是后面加一个「下单后发消息」要改所有 Controller;

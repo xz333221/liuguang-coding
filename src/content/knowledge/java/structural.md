@@ -149,6 +149,66 @@ public class ThirdPartyPayAdapter implements PayGateway {
 
 对象适配器(组合)比类适配器(多继承)更常用,因为 Java 单继承,而且组合还能在运行期替换实现。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 290" role="img" aria-label="代理、装饰器、适配器三者都包一层,但接口关系与意图不同">
+    <defs>
+      <marker id="stArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" />
+      </marker>
+    </defs>
+    <rect x="6" y="6" width="748" height="278" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <g>
+      <rect x="24" y="30" width="228" height="228" rx="14" fill="var(--canvas)" stroke="var(--line-strong)" />
+      <text x="44" y="54" font-size="12.5" font-weight="700" fill="var(--ink)">代理</text>
+      <g font-size="11.5" text-anchor="middle">
+        <rect x="48" y="66" width="180" height="34" rx="8" fill="var(--panel)" stroke="var(--line)" />
+        <text x="138" y="88" fill="var(--ink)">调用方</text>
+        <rect x="48" y="122" width="180" height="34" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+        <text x="138" y="144" fill="var(--ink)">代理:控制访问</text>
+        <rect x="48" y="178" width="180" height="34" rx="8" fill="var(--panel)" stroke="var(--line)" />
+        <text x="138" y="200" fill="var(--ink)">目标(同接口)</text>
+      </g>
+      <line x1="138" y1="104" x2="138" y2="116" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#stArrow)" />
+      <line x1="138" y1="160" x2="138" y2="172" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#stArrow)" />
+      <text x="138" y="238" font-size="11" fill="var(--muted)" text-anchor="middle">决定「能不能进」</text>
+    </g>
+    <g>
+      <rect x="266" y="30" width="228" height="228" rx="14" fill="var(--canvas)" stroke="var(--line-strong)" />
+      <text x="286" y="54" font-size="12.5" font-weight="700" fill="var(--ink)">装饰器</text>
+      <g font-size="11.5" text-anchor="middle">
+        <rect x="290" y="66" width="180" height="30" rx="8" fill="var(--panel)" stroke="var(--line)" />
+        <text x="380" y="86" fill="var(--ink)">调用方</text>
+        <rect x="290" y="110" width="180" height="30" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+        <text x="380" y="130" fill="var(--ink)">装饰器 A:日志</text>
+        <rect x="290" y="154" width="180" height="30" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+        <text x="380" y="174" fill="var(--ink)">装饰器 B:重试</text>
+        <rect x="290" y="198" width="180" height="30" rx="8" fill="var(--panel)" stroke="var(--line)" />
+        <text x="380" y="218" fill="var(--ink)">目标(同接口)</text>
+      </g>
+      <line x1="380" y1="100" x2="380" y2="106" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#stArrow)" />
+      <line x1="380" y1="144" x2="380" y2="150" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#stArrow)" />
+      <line x1="380" y1="188" x2="380" y2="194" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#stArrow)" />
+      <text x="380" y="246" font-size="11" fill="var(--muted)" text-anchor="middle">任意层,叠加能力</text>
+    </g>
+    <g>
+      <rect x="508" y="30" width="228" height="228" rx="14" fill="var(--canvas)" stroke="var(--line-strong)" />
+      <text x="528" y="54" font-size="12.5" font-weight="700" fill="var(--ink)">适配器</text>
+      <g font-size="11.5" text-anchor="middle">
+        <rect x="532" y="66" width="180" height="34" rx="8" fill="var(--panel)" stroke="var(--line)" />
+        <text x="622" y="88" fill="var(--ink)">调用方(期望接口)</text>
+        <rect x="532" y="122" width="180" height="34" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+        <text x="622" y="144" fill="var(--ink)">适配器:转换</text>
+        <rect x="532" y="178" width="180" height="34" rx="8" fill="var(--panel)" stroke="var(--line)" stroke-dasharray="5 4" />
+        <text x="622" y="200" fill="var(--muted)">第三方(接口不同)</text>
+      </g>
+      <line x1="622" y1="104" x2="622" y2="116" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#stArrow)" />
+      <line x1="622" y1="160" x2="622" y2="172" stroke="var(--muted)" stroke-width="1.4" marker-end="url(#stArrow)" />
+      <text x="622" y="238" font-size="11" fill="var(--muted)" text-anchor="middle">接口对不上才用它</text>
+    </g>
+  </svg>
+  <figcaption>结构几乎一样,区别只在意图:控制访问 / 叠加能力 / 转换接口。</figcaption>
+</figure>
+
 ## 三者怎么分
 
 | | 代理 | 装饰器 | 适配器 |

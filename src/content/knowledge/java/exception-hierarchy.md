@@ -34,6 +34,39 @@ Throwable
 
 记住这个分法:Error 与 Exception 平级,RuntimeException 是 Exception 的子类。后面所有的规则都围绕这条继承链展开。
 
+<figure class="lg-figure">
+  <svg class="lg-diagram" viewBox="0 0 760 320" role="img" aria-label="Throwable 分出 Error 与 Exception,Exception 再分受检异常与 RuntimeException">
+    <defs>
+      <marker id="exArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" />
+      </marker>
+    </defs>
+    <rect x="6" y="6" width="748" height="308" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
+    <rect x="290" y="30" width="180" height="44" rx="10" fill="var(--canvas)" stroke="var(--line-strong)" />
+    <text x="380" y="58" font-size="14" font-weight="700" fill="var(--ink)" text-anchor="middle">Throwable</text>
+    <line x1="380" y1="74" x2="380" y2="96" stroke="var(--muted)" stroke-width="1.5" />
+    <line x1="180" y1="96" x2="580" y2="96" stroke="var(--muted)" stroke-width="1.5" />
+    <line x1="180" y1="96" x2="180" y2="118" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#exArrow)" />
+    <line x1="580" y1="96" x2="580" y2="118" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#exArrow)" />
+    <rect x="90" y="120" width="180" height="44" rx="10" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="180" y="148" font-size="14" font-weight="700" fill="var(--ink)" text-anchor="middle">Error</text>
+    <text x="180" y="184" font-size="11.5" fill="var(--muted)" text-anchor="middle">JVM 层面,程序无力恢复</text>
+    <rect x="490" y="120" width="180" height="44" rx="10" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="580" y="148" font-size="14" font-weight="700" fill="var(--ink)" text-anchor="middle">Exception</text>
+    <line x1="580" y1="164" x2="580" y2="186" stroke="var(--muted)" stroke-width="1.5" />
+    <line x1="380" y1="186" x2="700" y2="186" stroke="var(--muted)" stroke-width="1.5" />
+    <line x1="380" y1="186" x2="380" y2="208" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#exArrow)" />
+    <line x1="700" y1="186" x2="700" y2="208" stroke="var(--muted)" stroke-width="1.5" marker-end="url(#exArrow)" />
+    <rect x="290" y="210" width="180" height="44" rx="10" fill="var(--canvas)" stroke="var(--line)" />
+    <text x="380" y="238" font-size="13" font-weight="700" fill="var(--ink)" text-anchor="middle">RuntimeException</text>
+    <text x="380" y="272" font-size="11.5" fill="var(--muted)" text-anchor="middle">非受检:编译器不强制处理</text>
+    <rect x="610" y="210" width="180" height="44" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-opacity="0.55" />
+    <text x="700" y="238" font-size="13" font-weight="700" fill="var(--ink)" text-anchor="middle">其他 Exception</text>
+    <text x="700" y="272" font-size="11.5" fill="var(--muted)" text-anchor="middle">受检:不处理就编译不过</text>
+  </svg>
+  <figcaption>能 catch 的是 Exception;Error 与 RuntimeException 都不该靠 catch 兜住。</figcaption>
+</figure>
+
 ## Error:JVM 层面的严重问题
 
 Error 表示运行环境本身出了严重问题,例如:
