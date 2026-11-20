@@ -60,7 +60,7 @@
     const loadIndex = () => {
       if (docs) return Promise.resolve()
       if (!loading) {
-        loading = fetch(indexUrl)
+        loading = fetch(indexUrl, { cache: 'no-cache' })
           .then((res) => res.json() as Promise<SearchDoc[]>)
           .then((data) => {
             docs = data

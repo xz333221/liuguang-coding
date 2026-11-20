@@ -216,6 +216,9 @@ if (existsSync(DIST)) {
           res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
         } else if (filePath.endsWith('.html')) {
           res.setHeader('Cache-Control', 'no-cache')
+        } else if (filePath.endsWith('search-index.json')) {
+          // 索引跟着构建走,发布后要立刻能搜到新文章;保留 ETag,让浏览器发条件请求。
+          res.setHeader('Cache-Control', 'no-cache')
         } else if (/\.(png|jpe?g|svg|webp|woff2?|json)$/i.test(filePath)) {
           res.setHeader('Cache-Control', 'public, max-age=3600')
         }

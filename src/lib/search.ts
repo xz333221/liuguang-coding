@@ -99,23 +99,39 @@ export function searchIndex(docs: SearchDoc[], query: string, limit = 20): Searc
   return hits.slice(0, limit)
 }
 
-/** 把命中词包成 <mark>,顺带转义 HTML。 */
-export function highlight(text: string, query: string): string {
-  const tokens = tokenize(query)
-  const escaped = text
+function escapeHtml(text: string): string {
+  return text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
 
-  if (tokens.length === 0) return escaped
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
 
-  // 长词优先,避免「线程」把「线程池」拆开标两次
-  const sorted = [...tokens].sort((a, b) => b.length - a.length)
-  let out = escaped
-  for (const token of sorted) {
-    const safe = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    out = out.replace(new RegExp(safe, 'gi'), (match) => `<mark>${match}</mark>`)
+/** 把命中词包成 <mark>,顺带转义 HTML。 */
+export function highlight(text: string, query: string): string {
+  const tokens = tokenize(query)
+  if (tokens.length === 0) return escapeHtml(text)
+
+  // 一次替换完成:先把所有词拼成一个正则,长词在前。
+  // 逐词替换会出两个问题:后一个词可能命中前一次插入的 <mark> 标签;
+  // 「线程」也会把已经标好的「线程池」再拆开。
+  const pattern = new RegExp(
+    [...tokens].sort((a, b) => b.length - a.length).map(escapeRegExp).join('|'),
+    'gi',
+  )
+
+  let out = ''
+  let last = 0
+  for (const match of text.matchAll(pattern)) {
+    const at = match.index ?? 0
+    out += escapeHtml(text.slice(last, at))
+    out += `<mark>${escapeHtml(match[0])}</mark>`
+    last = at + match[0].length
   }
-  return out
+  return out + escapeHtml(text.slice(last))
 }
