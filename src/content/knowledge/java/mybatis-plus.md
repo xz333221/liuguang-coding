@@ -1,12 +1,12 @@
 ---
 title: MyBatis 与 MyBatis-Plus 的分工
-summary: 'MyBatis 负责 SQL 映射:Mapper 接口声明方法,XML 或注解承载 SQL,框架完成参数绑定与结果映射;MyBatis-Plus 在此基础上补 BaseMapper 通用 CRUD、条件构造器、分页、逻辑删除与代码生成,复杂查询仍应写在 XML。'
+summary: 'MyBatis 是 SQL 映射框架:Mapper 接口声明方法,XML 或注解承载 SQL,框架负责参数绑定与结果映射;MyBatis-Plus 在它之上补 BaseMapper 单表 CRUD、条件构造器、分页、逻辑删除与代码生成。单表增删改查交给 Plus,join、聚合与复杂映射仍写 XML。'
 category: java
 node: java-persistence-mybatis
 order: 76
 level: 进阶
 tags: [MyBatis, MyBatis-Plus, Mapper, CRUD]
-updated: 2026-11-19
+updated: 2026-11-20
 mindmap: mybatis-plus.mindmap.json
 terms: ["mybatis", "mybatis-plus", "mapper", "spring-boot"]
 sources:
@@ -15,145 +15,125 @@ sources:
     note: SqlSessionFactory、Mapper 接口与 XML 映射的整体结构。
   - title: MyBatis 3 · XML Mapper
     url: https://mybatis.org/mybatis-3/sqlmap-xml.html
-    note: mapper namespace、select/insert/update/delete 与 resultMap 的定义。
+    note: namespace、select/insert/update/delete 与 resultMap 的定义。
   - title: MyBatis-Plus 官方文档
     url: https://baomidou.com/
     note: BaseMapper、IService、注解与插件的能力范围。
 ---
 
-上一章的 Spring Cloud 解决了服务之间的注册、配置与网关;服务之间能互相调用之后,数据最终仍要落到数据库。这一篇从 MyBatis 与 MyBatis-Plus 的分界讲起:哪些代码由框架生成,哪些 SQL 必须自己写。
+上一章讲完服务之间怎么调,这一章回到一个服务内部:数据存哪、怎么读写。Java 访问数据库的底层是 JDBC,但业务代码几乎不直接写 JDBC——样板太多。中间这一层就是 MyBatis,以及它之上的 MyBatis-Plus。
 
-## 一个负责映射,一个负责通用 CRUD
+## 两者是什么关系
 
-MyBatis 是半自动 ORM 框架。ORM(Object-Relational Mapping,对象关系映射)把表的一行映射成 Java 对象;「半自动」指 SQL 仍由开发者书写,框架只负责参数绑定、执行与结果映射。与 Hibernate 那类全自动 ORM 相比,SQL 可见、可调优。
+- **MyBatis** 是 SQL 映射框架。你写 SQL,它负责把参数塞进去、把结果集变成对象;
+- **MyBatis-Plus** 不是另一个框架,是 MyBatis 的增强包。它复用同一个 `SqlSessionFactory`,通过插件与 `BaseMapper` 补上单表 CRUD、条件构造器、分页、逻辑删除、代码生成。
 
-MyBatis-Plus(简称 MP)是 MyBatis 之上的一层增强,并非替代品:保留全部 MyBatis 能力,再补上单表通用 CRUD、条件构造器(Wrapper)、分页插件、逻辑删除、主键策略与代码生成器。
+一句话分工:**通用的单表 CRUD 交给 Plus,需要设计 SQL 的地方自己写**。Plus 生成的 SQL 你看不到也改不了,复杂查询硬用条件构造器拼,最后会写出一段比 SQL 更难读的 Java。
 
-分工可以概括为一句话:MP 覆盖增删改查的重复部分,MyBatis 的 XML 承担业务查询。
+## 一个 Mapper 长什么样
 
-| 能力 | 提供方 |
-| --- | --- |
-| SQL 与结果映射 | MyBatis |
-| 参数绑定、缓存、插件 | MyBatis |
-| BaseMapper 单表 CRUD | MyBatis-Plus |
-| 条件构造器、分页 | MyBatis-Plus |
-| 逻辑删除、代码生成 | MyBatis-Plus |
+MyBatis 的核心是「接口 + SQL」的绑定:
 
-## Mapper 接口:XML 与注解两种写法
+```java
+@Mapper
+public interface UserMapper {
 
-Mapper 是一个接口,方法名对应一条 SQL 的 id。MyBatis 在启动时为接口生成代理实现,调用方法即执行对应 SQL,不需要手写实现类。
+    @Select("select id, user_name, created_at from user where id = #{id}")
+    User selectById(Long id);
 
-XML 方式把 SQL 放在 resources/mapper/UserMapper.xml:
+    List<User> selectActive();
+}
+```
+
+`selectActive` 没有注解,对应的 SQL 写在 XML 里:
 
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.UserMapper">
-
-    <select id="findById" resultType="com.example.entity.User">
-        select id, name, age from sys_user where id = #{id}
-    </select>
+  <select id="selectActive" resultType="com.example.domain.User">
+    select id, user_name, created_at
+    from user
+    where status = 1
+    order by id desc
+  </select>
 </mapper>
 ```
 
-namespace 必须是 Mapper 接口的全限定名,id 与接口方法名一致,MyBatis 靠这两项把方法与 SQL 对应起来。
+两条规则不能错:XML 的 `namespace` 必须等于接口全限定名,语句的 `id` 必须等于方法名。对不上时启动不一定报错,第一次调用才抛 `Invalid bound statement (not found)`——这个报错九成是名字对不上或 XML 没被打包进去。
 
-注解方式适合只有一两行 SQL 的场景:
+启动类上加 `@MapperScan("com.example.mapper")` 可以省掉每个接口的 `@Mapper`。
+
+XML 放在 `src/main/resources/mapper/` 下,Boot 默认就扫这个位置。放在 Java 包下时要配 `mybatis.mapper-locations`,并且让 Maven 把 `**/*.xml` 一起打进 jar,否则本地能跑、打包后报找不到。
+
+## BaseMapper:继承就有的单表 CRUD
 
 ```java
-public interface UserMapper {
-    @Select("select id, name, age from sys_user where id = #{id}")
-    User findById(Long id);
+public interface UserMapper extends BaseMapper<User> {
+    // 不用写任何方法
 }
 ```
 
-两种写法可以混用,同一接口里多数方法走注解、复杂方法放 XML 也可以。SQL 超过一行或需要动态标签时,写在 XML 里更易读。
-
-## @Mapper 与 @MapperScan
-
-@Mapper 标在单个接口上,MyBatis 启动时扫描并注册它。接口分散在多个包时逐个标注很繁琐,改用 @MapperScan 在配置类上声明包路径:
+`BaseMapper<User>` 提供了 `insert`、`deleteById`、`updateById`、`selectById`、`selectList`、`selectCount`、`selectPage` 等方法。它们靠实体上的注解推断表名与列名:
 
 ```java
-@MapperScan("com.example.mapper")
-@SpringBootApplication
-public class Application { }
-```
-
-Spring Boot 项目通常直接用 @MapperScan,省去每个接口的注解。两个都写不会报错,但只保留一种即可。
-
-## BaseMapper:MP 提供的单表 CRUD
-
-继承 BaseMapper<T>,不用写任何 SQL 就有常用方法:
-
-```java
-public interface UserMapper extends BaseMapper<User> { }
-```
-
-常用方法:
-
-- insert(entity)、deleteById(id)、updateById(entity)、selectById(id);
-- selectList(wrapper)、selectCount(wrapper)、selectPage(page, wrapper);
-- selectBatchIds(ids)、deleteBatchIds(ids)。
-
-泛型 T 是实体类,MP 通过反射读取表名、主键与字段。实体与表的对应关系用注解声明:
-
-```java
-@TableName("sys_user")
+@TableName("t_user")
 public class User {
+
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    @TableField("user_name")
-    private String userName;
+    private String userName;          // 默认转成 user_name
+
+    @TableField("created_at")
+    private LocalDateTime createdAt;
 
     @TableField(exist = false)
-    private String token;   // 非表字段,不参与 CRUD
+    private List<Role> roles;         // 不是表字段,别让 Plus 拼进 SQL
 }
 ```
 
-- @TableName:实体对应的表名,省略时按类名做驼峰转下划线;
-- @TableId:主键字段与生成策略,AUTO 表示数据库自增,ASSIGN_ID 使用雪花算法;
-- @TableField:普通字段的列名;exist = false 表示该字段不在表中。
+默认的驼峰转下划线映射是开着的(`map-underscore-to-camel-case`),所以 `userName` 对应 `user_name` 不用额外声明。字段名和列名完全对不上时才需要 `@TableField`。
 
-## Service 层:IService 与 ServiceImpl
+主键策略要选对:`AUTO` 交给数据库自增;`ASSIGN_ID` 用雪花算法生成 19 位 Long,分库分表时不会撞;`ASSIGN_UUID` 生成字符串。用 `AUTO` 却把数据库列建成了 varchar,插入就会失败。
 
-MP 还提供了 Service 层封装,IService<T> 定义常用业务方法,ServiceImpl<M extends BaseMapper<T>, T> 给出实现:
+## Service 层:IService 是薄封装
 
 ```java
 public interface UserService extends IService<User> {
-    User findByPhone(String phone);
+    void register(RegisterCmd cmd);
 }
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
     @Override
-    public User findByPhone(String phone) {
-        return lambdaQuery().eq(User::getPhone, phone).one();
+    public void register(RegisterCmd cmd) {
+        // 业务规则:校验、加密、发事件
+        save(new User(cmd.name(), cmd.rawPassword()));
     }
 }
 ```
 
-Controller 注入 UserService 后,既能调用 save、removeById、page 这类通用方法,也能调用自己声明的方法。通用方法与自定义方法放在同一个入口,业务代码不必区分来源。
+`ServiceImpl` 把 Mapper 的方法原样转出来,`save`、`getById`、`list`、`page` 都能直接用。它只是省掉一层转发代码,不是业务层。业务逻辑该写在自己的方法里,而不是让 Controller 直接调 `service.getById()` 拼流程——那样分层就没意义了。
 
-需要说明的是,IService 只是对 BaseMapper 的薄封装,它不产生新的 SQL 能力;复杂查询仍要回到 Mapper。
+## 边界在哪
 
-## 复杂 SQL 应该写在 XML
+| 场景 | 写哪 |
+| --- | --- |
+| 按主键查、按单表条件查 | `BaseMapper` + Wrapper |
+| 一对多、多表 join | XML + `resultMap` |
+| `group by`、聚合统计、窗口函数 | XML |
+| 批量插入几万条 | XML + `foreach`,配 `rewriteBatchedStatements` |
+| 报表类复杂查询 | XML,必要时直接 `@Select` 写整段 SQL |
 
-MP 的通用方法只覆盖单表。出现以下情况时,把 SQL 写回 Mapper XML:
-
-- 多表 join、子查询、聚合与窗口函数;
-- 需要精确控制索引提示、执行顺序或分页写法;
-- 结果需要映射成多个对象(association / collection);
-- 动态条件与业务语义强相关,用条件构造器拼出来反而难读。
-
-用 MP 的 CRUD 替代所有查询,最终会把 join 拆成多次单表查询,再在 Java 里组装,数据库往返次数与数据量都放大。SQL 擅长的事交给 SQL。
+最常见的性能坑是「用 CRUD 逐表查,再在内存里拼关联」:查 100 个订单,循环里查 100 次用户,数据库被打 101 次。这种查询应该是一条 join,或者两条 in 查询在内存里按 id 分组——判断依据是「能不能用一次 SQL 表达」,而不是「Plus 能不能少写代码」。
 
 ## 小结
 
-- MyBatis 负责 SQL 映射:Mapper 接口声明方法,XML 或注解承载 SQL,框架完成参数绑定与结果映射;
-- MyBatis-Plus 在 MyBatis 之上补 BaseMapper 通用 CRUD、条件构造器、分页、逻辑删除与代码生成;
-- @Mapper 标单个接口,@MapperScan 按包扫描,Spring Boot 项目通常用后者;
-- 实体与表的对应关系由 @TableName、@TableId、@TableField 声明;
-- IService / ServiceImpl 是 Service 层的通用封装,不新增 SQL 能力;
-- 多表 join、复杂结果映射与强业务语义的查询应写在 XML。
+- MyBatis 是 SQL 映射框架,MyBatis-Plus 是它的增强包,复用同一个 `SqlSessionFactory`;
+- Mapper 接口 + XML/注解,`namespace` 与 `id` 必须和方法一一对应;
+- `BaseMapper<T>` 继承即得单表 CRUD,靠 `@TableName` / `@TableId` / `@TableField` 推断表结构;
+- 主键策略 `AUTO` 与 `ASSIGN_ID` 各有适用场景,要和数据库列类型匹配;
+- `ServiceImpl` 只是转发,业务逻辑仍写在自己的 service 方法里;
+- join、聚合、复杂映射写 XML;能用一次 SQL 表达的查询,不要拆成 N 次 CRUD。
+
+下一篇讲 XML 里那部分:resultMap 怎么映射列,动态 SQL 怎么按条件拼语句。

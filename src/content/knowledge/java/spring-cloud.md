@@ -1,48 +1,51 @@
 ---
 title: 微服务一览:Spring Cloud 与注册 / 配置 / 网关
-summary: '微服务把单体拆成多个进程,随之需要注册中心维护实例清单、配置中心集中下发配置、API 网关统一入口、客户端负载均衡与 OpenFeign 完成调用;Spring Cloud 是这些项目的集合,通过 BOM 统一版本并与 Spring Boot 对齐。'
+summary: '拆成多个进程后,单体里靠方法调用完成的事变成跨网络调用:注册中心维护实例清单、配置中心集中下发配置、网关统一入口并做鉴权限流、客户端负载均衡与 OpenFeign 完成调用、熔断与链路追踪兜住不稳定;Spring Cloud 是这些组件的集合,用 Release Train 与 BOM 统一版本。'
 category: java
 node: java-spring-cloud
 order: 75
 level: 深入
 tags: [Spring Cloud, 微服务, 网关, Nacos]
-updated: 2026-11-19
+updated: 2026-11-20
 mindmap: spring-cloud.mindmap.json
-terms: ["spring-boot", "dependency-management", "bean"]
+terms: ["spring-boot", "dependency-management", "ioc"]
 sources:
   - title: Spring Cloud 项目主页
     url: https://spring.io/projects/spring-cloud
     note: Release Train 概念、组件清单与版本兼容说明。
-  - title: Spring Cloud Gateway 项目主页
-    url: https://spring.io/projects/spring-cloud-gateway
-    note: 路由、断言与过滤器的定位。
-  - title: Spring Boot Reference
-    url: https://docs.spring.io/spring-boot/reference/index.html
-    note: 内嵌容器、外部化配置与应用启动模型。
+  - title: Spring Cloud Gateway
+    url: https://docs.spring.io/spring-cloud-gateway/reference/
+    note: 路由由 id、uri、断言、过滤器组成的定义。
+  - title: Spring Cloud OpenFeign
+    url: https://docs.spring.io/spring-cloud-openfeign/reference/
+    note: 接口声明式 HTTP 调用与负载均衡的配合。
 ---
 
-上一篇停在单个进程内部:请求如何被容器接收,又如何走到 Controller。系统拆成多个服务后,请求要跨越进程,实例地址会变化,配置也不再集中在一份文件里,Spring Cloud 处理的就是这组问题。
+上一篇停在单个进程内部:请求如何被容器接收,又如何走到 Controller。系统拆成多个服务后,请求要跨进程,实例地址会变,配置也不再集中在一份文件里。Spring Cloud 处理的就是这组「拆开之后才出现」的问题。
 
-## 微服务带来的问题
+## 拆开之后多出来的五件事
 
-单体应用把功能放在一个进程中,模块之间是方法调用;拆成微服务后,同样的调用变成网络请求。收益是独立部署、按需扩容与故障隔离,代价是四类新问题:
+单体里,A 调 B 就是一次方法调用:编译期就能确定目标,失败了抛异常,配置在一份文件里。切成服务后,每件事都变贵了:
 
-- 服务地址不固定,实例随时上下线,调用方需要一个目录;
-- 配置分散在多个进程,修改一项要动多个部署单元;
-- 外部流量需要统一入口,鉴权、限流、日志不适合每个服务各做一遍;
-- 一次请求跨越多个服务,失败与延迟需要可观测。
+- 目标地址会变。B 扩容成三个实例、IP 变了,调用方不能写死;
+- 配置要下发。二十个服务各有一份 yml,改一个超时时间要动二十次;
+- 入口要收敛。鉴权、限流、跨域、日志,不能让每个服务各写一遍;
+- 调用会失败。网络超时、对端挂了,得有超时、重试、熔断;
+- 出了问题要能查。一次请求串了五个服务,日志里得有同一个 id 才串得起来。
 
-Spring Cloud 针对这些问题提供一组组件,每类问题对应一个项目,按需引入。
+Spring Cloud 就是把这些问题的常见解法收成一堆可组装的组件。它不是框架,是一组项目的集合。
 
-## 注册中心:服务如何找到彼此
+## 注册中心:谁在哪
 
-注册中心保存「服务名 → 实例地址列表」的映射。服务启动时注册自己的地址并定期发送心跳,注册中心剔除心跳超时的实例,调用方按服务名查询可用实例,再选择一个发起请求。
+服务启动时把自己的地址注册进注册中心,并定时心跳;调用方从注册中心拉实例列表,缓存到本地。这样扩容、缩容、实例漂移都不需要改配置。
 
-常见实现:
+常见实现有三种:
 
-- Eureka:Netflix 开源,AP 模型,网络分区时保留旧实例列表,靠自我保护机制避免误删;
-- Nacos:阿里巴巴开源,同时提供注册中心与配置中心,支持 AP 与 CP 切换;
-- Consul:Hashicorp 出品,支持多数据中心、健康检查与 KV 存储。
+| | 特点 | 一致性 |
+| --- | --- | --- |
+| Nacos | 注册与配置二合一,国内使用广,控制台好用 | AP / CP 可切换 |
+| Eureka | Netflix 出品,早期 Spring Cloud 默认,已进入维护状态 | AP |
+| Consul | HashiCorp 出品,自带健康检查与 KV | CP |
 
 ```yaml
 spring:
@@ -54,17 +57,27 @@ spring:
         server-addr: 127.0.0.1:8848
 ```
 
-spring.application.name 就是服务名,Feign 与网关都通过它定位实例。名字写错时,报错通常出现在调用方,启动阶段不会提示。
+服务名(这里是 `order-service`)比 IP 更稳定,后面所有跨服务调用都用它对目标。
 
-## 配置中心
+注意:注册中心只解决「有多少实例、在哪」,不解决「调用哪个」。选择实例是负载均衡的事,在客户端做。
 
-配置中心把配置文件集中存放,服务启动时按「应用名 + profile」拉取,修改后在控制台发布,客户端监听变更并刷新。Spring Cloud Config 以 Git 仓库为后端,由独立的 Config Server 提供 HTTP 接口;Nacos Config 把配置存在服务端,支持灰度发布与历史版本。刷新范围受 @RefreshScope 控制,没有标注的 bean 仍持有旧值。
+## 配置中心:一处改,处处生效
 
-## API 网关:统一入口
+配置中心把 yml 从各个仓库里搬出来,按「应用名 + profile」组织,服务启动时拉取,变更时推送。
 
-网关是外部流量的唯一入口,按路径、主机、请求头等条件把请求转发到后端服务,并在转发前后执行过滤器。鉴权、限流、跨域、访问日志集中在这一层,后端服务只处理业务。
+- 好处一:改超时、改开关不用重新打包;
+- 好处二:敏感值集中在服务端,配合权限控制,不用发给每个开发;
+- 好处三:同一个 key 在不同环境、不同命名空间下可以有不同值。
 
-Spring Cloud Gateway 的路由由三部分组成:id、目标 uri、断言(predicate)与过滤器(filter)。
+Nacos 的 dataId 约定是 `${spring.application.name}-${profile}.yml`,加 `@RefreshScope` 的 bean 能在配置变更后重新绑定。Boot 3 之后也可以用 `spring.config.import=nacos:` 的方式在启动早期导入,避免「配置文件还没拉到,数据源已经初始化」的时序问题。
+
+## 网关:所有流量的入口
+
+网关是唯一对外暴露的端口,后面所有服务都在内网。Spring Cloud Gateway 的核心概念只有三个:
+
+- **路由(Route)**:id + 目标 uri + 断言 + 过滤器;
+- **断言(Predicate)**:匹配条件,路径、方法、请求头、时间窗口,全部匹配才转发;
+- **过滤器(Filter)**:转发前后改写请求与响应,加头、去头、限流、重试。
 
 ```yaml
 spring:
@@ -72,53 +85,44 @@ spring:
     gateway:
       routes:
         - id: order
-          uri: lb://order-service
+          uri: lb://order-service        # lb:// 表示交给负载均衡挑实例
           predicates:
             - Path=/api/orders/**
           filters:
-            - AddRequestHeader=X-Gateway, order
+            - StripPrefix=1              # 去掉 /api 前缀再转发
+            - AddRequestHeader=X-From, gateway
 ```
 
-`lb://order-service` 表示不使用固定地址,交给负载均衡器从注册中心选一个实例。断言全部匹配才转发;过滤器可以在转发前修改请求,也可以在响应返回时修改响应。Gateway 基于 WebFlux 与 Netty,属于响应式栈,classpath 中同时存在 spring-boot-starter-web 时需要显式设置 `spring.main.web-application-type=reactive`,否则应用按 servlet 容器启动,网关路由不会生效。
+鉴权、限流、跨域、灰度这些横切逻辑放在网关,下游服务就不用各自实现一遍。代价是网关成了单点,必须多副本部署。
 
-## 负载均衡与声明式调用
+## 服务调用:声明式 HTTP
 
-Spring Cloud LoadBalancer 是客户端负载均衡:调用方从注册中心取得实例列表,按轮询或随机策略选一个,请求直接发往该实例,不经过额外代理。网关的 lb:// 与 Feign 都复用它。
-
-OpenFeign 把 HTTP 调用写成接口。启动时为接口生成代理并注册为 bean,方法上的注解描述请求,调用方式与本地方法一致:
+有了注册中心,调用方可以按服务名发请求。Spring Cloud LoadBalancer 负责从实例列表里挑一个(默认轮询),OpenFeign 让你把 HTTP 调用写成接口:
 
 ```java
-@FeignClient(name = "user-service")
-public interface UserClient {
+@FeignClient(name = "inventory-service")
+public interface InventoryClient {
 
-    @GetMapping("/users/{id}")
-    User findById(@PathVariable("id") long id);
+    @GetMapping("/stock/{sku}")
+    StockDTO stock(@PathVariable("sku") String sku);
 }
 ```
 
-服务名由 name 指定,LoadBalancer 负责选实例,返回值由消息转换器按 Content-Type 反序列化。Feign 适合服务之间的内部调用,对外接口仍由 Controller 暴露。
+方法签名就是请求,注解就是路径与方法,序列化交给消息转换器。调用方看起来像本地方法,底下是一次 HTTP 请求——这个「像」要记住,否则容易忘了它会超时、会失败。
 
-## 熔断、限流与链路追踪
+超时是必须显式配的:`spring.cloud.openfeign.client.config.default.connectTimeout` 与 `readTimeout`。默认值在分布式环境下往往太长,一个卡住的下游能把上游线程吃光。
 
-Resilience4j 提供熔断、重试、舱壁与限流,Sentinel 提供控制台与规则动态下发,两者都可以通过 Spring Cloud CircuitBreaker 抽象接入。链路追踪由 Micrometer Tracing 采集 traceId 与 spanId,配合 OpenTelemetry 或 Zipkin 还原一次请求跨越的服务与耗时。
+## 稳定性:熔断、限流、追踪
 
-## 结构与版本
+- **熔断**:连续失败达到阈值就打开断路器,后续请求直接走降级逻辑,不再打在已经挂掉的下游上。Resilience4j 是 Spring Cloud 官方推荐的实现,Sentinel 在国内更常见,带控制台;
+- **限流**:在网关或服务入口限制 QPS,保护自己不被流量打穿;
+- **链路追踪**:请求进网关时生成 traceId,跨服务传递,每段调用一个 spanId。Micrometer Tracing 把 traceId 写进日志的 MDC,一个 `grep` 就能把五个服务的日志拼成一条链。
 
-一个典型的调用链:
+这三件事不是「上线前顺手加」,而是拆分之后的基本配套。没有它们,一次故障的定位时间会从十分钟变成一天。
 
-```text
-客户端
-  │ HTTPS
-  ▼
-API 网关 (Spring Cloud Gateway)
-  │ lb://order-service
-  ▼
-order-service ──Feign──> user-service
-  │                         │
-  └── 注册中心 / 配置中心 ────┘
-```
+## 版本:Release Train
 
-Spring Cloud 由一组项目组成,没有单一框架入口。各项目按 Release Train 统一发布,如 2023.0.x、2024.0.x,版本通过 spring-cloud-dependencies 的 BOM 导入,不在子模块里逐个指定:
+Spring Cloud 按年份发布「列车」,一列车里的组件版本互相兼容,对外只有一个版本号。引入方式不是逐个写依赖,而是导入 BOM:
 
 ```xml
 <dependencyManagement>
@@ -126,7 +130,7 @@ Spring Cloud 由一组项目组成,没有单一框架入口。各项目按 Relea
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-dependencies</artifactId>
-      <version>2023.0.3</version>
+      <version>2025.0.0</version>
       <type>pom</type>
       <scope>import</scope>
     </dependency>
@@ -134,15 +138,16 @@ Spring Cloud 由一组项目组成,没有单一框架入口。各项目按 Relea
 </dependencyManagement>
 ```
 
-依赖管理(dependency-management)决定各组件的版本,Release Train 与 Spring Boot 版本有官方兼容表,升级时两边同步调整。只改一侧,常见结果是启动阶段报类缺失或方法签名不匹配。
-
-服务之间能互相调用之后,数据最终仍要落到数据库。第 14 章从 JDBC 开始,依次讲连接池、MyBatis 与 JPA,把持久层补齐。
+具体哪个 train 配哪个 Spring Boot 版本,**只能查官方兼容表**,不要凭印象写。版本对不上时的报错通常很隐蔽:启动成功,某个自动配置悄悄不生效,运行时才炸。这是微服务项目里最常见的一类「玄学问题」。
 
 ## 小结
 
-- 微服务把方法调用变成网络调用,需要注册、配置、入口与可观测四类基础设施;
-- 注册中心维护服务名与实例列表,Eureka、Nacos、Consul 是常见实现;
-- 配置中心集中管理配置并按 profile 下发,刷新依赖 @RefreshScope;
-- 网关按断言路由并执行过滤器,lb:// 交给 Spring Cloud LoadBalancer 选择实例;
-- OpenFeign 用接口声明 HTTP 调用,Resilience4j 与 Sentinel 负责熔断限流;
-- Spring Cloud 是项目集合,通过 BOM 统一版本,并与 Spring Boot 版本对齐。
+- 拆分后多出五件事:寻址、配置下发、统一入口、调用失败、跨服务排查;
+- 注册中心(Nacos / Eureka / Consul)维护实例清单,服务名比 IP 稳定;
+- 配置中心按应用名 + profile 下发,`@RefreshScope` 支持运行期刷新;
+- 网关路由 = id + uri + 断言 + 过滤器,`lb://` 交给负载均衡,鉴权限流放这里;
+- OpenFeign 把 HTTP 调用写成接口,超时必须显式配置;
+- 熔断、限流、traceId 是拆分后的基本配套;
+- Spring Cloud 用 Release Train + BOM 管版本,与 Boot 的对应关系只能查官方表。
+
+第 13 章结束。下一章进数据库:MyBatis 与 MyBatis-Plus 各写哪一半代码。

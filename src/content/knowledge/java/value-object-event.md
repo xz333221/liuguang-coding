@@ -1,12 +1,12 @@
 ---
 title: 值对象与领域事件
-summary: '值对象没有独立身份,不可变、按属性值相等、无副作用,Java 用 record 表达,金额用 BigDecimal 封装成带币种的 Money;领域事件描述已经发生的事实,用过去式命名,由聚合收集、应用服务在事务提交后发布,消费方按事件 ID 保证幂等。'
+summary: '值对象没有独立身份:不可变、按属性值相等、方法没有副作用,Java 用 record 表达,紧凑构造器里做校验;金额用 BigDecimal 封装成带币种的 Money,运算返回新对象。领域事件描述已经发生的事实,用过去式命名,带事件 ID 与发生时间,由聚合收集、应用服务在事务提交后发布,消费方按事件 ID 幂等。'
 category: java
 node: java-ddd-value-object
 order: 87
 level: 深入
 tags: [DDD, 值对象, 领域事件, record, BigDecimal]
-updated: 2026-11-19
+updated: 2026-11-20
 mindmap: value-object-event.mindmap.json
 terms: ["value-object", "domain-event", "record", "bigdecimal"]
 sources:
@@ -16,156 +16,162 @@ sources:
   - title: Oracle Java · Record
     url: https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html
     note: record 自动生成成员与不可变约束。
-  - title: Spring Framework Reference · The IoC Container
-    url: https://docs.spring.io/spring-framework/reference/core/beans.html
-    note: ApplicationEventPublisher 与容器事件机制。
+  - title: Spring Framework Reference · Application Events
+    url: https://docs.spring.io/spring-framework/reference/core/beans/context-introduction.html
+    note: ApplicationEventPublisher 与事务事件监听。
 ---
 
-上一篇的订单聚合里,订单号被包装成 OrderId,总金额由明细计算。OrderId 没有独立身份,靠值区分,属于值对象;聚合之间的通知则交给领域事件。
+上一篇的聚合根里,金额用的是 `BigDecimal`,SKU 用的是 `String`。都能跑,但传参时很容易错位:两个 `String`(sku、地址)、两个 `BigDecimal`(金额、折扣),编译器分不出区别。这一篇讲怎么用值对象把这些「裸类型」包起来,以及聚合之间怎么用事件通信。
 
-## 值对象:不可变、按值相等
+## 值对象:没有身份,只有值
 
-值对象(value object)是以属性值定义相等性的对象,没有独立标识。它有三个特征:
+三条特征:
 
-- 不可变:创建后属性不再变化,需要修改就创建新对象;
-- 按值相等:属性相同即相等,不比较引用;
-- 无副作用:方法只返回结果,不修改自身或外部状态。
+- **不可变**:创建后不能改,要改就造一个新的;
+- **按属性值相等**:两个 `Money(100, CNY)` 是同一个值;
+- **无副作用**:`plus` 返回新对象,不改自己。
 
-不可变的对象可以安全共享,作为 Map 的 key 不会因为字段变化而丢失,并发访问也不需要额外同步。
-
-## 用 record 实现
-
-第 3 章讲过,record 自动生成构造器、访问器、equals、hashCode 与 toString,字段隐式为 final,类是 final 的。值对象正好符合这个形状:
+Java 用 `record` 写最省事:
 
 ```java
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+public record Sku(String value) {
 
-public class Main {
-    record Money(BigDecimal amount, String currency) {
-        Money {
-            if (amount == null) throw new IllegalArgumentException("金额不能为空");
-            if (!"CNY".equals(currency)) throw new IllegalArgumentException("只支持 CNY");
-            amount = amount.setScale(2, RoundingMode.HALF_UP);
+    public Sku {                                   // 紧凑构造器:只写校验
+        if (value == null || !value.matches("[A-Z0-9-]{6,20}")) {
+            throw new IllegalArgumentException("非法的 SKU: " + value);
         }
-
-        Money add(Money other) {
-            if (!currency.equals(other.currency)) {
-                throw new IllegalArgumentException("币种不一致");
-            }
-            return new Money(amount.add(other.amount), currency);
-        }
-
-        static Money of(String value) { return new Money(new BigDecimal(value), "CNY"); }
-    }
-
-    public static void main(String[] args) {
-        Money a = Money.of("19.9");
-        Money b = Money.of("0.1");
-        System.out.println(a.add(b));                     // Money[amount=20.00, currency=CNY]
-        System.out.println(a.equals(Money.of("19.90")));  // true,按值相等
     }
 }
 ```
 
-record 的 equals 比较全部字段。BigDecimal 的 equals 同时比较数值与 scale,所以构造器里统一调用 setScale(2),否则 19.9 与 19.90 会被判为不等。
+`record` 自动生成 `equals` / `hashCode` / `toString`,字段是 `final`,天然不可变。紧凑构造器不写参数列表,校验逻辑在这里执行,赋值由编译器补。
 
-## 自校验与不可变
+与 `Sku` 相关的非法状态,从「运行到某个分支才发现」变成了「根本造不出来」。这是值对象最大的收益:**校验只有一处,一旦通过,后面所有代码都可以放心**。
 
-值对象在构造器里完成校验与规范化,非法状态无法被创建,后续方法不必重复判断。Money 只接受 CNY,金额统一保留两位小数,所有使用方拿到的都是同一种表示。
+## Money:金额必须带币种
 
-三个约束:
-
-- 不提供 setter,修改通过方法返回新对象,如 add 返回新的 Money;
-- 内部集合用 List.copyOf 包装,或在构造时复制一份;
-- 需要「修改」时返回新实例,调用方不会与其他持有者互相影响。
-
-## 金额为什么封装成 Money
-
-第 3 章 3.3 节的 BigDecimal 解决了 double 的二进制精度问题,但单独的 BigDecimal 不携带币种,也允许「元」与「分」混算。Money 把金额与币种绑在一起:构造时统一精度,加减前校验币种,展示时格式一致。跨表、跨服务传入金额时,单位与币种随对象一起走,不需要在每个调用点重新约定。
-
-## 领域事件:已经发生的事
-
-领域事件(domain event)表示领域里已经发生的事实,命名用过去式:OrderPaid、OrderShipped、InventoryDeducted。它不表达「请做某事」;命令用祈使语气(如 PayOrder),两者不要混用。
-
-一个事件至少包含四部分:
-
-- 事件 ID:全局唯一,用于追踪与幂等;
-- 发生时间:事件产生的时刻,不是消费的时刻;
-- 聚合 ID:事件属于哪个聚合;
-- 载荷:消费方需要的业务字段,只放必要数据。
+`BigDecimal` 单独出现永远有歧义:100 元还是 100 分?人民币还是美元?
 
 ```java
-import java.time.Instant;
-import java.util.UUID;
+public record Money(BigDecimal amount, Currency currency) {
 
-public class Main {
-    record OrderPaid(String eventId, Instant occurredAt, String orderId, String amount) {
-        static OrderPaid of(String orderId, String amount) {
-            return new OrderPaid(UUID.randomUUID().toString(), Instant.now(), orderId, amount);
+    public Money {
+        Objects.requireNonNull(amount);
+        Objects.requireNonNull(currency);
+        amount = amount.setScale(2, RoundingMode.HALF_UP);      // 统一精度
+    }
+
+    public static Money cny(String v) {
+        return new Money(new BigDecimal(v), Currency.CNY);
+    }
+
+    public Money plus(Money other) {
+        requireSameCurrency(other);
+        return new Money(amount.add(other.amount), currency);
+    }
+
+    public Money times(int qty) {
+        return new Money(amount.multiply(BigDecimal.valueOf(qty)), currency);
+    }
+
+    private void requireSameCurrency(Money other) {
+        if (currency != other.currency) {
+            throw new IllegalArgumentException("币种不一致");
         }
     }
-
-    public static void main(String[] args) {
-        OrderPaid event = OrderPaid.of("A1001", "199.00");
-        System.out.println(event.orderId());              // A1001
-        System.out.println(event.eventId().length());     // 36,UUID
-        System.out.println(event.occurredAt() != null);   // true
-    }
 }
 ```
 
-事件对象同样不可变。载荷只放消费方真正需要的字段:放整个订单快照会让事件与模型实现绑定,字段一改就得兼容历史消息。
+三个细节值得注意:
 
-## 发布:事务提交之后
+1. **构造时统一精度**。`new BigDecimal("1.0")` 和 `new BigDecimal("1.00")` 用 `equals` 比较是不相等的——它们的 scale 不同。在构造器里 `setScale(2)` 一劳永逸;
+2. **运算返回新对象**。`plus` 不改 `this`,所以一个 `Money` 实例可以安全地被多个线程、多个订单共享;
+3. **运算前校验币种**。人民币加美元直接抛异常,比悄悄算出一个错数字好。
 
-聚合不直接调用消息中间件,只把事件收集到内部列表;应用服务保存聚合后取出事件,交给发布器。这样领域层不依赖任何消息设施。
+第 3 章 `BigDecimal` 那篇讲过 `double` 的精度问题,值对象是把这个知识点落到业务模型上的方式。
 
-Spring 提供 ApplicationEventPublisher 发布事件,配合 @TransactionalEventListener 把监听器放到事务提交之后执行:
+## 领域事件:已经发生的事实
+
+领域事件描述**过去发生的事**,命名用过去式:`OrderPlaced`、`PaymentRefunded`、`StockDeducted`。不用 `PlaceOrder`(那是命令),不用 `OrderEvent`(太泛)。
 
 ```java
-@Service
-class OrderApplicationService {
-    private final OrderRepository repository;
-    private final ApplicationEventPublisher publisher;
+public record OrderPaid(
+        String eventId,
+        long orderId,
+        Money paidAmount,
+        Instant occurredAt) {
 
-    OrderApplicationService(OrderRepository repository, ApplicationEventPublisher publisher) {
-        this.repository = repository;
-        this.publisher = publisher;
-    }
-
-    @Transactional
-    public void pay(String orderId) {
-        Order order = repository.findById(new OrderId(orderId)).orElseThrow();
-        order.pay();
-        repository.save(order);
-        order.pullEvents().forEach(publisher::publishEvent);
-    }
-}
-
-@Component
-class StockListener {
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    void on(OrderPaid event) {
-        // 扣减库存;失败进入重试,按 eventId 去重
+    public static OrderPaid of(long orderId, Money amount) {
+        return new OrderPaid(UUID.randomUUID().toString(), orderId, amount, Instant.now());
     }
 }
 ```
 
-在事务内发布、提交后执行,可以避免订单回滚而库存已经扣减。没有事务时,AFTER_COMMIT 监听器默认不执行,需要显式设置 fallbackExecution = true。
+四个字段各有用途:`eventId` 用于消费方幂等,`orderId` 是聚合标识,`paidAmount` 是必要载荷,`occurredAt` 用于排查与排序。
 
-## 事件不被消费不是错误
+事件里**只放必要载荷**,不要把整个聚合塞进去。一是体积,二是消费方会依赖你所有的字段,以后改聚合就变成了破坏性变更。
 
-发布方只声明事实,是否有人消费由订阅方决定。新增一个下游不需要修改订单聚合,这是解耦的收益。代价是发送语义:消息队列通常保证至少一次发送,同一个事件可能到达两次。
+## 发布:聚合收集,应用服务发出
 
-处理方式是幂等(idempotent):同一操作执行多次与执行一次的结果相同。常见做法是用 eventId 建唯一索引,或在消费表里记录已处理的事件 ID,重复事件直接跳过。
+聚合不该依赖消息中间件,它只负责「记住发生了什么」:
+
+```java
+public class Order {
+    private final List<Object> events = new ArrayList<>();
+
+    public void pay() {
+        // ... 校验与状态变更
+        events.add(OrderPaid.of(id.value(), total()));
+    }
+
+    public List<Object> pullEvents() {
+        List<Object> copy = List.copyOf(events);
+        events.clear();
+        return copy;
+    }
+}
+```
+
+应用服务在本地事务提交后统一发布:
+
+```java
+@Transactional
+public void pay(PayCmd cmd) {
+    Order order = orderRepository.find(new OrderId(cmd.orderId()));
+    order.pay();
+    orderRepository.save(order);
+
+    order.pullEvents().forEach(publisher::publishEvent);
+}
+```
+
+用 Spring 时,`@TransactionalEventListener(phase = AFTER_COMMIT)` 能保证「事务回滚了事件就不发」,省掉手写发件箱。跨进程(发 MQ)时,可靠的做法是**事务性发件箱**:事件和业务数据在同一个本地事务里写进 `outbox` 表,再由独立进程轮询发送,发成功才标记。这样不会出现「数据提交了、消息没发出去」。
+
+## 幂等:消费方必须自己保证
+
+消息中间件通常保证「至少一次」,意味着同一个事件可能被投递两次。消费方要能认出来:
+
+```java
+@TransactionalEventListener(phase = AFTER_COMMIT)
+public void on(OrderPaid event) {
+    if (!processedEventRepo.markIfAbsent(event.eventId())) {
+        return;                        // 已经处理过,直接返回
+    }
+    pointService.add(event.orderId(), event.paidAmount());
+}
+```
+
+`markIfAbsent` 靠事件 ID 的唯一索引实现,插入成功才继续处理。判断标准:**这段逻辑执行两次,结果一样吗?** 加积分用「设为 100」而不是「加 100」,扣库存用「按订单号去重」而不是「减 1」,都是幂等的写法。
+
+注意:事件是「通知」,不是「命令」。消费方不该回写发布方的聚合——那会形成双向依赖。需要回写时,发一个新的事件。
 
 ## 小结
 
-- 值对象没有独立身份,不可变、按值相等、无副作用;
-- record 自动生成 equals/hashCode,构造器统一精度后按值比较才可靠;
-- Money 把 BigDecimal 与币种绑定,自校验放在构造器里;
-- 领域事件用过去式命名,包含事件 ID、发生时间、聚合 ID 与载荷;
-- 聚合收集事件,应用服务在事务提交后发布,消费方按 eventId 保证幂等。
+- 值对象:不可变、按值相等、无副作用;`record` 自动生成 `equals` / `hashCode`,紧凑构造器放校验;
+- 包住裸类型(`Sku`、`OrderId`)能让编译器帮你挡掉传参错位;
+- `Money` 必须带币种,构造时统一精度,运算返回新对象并校验币种;
+- 领域事件用过去式命名,带 `eventId`、聚合 ID、载荷、发生时间,只放必要字段;
+- 聚合收集事件,应用服务在事务提交后发布;跨进程用事务性发件箱保证不丢;
+- 消费方按 `eventId` 幂等,「执行两次结果一样」是硬要求。
 
-下一篇回到整体结构:这些对象放进哪些层,依赖方向指向哪边,外部系统的模型怎样隔离。
+下一篇讲这些零件放在哪:分层架构与防腐层。

@@ -1,12 +1,12 @@
 ---
 title: 分层与防腐层
-summary: '把领域模型放进表现、应用、领域、基础设施四层,依赖方向指向领域层,仓储接口由领域层定义、实现放在基础设施层;应用服务只编排用例,业务规则留在聚合与领域服务;防腐层把外部系统的字段、状态码与单位转换成本上下文的模型,不让外部模型进入领域层。'
+summary: '四个层次:表现层、应用层、领域层、基础设施层,依赖方向一律指向领域层;仓储接口由领域层定义、实现放在基础设施层,领域层因此不依赖 Spring 与数据库;应用服务只编排用例、控制事务,业务规则留在聚合里;防腐层把外部系统的字段、状态码与单位转换成本上下文的模型,只转换不写规则。'
 category: java
 node: java-ddd-layering
 order: 88
 level: 深入
 tags: [DDD, 分层架构, 应用服务, 仓储, 防腐层]
-updated: 2026-11-19
+updated: 2026-11-20
 mindmap: layering-acl.mindmap.json
 terms: ["ddd", "application-service", "repository", "anti-corruption-layer"]
 sources:
@@ -21,160 +21,130 @@ sources:
     note: '@Service、@Repository 与依赖注入的容器机制。'
 ---
 
-上一篇的值对象与领域事件解决了模型内部如何表达值、如何通知变化。剩下一个组织问题:这些对象放在哪一层,谁可以依赖谁,外部系统的模型怎样隔离在边界之外。
+前几篇有了上下文、聚合、值对象与事件,这一篇解决最后一个问题:这些代码分别放在哪个包里,谁可以依赖谁。
 
-## 四层与依赖方向
+## 四层与一条依赖方向
 
-领域驱动设计沿用经典分层,把代码分成四层:
-
-- 表现层:Controller、请求参数校验、DTO 转换;
-- 应用层:应用服务,一个方法对应一个用例,负责流程与事务边界;
-- 领域层:实体、值对象、领域服务、仓储接口、领域事件;
-- 基础设施层:数据库、消息队列、外部接口的实现。
-
-依赖方向从外向内:表现层依赖应用层,应用层依赖领域层;基础设施层实现领域层定义的接口。领域层不依赖 Spring、MyBatis 或 Web 框架,编译期只依赖 JDK。
-
-仓储接口由领域层声明、实现放在基础设施层,这就是依赖倒置:源码依赖指向领域层,运行时由容器注入具体实现。
-
-## 应用服务:编排用例
-
-应用服务(application service)负责取聚合、调用聚合方法、保存、发布事件。业务规则留在聚合里,应用服务只决定顺序与事务。
-
-```java
-@Service
-public class PayOrderApplicationService {
-    private final OrderRepository orders;
-    private final ApplicationEventPublisher events;
-    public PayOrderApplicationService(OrderRepository orders, ApplicationEventPublisher events) {
-        this.orders = orders;
-        this.events = events;
-    }
-    @Transactional
-    public void pay(String orderId) {
-        Order order = orders.findById(new OrderId(orderId))
-                .orElseThrow(() -> new IllegalArgumentException("订单不存在: " + orderId));
-        order.pay();                 // 能否支付由聚合判断
-        orders.save(order);
-        order.pullEvents().forEach(events::publishEvent);
-    }
-}
+```
+表现层 Controller      接收 HTTP,参数校验,返回 DTO
+    ↓
+应用层 ApplicationService  编排用例:取聚合 → 调方法 → 存回去 → 发事件
+    ↓
+领域层 Entity / ValueObject / DomainService / Repository 接口
+    ↑
+基础设施层 Repository 实现 / Mapper / 外部系统客户端
 ```
 
-方法里没有 if (status == ...) 之类的状态判断,也没有折扣计算。这些规则属于 Order;应用服务只把一次请求需要的几步串起来。一个用例一个方法,调用方一眼就能看出系统提供哪些能力。
+关键在最后那条**向上的箭头**:基础设施层实现领域层定义的接口,所以依赖方向是「基础设施 → 领域」。领域层不 import Spring、不 import MyBatis、不认识 `@Service`。它是一堆纯 Java 类,能在单元测试里直接 `new` 出来跑。
 
-## 领域服务:跨实体的规则
+这条依赖倒置,换来的是:业务规则可以脱离框架测试,换 ORM 不动领域代码,框架升级不碰核心逻辑。
 
-领域服务(domain service)放置不属于单个实体、又确实是业务规则的逻辑。例如转账时校验两个账户的日累计限额,规则同时涉及两个账户,放进任一 Account 都不合适,可以放进 TransferService。领域服务无状态,参数与返回值都是领域对象,命名使用业务术语。
-
-只涉及一个聚合的规则不要上移到领域服务,否则聚合会退化成数据容器。
-
-## 仓储:接口与实现分离
-
-仓储(repository)以聚合为单位提供存取,接口属于领域层,实现属于基础设施层:
+## 仓库接口在领域层
 
 ```java
-// domain 包
+// 领域层:只描述「需要什么」
 public interface OrderRepository {
     Optional<Order> findById(OrderId id);
     void save(Order order);
 }
-
-// infrastructure 包
-@Repository
-public class JdbcOrderRepository implements OrderRepository {
-    private final JdbcTemplate jdbc;
-    public JdbcOrderRepository(JdbcTemplate jdbc) { this.jdbc = jdbc; }
-    @Override
-    public Optional<Order> findById(OrderId id) {
-        List<OrderLine> lines = jdbc.query(
-                "select sku, unit_price, quantity from order_line where order_id = ?",
-                (rs, i) -> new OrderLine(rs.getString("sku"),
-                        rs.getBigDecimal("unit_price"), rs.getInt("quantity")),
-                id.value());
-        return lines.isEmpty() ? Optional.empty() : Optional.of(Order.restore(id, lines));
-    }
-    @Override
-    public void save(Order order) {
-        // insert 或 update 聚合根与明细,整个聚合在一个事务内完成
-    }
-}
 ```
-
-领域层只认识 OrderRepository 接口,单元测试可以传入内存实现,不需要数据库。更换持久化方案时只改基础设施层。
-
-## 防腐层:隔离外部模型
-
-防腐层(anti-corruption layer,ACL)是上下文边界上的转换层,负责把外部系统的数据结构、状态码与单位转换成本上下文的领域对象。外部接口改字段或改状态机时,只改 ACL,领域层不受影响。
 
 ```java
-import java.math.BigDecimal;
-public class Main {
-    enum PaymentStatus { SUCCESS, PENDING, UNKNOWN }
+// 基础设施层:说明「怎么做到」
+@Repository
+public class MyBatisOrderRepository implements OrderRepository {
 
-    record PaymentResult(String tradeNo, BigDecimal amount, PaymentStatus status) {}
+    private final OrderMapper mapper;
 
-    // 第三方返回的对象:字段名与状态码由对方定义
-    static final class ThirdPartyPayResponse {
-        String trade_no;
-        String trade_status;
-        long total_fee;   // 单位:分
+    @Override
+    public Optional<Order> findById(OrderId id) {
+        return Optional.ofNullable(mapper.selectById(id.value()))
+                .map(OrderPo::toDomain);
     }
 
-    // 防腐层:转换状态与单位
-    static PaymentResult toDomain(ThirdPartyPayResponse response) {
-        PaymentStatus status = switch (response.trade_status) {
-            case "TRADE_SUCCESS" -> PaymentStatus.SUCCESS;
-            case "WAIT_BUYER_PAY" -> PaymentStatus.PENDING;
-            default -> PaymentStatus.UNKNOWN;
-        };
-        return new PaymentResult(response.trade_no, BigDecimal.valueOf(response.total_fee, 2), status);
-    }
-
-    public static void main(String[] args) {
-        ThirdPartyPayResponse response = new ThirdPartyPayResponse();
-        response.trade_no = "T20261119001";
-        response.trade_status = "TRADE_SUCCESS";
-        response.total_fee = 19900;
-        System.out.println(toDomain(response));
-        // PaymentResult[tradeNo=T20261119001, amount=199.00, status=SUCCESS]
+    @Override
+    public void save(Order order) {
+        mapper.insert(OrderPo.from(order));
     }
 }
 ```
 
-ACL 只做映射:状态码对齐、单位换算、字段改名。折扣、风控这类判断属于业务规则,放回领域层。外部模型不变时 ACL 可以很薄;外部模型频繁变化时,这一层能挡住大部分修改。
+领域层只认识 `OrderRepository` 这个接口,启动时 Spring 把实现注入进来。仓储的粒度是**聚合**,一个聚合一个仓储,不要给每条表都建一个。
 
-## DTO 与领域对象的转换边界
+`OrderPo`(持久化对象)与 `Order`(领域对象)是两个类,转换发生在基础设施层。这一步看起来啰嗦,但它把「数据库长什么样」挡在了领域层外面:表加了字段、列改了名,只改 `OrderPo`。
 
-Controller 接收请求 DTO,应用服务把 DTO 转成聚合方法需要的参数,返回时把领域对象转成响应 DTO。不要让 Controller 直接返回聚合:内部集合、延迟加载代理与仅供领域使用的字段会暴露到接口,序列化还可能触发额外查询。
+## 应用服务:只编排,不写规则
 
-转换集中在一处:接口层做 DTO 与领域对象的映射,应用层只处理用例输入与输出。转换方向保持单向,领域对象不引用 DTO。
+```java
+@Service
+public class OrderAppService {
 
-## 包结构建议
+    private final OrderRepository orders;
+    private final InventoryClient inventory;
+    private final ApplicationEventPublisher publisher;
 
-```text
-com.example.order
-├── interfaces        # Controller, Request/Response DTO
-├── application       # 用例服务, 事务边界
-├── domain            # Order, Money, OrderRepository, OrderPaid
-└── infrastructure    # JdbcOrderRepository, PayClient, PayAcl
+    @Transactional
+    public String place(PlaceCmd cmd) {
+        Order order = Order.create(OrderId.next());          // 聚合自己保证规则
+        cmd.items().forEach(i -> order.addItem(i.sku(), i.qty(), i.price()));
+
+        inventory.deduct(order.skuQtyMap());                 // 跨上下文:防腐层客户端
+        orders.save(order);
+        order.pullEvents().forEach(publisher::publishEvent);
+        return order.id().value();
+    }
+}
 ```
 
-先按限界上下文分包,每个上下文内部再分层。跨上下文不直接 import 对方的领域对象,只通过事件、DTO 或 ACL 交互。
+这段代码里没有一条 `if` 是业务规则——规则都在 `Order` 里。应用服务干四件事:取参数、取聚合、调聚合方法、存回去并处理事务与事件。
+
+常见的错误是「应用服务包揽一切」:校验、计算、组装全写在 service 里,聚合退化成只有 getter/setter 的数据袋。这种叫**贫血模型**,业务规则散落在多个 service 里,规则一改要搜全项目。判断方法:如果你的 `Order` 类只有字段和 getter,而 `OrderService` 有八百行,那就是贫血。
+
+也有反过来的极端:把事务、发消息、调外部接口写进聚合。聚合应该是纯内存对象,不依赖任何基础设施,否则没法单测。
+
+## 防腐层:挡住外部模型
+
+上游是外部系统或老系统时,它的模型不该流进你的领域层:
+
+```java
+// 外部系统返回的东西:字段缩写、状态码是数字、金额单位是分
+public record LegacyStockResp(int s, long q, String u) {}
+
+// 防腐层:翻译成本上下文能懂的语言
+@Component
+public class LegacyStockAdapter implements StockPort {
+
+    private final LegacyClient client;
+
+    @Override
+    public StockInfo query(Sku sku) {
+        LegacyStockResp r = client.get(sku.value());
+        return new StockInfo(
+                sku,
+                Math.toIntExact(r.q()),
+                StockState.fromCode(r.s()));      // 3 → AVAILABLE
+    }
+}
+```
+
+防腐层做三件事:翻译字段与状态码、转换单位(分↔元、磅↔千克)、兜住外部异常并转成本上下文的错误类型。
+
+它**只转换,不写业务规则**。如果适配器里开始出现「库存小于 10 就预警」这种判断,那说明规则放错地方了——应该放在领域层,由它接收 `StockInfo` 之后决定。
 
 ## 常见误区
 
-- 贫血模型:实体只有 getter/setter,规则全部散落在 Service,聚合退化成数据表映射;
-- Service 包揽一切:一个 OrderService 承担校验、计算、持久化与通知,任何改动都影响全部用例;
-- 领域层引入 Spring:@Service、@Transactional 让领域对象脱离容器就无法测试;事务注解留在应用层,领域层保持纯 Java;
-- 防腐层写业务规则:ACL 只做转换,规则判断放回领域层。
+- **表现层直接调仓储**。Controller → Repository 跳过了应用层,事务边界和事件发布都没了。小项目偶尔图快,代价是后面加一个「下单后发消息」要改所有 Controller;
+- **领域层引入 Spring 注解**。`@Service` 一出现在实体上,单测就要起容器,依赖倒置也就破了;
+- **DTO 与领域对象混用**。`@RequestBody` 直接绑到 `Order` 上,前端就能改 `status`、`total`。入参用 DTO,转换在应用层做;
+- **按技术分包**。`controller/` 下放所有 Controller、`service/` 下放所有 Service,业务一复杂就找不到东西。按上下文分包,包内再分层,是更耐长的结构。
 
 ## 小结
 
-- 四层依赖方向指向领域层,领域层不依赖框架,仓储接口由领域层定义;
-- 应用服务编排用例与事务,业务规则留在聚合与领域服务;
-- 仓储以聚合为单位存取,接口与实现分离,测试可替换为内存实现;
-- 防腐层转换外部模型的状态码、单位与字段,不承担业务规则;
-- DTO 与领域对象在接口边界转换,Controller 不直接返回聚合;
-- 常见误区是贫血模型、Service 包揽一切与领域层引入框架。
+- 四层:表现、应用、领域、基础设施;依赖方向一律指向领域层;
+- 仓储接口定义在领域层、实现在基础设施层,粒度是聚合;`Order` 与 `OrderPo` 分开,转换在基础设施层;
+- 应用服务只编排用例、控制事务与事件,业务规则留在聚合里;
+- 贫血模型(只有 getter 的实体 + 八百行 service)是最常见的退化形态;
+- 防腐层翻译字段、状态码、单位,只转换不写规则;
+- 别让表现层直连仓储,别把 Spring 注解放进领域层,入参用 DTO。
 
-第 16 章到这里结束。下一篇进入第 17 章,从时间复杂度与 Big-O 开始,讨论怎样估算一个写法在大数据量下的代价。
+第 16 章结束。下一章换到算法:先学会估算一个写法贵不贵。

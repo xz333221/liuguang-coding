@@ -1,171 +1,153 @@
 ---
 title: 聚合根与不变式
-summary: '实体按身份区分,值对象按属性值区分;聚合是一组必须一起保持一致的对象,聚合根是唯一外部入口,不变式由它维护。聚合边界同时是一致性边界与事务边界,应尽量小,跨聚合通过领域事件达到最终一致,仓储只针对聚合根。'
+summary: '实体按身份区分,值对象按属性值区分;聚合是一组必须一起保持一致的对象,聚合根是唯一的外部入口,不变式由它维护。聚合边界同时是一致性边界与事务边界,应尽量小;跨聚合用领域事件达到最终一致;仓储只针对聚合根,内部集合只提供只读视图。'
 category: java
 node: java-ddd-aggregate
 order: 86
 level: 深入
 tags: [DDD, 聚合根, 不变式, 实体, 最终一致]
-updated: 2026-11-19
+updated: 2026-11-20
 mindmap: aggregate.mindmap.json
 terms: ["ddd", "aggregate", "value-object", "repository"]
 sources:
-  - title: Martin Fowler · Domain Driven Design
-    url: https://martinfowler.com/tags/domain%20driven%20design.html
-    note: 实体、值对象与聚合的战术设计索引。
+  - title: Martin Fowler · DDD_Aggregate
+    url: https://martinfowler.com/bliki/DDD_Aggregate.html
+    note: 聚合、聚合根与一致性边界的定义。
   - title: Martin Fowler · Repository
     url: https://martinfowler.com/eaaCatalog/repository.html
     note: 以聚合为单位封装持久化的意图。
   - title: Domain Language · DDD Reference
     url: https://domainlanguage.com/ddd/reference/
-    note: 聚合边界与不变式的原始定义。
+    note: 不变式与聚合边界的原始表述。
 ---
 
-上一篇把系统划成若干限界上下文,边界内的术语与规则各自独立。领域驱动设计的战略部分到此结束,进入边界内部,模型由实体与值对象组成;其中必须一起保持一致的那组对象,由聚合根统一管理。
+上一篇把系统切成了若干上下文。这一篇进到上下文内部,解决一个更具体的问题:**一条业务规则,怎么保证它不会被任何一条代码路径绕过。**
 
 ## 实体与值对象
 
-实体(entity)有唯一标识,身份不随属性变化。订单改收货地址、改明细、更换支付方式之后仍是同一个订单,靠 orderId 识别。值对象(value object)没有独立标识,按属性值判断相等:两笔 100 元没有区别,不需要区分是哪一笔。
+先分清两种东西:
 
-落到代码,实体比较身份,通常只比较 ID;值对象比较全部属性。值对象不可变的写法在下一篇展开,这里先用它表达订单号。
+| | 实体 Entity | 值对象 Value Object |
+| --- | --- | --- |
+| 区分方式 | 身份(ID) | 属性值 |
+| 可变性 | 可变,但身份不变 | 不可变,改就换一个新的 |
+| 例子 | 订单、用户、账户 | 金额、地址、时间区间、手机号 |
 
-## 聚合与聚合根
+两个 `Address("天津市东丽区", "300300")` 是同一个地址,没有「第 1 个地址」这种说法,所以它是值对象。订单号不同就是不同订单,哪怕其他字段全一样,所以它是实体。
 
-聚合(aggregate)是一组必须一起保持一致的对象。聚合根(aggregate root)是这组对象里唯一对外的入口:外部只能持有聚合根的引用,通过它的方法修改内部状态。
+这个区分不是学术分类,它决定 `equals` 怎么写:实体按 ID 比,值对象按所有字段比。第 3 章 `equals` / `hashCode` 那篇说过,混用会导致集合里出现「看起来重复」的元素。
 
-订单与订单明细是一个聚合。明细脱离订单没有意义,订单总金额必须等于各明细金额之和;外部拿到 Order 后调用 addItem、removeItem、pay,不能取出内部 List 直接添加明细。
+## 聚合:必须一起改的东西
 
-## 不变式由聚合保证
-
-不变式(invariant)是业务对象在任何时刻都必须满足的规则。订单聚合的典型不变式:
-
-- 明细数量必须大于 0;
-- 订单总金额等于各明细金额之和;
-- 已支付的订单不能修改明细;
-- 空订单不能支付。
-
-这些规则必须写在聚合根的方法里。只要存在一条绕过聚合根的修改路径,不变式就可能被破坏:把内部 List 暴露出去,调用方可以跳过校验直接添加明细,规则等于没有。应用服务与 Controller 可以做参数格式校验,业务不变式仍归聚合。
-
-## 代码:一个订单聚合
+看一段业务规则:订单总金额必须等于各明细金额之和;明细最多 50 条;已支付的订单不能改明细。
 
 ```java
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+// 反例:每个类各自管自己
+public class Order {
+    private BigDecimal total;
+}
+public class OrderItem {
+    private BigDecimal amount;
+}
+```
 
-public class Main {
-    record OrderId(String value) {
-        OrderId {
-            if (value == null || value.isBlank()) {
-                throw new IllegalArgumentException("订单号不能为空");
-            }
-        }
+这样写,`order.setTotal(...)` 谁都能调,规则一旦变成「总金额由明细算出」就守不住。正确做法是把必须一起保持一致的对象收进一个聚合,并指定唯一入口:
+
+```java
+public class Order {                                  // 聚合根
+
+    private final OrderId id;
+    private final List<OrderItem> items = new ArrayList<>();
+    private OrderStatus status = OrderStatus.CREATED;
+
+    public static Order create(OrderId id) {
+        return new Order(id);
     }
 
-    static final class OrderLine {
-        private final String sku;
-        private final BigDecimal unitPrice;
-        private final int quantity;
-
-        OrderLine(String sku, BigDecimal unitPrice, int quantity) {
-            this.sku = sku;
-            this.unitPrice = unitPrice;
-            this.quantity = quantity;
+    public void addItem(String sku, int qty, BigDecimal unitPrice) {
+        ensureMutable();                              // 已支付不能改
+        if (items.size() >= 50) {
+            throw new IllegalStateException("明细不能超过 50 条");
         }
-
-        BigDecimal amount() { return unitPrice.multiply(BigDecimal.valueOf(quantity)); }
+        items.add(new OrderItem(sku, qty, unitPrice));
     }
 
-    static final class Order {
-        private final OrderId id;
-        private final List<OrderLine> lines = new ArrayList<>();
-        private boolean paid;
-
-        Order(OrderId id) { this.id = id; }
-
-        void addItem(String sku, BigDecimal unitPrice, int quantity, int availableStock) {
-            if (paid) throw new IllegalStateException("已支付订单不能修改明细");
-            if (quantity <= 0) throw new IllegalArgumentException("数量必须大于 0");
-            if (unitPrice.signum() < 0) throw new IllegalArgumentException("单价不能为负");
-            if (quantity > availableStock) throw new IllegalArgumentException("库存不足");
-            lines.add(new OrderLine(sku, unitPrice, quantity));
-        }
-
-        BigDecimal total() {
-            BigDecimal sum = BigDecimal.ZERO;
-            for (OrderLine line : lines) sum = sum.add(line.amount());
-            return sum;
-        }
-
-        List<OrderLine> lines() { return List.copyOf(lines); }
-
-        void pay() {
-            if (lines.isEmpty()) throw new IllegalStateException("空订单不能支付");
-            paid = true;
-        }
+    public void removeItem(String sku) {
+        ensureMutable();
+        items.removeIf(it -> it.sku().equals(sku));
     }
 
-    public static void main(String[] args) {
-        Order order = new Order(new OrderId("A1001"));
-        order.addItem("book", new BigDecimal("30.00"), 2, 10);
-        order.addItem("pen", new BigDecimal("15.00"), 1, 10);
-        System.out.println(order.total());          // 75.00
+    public BigDecimal total() {                       // 现算,不存字段
+        return items.stream()
+                .map(OrderItem::amount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 
-        order.pay();
-        try {
-            order.addItem("book", new BigDecimal("30.00"), 1, 10);
-        } catch (IllegalStateException e) {
-            System.out.println(e.getMessage());     // 已支付订单不能修改明细
+    public List<OrderItem> items() {                  // 只读视图
+        return Collections.unmodifiableList(items);
+    }
+
+    public void pay() {
+        if (items.isEmpty()) {
+            throw new IllegalStateException("空订单不能支付");
+        }
+        this.status = OrderStatus.PAID;
+    }
+
+    private void ensureMutable() {
+        if (status != OrderStatus.CREATED) {
+            throw new IllegalStateException("订单已支付,不能修改明细");
         }
     }
 }
 ```
 
-几个细节:
+四条规则现在只有一条路能绕过去——直接反射改字段,那不属于正常代码。这就是聚合根的作用:**它是外部唯一能拿到手的东西,所有状态变化都必须经过它的方法**。
 
-- 订单号用 record 值对象包装,空值在构造时就被拒绝,聚合内不必再判 null;
-- availableStock 是库存上下文提供的可用量快照,addItem 用它校验本次请求,库存的扣减仍由库存聚合负责;
-- 总金额不存字段,由明细计算,避免明细与合计两份数据不一致;
-- lines() 返回 List.copyOf 生成的只读副本,调用方无法通过它修改聚合状态;
-- paid 是私有字段,只能由 pay() 修改,pay() 里同时校验空订单。
+注意 `total()` 是**现算**的,不是存字段。存字段就要维护一致性:加明细要加金额、删明细要减金额、改单价要重算——三处任何一处漏了,数据就错了。能现算的就不存,这是消除不变式维护成本最有效的一招。
 
-## 聚合边界怎么定
+## 不变式:任何时候都必须成立
 
-三条判断依据:
+上面代码里的 `ensureMutable()`、明细上限、空订单不能支付,都是不变式。判断标准很简单:**这条规则被违反时,数据就是错的**,而不是「业务上不太合理」。
 
-- 一致性边界:哪些数据必须在同一次操作后立刻一致,这些放进同一个聚合。订单与明细要实时满足「合计等于明细之和」,所以在同一个聚合;
-- 事务边界:一次事务只修改一个聚合。第 14 章讲过,事务保证多条语句要么全部提交要么全部回滚,但范围越大,锁持有时间越长,并发冲突越多;
-- 尽量小:聚合越大,加载、保存与加锁的成本越高,两个人同时修改同一聚合的概率也越高。
+- 「总金额 = 明细之和」——违反就是脏数据,是不变式;
+- 「单笔订单不超过 5000 元需要审批」——这是业务流程,不是不变式,不该写在实体里。
 
-订单与库存不属于同一个聚合:库存有自己的扣减规则与并发要求。下单成功后通过领域事件通知库存,短暂的不一致可以接受。
+不变式放在聚合根里,由它在**每次状态变化时**校验。放到 Service 里校验就守不住,因为下一个调用方可能忘了调。
 
-## 跨聚合:领域事件与最终一致
+## 边界:聚合要小
 
-最终一致(eventual consistency)指两个聚合不要求在同一事务内同时更新,只要求在短时间内通过事件达到一致。支付成功后发布 OrderPaid,库存聚合订阅后扣减;中间存在短暂窗口,系统最终收敛到一致状态。
+新手最容易犯的错是把整个领域做成一个大聚合:订单里放用户、用户里放地址、地址里放城市。后果是:
 
-与一个大事务同时锁定订单表、库存表、账户表相比,这种方式把失败范围限制在单个聚合内,也减少了锁冲突。代价是重复发送与失败重试需要处理,下一篇展开。
+- 加载一个订单要把关联的全部数据拉出来,慢;
+- 两个人同时改订单和用户,锁冲突;
+- 事务边界变大,一个失败全部回滚。
 
-## 仓储只针对聚合根
-
-仓储(repository)以聚合为单位存取:findById 返回包含明细的完整订单,save 保存整个聚合。不为 OrderLine 单独建仓储,否则外部可以绕过聚合根修改明细,不变式再次被破坏。
+聚合的边界应该等于**事务边界**:一个事务只改一个聚合。跨聚合的一致性靠领域事件达成最终一致:
 
 ```java
-import java.util.Optional;
-
-public interface OrderRepository {
-    Optional<Order> findById(OrderId id);
-    void save(Order order);
-}
+// 订单支付成功后,库存要扣减、积分要增加
+order.pay();                                   // 改一个聚合,本地事务提交
+publisher.publishEvent(new OrderPaid(order.id(), order.total()));
 ```
 
-接口只出现聚合根类型,调用方拿不到 OrderLine 的独立存取入口。
+库存那一步失败了怎么办?重试 + 幂等,必要时用对账兜底。这比「一个大事务锁住订单和库存两张表」更抗压——后者在并发下单时几乎必然死锁。
+
+判断聚合是否过大,问三个问题:能否在一个事务里改完?两个人会同时改它吗?加载它需要几条 SQL?
+
+## 访问与存储
+
+- **内部对象不对外暴露**:`items()` 返回不可变视图,否则外部拿到 `List` 直接 `add`,不变式就废了;
+- **仓储只针对聚合根**:有 `OrderRepository`,不该有 `OrderItemRepository`。要改明细,先 `find` 订单再调它的方法;
+- **ID 用值对象**:`OrderId` 比 `long` 更难传错,`new OrderId("...")` 编译期就挡住了把用户 ID 传进来的错误。
 
 ## 小结
 
-- 实体按身份区分,值对象按属性值区分;
-- 聚合是一组必须一起保持一致的对象,聚合根是唯一外部入口;
-- 不变式由聚合根的方法维护,内部集合只返回只读副本;
-- 聚合边界同时是一致性边界与事务边界,应尽量小,一次事务只改一个聚合;
-- 跨聚合通过领域事件达到最终一致,仓储只针对聚合根。
+- 实体按 ID 区分,值对象按属性值区分且不可变;`equals` 的写法跟着这个走;
+- 聚合是一组必须一起保持一致的对象,聚合根是唯一入口,状态只能通过它的方法改;
+- 不变式是「违反就说明数据错了」的规则,由聚合根在每次变化时校验;
+- 能现算的字段不要存,存了就要在三处维护一致性;
+- 聚合边界约等于事务边界,应该尽量小;跨聚合用领域事件达到最终一致;
+- 仓储只针对聚合根,内部集合只提供只读视图,ID 用值对象。
 
-下一篇展开聚合内部的两个基础类型:值对象怎样用 record 表达,领域事件怎样定义与发布。
+下一篇讲聚合里最常用的两个零件:值对象怎么用 `record` 写,以及领域事件怎么发、怎么保证幂等。

@@ -1,14 +1,14 @@
 ---
 title: 结构型:代理 / 装饰器 / 适配器
-summary: '代理、装饰器与适配器都通过组合把一个对象包在另一个对象外面,接口关系相似而意图不同:代理控制对目标的访问,装饰器在不改接口的前提下叠加职责,适配器把不兼容的接口转换成调用方期望的形式。'
+summary: '三者都是「把一个对象包在另一个对象外面」,接口关系相似而意图不同:代理和目标实现同一接口、控制对目标的访问(鉴权、延迟加载、远程调用),装饰器也实现同一接口、在不改接口的前提下层层叠加职责,适配器实现调用方期望的接口、把不兼容的实现转过来。判断口诀:控制访问是代理,叠加能力是装饰器,转换接口是适配器。'
 category: java
 node: java-patterns-structural
 order: 83
 level: 进阶
 tags: [设计模式, 代理, 装饰器, 适配器, 动态代理]
-updated: 2026-11-19
+updated: 2026-11-20
 mindmap: structural.mindmap.json
-terms: ["object", "reference", "runtime"]
+terms: ["object", "reference-type", "runtime"]
 sources:
   - title: Refactoring Guru · 代理
     url: https://refactoringguru.cn/design-patterns/proxy
@@ -21,149 +21,152 @@ sources:
     note: 类适配器与对象适配器的差异。
 ---
 
-上一篇的工厂负责创建对象。对象创建之后,调用方与目标之间仍然可以插入一层:转发调用并加上控制逻辑,叠加额外职责,或者把一个不兼容的接口转换成期望的形式。这三种结构分别对应代理、装饰器与适配器。
+上一篇的创建型管「对象怎么生出来」,这一篇管「生出来之后怎么套一层」。代理、装饰器、适配器的类图几乎一样:都是一个类持有另一个对象、都实现某个接口。区分它们只看意图,不看结构。
 
-## 代理:控制对目标对象的访问
+## 代理:控制访问
 
-代理模式为目标对象提供一个同接口的替身,调用方访问替身,替身决定何时、是否以及如何把调用转发给目标。静态代理需要为每个目标类手写一个代理类:
+代理和目标实现同一个接口,调用方拿到的是代理,代理决定「要不要真的转给目标」。
 
 ```java
-interface UserService { String findName(long id); }
-class UserServiceImpl implements UserService {
-    public String findName(long id) { return "user-" + id; }
+public interface ReportService {
+    String load(long id);
 }
-class UserServiceProxy implements UserService {
-    private final UserService target;
-    UserServiceProxy(UserService target) { this.target = target; }
-    public String findName(long id) {
-        long start = System.currentTimeMillis();
-        String name = target.findName(id);
-        System.out.println("耗时 " + (System.currentTimeMillis() - start) + " ms");
-        return name;
+
+public class ReportServiceProxy implements ReportService {
+
+    private final ReportService target;
+    private final CurrentUser currentUser;
+
+    public ReportServiceProxy(ReportService target, CurrentUser currentUser) {
+        this.target = target;
+        this.currentUser = currentUser;
+    }
+
+    @Override
+    public String load(long id) {
+        if (!currentUser.hasPermission("report:read")) {
+            throw new SecurityException("无权访问");
+        }
+        long start = System.nanoTime();
+        try {
+            return target.load(id);                 // 真正的调用
+        } finally {
+            log.info("load cost {} ns", System.nanoTime() - start);
+        }
     }
 }
 ```
 
-接口方法一多,代理类就要重复转发与增强逻辑。JDK 动态代理把转发集中到一个 InvocationHandler,在运行时生成实现指定接口的代理类:
+代理的典型用途:权限校验、访问计数、延迟加载(Hibernate 的实体代理)、远程调用(RPC 把本地方法变成网络请求)、事务与缓存。
+
+手写代理的缺点是每个方法都要转发一遍。第 8 章的 JDK 动态代理把转发收进一个 `InvocationHandler`,Spring 的 `@Transactional` / `@Cacheable` / `@Async` 全走这条路。理解代理,是理解这些注解为什么「同类自调不生效」的前提。
+
+## 装饰器:叠加职责
+
+装饰器同样实现目标接口,但它不是「控制能不能访问」,而是「在访问前后加点东西」,并且可以一层层套:
 
 ```java
-UserService target = new UserServiceImpl();
-UserService proxy = (UserService) Proxy.newProxyInstance(
-        UserService.class.getClassLoader(),
-        new Class<?>[]{UserService.class},
-        (p, method, args) -> {
-            System.out.println("调用 " + method.getName());
-            return method.invoke(target, args);
-        });
-System.out.println(proxy.findName(7));
-// 调用 findName
-// user-7
+public interface Notifier {
+    void send(String msg);
+}
+
+public class SmsNotifier implements Notifier {
+    public void send(String msg) { /* 发短信 */ }
+}
+
+public class RetryDecorator implements Notifier {
+    private final Notifier inner;
+    public RetryDecorator(Notifier inner) { this.inner = inner; }
+
+    public void send(String msg) {
+        for (int i = 0; i < 3; i++) {
+            try { inner.send(msg); return; }
+            catch (RuntimeException e) { if (i == 2) throw e; }
+        }
+    }
+}
+
+public class LogDecorator implements Notifier {
+    private final Notifier inner;
+    public LogDecorator(Notifier inner) { this.inner = inner; }
+
+    public void send(String msg) {
+        log.info("send: {}", msg);
+        inner.send(msg);
+    }
+}
 ```
 
-动态代理的完整机制在第 8 章讲过:必须有接口,代理类实现接口而不继承目标。Spring AOP 的事务、日志、权限检查都建立在这层结构上,容器返回的 Bean 往往是代理对象。
-
-代理的应用场景是访问控制:权限校验、延迟加载、缓存命中、远程调用、调用耗时统计。业务语义仍由目标实现,代理只决定调用怎么到达目标。
-
-## 装饰器:叠加职责而不改接口
-
-装饰器模式让包装类实现与被包装对象相同的接口,持有一个同类型引用,在转发前后追加行为。多个装饰器可以嵌套,每种能力只由一个类负责。
+组合方式随意,顺序有意义:
 
 ```java
-interface Coffee {
-    String description();
-    BigDecimal price();
-}
-class Espresso implements Coffee {
-    public String description() { return "浓缩咖啡"; }
-    public BigDecimal price() { return new BigDecimal("20.00"); }
-}
-abstract class CoffeeDecorator implements Coffee {
-    protected final Coffee inner;
-    protected CoffeeDecorator(Coffee inner) { this.inner = inner; }
-}
-class Milk extends CoffeeDecorator {
-    Milk(Coffee inner) { super(inner); }
-    public String description() { return inner.description() + " + 牛奶"; }
-    public BigDecimal price() { return inner.price().add(new BigDecimal("3.00")); }
-}
-class Sugar extends CoffeeDecorator {
-    Sugar(Coffee inner) { super(inner); }
-    public String description() { return inner.description() + " + 糖"; }
-    public BigDecimal price() { return inner.price().add(new BigDecimal("1.00")); }
-}
-Coffee coffee = new Sugar(new Milk(new Espresso()));
-System.out.println(coffee.description());   // 浓缩咖啡 + 牛奶 + 糖
-System.out.println(coffee.price());         // 24.00
+Notifier notifier = new LogDecorator(new RetryDecorator(new SmsNotifier()));
 ```
 
-Java IO 是这套结构最典型的应用。FileInputStream 负责读取字节,BufferedInputStream 在它外面叠加缓冲,DataInputStream 再叠加基本类型读取:
+日志在最外层,重试的每一次都会被记录;反过来套,重试只发生在日志内部,失败的三次只有一条日志。
 
-```java
-new DataInputStream(new BufferedInputStream(new FileInputStream("a.bin")));
-```
-
-这与第 9 章的包装方式一致:每层只加一种能力,按需组合,关闭最外层即可释放全部资源。装饰器与代理的结构几乎相同,区别在于装饰器由调用方传入被包装对象,职责是增强;代理通常自己管理目标,职责是控制访问。
+Java 里最熟悉的装饰器是 IO:`new DataInputStream(new BufferedInputStream(new FileInputStream(f)))`——每层只加一种能力(缓冲、读基本类型),自由组合。设计上一个关键点:**装饰器必须实现同一接口**,否则不能互相套。这也是它和「在业务类里加几个 if」的本质区别。
 
 ## 适配器:转换接口
 
-适配器模式把一个类的接口转换成调用方期望的另一个接口,常用于兼容遗留代码、第三方 SDK 或单位与签名不同的外部服务。类适配器通过继承被适配者并实现目标接口完成转换:
+适配器实现的是**调用方期望的接口**,内部持有**不兼容的实现**:
 
 ```java
-interface PayGateway { void pay(String orderId, BigDecimal amount); }
-class LegacyPayApi {
-    void doPay(String orderNo, long cents) {
-        System.out.println("legacy pay " + orderNo + " " + cents + " 分");
-    }
+// 第三方支付 SDK,签名与返回值都不是我们想要的样子
+public class ThirdPartyPaySdk {
+    public Map<String, Object> doPay(String json, String sign) { /* ... */ }
 }
-class LegacyPayClassAdapter extends LegacyPayApi implements PayGateway {
-    public void pay(String orderId, BigDecimal amount) {
-        doPay(orderId, amount.movePointRight(2).longValueExact());
+
+// 我们系统内部统一的支付接口
+public interface PayGateway {
+    PayResult pay(BigDecimal amount, String orderNo);
+}
+
+public class ThirdPartyPayAdapter implements PayGateway {
+
+    private final ThirdPartyPaySdk sdk;
+
+    public ThirdPartyPayAdapter(ThirdPartyPaySdk sdk) { this.sdk = sdk; }
+
+    @Override
+    public PayResult pay(BigDecimal amount, String orderNo) {
+        String json = Json.write(Map.of(
+                "amount", amount.movePointRight(2).longValue(),   // 元 → 分
+                "orderNo", orderNo));
+        Map<String, Object> raw = sdk.doPay(json, sign(json));
+
+        int code = (int) raw.get("ret_code");
+        return switch (code) {
+            case 0 -> PayResult.ok((String) raw.get("trade_no"));
+            case 1001 -> PayResult.fail("余额不足");
+            default -> PayResult.fail("支付失败: " + code);
+        };
     }
 }
 ```
 
-Java 只支持单继承,类适配器会占用唯一的继承位置,并且与被适配类耦合。对象适配器改为持有被适配者的引用:
+适配器干三件事:转换方法签名、转换数据形态(元与分、枚举与状态码)、隔离第三方类型。做完之后,业务代码里再也不会出现 `ThirdPartyPaySdk` 这个类——它只在适配器里出现一次。这就是第 16 章会讲的防腐层的雏形。
 
-```java
-class LegacyPayAdapter implements PayGateway {
-    private final LegacyPayApi api = new LegacyPayApi();
-    public void pay(String orderId, BigDecimal amount) {
-        long cents = amount.movePointRight(2).longValueExact();
-        api.doPay(orderId, cents);
-    }
-}
-// 使用
-new LegacyPayAdapter().pay("A1001", new BigDecimal("99.50"));
-// legacy pay A1001 9950 分
-```
+对象适配器(组合)比类适配器(多继承)更常用,因为 Java 单继承,而且组合还能在运行期替换实现。
 
-对象适配器可以传入被适配类的任意子类,也便于在测试中替换实例,实际项目里更常见。适配器只负责协议、单位、参数顺序的转换,业务规则仍留在调用方或目标实现里。把折扣计算、风控判断写进适配器,会让这层转换难以复用。
+## 三者怎么分
 
-## 三者对照
-
-三种模式都依赖接口加组合,类图接近,区别在意图:
-
-| 模式 | 与目标的关系 | 意图 | 典型例子 |
+| | 代理 | 装饰器 | 适配器 |
 | --- | --- | --- | --- |
-| 代理 | 实现同一接口,通常自己持有或创建目标 | 控制访问 | 权限、缓存、远程调用、AOP |
-| 装饰器 | 实现同一接口,被包装对象由外部传入 | 叠加职责 | BufferedInputStream、加料计价 |
-| 适配器 | 实现目标接口,持有或继承被适配者 | 转换接口 | 遗留 SDK、支付网关、日志门面 |
+| 实现什么接口 | 和目标相同 | 和目标相同 | 调用方期望的接口 |
+| 内部持有 | 目标 | 同接口组件 | 不兼容的实现 |
+| 意图 | 控制访问 | 叠加职责 | 转换接口 |
+| 能否多层嵌套 | 一般一层 | 任意层 | 一般一层 |
+| 典型例子 | Spring AOP、Hibernate 懒加载 | `BufferedInputStream` | 第三方 SDK 包装 |
 
-判断方法很直接:调用方拿到对象后,行为是否应当与原对象一致?代理与装饰器都是,前者改变调用的到达方式,后者增加调用前后的行为;适配器不是,它让一个原本不能用的接口变得可用。
-
-## 选择与边界
-
-- 只是加日志、权限、缓存:用代理,一个拦截点覆盖全部方法;
-- 需要任意组合、可叠加的能力:用装饰器,每种能力独立成类;
-- 接口不兼容、来源不受控:用适配器,把差异限制在一层转换里;
-- 接口本来可以修改:直接改接口,不要增加适配层;
-- 装饰器层数过多会让调用栈变长,排查问题时先确认包装顺序。
+判断口诀:**能不能访问**是代理,**多做了一点**是装饰器,**接口对不上**是适配器。三者的代码长得像,是因为它们都遵守「面向接口 + 组合优于继承」,而不是因为它们是一回事。
 
 ## 小结
 
-- 代理提供同接口替身,控制调用的到达方式,静态代理手写转发,动态代理集中拦截;
-- JDK 动态代理基于接口,Proxy.newProxyInstance 配合 InvocationHandler 使用;
-- 装饰器实现同一接口并持有同类型引用,按需嵌套,每层只加一种能力;
-- Java IO 的包装流就是装饰器,与第 9 章的用法一致;
-- 适配器转换接口与单位,对象适配器比类适配器灵活,只做转换不写业务规则;
-- 三者结构相似,意图分别是控制访问、叠加职责、转换接口。
+- 代理与目标同接口,控制访问:鉴权、计数、懒加载、远程调用、事务;动态代理把转发集中到 `InvocationHandler`;
+- 装饰器与目标同接口,叠加职责,可任意嵌套,顺序影响语义;IO 流是最典型的例子;
+- 适配器实现调用方期望的接口,内部持有不兼容实现,顺手转换单位与状态码;
+- 区分靠意图:控制访问 / 叠加能力 / 转换接口;
+- 共同前提是「面向接口」,没有接口这三者都无从下手。
+
+下一篇讲行为型:把分支、通知与流程骨架从业务代码里抽出来。

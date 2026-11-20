@@ -1,12 +1,12 @@
 ---
 title: 行为型:策略 / 观察者 / 模板方法
-summary: '策略把可替换的算法抽成接口并由调用方选择,观察者在状态变化时通知多个监听者,模板方法在抽象类中固定流程骨架、把步骤留给子类;三者分别处理算法替换、变化通知与流程复用。'
+summary: '策略把可替换的算法抽成接口,用 Map 注册、按 code 查表,替掉一大片 if-else;观察者维护一对多通知,Spring 的 ApplicationEvent + @EventListener 是现成实现,默认同步、异常会影响发布方;模板方法用 final 方法固定流程骨架,把变化步骤留给子类,JdbcTemplate 就是这么做的。分支少而稳定时,直接写 if-else 更好。'
 category: java
 node: java-patterns-behavioral
 order: 84
 level: 进阶
 tags: [设计模式, 策略, 观察者, 模板方法, Spring 事件]
-updated: 2026-11-19
+updated: 2026-11-20
 mindmap: behavioral.mindmap.json
 terms: ["dependency-injection", "bean", "spring-boot", "object"]
 sources:
@@ -16,165 +16,189 @@ sources:
   - title: Refactoring Guru · 观察者
     url: https://refactoringguru.cn/design-patterns/observer
     note: 发布者与订阅者之间的通知机制。
-  - title: Refactoring Guru · 模板方法
-    url: https://refactoringguru.cn/design-patterns/template-method
-    note: 骨架方法与钩子方法的分工。
+  - title: Spring Framework Reference · Application Events
+    url: https://docs.spring.io/spring-framework/reference/core/beans/context-introduction.html
+    note: ApplicationEventPublisher 与 @EventListener 的语义。
 ---
 
-上一篇的结构型模式处理对象之间的组合。对象之间的调用与协作也有固定套路:把可替换的算法抽出来,把状态变化通知给多方,把固定流程的骨架与变化步骤分开。这一篇是第 15 章的最后一篇,讲策略、观察者与模板方法。
+结构型管「对象怎么组装」,行为型管「对象之间怎么分工」。这一篇挑三个业务代码里出现频率最高的:策略替分支,观察者解耦通知,模板方法固定流程。
 
-## 策略:把分支抽成对象
+## 策略:把 if-else 换成查表
 
-策略模式把一组可互换的算法各自封装成类,它们实现同一个接口,调用方持有一个策略引用,在运行时决定用哪一个。结算折扣是常见场景,用 if-else 堆叠时,新增规则要修改原方法,每加一条分支都要回归全部旧逻辑:
+订单折扣的常见写法:
 
 ```java
-interface DiscountStrategy { String code(); BigDecimal apply(BigDecimal price); }
-class VipDiscount implements DiscountStrategy {
-    public String code() { return "vip"; }
-    public BigDecimal apply(BigDecimal price) { return price.multiply(new BigDecimal("0.85")); }
-}
-class FullReduction implements DiscountStrategy {
-    public String code() { return "full200"; }
-    public BigDecimal apply(BigDecimal price) {
-        return price.compareTo(new BigDecimal("200")) >= 0 ? price.subtract(new BigDecimal("20")) : price;
+public BigDecimal discount(Order order) {
+    if ("NONE".equals(order.coupon())) {
+        return order.amount();
+    } else if ("FULL_100_MINUS_20".equals(order.coupon())) {
+        return order.amount().subtract(new BigDecimal("20"));
+    } else if ("VIP_10_PERCENT".equals(order.coupon())) {
+        return order.amount().multiply(new BigDecimal("0.9"));
     }
+    throw new IllegalArgumentException("未知优惠券");
 }
-class DiscountRegistry {
-    private final Map<String, DiscountStrategy> strategies = new HashMap<>();
-    DiscountRegistry(List<DiscountStrategy> list) {
-        for (DiscountStrategy s : list) { strategies.put(s.code(), s); }
-    }
-    BigDecimal calculate(String code, BigDecimal price) {
-        DiscountStrategy strategy = strategies.get(code);
-        if (strategy == null) { throw new IllegalArgumentException("未知折扣: " + code); }
-        return strategy.apply(price);
-    }
-}
-// 使用
-DiscountRegistry registry = new DiscountRegistry(List.of(new VipDiscount(), new FullReduction()));
-System.out.println(registry.calculate("vip", new BigDecimal("100.00")));       // 85.00
-System.out.println(registry.calculate("full200", new BigDecimal("260.00")));   // 240.00
 ```
 
-用 Map 按 code 注册策略,分支判断变成一次查表。新增策略只需新增实现类并注册,原来的 calculate 不改。
-
-在 Spring 中,注册过程由容器完成:一个接口的全部实现都是 Bean,构造参数声明 `List<DiscountStrategy>` 即可收到所有实现,再转成 Map 保存:
+每加一种券,这个方法长一截,还要改测试。策略把它拆成「接口 + 多个实现 + 一个查表」:
 
 ```java
+public interface DiscountStrategy {
+    String code();
+    BigDecimal apply(BigDecimal amount);
+}
+
 @Component
-class DiscountRegistry {
-    private final Map<String, DiscountStrategy> strategies;
-    DiscountRegistry(List<DiscountStrategy> strategies) {   // 注入全部实现
-        this.strategies = strategies.stream()
-                .collect(Collectors.toMap(DiscountStrategy::code, Function.identity()));
+public class FullReduction implements DiscountStrategy {
+    public String code() { return "FULL_100_MINUS_20"; }
+    public BigDecimal apply(BigDecimal amount) {
+        return amount.compareTo(new BigDecimal("100")) >= 0
+                ? amount.subtract(new BigDecimal("20")) : amount;
     }
 }
-```
 
-这里用到第 13 章的依赖注入:新增一个带 @Component 的策略类,容器自动把它加入列表,注册表代码无需修改。策略类自身还可以注入 Repository、远程客户端等依赖,这是纯 if-else 做不到的。
-
-策略适合分支会持续增长、每个分支有独立逻辑或独立依赖、需要单独测试的场景。分支只有两三条且长期稳定时,if-else 更直观,拆成类反而增加文件数量与跳转成本。策略与状态模式的区别可以概括为一句话:策略由调用方选定后保持不变,状态由对象内部随事件切换。
-
-## 观察者:变化发生时通知多方
-
-观察者模式定义一对多依赖:目标对象维护一组监听者,自身状态变化时逐个调用监听者的回调方法。监听者只依赖回调接口,发布方不需要知道具体有哪些订阅者。
-
-Java 早期的 java.util.Observer 与 Observable 从 JDK 9 起标记为 @Deprecated,原因是 Observable 是类而非接口,难以组合,通知顺序与并发语义也没有明确约定。现在通常直接定义一个监听器接口:
-
-```java
-interface OrderListener { void onPaid(String orderId); }
-class OrderService {
-    private final List<OrderListener> listeners = new CopyOnWriteArrayList<>();
-    void register(OrderListener listener) { listeners.add(listener); }
-    void pay(String orderId) {
-        System.out.println("订单 " + orderId + " 支付成功");
-        for (OrderListener listener : listeners) { listener.onPaid(orderId); }
-    }
-}
-// 使用
-OrderService service = new OrderService();
-service.register(id -> System.out.println("发放积分: " + id));
-service.register(id -> System.out.println("发送短信: " + id));
-service.pay("A1001");
-// 订单 A1001 支付成功
-// 发放积分: A1001
-// 发送短信: A1001
-```
-
-监听器列表用 CopyOnWriteArrayList,注册与遍历可以并发进行,遍历期间新增的监听器不会影响当前这一轮通知。
-
-Spring 把观察者做成了事件机制。发布方注入 ApplicationEventPublisher,监听方用 @EventListener 标注方法,事件类型就是参数类型:
-
-```java
-record OrderPaidEvent(String orderId) {}
 @Component
-class PointsListener {
-    @EventListener
-    public void onPaid(OrderPaidEvent event) {
-        System.out.println("发放积分: " + event.orderId());
+public class VipDiscount implements DiscountStrategy {
+    public String code() { return "VIP_10_PERCENT"; }
+    public BigDecimal apply(BigDecimal amount) {
+        return amount.multiply(new BigDecimal("0.9"));
     }
 }
+```
+
+Spring 把所有实现注入进一个 `List`,启动时建成 Map:
+
+```java
 @Service
-class OrderService {
+public class DiscountService {
+
+    private final Map<String, DiscountStrategy> strategies;
+
+    public DiscountService(List<DiscountStrategy> all) {
+        this.strategies = all.stream()
+                .collect(Collectors.toMap(DiscountStrategy::code, s -> s));
+    }
+
+    public BigDecimal discount(String code, BigDecimal amount) {
+        DiscountStrategy s = strategies.get(code);
+        if (s == null) {
+            throw new IllegalArgumentException("未知优惠券: " + code);
+        }
+        return s.apply(amount);
+    }
+}
+```
+
+加一种券等于加一个类,`DiscountService` 一行不改,测试也只需要测新类。这是策略真正的收益:**改动被限制在一个新文件里**。
+
+注意:策略适合「同一件事有多种算法,运行期选一种」。如果多个策略要串联(先满减再打折),那是责任链或装饰器;如果状态会随事件变化,那是状态模式。
+
+## 观察者:一件事,多方关心
+
+下单成功后要做五件事:发短信、加积分、写审计日志、清缓存、推消息。全塞进 `placeOrder` 里,这个方法会越来越长,而且任何一件失败都可能影响主流程。
+
+观察者把「主流程」和「副作用」分开:
+
+```java
+// 事件:一个不可变的记录,名字用过去式
+public record OrderPlaced(long orderId, long userId, BigDecimal amount) {}
+
+@Service
+public class OrderService {
+
     private final ApplicationEventPublisher publisher;
-    OrderService(ApplicationEventPublisher publisher) { this.publisher = publisher; }
-    void pay(String orderId) { publisher.publishEvent(new OrderPaidEvent(orderId)); }
-}
-```
 
-Spring Boot 启动时,Spring 容器会扫描 @EventListener,把方法注册到事件广播器,发布方与监听方互不引用。默认通知是同步的,监听器抛出的异常会传回发布方,影响主流程;需要异步时给监听方法加 @Async 并配置线程池;需要在事务提交后才执行,用 @TransactionalEventListener。监听器数量多、跨模块时用事件解耦,同一模块内两三处回调,显式接口更便于跟踪。
-
-## 模板方法:固定骨架,变化留给子类
-
-模板方法在抽象类中定义一个算法的骨架,把某些步骤声明为抽象方法,由子类实现。骨架方法的执行顺序固定,子类只能替换步骤内容。
-
-```java
-abstract class ReportExporter {
-    public final String export(List<String> rows) {   // final 防止子类改动顺序
-        StringBuilder sb = new StringBuilder(header()).append('\n');
-        for (String row : rows) { sb.append(format(row)).append('\n'); }
-        return sb.append(footer()).toString();
+    @Transactional
+    public void place(PlaceCmd cmd) {
+        long orderId = orderMapper.insert(cmd);
+        publisher.publishEvent(new OrderPlaced(orderId, cmd.userId(), cmd.amount()));
     }
-    protected abstract String header();
-    protected abstract String format(String row);
-    protected String footer() { return "--- end ---"; }   // 钩子,子类可选覆写
 }
-class CsvExporter extends ReportExporter {
-    protected String header() { return "id,name"; }
-    protected String format(String row) { return row.replace('|', ','); }
-}
-public class Main {
-    public static void main(String[] args) {
-        System.out.print(new CsvExporter().export(List.of("1|张三", "2|李四")));
-        // id,name
-        // 1,张三
-        // 2,李四
-        // --- end ---
+
+@Component
+public class PointListener {
+
+    @EventListener
+    public void on(OrderPlaced event) {
+        pointService.add(event.userId(), event.amount().intValue());
     }
 }
 ```
 
-骨架方法声明为 final,避免子类破坏步骤顺序;抽象方法强制子类补齐差异;钩子方法给出默认实现,子类按需覆写。这三类方法的分工是模板方法的核心。
+发布方只认识事件,不认识任何监听者。加一个「发短信」的监听者,`OrderService` 不用改。
 
-JdbcTemplate 是这套结构在框架里的应用。第 14 章手写 JDBC 时,获取连接、创建 PreparedStatement、遍历 ResultSet、转换异常、在 finally 中释放资源都是重复代码。JdbcTemplate 把这些固定步骤放进模板,调用方只提供 SQL 与 RowMapper:
+三个必须知道的细节:
+
+1. **默认是同步的**。`publishEvent` 会依次调用所有监听器,监听器抛异常会传回发布方,把事务一起回滚。想异步要 `@Async`(需要 `@EnableAsync`)或 `@TransactionalEventListener(phase = AFTER_COMMIT)`;
+2. **`@TransactionalEventListener` 默认在提交后才执行**。写在事务里的事件如果回滚了,监听器不会触发——这正是「订单没落库却发了短信」的解法;
+3. **监听器里再发事件要小心循环**。A 监听 B 的事件、B 又发 A 的事件,会无限递归。
+
+Spring 的事件机制是观察者的标准实现,自己写 `List<Listener>` 维护注册与遍历只在不能引入 Spring 时才需要。
+
+## 模板方法:骨架固定,步骤可变
+
+导入 Excel 的流程永远是:校验文件 → 读表头 → 逐行解析 → 分批入库 → 汇总结果。不同业务只有「解析一行」不一样。把骨架写在父类,变化点留给子类:
 
 ```java
-List<User> users = jdbcTemplate.query(
-        "select id, name from user where age > ?",
-        (rs, rowNum) -> new User(rs.getLong("id"), rs.getString("name")),
-        18);
+public abstract class ExcelImporter<T> {
+
+    public final ImportResult run(Path file) {          // final:骨架不许改
+        validate(file);
+        List<String> headers = readHeaders(file);
+        List<T> rows = new ArrayList<>();
+        for (Row row : readRows(file, headers)) {
+            T item = parseRow(row);                    // 变化点
+            if (item != null) rows.add(item);
+        }
+        int saved = saveAll(rows);
+        return new ImportResult(rows.size(), saved);
+    }
+
+    protected void validate(Path file) {               // 钩子:默认实现,子类可覆盖
+        if (!Files.isRegularFile(file)) {
+            throw new IllegalArgumentException("文件不存在");
+        }
+    }
+
+    protected abstract T parseRow(Row row);            // 必须实现
+
+    protected abstract int saveAll(List<T> rows);
+}
+
+public class UserImporter extends ExcelImporter<User> {
+
+    @Override
+    protected User parseRow(Row row) {
+        String name = row.get("姓名");
+        return name == null || name.isBlank() ? null : new User(name, row.getInt("年龄"));
+    }
+
+    @Override
+    protected int saveAll(List<User> rows) {
+        userMapper.batchInsert(rows);
+        return rows.size();
+    }
+}
 ```
 
-SQL 与行映射是变化点,连接与异常处理是稳定骨架,两者被拆开。Spring 用回调实现变化点,避免继承;抽象类版本用子类实现,两种方式解决的问题相同。
+三点设计意图:`run` 是 `final`,子类改不了顺序;`parseRow` / `saveAll` 抽象,必须实现;`validate` 有默认实现,是「可选覆盖的钩子」。
 
-模板方法依赖继承,子类与父类的骨架强耦合,骨架一改所有子类都受影响。骨架稳定、步骤顺序必须统一时适合使用;步骤之间可以自由组合时,策略或回调更灵活。
+JDK 与 Spring 里到处是这个结构:`AbstractList`、`JdbcTemplate.execute`、`HttpServlet.service`(它固定了按方法分发到 `doGet` / `doPost` 的骨架)。第 3 章抽象类那篇讲的「公共流程在父类,变化步骤留子类」,就是模板方法。
+
+代价是继承:子类被绑死在父类的流程上,骨架一变所有子类跟着受影响。所以只有当流程**稳定**时才用继承;流程本身还在变,用组合(把每一步抽成接口传进来)更灵活。
+
+## 适用边界
+
+- 分支只有两三个、且长期不变 → 直接写 if-else,策略类只会让人多跳几个文件;
+- 通知方只有一两个、且必须强一致 → 直接调用方法,事件机制的价值在「一对多 + 解耦」;
+- 骨架还在频繁调整 → 用组合而非模板方法;
+- 需要「多个策略依次尝试,任一成功即止」→ 那是责任链,不是策略。
 
 ## 小结
 
-- 策略把可替换的算法抽成接口,用 Map 注册或由 Spring 注入全部实现,调用方按 key 选择;
-- 策略适合分支持续增长且各有独立依赖的场景,分支少而稳定时 if-else 更直接;
-- java.util.Observer 已过时,监听器接口或 Spring 的 ApplicationEvent 是当前做法;
-- Spring 事件默认同步,监听器异常会影响发布方,异步与事务后处理需要额外注解;
-- 模板方法用 final 骨架固定步骤顺序,抽象方法提供变化点,JdbcTemplate 是框架中的实例。
+- 策略:接口 + 多实现 + Map 查表,替掉长 if-else,新增一种只加一个类;
+- 观察者:发布方只发事件,Spring 用 `ApplicationEventPublisher` + `@EventListener`,默认同步、异常影响发布方,提交后执行用 `@TransactionalEventListener`;
+- 模板方法:`final` 骨架 + 抽象步骤 + 可选钩子,`JdbcTemplate` / `HttpServlet` 都是这个结构;
+- 三者都在处理「变化」,变化点在哪就用哪个;没有变化点时,简单写法更值得维护。
 
-第 15 章到这里结束。下一篇进入第 16 章,用限界上下文、聚合根与值对象把业务规则组织成可维护的领域模型。
+第 15 章结束。下一章往业务架构走:限界上下文、聚合,把业务规则关进模型里。

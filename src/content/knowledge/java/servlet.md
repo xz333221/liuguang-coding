@@ -1,131 +1,154 @@
 ---
 title: Servlet 与请求生命周期:Boot 底下那层
-summary: 'Servlet、Filter、Listener 是 Servlet 规范的三个角色,Tomcat 作为容器负责连接、HTTP 解析与线程调度;一次请求经 Filter 链进入 DispatcherServlet,再由 HandlerMapping 找到 @Controller 方法;Filter 属于容器层,HandlerInterceptor 属于 MVC 层。'
+summary: 'Servlet 规范有三个角色:Servlet 处理请求生成响应、Filter 在请求链上拦截、Listener 监听容器事件;Tomcat 是实现规范的容器,负责连接、HTTP 解析与线程调度,一个应用一个 ServletContext;一次请求经 Filter 链进入 DispatcherServlet,由 HandlerMapping 找到 Controller 方法;Filter 在容器层,HandlerInterceptor 在 MVC 层。'
 category: java
 node: java-spring-servlet
 order: 74
 level: 深入
 tags: [Servlet, Filter, DispatcherServlet, Tomcat]
-updated: 2026-11-19
+updated: 2026-11-20
 mindmap: servlet.mindmap.json
-terms: ["protocol", "embedded-server"]
+terms: ["protocol", "embedded-server", "spring-boot"]
 sources:
   - title: Jakarta Servlet Specification
     url: https://jakarta.ee/specifications/servlet/
     note: Servlet、Filter、Listener 与 ServletContext 的规范定义。
-  - title: Spring Framework Reference · Web MVC
-    url: https://docs.spring.io/spring-framework/reference/index.html
-    note: DispatcherServlet 的分派流程与 HandlerInterceptor 的调用时机。
-  - title: Spring Boot Reference · Web
-    url: https://docs.spring.io/spring-boot/reference/index.html
-    note: 内嵌容器与 Servlet、Filter 注册方式。
+  - title: Spring Framework Reference · DispatcherServlet
+    url: https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-servlet.html
+    note: 分派流程、HandlerMapping 与拦截器的调用时机。
+  - title: Spring Boot Reference · Servlet Web Applications
+    url: https://docs.spring.io/spring-boot/reference/web/servlet.html
+    note: 内嵌容器与 Servlet、Filter 的注册方式。
 ---
 
-上一篇把配置调到了目标环境,应用已经在目标端口监听。接口方法能被执行,前提是请求先被容器接收;从 TCP 连接到 Controller 方法之间,还有一层 Servlet 规范在工作。
+前面几篇里,`@RestController` 一挂就能收请求,可从头到尾没提过 HTTP 连接是谁接受的、报文是谁解析的。这层东西叫 Servlet 容器,Spring Boot 只是把它塞进了 jar 里。这一篇往下看一眼,弄清请求从 socket 到方法调用之间发生了什么。
 
-## 三个角色:Servlet、Filter、Listener
+## 规范的三个角色
 
-Servlet 是运行在 Servlet 容器中的 Java 组件,接收 HTTP 请求并生成响应。业务代码通常不直接实现 Servlet 接口,而由 Spring MVC 的 DispatcherServlet 统一接管。
+Servlet 规范定义了三个可插拔的组件:
 
-Filter 是请求链上的拦截组件,在请求到达 Servlet 之前、响应返回客户端之前执行,可以修改请求与响应、决定请求是否继续经过后续环节。Listener 监听容器事件,例如应用启动与销毁(ServletContextListener)、会话创建与失效(HttpSessionListener)。
+- **Servlet**:接收请求、生成响应。你写的每个 Controller,最终都由一个 Servlet(`DispatcherServlet`)接手;
+- **Filter**:在请求进入 Servlet 之前、响应离开之后做拦截,能改请求头、能直接返回、能放行或拦住;
+- **Listener**:监听容器事件,比如应用启动、session 创建销毁、属性变更。
 
-容器(Tomcat、Jetty、Undertow)实现 Servlet 规范:监听端口、解析 HTTP 报文、维护线程池、管理 Servlet 生命周期。HTTP 是文本协议(protocol),请求行、请求头、空行与报文体都由容器解析,Spring 拿到的是已经封装好的 HttpServletRequest。
+三者都注册在 `ServletContext` 上。可以把它理解成一个应用的「公共抽屉」:容器启动时按配置把 Servlet、Filter、Listener 放进去,请求来了按路径取对应的 Servlet。
 
-ServletContext 代表一个 Web 应用,全局唯一。它保存初始化参数与应用级属性,也是动态注册 Servlet、Filter 的入口,Spring Boot 的 RegistrationBean 最终就是向它注册。
+## 容器:Tomcat 做了什么
 
-## 一次请求的完整路径
+Tomcat、Jetty、Undertow 都是 Servlet 规范的实现。它们干的活比想象中多:
 
-```text
-TCP 连接(或复用)
-  → 容器解析请求行 / 头 / 体,匹配 Context 与 Servlet
-  → Filter 链前置处理
-  → DispatcherServlet
-  → HandlerMapping 找到 Controller 方法
-  → 参数绑定、方法执行、返回值处理(视图渲染或消息转换器写 JSON)
-  → Filter 链后置处理
-  → 写响应,连接归还连接池或关闭
+- 监听端口,接受 TCP 连接,把字节流解析成 `HttpServletRequest`;
+- 管理线程池,每个请求分配一个工作线程,处理完归还;
+- 按 URL 找到匹配的 Servlet 并调用 `service()`;
+- 把 `HttpServletResponse` 里的状态码、头、body 序列化回字节流。
+
+`ServletContext` 一个应用一个,和进程同生共死;`HttpSession` 一个会话一个,靠 Cookie 里的 `JSESSIONID` 认人。
+
+Spring Boot 的「内嵌服务器」不是新东西,只是把 Tomcat 当普通依赖打进 jar,启动时在 `main` 里创建,不用再装外置 Tomcat、再丢一个 war 进去。所以 `java -jar app.jar` 就能跑,端口由 `server.port` 决定。
+
+## 一个请求的完整路径
+
+```
+浏览器 → TCP 连接
+       → Tomcat 解析 HTTP 报文
+       → Filter 链(编码、鉴权、日志……)
+       → DispatcherServlet
+       → HandlerMapping 找到 @GetMapping 方法
+       → HandlerInterceptor.preHandle
+       → 参数解析 + 方法调用
+       → HttpMessageConverter 把返回值写成 JSON
+       → 逆序走 Filter 后置逻辑
+       → 响应字节流回浏览器
 ```
 
-顺序固定:Filter 在 DispatcherServlet 之前,拦截器在 DispatcherServlet 之后。判断一段逻辑该放在哪一层,先看它需不需要访问处理器信息。
+链路上任何一环都能改写结果:Filter 里直接 `response.getWriter().write(...)` 然后 `return`,请求就不会往下走;拦截器 `preHandle` 返回 `false` 也一样能让 Controller 不被调用。
 
-## DispatcherServlet 与 @Controller
+## 手写一个 Servlet
 
-DispatcherServlet 是 Spring MVC 注册在 `/` 上的前端控制器,也是框架中唯一的 Servlet。它不处理具体业务,只做分派:
-
-- HandlerMapping 根据 URL、请求方法、请求头找到处理器;
-- HandlerAdapter 调用 @Controller 或 @RestController 的方法,完成参数绑定;
-- 返回值由 ViewResolver 渲染视图,或由 HttpMessageConverter 序列化为 JSON。
-
-@Controller 并未实现 Servlet 接口,它只是被扫描进容器的普通 bean,方法签名自由,返回值也不必是 Servlet 类型。这层间接让 Spring MVC 能提供注解路由、参数解析器与统一异常处理。
-
-## Filter 与 HandlerInterceptor
-
-两者都能在 Controller 前后插入逻辑,所处的层不同:
-
-- Filter 属于 Servlet 规范,由容器调用,拿不到 HandlerMethod,能替换 request/response 对象,可作用于静态资源与其他 Servlet;
-- HandlerInterceptor 属于 Spring MVC,由 DispatcherServlet 调用,能读取处理器方法、模型与异常,preHandle 返回 false 即终止后续调用。
-
-执行顺序如下:
-
-```text
-Filter#doFilter(前置)
-  → Interceptor#preHandle
-    → Controller 方法
-  → Interceptor#postHandle
-  → Interceptor#afterCompletion
-Filter#doFilter(后置)
-```
-
-多个 Filter 的顺序由 @Order 或注册顺序决定;多个 Interceptor 按注册顺序执行,postHandle 与 afterCompletion 逆序执行。
-
-## 内嵌容器与注册方式
-
-Spring Boot 把 Tomcat 作为依赖打进可执行 jar,启动时创建并启动容器,这类模式称为内嵌服务器(embedded-server)。部署只需要一个 jar,容器版本随应用管理;代价是不能像外置 Tomcat 那样让多个应用共享一个容器。
-
-实现 Filter 接口并标注 @Component,Spring Boot 会把它注册到所有 URL:
+用了 Boot 之后基本不写 Servlet 了,但写一个能看清这层是什么:
 
 ```java
-@Component
-@Order(1)
-public class TraceFilter extends OncePerRequestFilter {
+public class HelloServlet extends HttpServlet {
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain chain)
-            throws IOException, ServletException {
-        long start = System.currentTimeMillis();
-        chain.doFilter(request, response);
-        System.out.println(request.getMethod() + " " + request.getRequestURI()
-                + " " + (System.currentTimeMillis() - start) + "ms");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+        String name = req.getParameter("name");
+        resp.setContentType("text/plain;charset=UTF-8");
+        resp.getWriter().write("hello, " + name);
     }
 }
 ```
 
-需要限制路径、指定 DispatcherType 或控制顺序时,用 FilterRegistrationBean 显式注册;Servlet 用 ServletRegistrationBean。显式注册的 Filter 不要再加 @Component,否则会被注册两次:
+注册方式两种。原生写法是 `@WebServlet("/hello")` 加 `@ServletComponentScan`;Boot 风格是用 `ServletRegistrationBean`:
 
 ```java
 @Bean
-public FilterRegistrationBean<AuthFilter> authFilter() {
-    FilterRegistrationBean<AuthFilter> registration =
-            new FilterRegistrationBean<>(new AuthFilter());
-    registration.addUrlPatterns("/api/*");
-    registration.setOrder(2);
-    return registration;
+ServletRegistrationBean<HelloServlet> hello() {
+    return new ServletRegistrationBean<>(new HelloServlet(), "/hello");
 }
 ```
 
-## 常见问题为什么出在这一层
+注意:`HttpServlet` 的 `service()` 会按请求方法分发到 `doGet` / `doPost`,你重写哪个就只支持哪个,没重写的返回 405。
 
-- 过滤器不生效:路径不匹配最常见,`/api` 是精确匹配,只有 `/api/*` 才覆盖其下所有子路径;异步请求需要在注册时开启 asyncSupported 并使用 DispatcherType.ASYNC;请求经 forward 转发时默认不再经过 REQUEST 类型的 Filter。
-- 拦截器顺序不对:顺序取决于注册顺序,不来自注解;多个 WebMvcConfigurer 各自注册时,实际顺序由配置类自身的排序决定,分散注册难以核对,统一在一处注册更可靠。
-- 在 Filter 里读不到 Controller 的返回值:Filter 位于 DispatcherServlet 之外,响应体可能已经写出,也可能尚未生成;需要读取响应内容时用 ContentCachingResponseWrapper 包装。
-- @ControllerAdvice 处理不到的异常:Filter 抛出的异常不经过 Spring MVC 的异常解析器,需要在 Filter 内部捕获并写响应。
+## Filter:容器层的拦截
+
+Filter 比 Servlet 更常用。统一编码、请求日志、JWT 校验这些「所有请求都要过一遍」的事,放这里最合适:
+
+```java
+@Component
+public class TraceFilter extends OncePerRequestFilter {
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp,
+                                    FilterChain chain) throws IOException, ServletException {
+        String traceId = UUID.randomUUID().toString().substring(0, 8);
+        MDC.put("traceId", traceId);          // 日志带上它,一条请求的日志能串起来
+        resp.setHeader("X-Trace-Id", traceId);
+        try {
+            chain.doFilter(req, resp);        // 放行,交给下一个 Filter 或 Servlet
+        } finally {
+            MDC.remove("traceId");
+        }
+    }
+}
+```
+
+`@Component` 注册的 Filter 默认对所有路径生效。要控制路径和顺序,用 `FilterRegistrationBean`:
+
+```java
+@Bean
+FilterRegistrationBean<TraceFilter> traceFilter() {
+    var bean = new FilterRegistrationBean<>(new TraceFilter());
+    bean.addUrlPatterns("/api/*");
+    bean.setOrder(1);      // 数字越小越靠前
+    return bean;
+}
+```
+
+用 `OncePerRequestFilter` 而不是直接实现 `Filter`,是因为请求可能被 forward 或 include 再次经过同一条链,前者保证一次请求只执行一遍。
+
+## Filter 与 Interceptor 的分工
+
+两者都能拦请求,位置不同:
+
+| | Filter | HandlerInterceptor |
+| --- | --- | --- |
+| 所属层 | Servlet 容器 | Spring MVC |
+| 能拿到什么 | `HttpServletRequest` / `Response` | 还能拿到 handler 方法、`ModelAndView` |
+| 典型用途 | 编码、CORS、traceId、JWT | 登录态校验、权限注解、记录业务日志 |
+| 能否拿到 Spring Bean | 注册为 Bean 时可以 | 本来就是 Bean |
+| 顺序 | 在 DispatcherServlet 之前 | 在 DispatcherServlet 之后 |
+
+判断标准:和 HTTP 报文打交道、要包住整个 MVC 流程的用 Filter;需要知道「这次要调哪个方法」「方法上有没有某个注解」的用 Interceptor。
 
 ## 小结
 
-- Servlet 接收请求并生成响应,Filter 在其前后拦截,Listener 监听容器事件;
-- 容器负责监听端口、解析 HTTP 协议、调度线程与管理生命周期;
-- 一次请求依次经过 Filter 链、DispatcherServlet、HandlerMapping、Controller、消息转换器;
-- Filter 属于容器层,Interceptor 属于 MVC 层,Filter 先执行,Interceptor 能访问处理器信息;
-- Spring Boot 以内嵌服务器运行 Tomcat,FilterRegistrationBean 与 ServletRegistrationBean 控制注册细节。
+- Servlet 规范三个角色:`Servlet` 处理请求、`Filter` 拦截链路、`Listener` 监听事件,都注册在 `ServletContext`;
+- Tomcat 负责连接、HTTP 解析、线程调度和 URL 匹配,`ServletContext` 一应用一个,`HttpSession` 一会话一个;
+- 内嵌服务器就是把 Tomcat 打成依赖,`main` 里启动,不用外置容器;
+- 请求链路:连接 → 解析 → Filter 链 → DispatcherServlet → HandlerMapping → Interceptor → Controller → 消息转换器;
+- Filter 在容器层(编码、CORS、traceId),Interceptor 在 MVC 层(能拿 handler 与注解);
+- 注册:Servlet 用 `ServletRegistrationBean`,Filter 用 `@Component` 或 `FilterRegistrationBean` 控路径与顺序。
+
+第 13 章到这里。下一篇把视角拉到系统之间:微服务里注册中心、配置中心、网关各自解决什么问题。

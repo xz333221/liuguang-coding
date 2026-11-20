@@ -1,180 +1,151 @@
 ---
 title: 事务与连接池
-summary: '事务把多条 SQL 组成一个原子单元,Spring 的 @Transactional 由代理在方法前后开启、提交或回滚;传播行为决定事务如何加入或新建,隔离级别控制并发读的一致性;连接由 HikariCP 这样的连接池统一分配与回收。'
+summary: '事务把多条 SQL 组成原子单元,ACID 是它要满足的四个性质;JDBC 默认 autocommit,关掉后要显式 commit / rollback;@Transactional 由代理在方法前后织入提交与回滚,同类自调用不走代理所以会失效;传播行为决定加入还是新建事务,隔离级别控制并发读;连接从 HikariCP 借出并归还,池不是越大越好。'
 category: java
 node: java-persistence-transaction
 order: 79
 level: 进阶
 tags: [事务, "@Transactional", 传播行为, 隔离级别, HikariCP]
-updated: 2026-11-19
+updated: 2026-11-20
 mindmap: transaction-pool.mindmap.json
-terms: ["runtime", "spring-boot", "bean"]
+terms: ["spring-boot", "bean", "runtime"]
 sources:
   - title: Spring Framework Reference · Transaction Management
     url: https://docs.spring.io/spring-framework/reference/data-access/transaction.html
     note: 声明式事务、传播行为与回滚规则的官方说明。
-  - title: HikariCP
+  - title: HikariCP · Configuration
     url: https://github.com/brettwooldridge/HikariCP
-    note: 核心参数与连接池配置建议。
-  - title: Oracle Java 教程 · JDBC Transactions
-    url: https://docs.oracle.com/javase/tutorial/jdbc/basics/transactions.html
-    note: autocommit、commit 与 rollback 的基础用法。
+    note: 核心参数、池大小建议与泄漏检测。
+  - title: MySQL Reference · InnoDB Locking and Transaction Model
+    url: https://dev.mysql.com/doc/refman/8.4/en/innodb-locking-transaction-model.html
+    note: 隔离级别与各 Level 下读现象的权威定义。
 ---
 
-上一篇的条件构造器解决了 SQL 的拼装与分页,但一次业务操作往往包含多条 SQL:扣款与入账必须同时成功,任何一步失败都要整体撤销。这种「要么全部生效,要么全部不生效」的约束由事务提供,而事务运行在数据库连接上,连接的创建与复用由连接池管理。
+上一篇解决了单条查询怎么拼。真实的业务操作很少只有一条 SQL:下单要扣库存、写订单、记流水,三步中任何一步失败,前面的都不能留下。这就是事务。
 
-## 事务与 ACID
+## ACID:四个性质
 
-事务(transaction)是一组要么全部提交、要么全部回滚的数据库操作。ACID 是它要满足的四个性质:
+| 性质 | 含义 | 谁保证 |
+| --- | --- | --- |
+| 原子性 Atomicity | 要么全做,要么全不做 | 数据库(undo log) |
+| 一致性 Consistency | 事务前后都满足约束,如转账总额不变 | 数据库约束 + 业务代码 |
+| 隔离性 Isolation | 并发事务互不干扰,程度由隔离级别定 | 数据库(锁 + MVCC) |
+| 持久性 Durability | 提交后的修改不因宕机丢失 | 数据库(redo log) |
 
-- 原子性(Atomicity):事务内的操作不可分割,失败时全部撤销;
-- 一致性(Consistency):事务前后数据满足约束,例如转账前后总金额不变;
-- 隔离性(Isolation):并发事务之间互不干扰,干扰程度由隔离级别决定;
-- 持久性(Durability):提交后的修改写入磁盘,即使宕机也不丢失。
-
-数据库直接保证原子性、隔离性与持久性,一致性由应用逻辑与约束共同维护。
+四个里只有一致性需要业务参与:数据库能保证「转账前后总金额相等」这个约束,前提是你写的 SQL 确实是一扣一加。
 
 ## JDBC 的提交方式
 
-JDBC 连接默认 autocommit 为 true,每条 SQL 单独提交,无法跨语句回滚。要显式控制事务,先关闭自动提交,再在成功时 commit、失败时 rollback:
+连接默认 `autocommit = true`,每条 SQL 独立提交,没法跨语句回滚。要显式控制:
 
 ```java
 try (Connection conn = dataSource.getConnection()) {
     conn.setAutoCommit(false);
     try {
-        update(conn, "UPDATE account SET balance = balance - 100 WHERE id = 1");
-        update(conn, "UPDATE account SET balance = balance + 100 WHERE id = 2");
+        deduct(conn, sku, qty);      // 扣库存
+        insertOrder(conn, order);     // 写订单
         conn.commit();
     } catch (SQLException e) {
-        conn.rollback();
+        conn.rollback();              // 一步失败,前面全部撤销
         throw e;
     } finally {
-        conn.setAutoCommit(true);   // 归还连接池前恢复默认值
+        conn.setAutoCommit(true);     // 归还连接前恢复默认值
     }
 }
 ```
 
-`finally` 中恢复 autocommit 是必要步骤:连接会被连接池回收给下一个请求,带着未结束的事务或为 false 的提交模式会产生难以复现的问题。
+最后那行 `setAutoCommit(true)` 很重要:连接是复用的,带着 `false` 回到池里,下一个借到它的人会莫名其妙地「改了不生效」。
 
-## @Transactional 的原理
+## @Transactional:注解只是元数据
 
-手写提交与回滚样板重复,Spring 用注解声明事务边界:
-
-```java
-@Service
-public class TransferService {
-    private final AccountMapper accountMapper;
-
-    public TransferService(AccountMapper accountMapper) {
-        this.accountMapper = accountMapper;
-    }
-
-    @Transactional
-    public void transfer(long from, long to, BigDecimal amount) {
-        accountMapper.debit(from, amount);
-        accountMapper.credit(to, amount);
-    }
-}
-```
-
-注解本身只是元数据,不产生任何行为。Spring 启动时为标注了 @Transactional 的 Bean 创建代理,代理对象在运行时拦截方法调用:从连接池取连接、关闭 autocommit、执行目标方法,正常返回则提交,抛出符合条件的异常则回滚,最后归还连接。这正是第 8 章动态代理的应用:事务逻辑被织入调用链,业务方法只描述做什么。
-
-代理只能拦截经代理对象进入的调用。同一个类内部一个方法直接调用另一个标注了 @Transactional 的方法,不经过代理,注解不生效,这是最常见的失效场景:
+Spring 把上面这段模板收进了注解:
 
 ```java
 @Service
 public class OrderService {
-    public void create(Order order) {
-        save(order);   // 同类自调用,不经过代理,save 上的 @Transactional 失效
-    }
 
-    @Transactional
-    public void save(Order order) { ... }
+    @Transactional(rollbackFor = Exception.class)
+    public void place(PlaceCmd cmd) {
+        inventoryMapper.deduct(cmd.sku(), cmd.qty());
+        orderMapper.insert(cmd.toOrder());
+    }
 }
 ```
 
-解决办法是把事务方法拆到另一个 Bean,由注入的代理对象调用。不要依赖自调用。
+注解本身不做事,做事的是代理。容器为 `OrderService` 生成一个代理对象,调用 `place` 时,代理先向事务管理器要一个事务(本质是关掉 autocommit 并绑定连接到当前线程),方法正常返回就提交,抛异常就回滚。这也是为什么注入进来的 `orderService` 其实是代理。
 
-## 传播行为
+由此引出四个常见失效场景:
 
-传播行为(propagation)规定当前已经存在事务时,新方法的事务如何加入或新建。常用三种:
+- **同类自调用**。`this.other()` 不经过代理,事务注解等于没写。根因在第 8 章动态代理那篇讲过:代理对象没被调用;
+- **方法不是 public**。基于代理的实现拦不到 private / protected 方法;
+- **异常被吞掉**。`catch` 之后不再抛,代理看到的是正常返回,自然提交;
+- **checked 异常默认不回滚**。`@Transactional` 默认只对 `RuntimeException` 和 `Error` 回滚,受检异常要显式写 `rollbackFor = Exception.class`。
 
-- REQUIRED(默认):有事务则加入,没有则新建。两个方法共用一个事务,任一失败整体回滚。
-- REQUIRES_NEW:始终新建事务,原事务挂起。新事务的提交或回滚不影响原事务,适合必须独立留痕的操作,如审计日志。
-- NESTED:在当前事务内创建保存点(savepoint),失败只回滚到保存点,外层可以继续。要求底层驱动支持保存点。
+自调用的解法有两种:把方法拆到另一个 bean 里;或者注入自己(`@Lazy` 注入自身代理)。前者更干净,后者知道原理就行。
 
-独立提交的写法是 `@Transactional(propagation = Propagation.REQUIRES_NEW)`,用在审计方法上。选择依据是失败的影响范围:同一业务单元用 REQUIRED,需要独立提交用 REQUIRES_NEW,允许局部失败用 NESTED。
+## 传播行为:加入还是新建
 
-## 隔离级别与并发问题
+一个事务方法调用另一个事务方法时,内层怎么处理,由传播行为决定:
 
-多个事务并发读写同一批数据时,可能出现三种读异常:
+| 传播行为 | 行为 | 场景 |
+| --- | --- | --- |
+| `REQUIRED`(默认) | 有事务就加入,没有就新建 | 绝大多数业务方法 |
+| `REQUIRES_NEW` | 挂起外层,自己开一个独立事务 | 记日志、发消息,不想被外层回滚带走 |
+| `NESTED` | 在外层里开保存点,失败只回到保存点 | 局部失败不影响整体 |
+| `SUPPORTS` | 有就加入,没有就非事务执行 | 查询方法 |
+| `NOT_SUPPORTED` | 挂起外层,自己非事务执行 | 长耗时的非关键操作 |
+| `MANDATORY` | 必须在事务中,否则抛异常 | 强制约束调用方 |
+| `NEVER` | 必须不在事务中,否则抛异常 | 极少数场景 |
 
-- 脏读:读到另一个事务尚未提交的修改,对方回滚后读到的数据从未存在;
-- 不可重复读:同一事务内两次读同一行,结果不同,因为期间被其他事务修改并提交;
-- 幻读:同一事务内两次按条件查询,第二次多出或少掉若干行,因为期间有插入或删除。
+`REQUIRES_NEW` 要占用第二个数据库连接。外层事务还没提交时,两个连接同时持有,池小的时候容易把自己锁死——这是「事务里嵌套独立事务」最常见的翻车方式。
 
-SQL 标准定义四个隔离级别,逐级加强:
+## 隔离级别:并发读会出现什么
 
-| 级别 | 脏读 | 不可重复读 | 幻读 |
+| 隔离级别 | 脏读 | 不可重复读 | 幻读 |
 | --- | --- | --- | --- |
 | READ UNCOMMITTED | 可能 | 可能 | 可能 |
-| READ COMMITTED | 避免 | 可能 | 可能 |
-| REPEATABLE READ | 避免 | 避免 | 可能 |
-| SERIALIZABLE | 避免 | 避免 | 避免 |
+| READ COMMITTED | 不会 | 可能 | 可能 |
+| REPEATABLE READ | 不会 | 不会 | InnoDB 下基本不会 |
+| SERIALIZABLE | 不会 | 不会 | 不会 |
 
-隔离级别越高,并发度越低。MySQL 的 InnoDB 默认 REPEATABLE READ,Oracle 与 PostgreSQL 默认 READ COMMITTED。Spring 可以在注解上指定 `isolation = Isolation.READ_COMMITTED`,没有明确需求时保持数据库默认值。
+- 脏读:读到了别人未提交的数据;
+- 不可重复读:同一事务内两次读同一行,值变了;
+- 幻读:同一事务内两次范围查询,行数变了。
 
-## 回滚规则
+MySQL 的 InnoDB 默认 `REPEATABLE READ`,靠 MVCC 加间隙锁基本消除了幻读。Oracle、PostgreSQL 默认 `READ COMMITTED`。隔离级别越高,并发度越低,除非有明确理由,否则不要动数据库默认值。
 
-默认只对 RuntimeException 与 Error 回滚;受检异常(checked exception)不回滚,事务照样提交。实际项目中通常希望任何异常都回滚,因此显式声明 `@Transactional(rollbackFor = Exception.class)`。
+## 连接池:HikariCP
 
-被 catch 吞掉的异常不会触发回滚:代理看不到异常,认为方法正常返回。需要回滚时要么继续抛出,要么调用 `TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()`。
+每次 `getConnection()` 都建一次 TCP 连接 + 认证,几十毫秒起步。连接池提前建好一批,用完归还。
 
-## 只读事务与超时
-
-查询方法可以标注 `@Transactional(readOnly = true)`,向驱动与数据库声明不写数据,部分数据库可以据此优化。事务超时用同一注解的 `timeout` 设置,单位为秒,超时后事务被回滚,防止长事务长期占用连接与锁:
-
-```java
-@Transactional(readOnly = true, timeout = 5)
-public List<Order> recent() { ... }
-```
-
-## 连接池
-
-事务依赖数据库连接,而建立连接涉及 TCP 握手、认证与会话初始化,成本远高于执行一条 SQL。连接池预先创建一批连接,业务代码借出、用完归还,避免频繁创建与销毁。
-
-Spring Boot 默认使用 HikariCP,核心参数在 application.yml 中配置:
+Spring Boot 默认用 HikariCP,几个参数必须知道:
 
 ```yaml
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/shop
-    username: app
-    password: ${DB_PASSWORD}
     hikari:
-      maximumPoolSize: 10
-      minimumIdle: 5
-      connectionTimeout: 3000      # 借连接的最长等待,毫秒
-      idleTimeout: 600000          # 空闲连接回收,毫秒
-      maxLifetime: 1800000         # 连接最长存活,毫秒
-      leakDetectionThreshold: 20000
+      maximum-pool-size: 10        # 池上限,默认 10
+      minimum-idle: 10             # 最小空闲,默认与上限相同
+      connection-timeout: 3000     # 借连接等多久算超时(毫秒)
+      idle-timeout: 600000         # 空闲多久回收
+      max-lifetime: 1800000        # 连接最长寿命,要小于数据库的 wait_timeout
+      leak-detection-threshold: 20000   # 借出超过 20s 没还就打印堆栈
 ```
 
-- maximumPoolSize:池中连接上限。并非越大越好:每个连接占用数据库内存与线程,数据库能承受的并发连接有限,池过大只会把压力推给数据库并增加上下文切换。常见取值在 10 到 20。
-- minimumIdle:保持的最小空闲连接数,低于此值会补充。
-- connectionTimeout:借不到连接时的最长等待,超时抛异常。设置过长会让请求线程长时间挂起。
-- idleTimeout:空闲连接被回收的时间。
-- maxLifetime:连接的最长寿命,应小于数据库或中间件主动断开连接的时间,避免取到已被服务端关闭的连接。
+两个经验:
 
-连接泄漏指借出的连接没有归还,可用连接逐渐减少,最终所有请求都在 connectionTimeout 上失败。开启 leakDetectionThreshold 后,HikariCP 会在连接被占用超过阈值时打印堆栈,据此定位没有关闭连接的代码。排查时优先检查手动获取连接的位置与异常路径。
+1. **池不是越大越好**。数据库的连接数和 CPU 核数强相关,几十个连接就能把一台库打满。应用侧的池上限通常 10~20 就够,真正该扩的是实例数;
+2. **`max-lifetime` 要小于数据库的 `wait_timeout`**。否则连接被数据库单方面掐断,应用还以为是好的,借出去就报 `Communications link failure`。
+
+`leak-detection-threshold` 只在排查时打开:它会在连接借出超时后打印借用方的堆栈,能直接指出哪段代码忘了关。
 
 ## 小结
 
-- ACID 是事务的四个性质,数据库保证原子性、隔离性与持久性;
-- JDBC 默认自动提交,手动事务需关闭 autocommit 并在成功时 commit、失败时 rollback;
-- @Transactional 由代理织入,同类自调用不经过代理,注解失效;
-- 传播行为决定事务的加入与新建,隔离级别决定并发读的异常范围;
-- 默认只对 RuntimeException 回滚,覆盖受检异常时写 rollbackFor;
-- 连接池不是越大越好,maxLifetime 应小于数据库断连时间,泄漏用 leakDetectionThreshold 排查。
+- 事务保证多条 SQL 一起成功或一起撤销,ACID 里只有一致性需要业务参与;
+- JDBC 关掉 autocommit 后显式 commit / rollback,归还连接前恢复默认值;
+- `@Transactional` 靠代理织入,同类自调用、非 public、异常被吞、checked 异常默认不回滚都会让它失效;
+- 传播行为:`REQUIRED` 加入、`REQUIRES_NEW` 独立、`NESTED` 保存点;独立事务会多占一个连接;
+- 隔离级别越高并发越低,MySQL 默认 `REPEATABLE READ`,别轻易改;
+- HikariCP 池大小 10~20 通常够用,`max-lifetime` 必须小于数据库的 `wait_timeout`,泄漏用 `leak-detection-threshold` 查。
 
-下一篇回到 JDBC:看 Connection 从哪里来、SQL 如何执行,以及 MyBatis 在它之上封装了什么。
+下一篇回头看最底层:JDBC 自己是怎么执行一条 SQL 的。
