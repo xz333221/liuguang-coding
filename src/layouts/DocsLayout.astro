@@ -4,6 +4,7 @@ import { ChatPanel } from '../components/chat/ChatPanel.tsx'
 import ModelConfigDialog from '../components/chat/ModelConfigDialog.vue'
 import { Mark } from '../components/ui/Mark'
 import Sidebar from '../components/kb/Sidebar.astro'
+import SearchPalette from '../components/kb/SearchPalette.astro'
 import ThemeToggle from '../components/kb/ThemeToggle.astro'
 import Base from './Base.astro'
 import type { ArticleContext } from '../lib/chat'
@@ -40,6 +41,7 @@ const year = new Date().getFullYear()
       </a>
 
       <div class="ml-auto flex items-center gap-4">
+        <SearchPalette />
         <a href={withBase('game/')} class="lg-header-link hidden sm:inline">闯关</a>
         <a href={withBase('glossary/')} class="lg-header-link hidden sm:inline">术语</a>
         <button type="button" class="lg-header-link" data-chat-open>问答</button>
