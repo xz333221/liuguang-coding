@@ -124,6 +124,27 @@ async function synthesize(text, voice) {
   })
 }
 
+/**
+ * 上游偶尔会在握手后直接结束、一个音频块都不给(2026-11-21 21:55 连续三次),
+ * 这时重试一下基本就恢复。别把这种抖动直接甩给前端去回退浏览器语音。
+ */
+async function synthesizeWithRetry(text, voice, attempts = 3) {
+  let lastError = null
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      const buffer = await withSlot(() => synthesize(text, voice))
+      if (buffer?.length) return buffer
+      lastError = new Error('empty audio')
+    } catch (error) {
+      lastError = error
+    }
+    if (attempt < attempts) {
+      await new Promise((resolve) => setTimeout(resolve, 300 * attempt))
+    }
+  }
+  throw lastError ?? new Error('empty audio')
+}
+
 export function createTtsHandler() {
   return async (req, res) => {
     const text = typeof req.body?.text === 'string' ? req.body.text.trim() : ''
@@ -148,8 +169,7 @@ export function createTtsHandler() {
     }
 
     try {
-      const buffer = await withSlot(() => synthesize(text, voice))
-      if (!buffer?.length) throw new Error('empty audio')
+      const buffer = await synthesizeWithRetry(text, voice)
       mkdirSync(CACHE_DIR, { recursive: true })
       writeFileSync(file, buffer)
       pruneCache()
@@ -158,7 +178,8 @@ export function createTtsHandler() {
       res.send(buffer)
     } catch (error) {
       console.error('[tts]', error?.message || error)
-      res.status(502).json({ error: { message: '语音合成失败,前端可以回退到浏览器朗读' } })
+      res.setHeader('Retry-After', '1')
+      res.status(503).json({ error: { message: '语音合成暂时失败,稍后重试或回退浏览器朗读' } })
     }
   }
 }
