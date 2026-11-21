@@ -1,6 +1,6 @@
 ---
 title: 错误处理与调试
-summary: '抛 Error 实例而不是字符串,只有它带调用栈。catch 只处理认识的错误,finally 里不要 return。自定义错误用 cause 保留原始异常,异步边界会切断 try/catch。'
+summary: '抛 Error 实例而不是字符串，只有它带调用栈。catch 只处理认识的错误，finally 里不要 return。自定义错误用 cause 保留原始异常，异步边界会切断 try/catch。'
 category: frontend
 node: frontend-js-error
 order: 35
@@ -21,24 +21,24 @@ sources:
     note: errors 属性与 Promise.any 的关系。
 ---
 
-相等比较那篇解决的是「两个值算不算同一个」,前提是代码能跑到比较那一行。真实代码会解析失败、会超时、会拿到 `undefined`,这篇讲出错之后怎么让上层知道,拿到错误之后又怎么定位。
+相等比较那篇解决的是「两个值算不算同一个」，前提是代码能跑到比较那一行。真实代码会解析失败、会超时、会拿到 `undefined`，这篇讲出错之后怎么让上层知道，拿到错误之后又怎么定位。
 
 ## 内置错误类型
 
 | 类型 | 典型场景 |
 | --- | --- |
-| `Error` | 通用错误,自定义错误的基类 |
+| `Error` | 通用错误，自定义错误的基类 |
 | `TypeError` | 在 `undefined` 上取属性、调用非函数 |
 | `RangeError` | `new Array(-1)`、递归过深 |
 | `ReferenceError` | 访问 TDZ 里的变量、未声明的名字 |
 | `SyntaxError` | `JSON.parse('{')` |
-| `AggregateError` | 一次操作里的多个错误,如 `Promise.any` 全部失败 |
+| `AggregateError` | 一次操作里的多个错误，如 `Promise.any` 全部失败 |
 
-它们都继承 `Error`,带 `message`、`name`、`stack` 三个主要属性。`stack` 是访问时才生成的字符串,包含调用链,排查时比 `message` 有用。
+它们都继承 `Error`，带 `message`、`name`、`stack` 三个主要属性。`stack` 是访问时才生成的字符串，包含调用链，排查时比 `message` 有用。
 
 ## throw 与 catch
 
-`throw` 可以抛任何值,但只有 `Error` 实例带调用栈。
+`throw` 可以抛任何值，但只有 `Error` 实例带调用栈。
 
 ```js
 try {
@@ -59,9 +59,9 @@ try {
 }
 ```
 
-`catch` 里不要吞错误。只打一行日志然后继续,调用方拿到的是 `undefined`,错误会在后面某处变成 `TypeError: Cannot read properties of undefined`,原始线索全断。要么有明确兜底值,要么重新抛出。
+`catch` 里不要吞错误。只打一行日志然后继续，调用方拿到的是 `undefined`，错误会在后面某处变成 `TypeError: Cannot read properties of undefined`，原始线索全断。要么有明确兜底值，要么重新抛出。
 
-ES2019 起可以省略 catch 的参数:`catch {}`,只做清理不关心错误时用。
+ES2019 起可以省略 catch 的参数：`catch {}`，只做清理不关心错误时用。
 
 ## finally 里的 return 会盖掉 try 的
 
@@ -85,7 +85,7 @@ function g() {
 g()  // 'swallowed',错误消失了,外面根本不知道出过事
 ```
 
-`finally` 总是执行,里面的 `return` 直接覆盖 `try` 的返回值,连异常也能吞掉。它只用来做清理:关连接、清定时器、复原状态。不要在里面 `return`。
+`finally` 总是执行，里面的 `return` 直接覆盖 `try` 的返回值，连异常也能吞掉。它只用来做清理：关连接、清定时器、复原状态。不要在里面 `return`。
 
 ## 自定义错误与 cause
 
@@ -116,13 +116,13 @@ try {
 }
 ```
 
-继承 `Error` 时要把 `name` 改成自己的类名,否则日志里全是 `Error`,一眼看不出是哪类问题。必须 `extends Error`,只造一个带 `message` 的普通对象 `instanceof` 不成立。
+继承 `Error` 时要把 `name` 改成自己的类名，否则日志里全是 `Error`，一眼看不出是哪类问题。必须 `extends Error`，只造一个带 `message` 的普通对象 `instanceof` 不成立。
 
-`cause` 是 ES2022 的选项,控制台会展开显示,日志系统也能读到。写法上把上下文写进 `message`,把原始错误放进 `cause`,两层信息都不丢。
+`cause` 是 ES2022 的选项，控制台会展开显示，日志系统也能读到。写法上把上下文写进 `message`，把原始错误放进 `cause`，两层信息都不丢。
 
 ## 异步里的错误
 
-`try/catch` 只捕获同步执行过程中抛出的错误。放进回调、定时器的异常在另一个时刻抛出,捕获不到:
+`try/catch` 只捕获同步执行过程中抛出的错误。放进回调、定时器的异常在另一个时刻抛出，捕获不到：
 
 ```js
 try {
@@ -134,7 +134,7 @@ try {
 }
 ```
 
-这段代码会直接把进程打挂,`catch` 拿不到。Promise 的拒绝也一样:不 `await` 就不会被 `try` 捕获,`await` 之后才会。这部分在第 7 章讲异步时展开,先记一条结论:异步边界会切断 `try/catch`。
+这段代码会直接把进程打挂，`catch` 拿不到。Promise 的拒绝也一样：不 `await` 就不会被 `try` 捕获，`await` 之后才会。这部分在第 7 章讲异步时展开，先记一条结论：异步边界会切断 `try/catch`。
 
 ## 多个错误
 
@@ -147,9 +147,9 @@ err.errors.length    // 2
 err.errors[1].message // '邮箱格式不对'
 ```
 
-`AggregateError` 是 ES2021 加入的,`Promise.any` 全部失败时抛的就是它。自己做批量校验时也可以直接用,把多个失败原因一次交给上层,而不是只报第一条。
+`AggregateError` 是 ES2021 加入的，`Promise.any` 全部失败时抛的就是它。自己做批量校验时也可以直接用，把多个失败原因一次交给上层，而不是只报第一条。
 
-遍历 `err.errors` 时注意子错误不一定是 `Error` 实例,别直接读 `.message` 不看类型。
+遍历 `err.errors` 时注意子错误不一定是 `Error` 实例，别直接读 `.message` 不看类型。
 
 ## 定位问题
 
@@ -159,18 +159,18 @@ err.errors[1].message // '邮箱格式不对'
 3. 能复现就在那一行下 debugger,不能复现就加日志打参数
 ```
 
-`node --inspect-brk app.js` 会在第一行停下,配合 Chrome 的 `chrome://inspect` 可以逐行执行、看每个作用域里的变量。`debugger` 语句在打开调试器时同样会断住,提交前记得删掉。
+`node --inspect-brk app.js` 会在第一行停下，配合 Chrome 的 `chrome://inspect` 可以逐行执行、看每个作用域里的变量。`debugger` 语句在打开调试器时同样会断住，提交前记得删掉。
 
-`console.trace()` 在当前位置打印调用栈,比 `console.log` 多一层信息,适合确认「这个方法到底被谁调的」。
+`console.trace()` 在当前位置打印调用栈，比 `console.log` 多一层信息，适合确认「这个方法到底被谁调的」。
 
-浏览器控制台的 `console.log(obj)` 存的是对象引用,展开时读的是那一刻的值,不是打印时的快照。要留快照就先 `structuredClone` 或 `JSON.stringify` 再打。Node 的 `console.log` 会立即格式化,行为不一样。
+浏览器控制台的 `console.log(obj)` 存的是对象引用，展开时读的是那一刻的值，不是打印时的快照。要留快照就先 `structuredClone` 或 `JSON.stringify` 再打。Node 的 `console.log` 会立即格式化，行为不一样。
 
 ## 小结
 
-- 抛 `Error` 实例而不是字符串,只有实例带调用栈;
-- `catch` 只处理认识的错误,其余重新抛出,吞掉会让线索断在别处;
-- `finally` 里不要 `return`,它会覆盖返回值,也会吞掉异常;
-- 自定义错误 `extends Error` 并改 `name`,包装时用 `cause` 保留原始错误;
-- 异步边界会切断 `try/catch`,回调与未 `await` 的 Promise 要单独处理;
-- `AggregateError.errors` 装同一次操作里的多个失败原因;
-- 调试先看 `stack` 的第一行,再决定是加日志还是下断点。
+- 抛 `Error` 实例而不是字符串，只有实例带调用栈；
+- `catch` 只处理认识的错误，其余重新抛出，吞掉会让线索断在别处；
+- `finally` 里不要 `return`，它会覆盖返回值，也会吞掉异常；
+- 自定义错误 `extends Error` 并改 `name`，包装时用 `cause` 保留原始错误；
+- 异步边界会切断 `try/catch`，回调与未 `await` 的 Promise 要单独处理；
+- `AggregateError.errors` 装同一次操作里的多个失败原因；
+- 调试先看 `stack` 的第一行，再决定是加日志还是下断点。

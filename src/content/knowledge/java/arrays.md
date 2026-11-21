@@ -1,6 +1,6 @@
 ---
 title: 数组
-summary: '数组是一组同类型的值,长度定了就不能变,下标从 0 开始。数组是引用类型:赋值复制的是引用,改一个另一个也变;要独立副本用 Arrays.copyOf。'
+summary: '数组是一组同类型的值，长度定了就不能变，下标从 0 开始。数组是引用类型：赋值复制的是引用，改一个另一个也变；要独立副本用 Arrays.copyOf。'
 category: java
 node: java-quickstart-array
 order: 8
@@ -21,10 +21,10 @@ sources:
     note: 声明、初始化、越界异常的对照。
 ---
 
-一个变量装一个值,要装一组同类型的值,用数组。这一篇讲数组怎么定义、怎么取、怎么遍历,以及它作为引用类型最重要的一个性质。
+一个变量装一个值，要装一组同类型的值，用数组。这一篇讲数组怎么定义、怎么取、怎么遍历，以及它作为引用类型最重要的一个性质。
 
 <figure class="lg-figure">
-  <svg class="lg-diagram" viewBox="0 0 760 250" role="img" aria-label="数组变量持有引用,指向堆上一段连续内存,下标从 0 开始">
+  <svg class="lg-diagram" viewBox="0 0 760 250" role="img" aria-label="数组变量持有引用，指向堆上一段连续内存，下标从 0 开始">
     <defs>
       <marker id="arrArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
         <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)" />
@@ -32,7 +32,7 @@ sources:
     </defs>
     <rect x="6" y="6" width="748" height="238" rx="20" fill="var(--panel)" stroke="var(--line-strong)" />
     <text x="32" y="40" font-size="12" fill="var(--muted)">栈</text>
-    <text x="250" y="40" font-size="12" fill="var(--muted)">堆:一段连续内存</text>
+    <text x="250" y="40" font-size="12" fill="var(--muted)">堆：一段连续内存</text>
     <rect x="32" y="56" width="130" height="64" rx="12" fill="var(--canvas)" stroke="var(--line)" />
     <text x="97" y="82" font-size="14" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="var(--ink)" text-anchor="middle">int[] a</text>
     <text x="97" y="102" font-size="11" fill="var(--muted)" text-anchor="middle">只是一个引用</text>
@@ -59,15 +59,15 @@ sources:
       </g>
     </g>
     <text x="594" y="94" font-size="11" fill="var(--muted)">长度 5</text>
-    <text x="32" y="168" font-size="12.5" fill="var(--ink)">a[2] 的地址 = 首地址 + 2 × 4 字节。一次乘法就能算出来,所以随机访问是 O(1)。</text>
-    <text x="32" y="200" font-size="12.5" fill="var(--muted)">扩容只能新建一个更大的数组,把旧元素逐个复制过去:代价 O(n),而且旧数组要等 GC 回收。</text>
+    <text x="32" y="168" font-size="12.5" fill="var(--ink)">a[2] 的地址 = 首地址 + 2 × 4 字节。一次乘法就能算出来，所以随机访问是 O(1)。</text>
+    <text x="32" y="200" font-size="12.5" fill="var(--muted)">扩容只能新建一个更大的数组，把旧元素逐个复制过去：代价 O(n)，而且旧数组要等 GC 回收。</text>
   </svg>
-  <figcaption>数组变量是引用,数据在堆上连续存放;下标就是偏移量,所以读得快、插入慢。</figcaption>
+  <figcaption>数组变量是引用，数据在堆上连续存放；下标就是偏移量，所以读得快、插入慢。</figcaption>
 </figure>
 
 ## 定义与初始化
 
-两种写法:
+两种写法：
 
 ```java
 // 先指定长度,元素拿默认值
@@ -77,13 +77,13 @@ int[] a = new int[5];        // 5 个 0
 int[] b = {90, 85, 77};      // 长度 3
 ```
 
-`int[]` 读作「int 数组」。方括号写在类型后面是推荐写法,`int a[]` 也合法但少见。
+`int[]` 读作「int 数组」。方括号写在类型后面是推荐写法，`int a[]` 也合法但少见。
 
-只指定长度时,元素自动拿默认值:整数是 0,浮点是 0.0,boolean 是 false,引用类型是 null。不用自己一个个填。
+只指定长度时，元素自动拿默认值：整数是 0，浮点是 0.0,boolean 是 false，引用类型是 null。不用自己一个个填。
 
-注意:数组长度一旦定了就不能变。`new int[5]` 就是 5 个,装不下第 6 个。需要「随时追加」的容器,用第 6 章的 ArrayList,数组适合长度固定的场景。
+注意：数组长度一旦定了就不能变。`new int[5]` 就是 5 个，装不下第 6 个。需要「随时追加」的容器，用第 6 章的 ArrayList，数组适合长度固定的场景。
 
-## 取下标:从 0 开始
+## 取下标：从 0 开始
 
 ```java
 int[] b = {90, 85, 77};
@@ -93,17 +93,17 @@ System.out.println(b.length);  // 3,长度是属性,不带括号
 b[1] = 100;                    // 改第二个
 ```
 
-最后一个元素的下标是 `length - 1`。下标越界不会编译报错,运行时抛 `ArrayIndexOutOfBoundsException`:
+最后一个元素的下标是 `length - 1`。下标越界不会编译报错，运行时抛 `ArrayIndexOutOfBoundsException`:
 
 ```java
 System.out.println(b[3]);   // 运行时炸:下标 3 不存在
 ```
 
-编译器不管下标范围,因为它经常是变量,只有运行时才知道。所以循环遍历的条件写 `i < b.length`,上一篇强调的边界差一在这里最常犯。
+编译器不管下标范围，因为它经常是变量，只有运行时才知道。所以循环遍历的条件写 `i < b.length`，上一篇强调的边界差一在这里最常犯。
 
 ## 遍历
 
-两种:
+两种：
 
 ```java
 // 三段式:需要下标时用
@@ -117,17 +117,17 @@ for (int x : b) {
 }
 ```
 
-直接 `System.out.println(b)` 打印的不是内容,是一串类似 `[I@1b6d3586` 的东西(类型标记加哈希码)。想看内容,用工具方法:
+直接 `System.out.println(b)` 打印的不是内容，是一串类似 `[I@1b6d3586` 的东西(类型标记加哈希码)。想看内容，用工具方法：
 
 ```java
 System.out.println(Arrays.toString(b));   // [90, 100, 77]
 ```
 
-`Arrays` 是 `java.util` 里的工具类,用之前要 `import java.util.Arrays;`。它还有 `sort`(排序)、`copyOf`(复制)等,后面用到再查。
+`Arrays` 是 `java.util` 里的工具类，用之前要 `import java.util.Arrays;`。它还有 `sort`(排序)、`copyOf`(复制)等，后面用到再查。
 
-## 数组是引用类型:赋值复制的是引用
+## 数组是引用类型：赋值复制的是引用
 
-这一节是关键,看例子:
+这一节是关键，看例子：
 
 ```java
 int[] a = {1, 2, 3};
@@ -136,7 +136,7 @@ b[0] = 99;
 System.out.println(a[0]);   // 99,a 也变了
 ```
 
-基本类型赋值是复制值,两不相干;数组赋值是复制引用,两个变量指向同一个数组,改哪个名字看到的都是同一份数据。画出来:
+基本类型赋值是复制值，两不相干；数组赋值是复制引用，两个变量指向同一个数组，改哪个名字看到的都是同一份数据。画出来：
 
 ```text
 a ──┐
@@ -146,7 +146,7 @@ a ──┐
 b ──┘
 ```
 
-想要一份独立的副本,用 `Arrays.copyOf`:
+想要一份独立的副本，用 `Arrays.copyOf`:
 
 ```java
 int[] c = Arrays.copyOf(a, a.length);
@@ -154,11 +154,11 @@ c[0] = 0;
 System.out.println(a[0]);   // 99,不受影响
 ```
 
-这个性质后面会反复遇到:方法参数传数组、集合里装对象,都是同一套引用语义。第 3 章会把它讲透,这里先在数组上建立直觉。
+这个性质后面会反复遇到：方法参数传数组、集合里装对象，都是同一套引用语义。第 3 章会把它讲透，这里先在数组上建立直觉。
 
 ## 多维数组
 
-数组的元素还是数组,就是二维数组,常用来存表格:
+数组的元素还是数组，就是二维数组，常用来存表格：
 
 ```java
 int[][] grid = {
@@ -169,14 +169,14 @@ System.out.println(grid[1][2]);   // 6,第 2 行第 3 列
 System.out.println(grid.length);  // 2,行数
 ```
 
-遍历就套两层循环,外层走行、内层走列。二维数组了解即可,实际项目里更常见的是「对象组成的列表」,那是集合章节的事。
+遍历就套两层循环，外层走行、内层走列。二维数组了解即可，实际项目里更常见的是「对象组成的列表」，那是集合章节的事。
 
 ## 小结
 
-- 数组长度固定,下标 0 到 length-1,越界运行时抛异常;
-- 只指定长度时元素拿默认值:0 / 0.0 / false / null;
-- 遍历优先 for-each;打印内容用 Arrays.toString,直接 println 打印的是哈希码;
-- 数组是引用类型,赋值复制引用,改一处两处都变;独立副本用 Arrays.copyOf;
-- 需要可变长度,等第 6 章的 ArrayList。
+- 数组长度固定，下标 0 到 length-1，越界运行时抛异常；
+- 只指定长度时元素拿默认值：0 / 0.0 / false / null;
+- 遍历优先 for-each；打印内容用 Arrays.toString，直接 println 打印的是哈希码；
+- 数组是引用类型，赋值复制引用，改一处两处都变；独立副本用 Arrays.copyOf;
+- 需要可变长度，等第 6 章的 ArrayList。
 
-下一篇讲方法:把一段逻辑包起来,起个名字,反复用。
+下一篇讲方法：把一段逻辑包起来，起个名字，反复用。

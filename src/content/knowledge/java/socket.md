@@ -1,6 +1,6 @@
 ---
 title: 网络编程:Socket 与 HTTP 客户端
-summary: 'TCP 用 Socket/ServerSocket 面向连接可靠传输,UDP 用 DatagramSocket 无连接;JDK11 的 java.net.http.HttpClient 支持同步/异步与 HTTP/2,取代 HttpURLConnection。'
+summary: 'TCP 用 Socket/ServerSocket 面向连接可靠传输，UDP 用 DatagramSocket 无连接；JDK11 的 java.net.http.HttpClient 支持同步/异步与 HTTP/2，取代 HttpURLConnection。'
 category: java
 node: java-io-socket
 order: 55
@@ -18,11 +18,11 @@ sources:
     note: TCP Socket 客户端/服务端模型的参照。
 ---
 
-IO 流解决本地读写,网络编程把流延伸到远端。这一篇讲 TCP/UDP 两种 Socket,以及 JDK11 起内置的现代 HTTP 客户端。
+IO 流解决本地读写，网络编程把流延伸到远端。这一篇讲 TCP/UDP 两种 Socket，以及 JDK11 起内置的现代 HTTP 客户端。
 
 ## TCP:Socket / ServerSocket
 
-TCP 面向连接、可靠、有序。服务端监听端口,客户端发起连接,双方通过输入/输出流交换字节:
+TCP 面向连接、可靠、有序。服务端监听端口，客户端发起连接，双方通过输入/输出流交换字节：
 
 ```java
 // 服务端
@@ -50,11 +50,11 @@ try (Socket s = new Socket("localhost", 8080);
 }
 ```
 
-accept 与 read 都阻塞,因此一连接一线程;高并发用 NIO/Netty(上一篇)。务必设置超时 `setSoTimeout`,避免永久挂起。
+accept 与 read 都阻塞，因此一连接一线程；高并发用 NIO/Netty(上一篇)。务必设置超时 `setSoTimeout`，避免永久挂起。
 
 ## UDP:DatagramSocket
 
-UDP 无连接、不保证可靠与顺序,以数据报(DatagramPacket)为单位,开销小,适合实时音视频、DNS:
+UDP 无连接、不保证可靠与顺序，以数据报(DatagramPacket)为单位，开销小，适合实时音视频、DNS:
 
 ```java
 try (DatagramSocket ds = new DatagramSocket()) {
@@ -69,7 +69,7 @@ try (DatagramSocket ds = new DatagramSocket()) {
 
 ## HttpClient:JDK11 内置
 
-HttpURLConnection 陈旧难用;JDK11 的 java.net.http.HttpClient 支持 HTTP/1.1 与 HTTP/2、同步与异步、WebSocket:
+HttpURLConnection 陈旧难用；JDK11 的 java.net.http.HttpClient 支持 HTTP/1.1 与 HTTP/2、同步与异步、WebSocket:
 
 ```java
 HttpClient client = HttpClient.newHttpClient();
@@ -89,20 +89,20 @@ client.sendAsync(req, HttpResponse.BodyHandlers.ofString())
       .thenAccept(System.out::println);
 ```
 
-BodyPublishers 提供 ofString/ofByteArray/ofFile;BodyHandlers 提供 ofString/ofByteArray/ofFile/discarding。客户端可复用(线程安全),不要每请求新建。
+BodyPublishers 提供 ofString/ofByteArray/ofFile;BodyHandlers 提供 ofString/ofByteArray/ofFile/discarding。客户端可复用(线程安全)，不要每请求新建。
 
 ## 选型
 
-- 简单 HTTP 调用:HttpClient;
+- 简单 HTTP 调用：HttpClient;
 - 复杂需求(连接池、拦截器、重试):OkHttp / Apache HttpClient;
-- 自定义二进制协议 / 长连接:Socket 或 Netty;
-- 实时不可靠传输:UDP。
+- 自定义二进制协议 / 长连接：Socket 或 Netty;
+- 实时不可靠传输：UDP。
 
 ## 小结
 
-- TCP Socket/ServerSocket 面向连接可靠,accept/read 阻塞,设超时;
-- UDP DatagramSocket 无连接数据报,丢包乱序应用层处理;
-- HttpClient(JDK11)支持 HTTP/2、同步/异步,BodyPublishers/BodyHandlers 组合;
-- 客户端复用;复杂需求用 OkHttp 等;自定义协议用 Socket/Netty。
+- TCP Socket/ServerSocket 面向连接可靠，accept/read 阻塞，设超时；
+- UDP DatagramSocket 无连接数据报，丢包乱序应用层处理；
+- HttpClient(JDK11)支持 HTTP/2、同步/异步，BodyPublishers/BodyHandlers 组合；
+- 客户端复用；复杂需求用 OkHttp 等；自定义协议用 Socket/Netty。
 
-下一章进入多线程与并发:线程、锁与内存模型。
+下一章进入多线程与并发：线程、锁与内存模型。

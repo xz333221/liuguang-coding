@@ -1,6 +1,6 @@
 ---
 title: 函数式接口:Function / Consumer / Supplier
-summary: 'JDK 内置函数式接口按"输入→输出"形状划分:Function 转换、Consumer 消费、Supplier 供给、Predicate 判断;可用 andThen/compose/negate 组合;基本类型特化避免装箱。'
+summary: 'JDK 内置函数式接口按"输入→输出"形状划分：Function 转换、Consumer 消费、Supplier 供给、Predicate 判断；可用 andThen/compose/negate 组合；基本类型特化避免装箱。'
 category: java
 node: java-functional-interface
 order: 46
@@ -18,7 +18,7 @@ sources:
     note: 以 Predicate/Consumer 为例的 API 设计参照。
 ---
 
-上一篇说 Lambda 的目标是函数式接口。自己定义接口当然可以,但 JDK 在 java.util.function 里预置了一组按"输入→输出"形状划分的接口,覆盖绝大多数场景,优先复用它们。
+上一篇说 Lambda 的目标是函数式接口。自己定义接口当然可以，但 JDK 在 java.util.function 里预置了一组按"输入→输出"形状划分的接口，覆盖绝大多数场景，优先复用它们。
 
 ## 按形状分类
 
@@ -39,15 +39,15 @@ Supplier<List<String>> factory = ArrayList::new;
 Predicate<Integer> positive = n -> n > 0;
 ```
 
-记忆法:Function 有进有出、Consumer 只进不出、Supplier 只出不进、Predicate 进出 boolean。
+记忆法：Function 有进有出、Consumer 只进不出、Supplier 只出不进、Predicate 进出 boolean。
 
 ## @FunctionalInterface 的作用
 
-该注解是**编译期检查**:标注的接口若抽象方法不止一个,编译报错。它不改变运行时行为,也不是 Lambda 的必要条件(未标注的单抽象方法接口同样可作 Lambda 目标)。加上它是向读者与编译器声明意图。
+该注解是**编译期检查**:标注的接口若抽象方法不止一个，编译报错。它不改变运行时行为，也不是 Lambda 的必要条件(未标注的单抽象方法接口同样可作 Lambda 目标)。加上它是向读者与编译器声明意图。
 
-## 组合:andThen / compose / negate
+## 组合：andThen / compose / negate
 
-函数式接口提供 default 组合方法,把小函数拼成流水线:
+函数式接口提供 default 组合方法，把小函数拼成流水线：
 
 ```java
 Function<Integer, Integer> plus1 = n -> n + 1;
@@ -63,9 +63,9 @@ Predicate<Integer> either = positive.or(n -> n == 0); // 或
 
 andThen 是"我之后接你",compose 是"我之前先你"。Consumer 也有 andThen(依次消费);Function 与 Predicate 的组合最常用。
 
-## 基本类型特化:避免装箱
+## 基本类型特化：避免装箱
 
-泛型接口不能用基本类型作类型参数,Function<Integer,Integer> 会装箱拆箱。JDK 提供特化版:
+泛型接口不能用基本类型作类型参数，Function<Integer,Integer> 会装箱拆箱。JDK 提供特化版：
 
 - IntFunction<R>、ToIntFunction<T>、IntUnaryOperator、IntPredicate、IntConsumer、IntSupplier;
 - 以及 Long / Double 对应版本。
@@ -75,11 +75,11 @@ IntPredicate even = n -> n % 2 == 0;      // 无装箱
 ToIntFunction<String> len = String::length;
 ```
 
-热点路径上优先用特化版,减少装箱开销(呼应第 3 章装箱性能提醒)。
+热点路径上优先用特化版，减少装箱开销(呼应第 3 章装箱性能提醒)。
 
 ## 自定义函数式接口
 
-内置形状不匹配时再自定义,例如带两个输入一个输出且语义明确:
+内置形状不匹配时再自定义，例如带两个输入一个输出且语义明确：
 
 ```java
 @FunctionalInterface
@@ -88,14 +88,14 @@ interface TriFunction<A, B, C, R> {
 }
 ```
 
-自定义时保持单一抽象方法,语义命名清晰;能复用内置就不要新建。
+自定义时保持单一抽象方法，语义命名清晰；能复用内置就不要新建。
 
 ## 小结
 
-- 按形状复用内置接口:Function/Consumer/Supplier/Predicate/BiFunction/Operator;
-- @FunctionalInterface 是编译期检查,非必需;
-- andThen/compose/negate/and/or 组合小函数;
-- 基本类型用 Int/Long/Double 特化版避免装箱;
-- 形状不匹配再自定义,保持单一抽象方法。
+- 按形状复用内置接口：Function/Consumer/Supplier/Predicate/BiFunction/Operator;
+- @FunctionalInterface 是编译期检查，非必需；
+- andThen/compose/negate/and/or 组合小函数；
+- 基本类型用 Int/Long/Double 特化版避免装箱；
+- 形状不匹配再自定义，保持单一抽象方法。
 
 下一篇讲 Stream:把这些函数串成集合处理的流水线。

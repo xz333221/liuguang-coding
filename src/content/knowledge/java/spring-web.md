@@ -1,6 +1,6 @@
 ---
 title: Web 层：Controller / 参数绑定 / 统一返回
-summary: '@RestController 组合 Controller+ResponseBody;@RequestMapping 族映射路由;@PathVariable/@RequestParam/@RequestBody 绑定参数;统一返回体与 @RestControllerAdvice 全局异常处理;校验 @Valid。'
+summary: '@RestController 组合 Controller+ResponseBody;@RequestMapping 族映射路由；@PathVariable/@RequestParam/@RequestBody 绑定参数；统一返回体与 @RestControllerAdvice 全局异常处理；校验 @Valid。'
 category: java
 node: java-spring-web
 order: 72
@@ -44,21 +44,21 @@ class OrderController {
 }
 ```
 
-- @RestController = @Controller + @ResponseBody,方法返回值直接序列化为 JSON(Jackson);
-- @GetMapping/@PostMapping/@PutMapping/@DeleteMapping/@PatchMapping 映射 HTTP 方法;
-- 类级 @RequestMapping 定前缀,方法级定子路径。
+- @RestController = @Controller + @ResponseBody，方法返回值直接序列化为 JSON(Jackson);
+- @GetMapping/@PostMapping/@PutMapping/@DeleteMapping/@PatchMapping 映射 HTTP 方法；
+- 类级 @RequestMapping 定前缀，方法级定子路径。
 
 ## 参数绑定
 
 - @PathVariable:路径占位 /orders/{id};
-- @RequestParam:查询串 ?page=1,可 defaultValue/required;
-- @RequestBody:请求体 JSON 反序列化为对象;
+- @RequestParam:查询串 ?page=1，可 defaultValue/required;
+- @RequestBody:请求体 JSON 反序列化为对象；
 - @RequestHeader / @CookieValue:头/Cookie;
-- 无注解的简单类型默认按 @RequestParam,复杂对象默认按表单绑定(ModelAttribute)。
+- 无注解的简单类型默认按 @RequestParam，复杂对象默认按表单绑定(ModelAttribute)。
 
 ## 校验
 
-@Valid/@Validated 触发 Bean Validation:DTO 字段加 @NotNull/@NotBlank/@Size/@Min/@Email 等;校验失败抛 MethodArgumentNotValidException,由全局异常处理转 400 + 字段错误。分组校验用 @Validated(Group.class)。
+@Valid/@Validated 触发 Bean Validation:DTO 字段加 @NotNull/@NotBlank/@Size/@Min/@Email 等；校验失败抛 MethodArgumentNotValidException，由全局异常处理转 400 + 字段错误。分组校验用 @Validated(Group.class)。
 
 ## 统一返回体
 
@@ -69,7 +69,7 @@ record Result<T>(int code, String message, T data) {
 }
 ```
 
-约定 code=0 成功,非 0 业务错误;HTTP 状态码与业务 code 分工:HTTP 表传输/资源状态(200/400/404/500),业务 code 表领域错误(库存不足/余额不够)。不要所有错误都 200+code,也不要滥用 500 表业务错误。
+约定 code=0 成功，非 0 业务错误；HTTP 状态码与业务 code 分工：HTTP 表传输/资源状态(200/400/404/500)，业务 code 表领域错误(库存不足/余额不够)。不要所有错误都 200+code，也不要滥用 500 表业务错误。
 
 ## 全局异常处理
 
@@ -98,14 +98,14 @@ class GlobalExceptionHandler {
 }
 ```
 
-@RestControllerAdvice = @ControllerAdvice + @ResponseBody,集中处理所有控制器异常,避免每方法 try-catch。未知异常记日志、对外只给通用提示,不泄漏内部细节。
+@RestControllerAdvice = @ControllerAdvice + @ResponseBody，集中处理所有控制器异常，避免每方法 try-catch。未知异常记日志、对外只给通用提示，不泄漏内部细节。
 
 ## 小结
 
-- @RestController 返回 JSON;@*Mapping 映射路由;
-- 参数:PathVariable/RequestParam/RequestBody/Header;
+- @RestController 返回 JSON;@*Mapping 映射路由；
+- 参数：PathVariable/RequestParam/RequestBody/Header;
 - @Valid + Bean Validation 校验 DTO;
-- 统一 Result(code/message/data),HTTP 状态与业务 code 分工;
-- @RestControllerAdvice 集中异常,未知错误记日志不暴露堆栈。
+- 统一 Result(code/message/data),HTTP 状态与业务 code 分工；
+- @RestControllerAdvice 集中异常，未知错误记日志不暴露堆栈。
 
-下一篇讲配置管理与多环境:外部化配置优先级与 profile。
+下一篇讲配置管理与多环境：外部化配置优先级与 profile。

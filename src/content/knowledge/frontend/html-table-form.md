@@ -1,6 +1,6 @@
 ---
 title: 表格与表单
-summary: 'table 用 caption、thead、tbody、tfoot 组织行列,th 的 scope 标明表头;form 用 action 与 method 提交,name 决定提交的键,label 的 for 关联 input 的 id,约束属性在提交前校验。'
+summary: 'table 用 caption、thead、tbody、tfoot 组织行列，th 的 scope 标明表头；form 用 action 与 method 提交，name 决定提交的键，label 的 for 关联 input 的 id，约束属性在提交前校验。'
 category: frontend
 node: frontend-html-table-form
 order: 7
@@ -21,13 +21,13 @@ sources:
     note: 表单提交与约束校验的规范定义。
 ---
 
-标题、段落、列表、链接与图片覆盖了大部分静态内容,但页面还要展示行列数据和收集用户输入。这一篇讲两类专用元素:表格与表单。
+标题、段落、列表、链接与图片覆盖了大部分静态内容，但页面还要展示行列数据和收集用户输入。这一篇讲两类专用元素：表格与表单。
 
-## 表格:行、列与表头
+## 表格：行、列与表头
 
-表格由 `table` 包住,内部按行组织:`tr` 是一行,`td` 是一个数据单元格,`th` 是表头单元格。
+表格由 `table` 包住，内部按行组织：`tr` 是一行，`td` 是一个数据单元格，`th` 是表头单元格。
 
-`caption` 给表格一个标题;`thead`、`tbody`、`tfoot` 把行分成三组,分别表示表头、主体与汇总;`th` 的 `scope` 声明这个表头作用于列(`col`)还是行(`row`)。
+`caption` 给表格一个标题；`thead`、`tbody`、`tfoot` 把行分成三组，分别表示表头、主体与汇总；`th` 的 `scope` 声明这个表头作用于列(`col`)还是行(`row`)。
 
 ```html
 <table>
@@ -61,17 +61,17 @@ sources:
 </table>
 ```
 
-预期:浏览器把表头加粗显示,屏幕阅读器读到 135 时会同时读出「A 型,二月」,因为 `th` 的 `scope` 建立了关联。
+预期：浏览器把表头加粗显示，屏幕阅读器读到 135 时会同时读出「A 型，二月」，因为 `th` 的 `scope` 建立了关联。
 
-表格只用于二维数据,不用来排版;合并单元格用 `colspan` 与 `rowspan`,合并会破坏表头与单元格的对应关系,能不用就不用。
+表格只用于二维数据，不用来排版；合并单元格用 `colspan` 与 `rowspan`，合并会破坏表头与单元格的对应关系，能不用就不用。
 
 ## 表单与提交
 
-`form` 把一组控件组织成一次提交。`action` 是提交地址,`method` 是 HTTP 方法,默认 `get`。
+`form` 把一组控件组织成一次提交。`action` 是提交地址，`method` 是 HTTP 方法，默认 `get`。
 
-`get` 把数据编码进 URL 的查询串,适合搜索、筛选这类无副作用操作;`post` 把数据放在请求体,适合创建、修改或包含敏感信息的提交。
+`get` 把数据编码进 URL 的查询串，适合搜索、筛选这类无副作用操作；`post` 把数据放在请求体，适合创建、修改或包含敏感信息的提交。
 
-每个需要提交的控件必须有 `name`,`name` 是提交时的键;没有 `name` 的控件不会出现在提交数据中。
+每个需要提交的控件必须有 `name`,`name` 是提交时的键；没有 `name` 的控件不会出现在提交数据中。
 
 ```html
 <form action="/subscribe" method="post">
@@ -81,17 +81,17 @@ sources:
 </form>
 ```
 
-点击「订阅」,浏览器向 `/subscribe` 发 POST 请求,请求体包含 `email=...`。没有 `name` 的 `input` 即使有值也不会提交;`disabled` 的控件同样不提交。
+点击「订阅」，浏览器向 `/subscribe` 发 POST 请求，请求体包含 `email=...`。没有 `name` 的 `input` 即使有值也不会提交；`disabled` 的控件同样不提交。
 
 ## label 与 input 的关联
 
-`label` 的 `for` 指向 `input` 的 `id`,两者建立关联:点击文字会聚焦输入框,屏幕阅读器朗读输入框时会带上这段文字。`id` 在文档中必须唯一。
+`label` 的 `for` 指向 `input` 的 `id`，两者建立关联：点击文字会聚焦输入框，屏幕阅读器朗读输入框时会带上这段文字。`id` 在文档中必须唯一。
 
-也可以把 `input` 包在 `label` 内部,省略 `for` 与 `id`,但显式关联更清晰。
+也可以把 `input` 包在 `label` 内部，省略 `for` 与 `id`，但显式关联更清晰。
 
 ## 常用 input 类型
 
-`type` 决定控件的形态、键盘与校验规则:
+`type` 决定控件的形态、键盘与校验规则：
 
 | type | 用途 | 说明 |
 | --- | --- | --- |
@@ -104,11 +104,11 @@ sources:
 | file | 文件 | 表单需要 enctype="multipart/form-data" |
 | date | 日期 | 浏览器提供日期选择器 |
 
-`checkbox` 与 `radio` 用 `value` 表示选中时提交的值;`radio` 依靠相同的 `name` 形成一组,一组内只能选一个,默认选中用 `checked`。
+`checkbox` 与 `radio` 用 `value` 表示选中时提交的值；`radio` 依靠相同的 `name` 形成一组，一组内只能选一个，默认选中用 `checked`。
 
 ## select、textarea 与 button
 
-`select` 是下拉列表,`option` 的 `value` 是提交值,没有 `value` 时提交 `option` 的文本;`multiple` 允许按住 Ctrl 多选,`size` 控制可见行数。`textarea` 是多行文本,`rows` 与 `cols` 只给初始尺寸,实际大小由 CSS 决定。
+`select` 是下拉列表，`option` 的 `value` 是提交值，没有 `value` 时提交 `option` 的文本；`multiple` 允许按住 Ctrl 多选，`size` 控制可见行数。`textarea` 是多行文本，`rows` 与 `cols` 只给初始尺寸，实际大小由 CSS 决定。
 
 ```html
 <label for="city">城市</label>
@@ -124,16 +124,16 @@ sources:
 <button type="button">清空</button>
 ```
 
-`button` 在 `form` 内默认 `type` 是 `submit`,点击就会提交。只执行脚本、不提交的按钮要显式写 `type="button"`。
+`button` 在 `form` 内默认 `type` 是 `submit`，点击就会提交。只执行脚本、不提交的按钮要显式写 `type="button"`。
 
 ## 约束校验
 
-HTML 提供一组声明式校验属性,浏览器在提交前检查,不通过就阻止提交并显示提示:
+HTML 提供一组声明式校验属性，浏览器在提交前检查，不通过就阻止提交并显示提示：
 
-- `required`:值不能为空;
-- `pattern`:用正则约束文本格式,整个值必须匹配;
-- `min` 与 `max`、`step`:约束数字与日期的范围与步长;
-- `minlength` 与 `maxlength`:约束文本长度;
+- `required`:值不能为空；
+- `pattern`:用正则约束文本格式，整个值必须匹配；
+- `min` 与 `max`、`step`:约束数字与日期的范围与步长；
+- `minlength` 与 `maxlength`:约束文本长度；
 - `type="email"`、`type="url"` 等类型自带格式检查。
 
 ```html
@@ -152,15 +152,15 @@ HTML 提供一组声明式校验属性,浏览器在提交前检查,不通过就�
 </form>
 ```
 
-预期:账号为空、少于 3 个字符或包含非法字符时,浏览器阻止提交并在控件旁显示提示;年龄超出 18 到 120 时同样被阻止。`novalidate` 可以关闭浏览器校验,`:invalid` 伪类可以给非法控件设置样式。
+预期：账号为空、少于 3 个字符或包含非法字符时，浏览器阻止提交并在控件旁显示提示；年龄超出 18 到 120 时同样被阻止。`novalidate` 可以关闭浏览器校验，`:invalid` 伪类可以给非法控件设置样式。
 
-浏览器校验只改善交互,不能替代服务端校验:请求可以绕过页面直接发出,服务端必须重新检查。
+浏览器校验只改善交互，不能替代服务端校验：请求可以绕过页面直接发出，服务端必须重新检查。
 
 ## 小结
 
-- 表格用 `caption` 命名,`thead`、`tbody`、`tfoot` 分组,`th` 的 `scope` 标明表头关联的行或列;
-- `form` 的 `action` 决定提交地址,`method` 决定 `get` 或 `post`;
-- 控件要有 `name` 才会提交;`label` 的 `for` 关联 `input` 的 `id`;
-- `input` 的 `type` 决定形态与校验,`checkbox` 与 `radio` 用 `value` 提交选中值;
-- `button` 在表单内默认提交,纯脚本按钮写 `type="button"`;
-- `required`、`pattern`、`min` 与 `max` 提供提交前校验,服务端仍须复核。
+- 表格用 `caption` 命名，`thead`、`tbody`、`tfoot` 分组，`th` 的 `scope` 标明表头关联的行或列；
+- `form` 的 `action` 决定提交地址，`method` 决定 `get` 或 `post`;
+- 控件要有 `name` 才会提交；`label` 的 `for` 关联 `input` 的 `id`;
+- `input` 的 `type` 决定形态与校验，`checkbox` 与 `radio` 用 `value` 提交选中值；
+- `button` 在表单内默认提交，纯脚本按钮写 `type="button"`;
+- `required`、`pattern`、`min` 与 `max` 提供提交前校验，服务端仍须复核。
