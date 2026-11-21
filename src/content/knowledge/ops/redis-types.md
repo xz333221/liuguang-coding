@@ -1,6 +1,6 @@
 ---
-title: 数据类型与选型：五种基础结构
-summary: 'Redis 的 key 都是字符串,值可以是 string、hash、list、set、zset 五种基础结构,外加 Stream 这类消息结构。这篇把每种结构的常用命令跑一遍,给一张选型表,再说清大 key 和过期策略这两个运维最常遇到的问题。'
+title: Redis 数据类型与选型
+summary: 'Redis 的键始终为字符串,值的类型决定可执行操作与内存开销。本文介绍 string、hash、list、set、zset 五种基础结构及 Stream,并给出选型表、大 key 与内存淘汰的处理方式。'
 category: ops
 node: ops-redis-types
 order: 2
@@ -11,39 +11,41 @@ terms: []
 sources:
   - title: Redis docs · Data types
     url: https://redis.io/docs/latest/develop/data-types/
-    note: 五种基础类型与 Stream、位图、HyperLogLog 等扩展类型的官方定义和适用场景。
+    note: 五种基础类型与 Stream、位图、HyperLogLog 等扩展类型的官方定义与适用场景。
   - title: Redis docs · SET
     url: https://redis.io/docs/latest/commands/set/
-    note: SET 的 EX / NX 选项与返回值定义,缓存互斥锁写法出自这里。
+    note: SET 的 EX / NX 选项与返回值定义。
   - title: Redis docs · EXPIRE
     url: https://redis.io/docs/latest/commands/expire/
-    note: 过期时间与 TTL 返回值的官方说明。
+    note: 过期时间设置与 TTL 返回值的官方说明。
 ---
 
-Redis 的键永远是字符串,值才有类型之分。选错类型不会让程序报错,但会让某类操作变得很别扭,或者让内存翻几倍。这篇把五种基础结构过一遍,每种给两三条最常用的命令,最后给一张按场景选的表。
+Redis 的键始终是字符串,类型差异体现在值上。值类型决定了可执行的操作、编码方式与内存开销。选型不当通常不会引发错误,但会导致操作复杂化或内存占用显著增加。
 
-## string:最基础的一种
+## string
 
-字符串能存文本、数字和二进制,最大 512MB。除了 `SET` / `GET`,最常用的是三个变体:
+字符串可存储文本、整数与二进制数据,单个值上限 512MB。除 `SET` / `GET` 外,常用变体如下:
 
 ```bash
 SET page:46:views 0
-INCR page:46:views              # 原子加一,返回新值
-SET lock:job "1" NX EX 30       # 不存在才设置,30 秒后自动过期
+INCR page:46:views              # 原子自增,返回新值
+SET lock:job "1" NX EX 30       # 仅当键不存在时设置,30 秒后过期
 ```
 
-`INCR` 适合计数,多个客户端同时加也不会丢。`SET NX EX` 是分布式锁最常见的写法:只有键不存在才能设置成功,过期时间兜住进程崩溃没释放的情况。
+`INCR` 为原子操作,多个客户端并发自增不会丢失更新。`SET NX EX` 是分布式锁的常见写法:仅当键不存在时设置成功,过期时间用于处理持有者崩溃后未主动释放的情况。
 
-位图也挂在 string 上。签到、活跃用户这种「一天一个标记」的场景,用 `SETBIT` 比存一堆布尔值省内存:
+位图属于 string 的位操作,适用于签到、活跃标记等二值状态:
 
 ```bash
-SETBIT sign:2026-11:u1001 20 1   # 第 21 天签到
-BITCOUNT sign:2026-11:u1001      # 本月签了几天
+SETBIT sign:2026-11:u1001 20 1   # 记录第 21 天已签到
+BITCOUNT sign:2026-11:u1001      # 统计本月签到天数
 ```
 
-## hash:存一个对象
+相比为每个用户保存布尔数组,位图显著降低内存占用。
 
-一个 hash 就是一张小的字段表,适合存用户资料、商品属性这种「整体读写、偶尔改一个字段」的数据:
+## hash
+
+hash 表示字段与值的映射,适合存储用户资料、商品属性等对象:
 
 ```bash
 HSET user:1001 name "徐泽" city "杭州" level 3
@@ -52,49 +54,49 @@ HINCRBY user:1001 level 1
 HGETALL user:1001
 ```
 
-比把对象序列化成 JSON 存 string 的好处是:改一个字段只写一个字段,不用整段读出来再写回去。字段不多时内存也更省。
+与将对象序列化为 JSON 后存入 string 相比,hash 支持单字段更新,无需读出整个对象再写回。字段数量较少时,内存占用也更低。
 
-注意:`HGETALL` 会把整个 hash 拉回来,字段上千的大对象要分页或用 `HSCAN`。
+`HGETALL` 会返回全部字段。字段数量达到上千时,应使用 `HSCAN` 分批遍历。
 
-## list:两端进出的队列
+## list
 
-list 是按插入顺序排的字符串序列,左边和右边都能进出:
+list 是按插入顺序排列的字符串序列,支持两端进出:
 
 ```bash
-LPUSH queue:mail "job-1"        # 左边进
-RPOP queue:mail                 # 右边出,先进先出
-BRPOP queue:mail 5              # 阻塞等 5 秒,没数据就返回 nil
+LPUSH queue:mail "job-1"        # 左端插入
+RPOP queue:mail                 # 右端取出,先进先出
+BRPOP queue:mail 5              # 阻塞等待 5 秒,超时返回 nil
 ```
 
-`BRPOP` 是轻量队列的常用写法:消费者阻塞等待,有任务立刻拿到。缺点是消息取走就没了,消费者处理到一半崩溃,这条消息就丢了。要可靠消费,用下面的 Stream。
+`BRPOP` 常用于轻量队列:消费者阻塞等待,任务到达后立即返回。其限制在于消息取出即从列表移除,消费者处理过程中崩溃会导致消息丢失。需要可靠投递时应使用 Stream。
 
-## set:去重与集合运算
+## set
 
-set 是无序不重复的集合,适合标签、关注列表、抽奖池这类需要判重或求交并的场景:
+set 是无序且不重复的字符串集合,适用于标签、关注关系、抽奖池等需要判重或集合运算的场景:
 
 ```bash
 SADD tag:redis u1001 u1002
-SISMEMBER tag:redis u1001        # 1 = 在集合里
-SINTER tag:redis tag:ops         # 交集:同时关注两个标签的人
+SISMEMBER tag:redis u1001        # 返回 1 表示存在
+SINTER tag:redis tag:ops         # 交集
 ```
 
-集合元素多时,`SINTER` 这类运算会在主线程里算完。元素上万要先估算耗时,别在高峰期跑。
+集合运算在主线程内完成。元素数量达到数万时,应先评估耗时,避免在流量高峰期执行。
 
-## zset:带分数的排行榜
+## zset
 
-有序集合给每个元素配一个分数,按分数排序,分数相同再按元素字典序:
+有序集合为每个元素关联一个分数,按分数排序,分数相同时按元素字典序排列:
 
 ```bash
 ZADD rank:2026-11 120 u1001 98 u1002
-ZREVRANGE rank:2026-11 0 9 WITHSCORES   # 前 10 名
-ZINCRBY rank:2026-11 5 u1001            # 加分
+ZREVRANGE rank:2026-11 0 9 WITHSCORES   # 取前 10 名
+ZINCRBY rank:2026-11 5 u1001            # 增加分数
 ```
 
-排行榜、延迟队列(分数存执行时间戳,到点取出来)、按时间范围查历史,都是 zset 的典型用法。它比 list 多了一个「按分数取范围」的能力,这也是它最值钱的地方。
+zset 的典型用途包括排行榜、延迟队列(以执行时间戳作为分数)以及按时间范围查询。相较 list,它额外支持按分数取范围,这是其核心价值。
 
-## Stream:能确认的消息队列
+## Stream
 
-Stream 是追加日志式的结构,支持消费组和 ACK:
+Stream 是追加日志结构,支持消费组与消息确认:
 
 ```bash
 XADD events * type "signup" uid 1001
@@ -103,33 +105,33 @@ XREADGROUP GROUP g1 c1 COUNT 10 STREAMS events >
 XACK events g1 <消息ID>
 ```
 
-消息进了 Stream 不会因为被读走就消失,消费者处理完显式 `XACK`,崩溃后还能用 `XPENDING` 找到没确认的消息重新处理。轻量异步任务用它比 list 稳。
+消息被读取后不会立即删除。消费者处理完成后显式执行 `XACK`,崩溃后可通过 `XPENDING` 查找未确认消息并重新投递。轻量异步任务使用 Stream 比 list 更可靠。
 
-## 按场景选
+## 选型
 
-| 场景 | 选什么 | 理由 |
+| 场景 | 类型 | 说明 |
 | --- | --- | --- |
-| 缓存一段 JSON / HTML | string | 整段读写,最简单 |
-| 对象,常改单个字段 | hash | 单字段更新,不用整段回写 |
-| 计数、限流 | string + `INCR` | 原子自增,配过期就是滑动窗口 |
-| 简单队列 | list + `BRPOP` | 够用,但消息可能丢 |
-| 可靠消息 | Stream | 消费组 + ACK + 重投 |
-| 去重、标签 | set | 判重和交并差都是内置操作 |
-| 排行榜、延时任务 | zset | 按分数取范围 |
-| 签到、活跃标记 | string 位图 | 一个用户一个月只占几个字节 |
+| 缓存 JSON / HTML 片段 | string | 整段读写,实现简单 |
+| 对象,单字段更新频繁 | hash | 避免整对象回写 |
+| 计数、限流 | string + `INCR` | 原子自增,配合过期实现窗口 |
+| 轻量队列 | list + `BRPOP` | 实现简单,但可能丢消息 |
+| 可靠消息 | Stream | 消费组、ACK 与重投 |
+| 判重、标签 | set | 内置交并差运算 |
+| 排行榜、延迟任务 | zset | 按分数取范围 |
+| 签到、活跃标记 | string 位图 | 内存占用低 |
 
 ## 大 key 与热 key
 
-运维排查 Redis 变慢,十次有八次是这两个问题:
+Redis 性能下降通常可归因于两类键:
 
-- **大 key**:单个 string 几 MB,或者 hash / list / set 有几十万元素。读写它要占住主线程,网络也要传很久。用 `redis-cli --bigkeys` 扫一遍,把大 key 拆小或移到别处。
-- **热 key**:某个键每秒被访问几十万次,所有请求都压到同一个节点。加本地缓存、把 key 加随机后缀分散到多个键,都能缓解。
+- **大 key**:单个 string 达到数 MB,或 hash、list、set 包含数十万元素。读写此类键会长时间占用主线程,并产生较大的网络传输。可用 `redis-cli --bigkeys` 扫描,随后拆分或迁移。
+- **热 key**:单个键的 QPS 极高,请求集中到同一节点。可通过本地缓存或为键增加随机后缀分散访问。
 
-注意:`--bigkeys` 也是扫描,低峰期跑,别在业务高峰执行。
+`--bigkeys` 本身也是扫描操作,应在低峰期执行。
 
 ## 过期与淘汰
 
-过期是键级别的:`EXPIRE key 60`。淘汰是内存级别的:内存到 `maxmemory` 后按策略删键。
+过期作用于单个键:`EXPIRE key 60`。淘汰作用于内存:达到 `maxmemory` 后按策略删除键。
 
 ```conf
 maxmemory 2gb
@@ -138,18 +140,18 @@ maxmemory-policy allkeys-lru
 
 常用策略:
 
-- `noeviction`:不淘汰,写入直接报错。适合当数据库用、不能丢数据的场景;
-- `allkeys-lru`:所有键里挑最久没用的删。纯缓存首选;
-- `volatile-lru`:只在设了过期时间的键里淘汰。缓存和持久数据混在一个实例时用;
-- `allkeys-random`:随机删。访问分布很均匀时可以,一般不推荐。
+- `noeviction`:不淘汰,写入返回错误。适用于不允许丢失数据的场景;
+- `allkeys-lru`:在全部键中淘汰最久未使用的键,纯缓存场景首选;
+- `volatile-lru`:仅在设置了过期时间的键中淘汰,适用于缓存与持久数据混部的实例;
+- `allkeys-random`:随机淘汰,仅在访问分布均匀时可用。
 
-设了 `maxmemory` 却没设策略,等于把「内存满了怎么办」交给默认值,线上很容易踩到写入报错。
+只设置 `maxmemory` 而不设置策略,内存达到上限后写入将持续报错。
 
-## 小结
+## 要点
 
-- key 是字符串,值有 string / hash / list / set / zset 五种基础结构,消息用 Stream;
-- 计数用 `INCR`,`SET NX EX` 做锁,对象用 hash,排行用 zset,可靠队列用 Stream;
-- 大 key 拖慢主线程,热 key 压垮单节点,上线前先扫一遍;
-- `maxmemory` 和淘汰策略必须一起配,只配一个等于没配。
+- 键为字符串,值有 string、hash、list、set、zset 五种基础结构,消息使用 Stream;
+- 计数用 `INCR`,互斥用 `SET NX EX`,对象用 hash,排行用 zset,可靠队列用 Stream;
+- 大 key 阻塞主线程,热 key 造成单节点过载,上线前应完成扫描;
+- `maxmemory` 与淘汰策略需同时配置。
 
-下一篇讲数据怎么落盘: RDB 快照、AOF 日志,以及备份和恢复该怎么做。
+下一篇讨论持久化机制:RDB 快照、AOF 日志,以及备份与恢复流程。
