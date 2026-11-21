@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { codeLabel, codeToSpeech } from '../../lib/code-speech'
 
 // 文章朗读条。音频优先走服务端 /api/tts(Edge 音色 + 缓存),
 // 服务端不可用时自动回退到浏览器自带的 speechSynthesis,不额外装依赖。
@@ -69,14 +70,25 @@ function pushText(text: string) {
   for (const piece of splitLong(text)) chunks.push(piece)
 }
 
-/** 抓正文里的段落、标题、列表项;代码块、表格、导图不读 */
+/** 抓正文里的段落、标题、列表项;代码块转成口语后一起读,表格和导图跳过 */
 function collect() {
   if (chunks.length) return
   const root = document.querySelector('#read .lg-prose')
   if (!root) return
-  const skip = 'pre, code, script, style, table, .code-block, .mermaid-block, .mindmap-block, [data-no-speech]'
+  const skip = 'script, style, table, .mermaid-block, .mindmap-block, [data-no-speech]'
   const walk = (el: Element) => {
     if (el.matches(skip)) return
+    if (el.matches('pre')) {
+      const codeEl = el.querySelector('code') ?? el
+      const classes = `${el.getAttribute('class') ?? ''} ${codeEl.getAttribute('class') ?? ''}`
+      const lang = (el.getAttribute('data-language') ?? classes.match(/language-([\w-]+)/)?.[1] ?? '').toLowerCase()
+      const code = (codeEl.textContent ?? '').trim()
+      if (code) {
+        pushText(codeLabel(lang))
+        pushText(codeToSpeech(code, lang))
+      }
+      return
+    }
     const isBlock = el.matches('p, h2, h3, h4, li, blockquote, dt, dd')
     if (isBlock && !el.querySelector('p, h2, h3, h4, li, blockquote, dt, dd')) {
       const text = (el.textContent || '').replace(/\s+/g, ' ').trim()
