@@ -312,6 +312,23 @@ try {
         Write-Warn '按 -SkipHealth 跳过'
     }
     else {
+        # 构建成功 ≠ 新 server 代码已生效:旧进程的 /api/health 一样回 200,
+        # 只做健康检查会把它当成"正常",于是新加的后端路由(比如 /api/tts)
+        # 在线上一直 404 —— 2026-11-21 就是这么踩到的。
+        # 所以部署完先无条件重启后端,再检查健康状态。
+        $pm2 = Get-Command 'pm2.cmd' -ErrorAction SilentlyContinue
+        if ($pm2) {
+            Write-Host '    重启后端:pm2 restart liuguang-coding'
+            $restart = Invoke-Capture -Exe $pm2.Source -Arguments @('restart', 'liuguang-coding') -WorkDir $AppDir
+            if ($restart.Code -eq 0) {
+                Write-Ok '后端已重启'
+            }
+            else {
+                Write-Warn 'pm2 restart 未成功,继续走健康检查(新接口可能仍不可用)'
+            }
+            Start-Sleep -Seconds 2
+        }
+
         if (Wait-Health -Seconds 5) {
             Write-Ok ("http://127.0.0.1:" + $Port + "/api/health 正常")
         }
