@@ -17,6 +17,8 @@ const RATES = [0.9, 1, 1.25, 1.5]
 const MAX_CHARS = 220
 const VOICE_KEY = 'flowlight-kb-voice'
 const RATE_KEY = 'flowlight-kb-rate'
+// 默认同源;部署在子路径或指向独立 TTS 服务时,构建时用 PUBLIC_TTS_API 覆盖
+const TTS_API = (import.meta.env.PUBLIC_TTS_API as string | undefined) || '/api/tts'
 
 type State = 'idle' | 'loading' | 'playing' | 'paused'
 
@@ -38,7 +40,7 @@ const progress = computed(() =>
 
 let audio: HTMLAudioElement | null = null
 let runId = 0
-let fallback = false
+const fallback = ref(false)
 const urls = new Map<number, string>()
 
 function splitLong(text: string): string[] {
@@ -107,13 +109,17 @@ function finish() {
 function fetchUrl(index: number, id: number): Promise<string> {
   const cached = urls.get(index)
   if (cached) return Promise.resolve(cached)
-  return fetch('/api/tts', {
+  return fetch(TTS_API, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text: chunks[index], voice: voice.value }),
   })
     .then((res) => {
-      if (!res.ok) throw new Error('tts ' + res.status)
+      if (!res.ok) {
+        const reason = new Error('tts ' + res.status) as Error & { status?: number }
+        reason.status = res.status
+        throw reason
+      }
       return res.blob()
     })
     .then((blob) => {
@@ -169,7 +175,7 @@ async function playAt(index: number, id: number) {
   try {
     const url = await fetchUrl(index, id)
     if (id !== runId) return
-    fallback = false
+    fallback.value = false
     if (!audio) {
       audio = new Audio()
       audio.onended = () => {
@@ -186,7 +192,11 @@ async function playAt(index: number, id: number) {
   } catch (e) {
     if (id !== runId) return
     if (e instanceof Error && e.message === 'aborted') return
-    fallback = true
+    const status = (e as { status?: number })?.status
+    fallback.value = true
+    error.value = status
+      ? `服务端朗读不可用(HTTP ${status}),已改用浏览器语音`
+      : '服务端朗读不可用,已改用浏览器语音'
     speakAt(index, id)
   }
 }
@@ -195,7 +205,7 @@ function start() {
   if (!supported) return
   error.value = ''
   runId += 1
-  fallback = false
+  fallback.value = false
   resetAudio()
   releaseUrls()
   collect()
@@ -210,7 +220,7 @@ function start() {
 function stop() {
   runId += 1
   if ('speechSynthesis' in window) window.speechSynthesis.cancel()
-  fallback = false
+  fallback.value = false
   resetAudio()
   releaseUrls()
   finish()
@@ -222,13 +232,13 @@ function toggle() {
     return
   }
   if (state.value === 'playing') {
-    if (fallback) window.speechSynthesis.pause()
+    if (fallback.value) window.speechSynthesis.pause()
     else audio?.pause()
     state.value = 'paused'
     return
   }
   if (state.value === 'paused') {
-    if (fallback) window.speechSynthesis.resume()
+    if (fallback.value) window.speechSynthesis.resume()
     else audio?.play()
     state.value = 'playing'
     return
@@ -277,7 +287,13 @@ onBeforeUnmount(() => {
     >
       {{ label }}
     </button>
-    <select v-model="voice" class="read-pick" aria-label="朗读音色">
+    <select
+      v-model="voice"
+      class="read-pick"
+      :disabled="fallback"
+      :title="fallback ? '已回退浏览器语音,音色由系统决定' : '朗读音色'"
+      aria-label="朗读音色"
+    >
       <option v-for="item in VOICES" :key="item.id" :value="item.id">{{ item.label }}</option>
     </select>
     <select v-model.number="rate" class="read-pick" aria-label="朗读语速">
