@@ -38,6 +38,7 @@ const label = computed(() =>
 const progress = computed(() =>
   state.value === 'idle' || !total.value ? '' : `${current.value}/${total.value}`,
 )
+const voiceLabel = computed(() => VOICES.find((item) => item.id === voice.value)?.label ?? '')
 
 let audio: HTMLAudioElement | null = null
 let runId = 0
@@ -320,6 +321,45 @@ onBeforeUnmount(() => {
     <span v-if="progress" class="text-[0.78rem] text-muted">{{ progress }}</span>
     <span v-if="error" class="text-[0.78rem] text-[#b3261e]">{{ error }}</span>
   </div>
+
+  <Teleport to="body">
+    <Transition name="read-dock">
+      <div
+        v-if="state !== 'idle'"
+        class="read-dock rounded-full border border-line bg-panel/95 px-3.5 py-2 text-ink shadow-lg backdrop-blur"
+        role="status"
+        aria-live="polite"
+      >
+        <span class="read-dock__dot" :class="{ 'is-paused': state === 'paused' }" aria-hidden="true" />
+        <div class="read-dock__text">
+          <strong>{{ state === 'loading' ? '准备朗读' : state === 'paused' ? '已暂停' : '朗读中' }}</strong>
+          <span class="read-dock__meta">
+            {{ voiceLabel }}<template v-if="total"> · {{ current }}/{{ total }}</template>
+          </span>
+        </div>
+        <button type="button" class="read-dock__toggle" @click="toggle">
+          {{ state === 'playing' ? '暂停' : state === 'paused' ? '继续' : '取消' }}
+        </button>
+        <button
+          type="button"
+          class="read-dock__stop"
+          aria-label="停止朗读"
+          title="停止朗读"
+          @click="stop"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M7 7l10 10M17 7 7 17"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.9"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <style scoped>
@@ -336,5 +376,118 @@ onBeforeUnmount(() => {
 
 .read-pick:hover {
   border-color: currentColor;
+}
+
+/* ---------- 朗读时浮在底部的迷你控制条 ---------- */
+.read-dock {
+  position: fixed;
+  left: 50%;
+  bottom: clamp(1rem, 3vw, 1.5rem);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(420px, calc(100vw - 32px));
+  transform: translateX(-50%);
+  background: var(--panel, #ffffff);
+  border-color: var(--line, rgba(0, 0, 0, 0.12));
+  color: var(--ink, inherit);
+}
+
+.read-dock__dot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--accent, #b3261e);
+  animation: read-dock-pulse 1.4s ease-in-out infinite;
+}
+
+.read-dock__dot.is-paused {
+  opacity: 0.45;
+  animation: none;
+}
+
+@keyframes read-dock-pulse {
+  50% {
+    transform: scale(0.7);
+    opacity: 0.6;
+  }
+}
+
+.read-dock__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.read-dock__text strong {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.read-dock__meta {
+  font-size: 11px;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.read-dock__toggle {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.read-dock__toggle:hover {
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+.read-dock__stop {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.read-dock__stop:hover {
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+.read-dock__stop svg {
+  width: 13px;
+  height: 13px;
+}
+
+.read-dock__toggle:focus-visible,
+.read-dock__stop:focus-visible {
+  outline: 2px solid var(--accent, #b3261e);
+  outline-offset: 2px;
+}
+
+.read-dock-enter-active,
+.read-dock-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.read-dock-enter-from,
+.read-dock-leave-to {
+  opacity: 0;
+  transform: translate(-50%, 8px);
 }
 </style>
