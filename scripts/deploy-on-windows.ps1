@@ -318,13 +318,33 @@ try {
         # 所以部署完先无条件重启后端,再检查健康状态。
         $pm2 = Get-Command 'pm2.cmd' -ErrorAction SilentlyContinue
         if ($pm2) {
-            Write-Host '    重启后端:pm2 restart liuguang-coding'
-            $restart = Invoke-Capture -Exe $pm2.Source -Arguments @('restart', 'liuguang-coding') -WorkDir $AppDir
-            if ($restart.Code -eq 0) {
-                Write-Ok '后端已重启'
+            # 必须"干净重启"。历史部署可能留下一个不在 pm2 里的 node 进程占着端口:
+            # 此时 pm2 restart 要么找不到应用,要么新进程 bind 失败立刻退出,
+            # 旧进程继续服务,新加的路由(比如 /api/tts)就一直是 404。
+            # 顺序:删掉 pm2 旧应用 → 清掉仍占端口的遗留 node → 重新 start。
+            $list = Invoke-Capture -Exe $pm2.Source -Arguments @('jlist') -WorkDir $AppDir
+            if ($list.Code -eq 0 -and (($list.Lines -join "`n") -match 'liuguang-coding')) {
+                Invoke-Capture -Exe $pm2.Source -Arguments @('delete', 'liuguang-coding') -WorkDir $AppDir | Out-Null
+                Start-Sleep -Seconds 1
+            }
+
+            $listener = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+            if ($listener) {
+                $old = Get-Process -Id $listener.OwningProcess -ErrorAction SilentlyContinue
+                if ($old -and $old.ProcessName -like 'node*') {
+                    Write-Host ("    停掉占用 {0} 的旧进程 PID {1}" -f $Port, $old.Id)
+                    Stop-Process -Id $old.Id -Force -ErrorAction SilentlyContinue
+                    Start-Sleep -Seconds 1
+                }
+            }
+
+            Write-Host '    重新拉起:pm2 start server/index.mjs --name liuguang-coding'
+            $start = Invoke-Capture -Exe $pm2.Source -Arguments @('start', 'server/index.mjs', '--name', 'liuguang-coding') -WorkDir $AppDir
+            if ($start.Code -eq 0) {
+                Write-Ok '后端已重建并启动'
             }
             else {
-                Write-Warn 'pm2 restart 未成功,继续走健康检查(新接口可能仍不可用)'
+                Write-Warn 'pm2 启动失败,继续走健康检查(会退到直接 node 拉起)'
             }
             Start-Sleep -Seconds 2
         }
