@@ -106,28 +106,33 @@ function finish() {
   current.value = 0
 }
 
-function fetchUrl(index: number, id: number): Promise<string> {
+async function fetchUrl(index: number, id: number): Promise<string> {
   const cached = urls.get(index)
-  if (cached) return Promise.resolve(cached)
-  return fetch(TTS_API, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text: chunks[index], voice: voice.value }),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        const reason = new Error('tts ' + res.status) as Error & { status?: number }
-        reason.status = res.status
-        throw reason
-      }
-      return res.blob()
+  if (cached) return cached
+  const post = () =>
+    fetch(TTS_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: chunks[index], voice: voice.value }),
     })
-    .then((blob) => {
-      if (id !== runId) throw new Error('aborted')
-      const url = URL.createObjectURL(blob)
-      urls.set(index, url)
-      return url
-    })
+  let res = await post()
+  // 上游偶发空音频时服务端返回 5xx(它自己已经重试过几轮)。这里再补一次:
+  // 音色突然换成系统音比多等一秒更明显。
+  if (res.status >= 500) {
+    await new Promise((resolve) => setTimeout(resolve, 800))
+    if (id !== runId) throw new Error('aborted')
+    res = await post()
+  }
+  if (!res.ok) {
+    const reason = new Error('tts ' + res.status) as Error & { status?: number }
+    reason.status = res.status
+    throw reason
+  }
+  const blob = await res.blob()
+  if (id !== runId) throw new Error('aborted')
+  const url = URL.createObjectURL(blob)
+  urls.set(index, url)
+  return url
 }
 
 function pickSystemVoice(): SpeechSynthesisVoice | null {

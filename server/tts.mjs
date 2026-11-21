@@ -128,7 +128,7 @@ async function synthesize(text, voice) {
  * 上游偶尔会在握手后直接结束、一个音频块都不给(2026-11-21 21:55 连续三次),
  * 这时重试一下基本就恢复。别把这种抖动直接甩给前端去回退浏览器语音。
  */
-async function synthesizeWithRetry(text, voice, attempts = 3) {
+async function synthesizeWithRetry(text, voice, attempts = 4) {
   let lastError = null
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     try {
@@ -139,7 +139,8 @@ async function synthesizeWithRetry(text, voice, attempts = 3) {
       lastError = error
     }
     if (attempt < attempts) {
-      await new Promise((resolve) => setTimeout(resolve, 300 * attempt))
+      // 空流往往连着来几秒,间隔要逐渐拉开;600/1200/1800ms 三档实测够用。
+      await new Promise((resolve) => setTimeout(resolve, 600 * attempt))
     }
   }
   throw lastError ?? new Error('empty audio')
