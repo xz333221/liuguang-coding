@@ -1,6 +1,7 @@
 ---
 import Breadcrumbs from '../../components/kb/Breadcrumbs.astro'
 import MindMapPanel from '../../components/kb/MindMapPanel.vue'
+import ReadAloud from '../../components/kb/ReadAloud.vue'
 import SourceList from '../../components/kb/SourceList.astro'
 import Toc from '../../components/kb/Toc.astro'
 import { findCategory, pathOf } from '../../data/catalog'
@@ -113,6 +114,7 @@ const jsonLd = JSON.stringify({
           {meta?.name} · {topic.data.level} · {formatDate(topic.data.updated)} 更新
         </p>
         <button type="button" class="lg-chip" data-chat-open>问这篇</button>
+        <ReadAloud client:only="vue" />
       </div>
 
       {

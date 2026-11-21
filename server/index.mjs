@@ -30,6 +30,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createAiModelMiddleware } from 'ai-model-form/server'
 import { createChatHandler } from './chat.mjs'
+import { createTtsHandler } from './tts.mjs'
 import { createUser, findUserByEmail, optionalUser, passwordMatches, publicUser, requireAuth, revokeToken, issueToken } from './auth.mjs'
 import { dbInfo, dbReady, dbStatus, query, startDatabaseWithRetry } from './db.mjs'
 import { normalizeGameProgress } from './game.mjs'
@@ -148,6 +149,9 @@ app.put('/api/game/progress', requireAuth, async (req, res, next) => {
 })
 
 app.post('/api/chat', createChatHandler())
+
+// 文章朗读:音色走 Edge 在线语音,结果按内容哈希缓存;失败时前端会自动回退浏览器朗读
+app.post('/api/tts', createTtsHandler())
 
 // 保存/列出/删除走自己的仓库(要拿明文 Key 才能替浏览器调模型)。
 // 登录用户存自己名下(MySQL),匿名用户存全局文件,行为与从前一致。

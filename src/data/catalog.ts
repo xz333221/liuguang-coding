@@ -16,6 +16,7 @@
 
 import { frontendChapters } from './frontendOutline'
 import { javaChapters } from './javaOutline'
+import { opsChapters } from './opsOutline'
 
 export type CategoryStatus = 'active' | 'soon' | 'hidden'
 
@@ -79,8 +80,11 @@ export const catalog: Category[] = [
   {
     id: 'ops',
     name: '运维',
-    intro: 'Linux、网络、容器、可观测性与发布流程。',
-    status: 'soon',
+    intro:
+      '按 12 章走完:Linux 与 Shell → 网络排障 → 服务与 Nginx → 发布、容器与观测 → 中间件(Redis) → 安全与容量。',
+    status: 'active',
+    numbered: true,
+    children: opsChapters,
   },
   {
     id: 'algorithm',
