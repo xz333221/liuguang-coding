@@ -71,7 +71,7 @@ const jsonLd = JSON.stringify({
       image: [new URL(withBase('og-cover.png'), Astro.site).href],
       datePublished: topic.data.updated.toISOString(),
       dateModified: topic.data.updated.toISOString(),
-      author: { '@type': 'Person', name: '徐泽', url: 'https://xuze.flowdash.cn/' },
+      author: { '@type': 'Person', name: '流光 coding', url: 'https://coding.flowdash.cn/' },
       publisher: { '@type': 'Organization', name: '流光 coding' },
       mainEntityOfPage: pageUrl,
     },
@@ -114,7 +114,7 @@ const jsonLd = JSON.stringify({
           {meta?.name} · {topic.data.level} · {formatDate(topic.data.updated)} 更新
         </p>
         <button type="button" class="lg-chip" data-chat-open>问这篇</button>
-        <ReadAloud client:only="vue" />
+        <ReadAloud client:only="vue" nextHref={next ? topicPath(next) : ''} nextTitle={next?.data.title ?? ''} />
       </div>
 
       {

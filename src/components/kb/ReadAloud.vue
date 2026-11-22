@@ -5,6 +5,13 @@ import { codeLabel, codeToSpeech } from '../../lib/code-speech'
 // 文章朗读条。音频优先走服务端 /api/tts(Edge 音色 + 缓存),
 // 服务端不可用时自动回退到浏览器自带的 speechSynthesis,不额外装依赖。
 
+const props = defineProps<{ nextHref?: string; nextTitle?: string }>()
+
+// 读完这一篇后自动跳到下一篇并接着朗读(可关掉,开关状态存本地)
+const AUTONEXT_KEY = 'flowlight-kb-autonext'
+// 跨页接管:跳转前写一个标记,下一篇的朗读条看到它就自动开读
+const AUTOPLAY_KEY = 'flowlight-kb-autoplay-next'
+
 const VOICES = [
   { id: 'zh-CN-XiaoxiaoNeural', label: '晓晓' },
   { id: 'zh-CN-XiaoyiNeural', label: '晓伊' },
@@ -29,6 +36,8 @@ const total = ref(0)
 const error = ref('')
 const voice = ref(VOICES[0].id)
 const rate = ref(1)
+const autonext = ref(true)
+const jumping = ref(false)
 const chunks: string[] = []
 
 const supported = typeof window !== 'undefined' && typeof fetch === 'function'
@@ -114,9 +123,21 @@ function resetAudio() {
   audio.load()
 }
 
-function finish() {
+function finish(completed = false) {
   state.value = 'idle'
   current.value = 0
+  if (completed && autonext.value && props.nextHref) {
+    jumping.value = true
+    try {
+      sessionStorage.setItem(AUTOPLAY_KEY, '1')
+    } catch {
+      /* 隐私模式下不可用,退化成不自动朗读 */
+    }
+    const target = props.nextHref
+    setTimeout(() => {
+      window.location.assign(target)
+    }, 1200)
+  }
 }
 
 async function fetchUrl(index: number, id: number): Promise<string> {
@@ -161,7 +182,7 @@ function speakAt(index: number, id: number) {
     return
   }
   if (index >= chunks.length) {
-    finish()
+    finish(true)
     return
   }
   current.value = index + 1
@@ -185,7 +206,7 @@ function speakAt(index: number, id: number) {
 async function playAt(index: number, id: number) {
   if (id !== runId) return
   if (index >= chunks.length) {
-    finish()
+    finish(true)
     return
   }
   current.value = index + 1
@@ -264,6 +285,10 @@ function toggle() {
   start()
 }
 
+watch(autonext, (next) => {
+  try { localStorage.setItem(AUTONEXT_KEY, next ? '1' : '0') } catch { /* ignore */ }
+})
+
 watch(voice, (next) => {
   localStorage.setItem(VOICE_KEY, next)
   if (state.value !== 'idle') {
@@ -286,7 +311,13 @@ onMounted(() => {
   if (VOICES.some((item) => item.id === savedVoice)) voice.value = savedVoice
   const savedRate = Number(localStorage.getItem(RATE_KEY))
   if (RATES.includes(savedRate)) rate.value = savedRate
+  if (localStorage.getItem(AUTONEXT_KEY) === '0') autonext.value = false
   collect()
+  // 上一篇读完后跳过来的：直接接着读
+  if (sessionStorage.getItem(AUTOPLAY_KEY) === '1') {
+    sessionStorage.removeItem(AUTOPLAY_KEY)
+    setTimeout(() => start(), 300)
+  }
 })
 
 onBeforeUnmount(() => {
@@ -318,6 +349,11 @@ onBeforeUnmount(() => {
       <option v-for="item in RATES" :key="item" :value="item">{{ item }}x</option>
     </select>
     <button v-if="state !== 'idle'" type="button" class="lg-chip" @click="stop">停止</button>
+    <label v-if="nextHref" class="read-auto" title="读完这一篇后自动跳到下一篇并接着朗读">
+      <input v-model="autonext" type="checkbox" />
+      <span>自动下一篇</span>
+    </label>
+    <span v-if="jumping" class="text-[0.78rem] text-muted">读完，即将朗读下一篇：{{ nextTitle }}</span>
     <span v-if="progress" class="text-[0.78rem] text-muted">{{ progress }}</span>
     <span v-if="error" class="text-[0.78rem] text-[#b3261e]">{{ error }}</span>
   </div>
@@ -363,6 +399,22 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+.read-auto {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: inherit;
+  cursor: pointer;
+  user-select: none;
+}
+
+.read-auto input {
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+}
+
 .read-pick {
   appearance: none;
   background: transparent;

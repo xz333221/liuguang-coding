@@ -58,7 +58,7 @@ BITCOUNT sign:2026-11:u1001      # 统计本月签到天数
 hash 表示字段与值的映射，适合存储用户资料、商品属性等对象：
 
 ```bash
-HSET user:1001 name "徐泽" city "杭州" level 3
+HSET user:1001 name "示例用户" city "示例城市" level 3
 HGET user:1001 name
 HINCRBY user:1001 level 1
 HGETALL user:1001
