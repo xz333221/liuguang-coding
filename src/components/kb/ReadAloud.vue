@@ -39,6 +39,9 @@ const rate = ref(1)
 const autonext = ref(true)
 const jumping = ref(false)
 const chunks: string[] = []
+// 与 chunks 一一对应:这段文字来自正文里的哪个块,朗读时据此滚动并高亮
+const chunkEls: (Element | null)[] = []
+let readingEl: Element | null = null
 
 const supported = typeof window !== 'undefined' && typeof fetch === 'function'
 const label = computed(() =>
@@ -72,12 +75,17 @@ function splitLong(text: string): string[] {
   return out
 }
 
-function pushText(text: string) {
+function pushChunk(text: string, el: Element | null) {
+  chunks.push(text)
+  chunkEls.push(el)
+}
+
+function pushText(text: string, el: Element | null) {
   if (text.length <= MAX_CHARS) {
-    chunks.push(text)
+    pushChunk(text, el)
     return
   }
-  for (const piece of splitLong(text)) chunks.push(piece)
+  for (const piece of splitLong(text)) pushChunk(piece, el)
 }
 
 /** 抓正文里的段落、标题、列表项;代码块转成口语后一起读,表格和导图跳过 */
@@ -94,15 +102,15 @@ function collect() {
       const lang = (el.getAttribute('data-language') ?? classes.match(/language-([\w-]+)/)?.[1] ?? '').toLowerCase()
       const code = (codeEl.textContent ?? '').trim()
       if (code) {
-        pushText(codeLabel(lang))
-        pushText(codeToSpeech(code, lang))
+        pushText(codeLabel(lang), el)
+        pushText(codeToSpeech(code, lang), el)
       }
       return
     }
     const isBlock = el.matches('p, h2, h3, h4, li, blockquote, dt, dd')
     if (isBlock && !el.querySelector('p, h2, h3, h4, li, blockquote, dt, dd')) {
       const text = (el.textContent || '').replace(/\s+/g, ' ').trim()
-      if (text) pushText(text)
+      if (text) pushText(text, el)
       return
     }
     for (const child of Array.from(el.children)) walk(child)
@@ -123,7 +131,36 @@ function resetAudio() {
   audio.load()
 }
 
+/** 朗读到第 index 段时,把对应正文块滚进视野,并做轻量标记 */
+function follow(index: number) {
+  const el = chunkEls[index]
+  if (!el) return
+  if (readingEl !== el) {
+    readingEl?.classList.remove('is-reading')
+    el.classList.add('is-reading')
+    readingEl = el
+  }
+  const rect = el.getBoundingClientRect()
+  const vh = window.innerHeight
+  // 比视口还高的块(长代码)只能让顶部对齐,普通段落居中;两者都避开页头和底部控制条
+  const tall = rect.height > vh * 0.62
+  const topSafe = 96
+  const bottomSafe = 140
+  const visible = tall
+    ? rect.top >= topSafe - 8 && rect.top <= vh - bottomSafe
+    : rect.top >= topSafe && rect.bottom <= vh - bottomSafe
+  if (visible) return
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  el.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: tall ? 'start' : 'center' })
+}
+
+function clearReading() {
+  readingEl?.classList.remove('is-reading')
+  readingEl = null
+}
+
 function finish(completed = false) {
+  clearReading()
   state.value = 'idle'
   current.value = 0
   if (completed && autonext.value && props.nextHref) {
@@ -186,6 +223,7 @@ function speakAt(index: number, id: number) {
     return
   }
   current.value = index + 1
+  follow(index)
   const utterance = new SpeechSynthesisUtterance(chunks[index])
   utterance.lang = 'zh-CN'
   utterance.rate = rate.value
@@ -210,6 +248,7 @@ async function playAt(index: number, id: number) {
     return
   }
   current.value = index + 1
+  follow(index)
   state.value = 'loading'
   try {
     const url = await fetchUrl(index, id)
@@ -279,6 +318,7 @@ function toggle() {
   if (state.value === 'paused') {
     if (fallback.value) window.speechSynthesis.resume()
     else audio?.play()
+    follow(current.value - 1)
     state.value = 'playing'
     return
   }
@@ -542,4 +582,5 @@ onBeforeUnmount(() => {
   opacity: 0;
   transform: translate(-50%, 8px);
 }
+
 </style>

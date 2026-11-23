@@ -1547,3 +1547,17 @@
     }
   }
 }
+/* ---------- 朗读跟随:当前朗读到的正文块 ---------- */
+/* 用内阴影画左侧竖线,不引入伪元素,避免被构建链把 ::before 合并到主规则上 */
+#read .lg-prose .is-reading {
+  position: relative;
+  scroll-margin-top: 5.5rem;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--accent, #b3261e) 6%, transparent);
+  box-shadow:
+    inset 3px 0 0 0 var(--accent, #b3261e),
+    0 0 0 4px color-mix(in srgb, var(--accent, #b3261e) 6%, transparent);
+  transition:
+    background-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
