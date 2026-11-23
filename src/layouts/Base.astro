@@ -24,6 +24,28 @@ const cover = new URL(ogImage ?? `${base}og-cover.png`, Astro.site).href
 <html lang="zh-CN" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
+    <script is:inline>
+      // 首屏就把两栏状态定下来，避免展开/收起闪一下
+      (() => {
+        try {
+          const w = window.innerWidth
+          const bucket = w < 768 ? 'mobile' : w < 1024 ? 'tablet' : 'desktop'
+          const defaults = {
+            mobile: { left: 'closed', right: 'closed' },
+            tablet: { left: 'open', right: 'closed' },
+            desktop: { left: 'open', right: 'open' },
+          }
+          let saved = {}
+          try {
+            saved = JSON.parse(localStorage.getItem('flowlight-kb-panes-v1')) || {}
+          } catch {}
+          const state = saved[bucket] || defaults[bucket]
+          const data = document.documentElement.dataset
+          data.kbLeft = state.left
+          data.kbRight = state.right
+        } catch {}
+      })()
+    </script>
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="baidu-site-verification" content="codeva-s7d0K7sXZQ" />

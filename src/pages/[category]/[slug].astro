@@ -103,7 +103,7 @@ const jsonLd = JSON.stringify({
     title={topic.data.title}
   />
 
-  <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_190px] lg:gap-12">
+  <div class="kb-article-grid">
     <article class="min-w-0">
       <h1 class="text-[1.9rem] leading-[1.25] font-medium tracking-tight md:text-[2.15rem]">
         {topic.data.title}
@@ -114,6 +114,20 @@ const jsonLd = JSON.stringify({
           {meta?.name} · {topic.data.level} · {formatDate(topic.data.updated)} 更新
         </p>
         <button type="button" class="lg-chip" data-chat-open>问这篇</button>
+        <button
+          type="button"
+          class="lg-chip hidden md:inline-flex"
+          data-pane-toggle="left"
+          aria-controls="kb-side-left"
+          aria-expanded="true"
+        >分类</button>
+        <button
+          type="button"
+          class="lg-chip inline-flex"
+          data-pane-toggle="right"
+          aria-controls="kb-side-right"
+          aria-expanded="true"
+        >大纲</button>
         <ReadAloud client:only="vue" nextHref={next ? topicPath(next) : ''} nextTitle={next?.data.title ?? ''} />
       </div>
 
@@ -173,7 +187,7 @@ const jsonLd = JSON.stringify({
       </nav>
     </article>
 
-    <aside class="hidden lg:block">
+    <aside id="kb-side-right" class="hidden lg:block">
       <div class="sticky top-20 grid gap-10">
         <nav aria-label="本页结构" class="text-[0.82rem]">
           <p class="mb-3 text-[0.72rem] tracking-[0.08em] text-muted">本页结构</p>

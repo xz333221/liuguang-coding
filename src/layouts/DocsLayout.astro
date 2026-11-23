@@ -52,8 +52,8 @@ const year = new Date().getFullYear()
     </div>
   </header>
 
-  <div class="mx-auto flex max-w-[1240px] gap-10 px-5 md:px-8">
-    <aside class="hidden w-[240px] shrink-0 lg:block">
+  <div class="kb-shell mx-auto flex max-w-[1240px] gap-10 px-5 md:px-8">
+    <aside id="kb-side-left" class="hidden md:block">
       <div
         class="lg-scroll-slim sticky top-16 max-h-[calc(100dvh-4rem)] overflow-x-hidden overflow-y-auto py-8"
       >
@@ -85,6 +85,8 @@ const year = new Date().getFullYear()
     </div>
   </footer>
 
+  <div class="kb-pane-mask" data-pane-mask hidden></div>
+
   <ChatPanel client:only="react" article={article} />
   <ModelConfigDialog client:only="vue" />
 
@@ -95,5 +97,72 @@ const year = new Date().getFullYear()
         document.dispatchEvent(new CustomEvent('lg-chat:open'))
       })
     }
+  </script>
+
+  <script>
+    // 左右两栏的展开/收起：桌面折叠改宽度，窄屏右侧变成抽屉
+    const PANE_KEY = 'flowlight-kb-panes-v1'
+    const PANE_DEFAULTS = {
+      mobile: { left: 'closed', right: 'closed' },
+      tablet: { left: 'open', right: 'closed' },
+      desktop: { left: 'open', right: 'open' },
+    }
+    const paneBucket = () =>
+      innerWidth < 768 ? 'mobile' : innerWidth < 1024 ? 'tablet' : 'desktop'
+    const paneAttr = (pane: string) => (pane === 'left' ? 'kbLeft' : 'kbRight')
+    const paneIsOpen = (pane: string) =>
+      document.documentElement.dataset[paneAttr(pane)] === 'open'
+    const readPanes = () => {
+      try {
+        const raw = localStorage.getItem(PANE_KEY)
+        return raw ? JSON.parse(raw) : {}
+      } catch {
+        return {}
+      }
+    }
+
+    function syncPanes() {
+      for (const btn of document.querySelectorAll<HTMLElement>('[data-pane-toggle]')) {
+        const pane = btn.dataset.paneToggle || ''
+        const open = paneIsOpen(pane)
+        btn.setAttribute('aria-expanded', String(open))
+        btn.classList.toggle('is-pane-on', open)
+      }
+      const mask = document.querySelector<HTMLElement>('[data-pane-mask]')
+      if (mask) mask.hidden = !(innerWidth < 1024 && paneIsOpen('right'))
+    }
+
+    function setPane(pane: string, open: boolean) {
+      const bucket = paneBucket()
+      const all = readPanes()
+      all[bucket] = { ...(all[bucket] || PANE_DEFAULTS[bucket]), [pane]: open ? 'open' : 'closed' }
+      try {
+        localStorage.setItem(PANE_KEY, JSON.stringify(all))
+      } catch {
+        /* 隐私模式下只影响记忆，不影响本次切换 */
+      }
+      document.documentElement.dataset[paneAttr(pane)] = open ? 'open' : 'closed'
+      syncPanes()
+    }
+
+    for (const btn of document.querySelectorAll<HTMLElement>('[data-pane-toggle]')) {
+      btn.addEventListener('click', () => {
+        const pane = btn.dataset.paneToggle || ''
+        setPane(pane, !paneIsOpen(pane))
+      })
+    }
+    document.querySelector('[data-pane-mask]')?.addEventListener('click', () => setPane('right', false))
+
+    let lastPaneBucket = paneBucket()
+    addEventListener('resize', () => {
+      const bucket = paneBucket()
+      if (bucket === lastPaneBucket) return
+      lastPaneBucket = bucket
+      const state = readPanes()[bucket] || PANE_DEFAULTS[bucket]
+      document.documentElement.dataset.kbLeft = state.left
+      document.documentElement.dataset.kbRight = state.right
+      syncPanes()
+    })
+    syncPanes()
   </script>
 </Base>
