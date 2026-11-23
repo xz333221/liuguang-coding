@@ -32,6 +32,7 @@ import { createAiModelMiddleware } from 'ai-model-form/server'
 import { createChatHandler } from './chat.mjs'
 import { createTtsHandler } from './tts.mjs'
 import { createUser, findUserByEmail, optionalUser, passwordMatches, publicUser, requireAuth, revokeToken, issueToken } from './auth.mjs'
+import { allowed, clientKeyOf, note, reset } from './rate-limit.mjs'
 import { dbInfo, dbReady, dbStatus, query, startDatabaseWithRetry } from './db.mjs'
 import { normalizeGameProgress } from './game.mjs'
 import {
@@ -73,19 +74,35 @@ app.get('/api/health', (_req, res) => {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+// 反滥用阈值(进程内滑动窗口,见 rate-limit.mjs)
+const HOUR_MS = 60 * 60 * 1000
+const REGISTER_PER_IP = 10 // 同一 IP 每小时建号上限
+const REGISTER_GLOBAL = 50 // 全站每小时建号上限
+const LOGIN_WINDOW_MS = 15 * 60 * 1000
+const LOGIN_FAILURES = 10 // 同一 email + IP 在 15 分钟内允许的失败次数
+
 app.post('/api/auth/register', async (req, res, next) => {
   const email = String(req.body?.email ?? '').trim().toLowerCase()
   const password = String(req.body?.password ?? '')
   const displayName = String(req.body?.displayName ?? '').trim()
-  if (!EMAIL_RE.test(email)) return res.status(400).json({ message: '邮箱格式不正确' })
-  if (password.length < 8) return res.status(400).json({ message: '密码至少 8 位' })
-  if (displayName.length > 40) return res.status(400).json({ message: '昵称最多 40 个字' })
+  if (!email || email.length > 190 || !EMAIL_RE.test(email)) return res.status(400).json({ message: '邮箱格式不正确' })
+  if (password.length < 8 || password.length > 72) return res.status(400).json({ message: '密码长度要在 8 到 72 位之间' })
+  if (displayName.length > 60) return res.status(400).json({ message: '昵称最多 60 个字' })
+
+  const ipKey = `register:ip:${clientKeyOf(req)}`
+  const globalKey = 'register:global'
+  if (!allowed(ipKey, REGISTER_PER_IP, HOUR_MS) || !allowed(globalKey, REGISTER_GLOBAL, HOUR_MS)) {
+    return res.status(429).json({ message: '注册太频繁了，请稍后再试' })
+  }
   try {
     if (await findUserByEmail(email)) {
       return res.status(409).json({ message: '这个邮箱已经注册过,直接登录吧' })
     }
     const user = await createUser({ email, password, displayName: displayName || email.split('@')[0] })
     const token = await issueToken(user.id)
+    // 建号成功才记账:校验失败、邮箱重复都不该吃掉正常用户的额度
+    note(ipKey)
+    note(globalKey)
     res.status(201).json({ token, user: publicUser(user) })
   } catch (error) {
     if (error?.code === 'ER_DUP_ENTRY') return res.status(409).json({ message: '这个邮箱已经注册过,直接登录吧' })
@@ -97,11 +114,20 @@ app.post('/api/auth/login', async (req, res, next) => {
   const email = String(req.body?.email ?? '').trim().toLowerCase()
   const password = String(req.body?.password ?? '')
   if (!email || !password) return res.status(400).json({ message: '邮箱和密码都要填' })
+  if (email.length > 190 || password.length > 72) return res.status(400).json({ message: '邮箱或密码不正确' })
+
+  // 判锁放在查库之前:锁住时连密码哈希都不算
+  const failKey = `login:${email}:${clientKeyOf(req)}`
+  if (!allowed(failKey, LOGIN_FAILURES, LOGIN_WINDOW_MS)) {
+    return res.status(429).json({ message: '尝试次数过多，请稍后再试' })
+  }
   try {
     const user = await findUserByEmail(email)
     if (!user || !(await passwordMatches(user.password_hash, password))) {
+      note(failKey)
       return res.status(401).json({ message: '邮箱或密码不正确' })
     }
+    reset(failKey)
     const token = await issueToken(user.id)
     res.json({ token, user: publicUser(user) })
   } catch (error) {
