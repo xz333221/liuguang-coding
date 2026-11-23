@@ -22,6 +22,15 @@ sources:
 
 ## 实例方法：通过对象调用
 
+```mermaid
+flowchart TD
+  A["方法"] --> B["实例方法<br/>通过对象调用,可访问 this 字段"]
+  A --> C["static 方法<br/>属于类,不能访问实例字段"]
+  A --> D["可变参数<br/>本质是数组,必须放最后"]
+  B --> E["s.getScore()"]
+  C --> F["Student.count()"]
+```
+
 ```java
 class Student {
     private String name;

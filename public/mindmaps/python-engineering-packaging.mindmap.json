@@ -1,0 +1,55 @@
+{
+  "id": "root",
+  "text": "打包与发布",
+  "children": [
+    {
+      "id": "artifacts",
+      "text": "产物",
+      "children": [
+        { "id": "ar-sdist", "text": "sdist 源码包", "children": [] },
+        { "id": "ar-wheel", "text": "wheel 预构建安装包", "children": [] }
+      ]
+    },
+    {
+      "id": "version",
+      "text": "版本",
+      "children": [
+        { "id": "ve-semver", "text": "主.次.修订 语义化", "children": [] },
+        { "id": "ve-python", "text": "requires-python 声明范围", "children": [] }
+      ]
+    },
+    {
+      "id": "build",
+      "text": "构建",
+      "children": [
+        { "id": "bu-build", "text": "uv build / python -m build", "children": [] },
+        { "id": "bu-tag", "text": "文件名含 Python 与平台标签", "children": [] }
+      ]
+    },
+    {
+      "id": "upload",
+      "text": "上传",
+      "children": [
+        { "id": "up-twine", "text": "twine upload", "children": [] },
+        { "id": "up-test", "text": "先 TestPyPI 安装验证", "children": [] },
+        { "id": "up-secret", "text": "凭据走环境变量", "children": [] }
+      ]
+    },
+    {
+      "id": "data",
+      "text": "包数据",
+      "children": [
+        { "id": "da-include", "text": "模板/数据文件要声明", "children": [] },
+        { "id": "da-typed", "text": "py.typed 标记", "children": [] }
+      ]
+    },
+    {
+      "id": "checklist",
+      "text": "发布清单",
+      "children": [
+        { "id": "ch-clean", "text": "干净环境安装验证", "children": [] },
+        { "id": "ch-readme", "text": "README 与元数据完整", "children": [] }
+      ]
+    }
+  ]
+}

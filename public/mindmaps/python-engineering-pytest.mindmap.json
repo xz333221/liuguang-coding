@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "pytest",
+  "children": [
+    {
+      "id": "discovery",
+      "text": "发现与断言",
+      "children": [
+        { "id": "di-rule", "text": "test_*.py / test_ 函数 / Test 类", "children": [] },
+        { "id": "di-assert", "text": "assert 重写显示中间值", "children": [] }
+      ]
+    },
+    {
+      "id": "fixture",
+      "text": "fixture",
+      "children": [
+        { "id": "fi-inject", "text": "参数名匹配即注入", "children": [] },
+        { "id": "fi-yield", "text": "yield 之后做清理", "children": [] },
+        { "id": "fi-conftest", "text": "conftest.py 共享", "children": [] }
+      ]
+    },
+    {
+      "id": "scope",
+      "text": "作用域",
+      "children": [
+        { "id": "sc-function", "text": "function 隔离最好", "children": [] },
+        { "id": "sc-session", "text": "session 用于昂贵资源", "children": [] }
+      ]
+    },
+    {
+      "id": "param",
+      "text": "参数化",
+      "children": [
+        { "id": "pa-case", "text": "每组参数独立用例", "children": [] },
+        { "id": "pa-product", "text": "多参化是笛卡尔积,控制数量", "children": [] }
+      ]
+    },
+    {
+      "id": "helpers",
+      "text": "内置工具",
+      "children": [
+        { "id": "he-raises", "text": "pytest.raises(match=) 校验消息", "children": [] },
+        { "id": "he-tmp", "text": "tmp_path 独立临时目录", "children": [] },
+        { "id": "he-mp", "text": "monkeypatch 自动还原", "children": [] }
+      ]
+    }
+  ]
+}

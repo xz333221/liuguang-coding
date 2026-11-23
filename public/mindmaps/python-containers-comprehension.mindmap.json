@@ -1,0 +1,44 @@
+{
+  "id": "root",
+  "text": "推导式：列表 / 字典 / 集合",
+  "children": [
+    {
+      "id": "forms",
+      "text": "三种形式",
+      "children": [
+        { "id": "fo-list", "text": "列表 [expr for … if …]", "children": [] },
+        { "id": "fo-dictset", "text": "字典键冲突后覆盖 / 集合去重", "children": [] }
+      ]
+    },
+    {
+      "id": "eager",
+      "text": "立即求值",
+      "children": [
+        { "id": "ea-on", "text": "整批算完占 O(n)", "children": [] }
+      ]
+    },
+    {
+      "id": "genexp",
+      "text": "生成器表达式",
+      "children": [
+        { "id": "ge-lazy", "text": "惰性 O(1) 峰值,一次性", "children": [] },
+        { "id": "ge-agg", "text": "sum/any/all 首选", "children": [] }
+      ]
+    },
+    {
+      "id": "cond",
+      "text": "条件位置",
+      "children": [
+        { "id": "co-filter", "text": "for 后 if=筛选", "children": [] },
+        { "id": "co-map", "text": "表达式位条件=变换", "children": [] }
+      ]
+    },
+    {
+      "id": "read",
+      "text": "可读性边界",
+      "children": [
+        { "id": "re-two", "text": "超两层 for 改回循环", "children": [] }
+      ]
+    }
+  ]
+}

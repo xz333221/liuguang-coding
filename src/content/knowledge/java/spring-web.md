@@ -22,6 +22,17 @@ Web 层把 HTTP 请求转成方法调用、把结果转成响应。Spring MVC �
 
 ## 控制器与路由
 
+```mermaid
+flowchart LR
+  A["HTTP 请求"] --> B["DispatcherServlet"]
+  B --> C["@RestController 路由"]
+  C --> D["参数绑定<br/>PathVariable / RequestParam / RequestBody"]
+  D --> E["Service"]
+  E --> F["统一返回体"]
+  G["@RestControllerAdvice"] --> H["全局异常处理"]
+  I["@Valid"] --> J["参数校验"]
+```
+
 ```java
 @RestController
 @RequestMapping("/api/orders")

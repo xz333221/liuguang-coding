@@ -1,0 +1,39 @@
+{
+  "id": "root",
+  "text": "可变性、浅拷贝与深拷贝",
+  "children": [
+    {
+      "id": "levels",
+      "text": "三层语义",
+      "children": [
+        { "id": "lv-alias", "text": "赋值=别名", "children": [] },
+        { "id": "lv-shallow", "text": "浅拷贝=新外壳共享内层", "children": [] },
+        { "id": "lv-deep", "text": "深拷贝=递归独立", "children": [] }
+      ]
+    },
+    {
+      "id": "shallow",
+      "text": "浅拷贝操作",
+      "children": [
+        { "id": "sh-ops", "text": "list()/[:]/copy()/dict()/set()", "children": [] },
+        { "id": "sh-star", "text": "[[]]*n 共享引用陷阱", "children": [] }
+      ]
+    },
+    {
+      "id": "deep",
+      "text": "深拷贝细节",
+      "children": [
+        { "id": "de-memo", "text": "memo 保拓扑防循环引用", "children": [] },
+        { "id": "de-imm", "text": "不可变返回原对象;句柄不可拷贝", "children": [] }
+      ]
+    },
+    {
+      "id": "choose",
+      "text": "按意图选层",
+      "children": [
+        { "id": "ch-intent", "text": "共享/外层独立/完全快照", "children": [] },
+        { "id": "ch-view", "text": "numpy/pandas 视图更浅,第 12 章", "children": [] }
+      ]
+    }
+  ]
+}

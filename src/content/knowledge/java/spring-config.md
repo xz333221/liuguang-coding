@@ -25,6 +25,17 @@ sources:
 
 ## 配置文件放哪、怎么写
 
+```mermaid
+flowchart TD
+  A["配置来源(优先级从高到低)"] --> B["命令行参数"]
+  B --> C["环境变量"]
+  C --> D["application-{profile}.yml"]
+  D --> E["application.yml"]
+  F["@Value"] --> G["零散单值"]
+  H["@ConfigurationProperties"] --> I["类型安全的分组绑定与校验"]
+  J["密码"] --> K["只留 ${} 占位符"]
+```
+
 Spring Boot 启动时自动加载 classpath 下的 `application.properties` 或 `application.yml`。两个同时存在也都生效，properties 的优先级更高。
 
 除了 classpath,jar 包同级的 `config/` 目录、jar 所在目录、当前工作目录也在搜索范围内。这条规则是给运维留的口子：构建出来的 jar 不动，旁边放一个 `config/application.yml` 就能覆盖包里的值。

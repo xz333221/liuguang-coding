@@ -22,6 +22,14 @@ sources:
 
 ## 无界通配符 ?
 
+```mermaid
+flowchart LR
+  A["? extends T 上界"] --> B["生产者:可读,不可写入"]
+  C["? super T 下界"] --> D["消费者:可写,读出只能当 Object"]
+  B --> E["PECS:Producer Extends"]
+  D --> F["Consumer Super"]
+```
+
 `List<?>` 表示"元素类型未知但确定的某个列表"。可以读(读出来是 Object)，不能 add 除 null 外的任何元素——因为编译器不知道它到底装什么：
 
 ```java

@@ -25,6 +25,16 @@ sources:
 
 ## 旧 API 的问题
 
+```mermaid
+flowchart TD
+  A["java.time (JDK 8+)"] --> B["LocalDate / LocalTime<br/>不带时区"]
+  A --> C["LocalDateTime<br/>本地日期时间"]
+  A --> D["ZonedDateTime<br/>带时区的时刻"]
+  A --> E["Instant<br/>时间戳"]
+  A --> F["DateTimeFormatter<br/>线程安全格式化"]
+  G["旧 Date / SimpleDateFormat"] --> H["可变、月份 0 起、线程不安全"]
+```
+
 java.util.Date 和 SimpleDateFormat 有几个硬伤：
 
 - Date 是**可变**的，setTime 能改，多线程共享要加锁；

@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "FastAPI 入门",
+  "children": [
+    {
+      "id": "routing",
+      "text": "路由与参数",
+      "children": [
+        { "id": "ro-path", "text": "路径参数按类型转换", "children": [] },
+        { "id": "ro-query", "text": "标量参数默认是查询参数", "children": [] },
+        { "id": "ro-body", "text": "Pydantic 模型收请求体", "children": [] }
+      ]
+    },
+    {
+      "id": "pydantic",
+      "text": "模型校验",
+      "children": [
+        { "id": "py-field", "text": "Field 约束范围长度", "children": [] },
+        { "id": "py-response", "text": "response_model 过滤输出", "children": [] },
+        { "id": "py-error", "text": "校验失败自动 422", "children": [] }
+      ]
+    },
+    {
+      "id": "deps",
+      "text": "依赖注入",
+      "children": [
+        { "id": "de-depends", "text": "Depends 嵌套解析", "children": [] },
+        { "id": "de-yield", "text": "生成器依赖负责清理", "children": [] }
+      ]
+    },
+    {
+      "id": "async",
+      "text": "同步与异步",
+      "children": [
+        { "id": "as-def", "text": "def 路由走线程池", "children": [] },
+        { "id": "as-async", "text": "async 路由禁阻塞", "children": [] }
+      ]
+    },
+    {
+      "id": "docs",
+      "text": "文档与错误",
+      "children": [
+        { "id": "do-openapi", "text": "/docs /redoc /openapi.json", "children": [] },
+        { "id": "do-handler", "text": "exception_handler 统一错误", "children": [] }
+      ]
+    }
+  ]
+}

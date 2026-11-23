@@ -22,6 +22,17 @@ sources:
 
 ## HashMap 怎么找东西
 
+```mermaid
+flowchart TD
+  A["map.put(key, value)"] --> B["hashCode(key) 算出桶位置"]
+  B --> C{"桶里已有 key?"}
+  C -->|无| D["直接放入"]
+  C -->|有| E["用 equals 逐个比较"]
+  E -->|相等| F["覆盖旧值"]
+  E -->|不等| G["链表 / 红黑树追加"]
+  H["equals 相等的对象"] --> I["hashCode 必须相等"]
+```
+
 HashMap 内部是一个数组，每个格子叫桶(bucket)。放 key-value 时：
 
 1. 调 key.hashCode() 得到一个 int;

@@ -25,6 +25,15 @@ String 是用得最多的引用类型。它有三个必须记住的性质：不�
 
 ## 不可变：改不动，只能换
 
+```mermaid
+flowchart LR
+  A["String 不可变"] --> B["修改方法返回新串"]
+  B --> C["比较内容用 equals"]
+  A --> D["循环拼接用 StringBuilder"]
+  D --> E["带分隔符用 StringJoiner"]
+  F["编码转换"] --> G["显式指定 UTF-8"]
+```
+
 String 内部装字符的数组是 private final 的，也没有任何修改它的方法。所以 String 对象一旦造出来，内容就定死了：
 
 ```java

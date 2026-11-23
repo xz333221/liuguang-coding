@@ -1,0 +1,37 @@
+{
+  "id": "root",
+  "text": "数字与字符串",
+  "children": [
+    {
+      "id": "num",
+      "text": "数值类型",
+      "children": [
+        { "id": "nu-int", "text": "int 任意精度", "children": [] },
+        { "id": "nu-float", "text": "float 舍入误差,isclose / Decimal", "children": [] },
+        { "id": "nu-div", "text": "// 向负无穷取整,divmod", "children": [] }
+      ]
+    },
+    {
+      "id": "str",
+      "text": "字符串不可变",
+      "children": [
+        { "id": "st-index", "text": "索引 / 切片含头不含尾", "children": [] },
+        { "id": "st-methods", "text": "strip/split/join/replace 返回新串", "children": [] }
+      ]
+    },
+    {
+      "id": "fmt",
+      "text": "f-string",
+      "children": [
+        { "id": "fm-spec", "text": ":.1f / , / % / = 调试", "children": [] }
+      ]
+    },
+    {
+      "id": "bytes",
+      "text": "str 与 bytes",
+      "children": [
+        { "id": "by-encode", "text": "文本 vs 字节,边界 encode/decode utf-8", "children": [] }
+      ]
+    }
+  ]
+}

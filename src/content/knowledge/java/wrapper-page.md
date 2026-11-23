@@ -25,6 +25,16 @@ sources:
 
 ## 两种 Wrapper
 
+```mermaid
+flowchart TD
+  A["Wrapper 条件构造器"] --> B["QueryWrapper:字符串列名,运行期才报错"]
+  A --> C["LambdaQueryWrapper:方法引用,编译期检查"]
+  A --> D["条件方法带 boolean 重载,false 时整段跳过"]
+  E["分页"] --> F["注册 MybatisPlusInterceptor + PaginationInnerInterceptor"]
+  F -->|未注册| G["分页参数被忽略,查出全表"]
+  H["逻辑删除 @TableLogic"] --> I["查询与删除自动追加条件,手写 SQL 不生效"]
+```
+
 ```java
 // 字符串列名:拼错了运行期才报错
 new QueryWrapper<User>().eq("u_name", name);

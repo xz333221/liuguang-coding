@@ -1,0 +1,46 @@
+{
+  "id": "root",
+  "text": "numpy 数组与向量化",
+  "children": [
+    {
+      "id": "ndarray",
+      "text": "ndarray",
+      "children": [
+        { "id": "nd-shape", "text": "shape / dtype / ndim", "children": [] },
+        { "id": "nd-create", "text": "array / zeros / arange / linspace", "children": [] }
+      ]
+    },
+    {
+      "id": "vector",
+      "text": "向量化",
+      "children": [
+        { "id": "ve-c", "text": "循环下沉到 C 层", "children": [] },
+        { "id": "ve-simd", "text": "连续内存 + SIMD", "children": [] }
+      ]
+    },
+    {
+      "id": "broadcast",
+      "text": "广播",
+      "children": [
+        { "id": "br-rule", "text": "从尾部维度对齐", "children": [] },
+        { "id": "br-err", "text": "不兼容形状抛 ValueError", "children": [] }
+      ]
+    },
+    {
+      "id": "index",
+      "text": "索引",
+      "children": [
+        { "id": "in-slice", "text": "切片是视图", "children": [] },
+        { "id": "in-bool", "text": "布尔索引是副本", "children": [] }
+      ]
+    },
+    {
+      "id": "dtype",
+      "text": "dtype",
+      "children": [
+        { "id": "dt-float", "text": "默认 float64,float32 省内存", "children": [] },
+        { "id": "dt-overflow", "text": "整型溢出静默截断", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "id": "root",
+  "text": "继承与 MRO",
+  "children": [
+    {
+      "id": "override",
+      "text": "覆盖与扩展",
+      "children": [
+        { "id": "ov-override", "text": "同名方法子类优先", "children": [] },
+        { "id": "ov-super", "text": "super() 扩展而非替换", "children": [] }
+      ]
+    },
+    {
+      "id": "super",
+      "text": "super 的本质",
+      "children": [
+        { "id": "su-next", "text": "沿 MRO 的下一个类,不是父类", "children": [] },
+        { "id": "su-coop", "text": "协作式调用依赖每层都调 super", "children": [] }
+      ]
+    },
+    {
+      "id": "mro",
+      "text": "MRO / C3",
+      "children": [
+        { "id": "mr-order", "text": "子类在前,基类按声明序", "children": [] },
+        { "id": "mr-conflict", "text": "顺序矛盾在定义时报 TypeError", "children": [] }
+      ]
+    },
+    {
+      "id": "diamond",
+      "text": "菱形继承",
+      "children": [
+        { "id": "di-once", "text": "Base 初始化只执行一次", "children": [] },
+        { "id": "di-broken", "text": "写死父类调用会断链", "children": [] }
+      ]
+    },
+    {
+      "id": "mixin",
+      "text": "mixin",
+      "children": [
+        { "id": "mi-cross", "text": "只表达能力,不表达 is-a", "children": [] }
+      ]
+    },
+    {
+      "id": "abc",
+      "text": "抽象基类",
+      "children": [
+        { "id": "ab-force", "text": "abstractmethod 强制实现", "children": [] },
+        { "id": "ab-vs", "text": "ABC 显式继承,Protocol 结构匹配", "children": [] }
+      ]
+    }
+  ]
+}

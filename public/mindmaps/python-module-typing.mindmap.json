@@ -1,0 +1,55 @@
+{
+  "id": "root",
+  "text": "类型提示与静态检查",
+  "children": [
+    {
+      "id": "meta",
+      "text": "注解是元数据",
+      "children": [
+        { "id": "me-runtime", "text": "运行时不校验", "children": [] },
+        { "id": "me-annotations", "text": "存进 __annotations__ 供工具读", "children": [] }
+      ]
+    },
+    {
+      "id": "syntax",
+      "text": "常用写法",
+      "children": [
+        { "id": "sy-builtin", "text": "list[int] / dict[str, int]", "children": [] },
+        { "id": "sy-union", "text": "X | None", "children": [] },
+        { "id": "sy-abc", "text": "Iterable / Mapping 描述能力", "children": [] }
+      ]
+    },
+    {
+      "id": "generic",
+      "text": "泛型",
+      "children": [
+        { "id": "ge-var", "text": "TypeVar 关联输入输出", "children": [] },
+        { "id": "ge-new", "text": "3.12 的 def f[T] 语法", "children": [] }
+      ]
+    },
+    {
+      "id": "protocol",
+      "text": "结构类型",
+      "children": [
+        { "id": "pr-protocol", "text": "Protocol 只看方法形状", "children": [] },
+        { "id": "pr-typeddict", "text": "TypedDict 描述字典键", "children": [] }
+      ]
+    },
+    {
+      "id": "tools",
+      "text": "检查工具",
+      "children": [
+        { "id": "to-mypy", "text": "mypy / pyright 在 CI 跑", "children": [] },
+        { "id": "to-strict", "text": "严格度渐进收紧", "children": [] }
+      ]
+    },
+    {
+      "id": "forward",
+      "text": "前向引用",
+      "children": [
+        { "id": "fo-string", "text": "字符串注解或延迟求值", "children": [] },
+        { "id": "fo-framework", "text": "框架解析注解需 get_type_hints", "children": [] }
+      ]
+    }
+  ]
+}

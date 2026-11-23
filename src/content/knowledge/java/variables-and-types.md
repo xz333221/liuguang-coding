@@ -26,6 +26,18 @@ sources:
 
 程序处理的数据都存在变量里。这一篇讲变量的用法和 Java 的八种基本类型。
 
+```mermaid
+flowchart TD
+  A["Java 数据类型"] --> B["基本类型 8 种"]
+  A --> C["引用类型"]
+  B --> D["整数 byte / short / int / long"]
+  B --> E["浮点 float / double"]
+  B --> F["char / boolean"]
+  C --> G["String / 数组 / 对象"]
+  D --> H["整数默认 int,long 字面量加 L"]
+  E --> I["小数默认 double,float 字面量加 f"]
+```
+
 ## 变量：先定义，后使用
 
 Java 的变量必须先定义后使用。定义的时候指定类型，可以顺便给一个初始值：

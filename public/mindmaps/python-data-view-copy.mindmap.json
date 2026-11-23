@@ -1,0 +1,47 @@
+{
+  "id": "root",
+  "text": "视图与副本",
+  "children": [
+    {
+      "id": "numpy",
+      "text": "numpy",
+      "children": [
+        { "id": "nu-view", "text": "基本切片是视图", "children": [] },
+        { "id": "nu-copy", "text": "布尔/花式索引是副本", "children": [] },
+        { "id": "nu-base", "text": "a.base 判断是否视图", "children": [] }
+      ]
+    },
+    {
+      "id": "pandas",
+      "text": "pandas",
+      "children": [
+        { "id": "pa-unknown", "text": "选择结果不确定", "children": [] },
+        { "id": "pa-warn", "text": "链式赋值触发警告", "children": [] }
+      ]
+    },
+    {
+      "id": "safe",
+      "text": "可靠写法",
+      "children": [
+        { "id": "sa-loc", "text": "单步 loc 赋值", "children": [] },
+        { "id": "sa-copy", "text": "处理副本先 .copy()", "children": [] }
+      ]
+    },
+    {
+      "id": "cow",
+      "text": "Copy-on-Write",
+      "children": [
+        { "id": "co-lazy", "text": "修改时才复制", "children": [] },
+        { "id": "co-future", "text": "pandas 3.0 默认", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "常见误用",
+      "children": [
+        { "id": "pi-chain", "text": "链式索引赋值不可靠", "children": [] },
+        { "id": "pi-group", "text": "分组结果不回写原表", "children": [] }
+      ]
+    }
+  ]
+}

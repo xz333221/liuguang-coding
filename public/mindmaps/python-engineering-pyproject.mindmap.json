@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "pyproject 与依赖管理",
+  "children": [
+    {
+      "id": "structure",
+      "text": "pyproject.toml",
+      "children": [
+        { "id": "st-project", "text": "[project] 元数据与依赖", "children": [] },
+        { "id": "st-optional", "text": "optional-dependencies 分组", "children": [] },
+        { "id": "st-scripts", "text": "[project.scripts] 命令入口", "children": [] },
+        { "id": "st-tool", "text": "[tool.*] 工具配置", "children": [] }
+      ]
+    },
+    {
+      "id": "layout",
+      "text": "src 布局",
+      "children": [
+        { "id": "la-src", "text": "包放 src/,强制走安装", "children": [] },
+        { "id": "la-test", "text": "tests/ 独立目录", "children": [] }
+      ]
+    },
+    {
+      "id": "uv",
+      "text": "uv 工作流",
+      "children": [
+        { "id": "uv-add", "text": "add / remove 改依赖", "children": [] },
+        { "id": "uv-sync", "text": "sync 严格对齐锁文件", "children": [] },
+        { "id": "uv-run", "text": "run 自动使用项目环境", "children": [] }
+      ]
+    },
+    {
+      "id": "files",
+      "text": "三类文件分工",
+      "children": [
+        { "id": "fi-declare", "text": "声明写范围", "children": [] },
+        { "id": "fi-lock", "text": "锁文件写精确版本", "children": [] },
+        { "id": "fi-env", "text": "虚拟环境装产物", "children": [] }
+      ]
+    },
+    {
+      "id": "backend",
+      "text": "构建后端",
+      "children": [
+        { "id": "ba-hatch", "text": "hatchling 纯 Python 首选", "children": [] },
+        { "id": "ba-setup", "text": "setuptools 兼容老项目", "children": [] }
+      ]
+    }
+  ]
+}

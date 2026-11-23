@@ -22,6 +22,16 @@ sources:
 
 ## BigInteger:任意大的整数
 
+```mermaid
+flowchart TD
+  A["精确计算需求"] --> B["BigInteger<br/>任意精度整数,内部 int 数组"]
+  A --> C["BigDecimal<br/>精确小数"]
+  C --> D["用字符串构造 new BigDecimal('0.1')"]
+  C --> E["除法必须给 scale 与 RoundingMode"]
+  C --> F["不可变,equals 连小数位数一起比"]
+  F --> G["按数值比较用 compareTo"]
+```
+
 BigInteger 内部用 int 数组模拟任意长度的整数，没有上限(只受内存限制):
 
 ```java

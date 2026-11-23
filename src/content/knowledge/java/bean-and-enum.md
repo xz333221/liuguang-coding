@@ -25,6 +25,15 @@ sources:
 
 ## JavaBean:一种约定
 
+```mermaid
+flowchart TD
+  A["装数据的类"] --> B["JavaBean<br/>私有字段 + getter/setter + 无参构造"]
+  A --> C["record<br/>不可变数据载体,自动生成访问器"]
+  A --> D["enum<br/>一组常量的类型"]
+  B --> E["框架靠反射按约定读写属性"]
+  D --> F["编译期查错,比较用 =="]
+```
+
 JavaBean 不是某个类或接口，是一套命名约定：
 
 - 字段 private;

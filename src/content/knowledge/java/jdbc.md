@@ -25,6 +25,16 @@ sources:
 
 ## 四个核心接口
 
+```mermaid
+flowchart LR
+  A["DriverManager"] -->|按 URL 找驱动| B["Connection"]
+  B --> C["PreparedStatement<br/>预编译 + 参数绑定"]
+  C --> D["ResultSet<br/>游标按列取值"]
+  B --> E["事务:commit / rollback"]
+  C --> F["addBatch / executeBatch"]
+  G["JDBC 4 SPI"] -->|自动发现驱动| A
+```
+
 | 接口 | 职责 |
 | --- | --- |
 | `DriverManager` | 按 URL 找驱动，建立 `Connection` |

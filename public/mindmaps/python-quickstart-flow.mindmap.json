@@ -1,0 +1,45 @@
+{
+  "id": "root",
+  "text": "流程控制：分支与循环",
+  "children": [
+    {
+      "id": "if",
+      "text": "分支",
+      "children": [
+        { "id": "if-elif", "text": "if/elif/else 真值分支", "children": [] },
+        { "id": "if-ternary", "text": "单行用条件表达式", "children": [] }
+      ]
+    },
+    {
+      "id": "for",
+      "text": "for 遍历",
+      "children": [
+        { "id": "fo-iter", "text": "遍历可迭代对象,非计数", "children": [] },
+        { "id": "fo-helpers", "text": "enumerate / zip(strict) / items", "children": [] }
+      ]
+    },
+    {
+      "id": "while",
+      "text": "while 与控制",
+      "children": [
+        { "id": "wh-break", "text": "break / continue", "children": [] },
+        { "id": "wh-else", "text": "循环 else = 未被 break", "children": [] }
+      ]
+    },
+    {
+      "id": "match",
+      "text": "match(3.10+)",
+      "children": [
+        { "id": "ma-destructure", "text": "解构序列/映射/实例", "children": [] },
+        { "id": "ma-capture", "text": "裸名字是捕获,通配 _", "children": [] }
+      ]
+    },
+    {
+      "id": "mutate",
+      "text": "循环内改容器",
+      "children": [
+        { "id": "mu-copy", "text": "遍历副本或建新列表", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "id": "root",
+  "text": "日期时间与时区",
+  "children": [
+    {
+      "id": "types",
+      "text": "naive 与 aware",
+      "children": [
+        { "id": "ty-naive", "text": "naive 不带时区,含义不确定", "children": [] },
+        { "id": "ty-aware", "text": "aware 带 tzinfo,可安全比较", "children": [] }
+      ]
+    },
+    {
+      "id": "now",
+      "text": "获取当前时间",
+      "children": [
+        { "id": "no-utc", "text": "now(timezone.utc) 推荐", "children": [] },
+        { "id": "no-utcnow", "text": "utcnow 返回 naive,不用", "children": [] }
+      ]
+    },
+    {
+      "id": "tz",
+      "text": "时区",
+      "children": [
+        { "id": "tz-zoneinfo", "text": "ZoneInfo + IANA 时区名", "children": [] },
+        { "id": "tz-convert", "text": "astimezone 只换表示不换时刻", "children": [] }
+      ]
+    },
+    {
+      "id": "format",
+      "text": "格式化与解析",
+      "children": [
+        { "id": "fo-iso", "text": "isoformat / fromisoformat", "children": [] },
+        { "id": "fo-strftime", "text": "strftime 格式固定,避免 locale", "children": [] }
+      ]
+    },
+    {
+      "id": "stamp",
+      "text": "时间戳与 timedelta",
+      "children": [
+        { "id": "st-tz", "text": "timestamp 两端都要时区", "children": [] },
+        { "id": "st-day", "text": "timedelta 是时长不是日历", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "常见问题",
+      "children": [
+        { "id": "pi-mix", "text": "UTC 与本地混存", "children": [] },
+        { "id": "pi-offset", "text": "固定偏移不处理夏令时", "children": [] }
+      ]
+    }
+  ]
+}

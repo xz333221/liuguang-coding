@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "测量先行",
+  "children": [
+    {
+      "id": "process",
+      "text": "优化流程",
+      "children": [
+        { "id": "pr-base", "text": "先建基线再改", "children": [] },
+        { "id": "pr-hot", "text": "只改热点", "children": [] },
+        { "id": "pr-verify", "text": "改完重新测量", "children": [] }
+      ]
+    },
+    {
+      "id": "timeit",
+      "text": "timeit",
+      "children": [
+        { "id": "ti-number", "text": "number 控制执行次数", "children": [] },
+        { "id": "ti-min", "text": "repeat 多次取最小值", "children": [] }
+      ]
+    },
+    {
+      "id": "cprofile",
+      "text": "cProfile",
+      "children": [
+        { "id": "cp-tottime", "text": "tottime 看函数自身", "children": [] },
+        { "id": "cp-cumtime", "text": "cumtime 看调用链", "children": [] },
+        { "id": "cp-pstats", "text": "pstats 排序与过滤", "children": [] }
+      ]
+    },
+    {
+      "id": "tools",
+      "text": "更细定位",
+      "children": [
+        { "id": "to-line", "text": "line_profiler 逐行", "children": [] },
+        { "id": "to-spy", "text": "py-spy 线上采样", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "误区",
+      "children": [
+        { "id": "pi-guess", "text": "凭直觉优化", "children": [] },
+        { "id": "pi-noise", "text": "单次测量噪声大", "children": [] }
+      ]
+    }
+  ]
+}

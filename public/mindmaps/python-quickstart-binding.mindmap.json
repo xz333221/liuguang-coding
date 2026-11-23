@@ -1,0 +1,38 @@
+{
+  "id": "root",
+  "text": "变量与名字绑定：动态类型",
+  "children": [
+    {
+      "id": "bind",
+      "text": "赋值即绑定",
+      "children": [
+        { "id": "bd-label", "text": "名字是标签,对象是实体", "children": [] },
+        { "id": "bd-rebind", "text": "改绑不影响其它名字", "children": [] }
+      ]
+    },
+    {
+      "id": "type",
+      "text": "类型在对象上",
+      "children": [
+        { "id": "ty-dyn", "text": "动态类型,运行时检查", "children": [] },
+        { "id": "ty-check", "text": "type() / isinstance(推荐)", "children": [] }
+      ]
+    },
+    {
+      "id": "eq",
+      "text": "is 与 ==",
+      "children": [
+        { "id": "eq-value", "text": "== 比值,is 比身份", "children": [] },
+        { "id": "eq-none", "text": "is 只用于 None/单例", "children": [] }
+      ]
+    },
+    {
+      "id": "mut",
+      "text": "可变与不可变",
+      "children": [
+        { "id": "mu-new", "text": "不可变修改产生新对象", "children": [] },
+        { "id": "mu-inplace", "text": "可变就地修改别名可见", "children": [] }
+      ]
+    }
+  ]
+}

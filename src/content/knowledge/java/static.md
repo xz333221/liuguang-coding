@@ -22,6 +22,15 @@ sources:
 
 ## 静态字段：全体实例共用一份
 
+```mermaid
+flowchart TD
+  C["class Student"] --> S["static int count<br/>全体实例共用一份"]
+  C --> I1["实例字段 name<br/>每个对象各一份"]
+  C --> I2["实例字段 score<br/>每个对象各一份"]
+  S --> M["静态方法 / 常量<br/>不用 new 即可访问"]
+  S --> B["static 代码块<br/>类加载时执行一次"]
+```
+
 实例字段是每个对象各一份。想统计「一共造了多少个 Student」，字段放实例里就不对了：每个对象只知道自己的事。把计数器声明为 static:
 
 ```java

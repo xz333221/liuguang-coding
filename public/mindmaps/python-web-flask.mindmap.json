@@ -1,0 +1,47 @@
+{
+  "id": "root",
+  "text": "Flask 与选型",
+  "children": [
+    {
+      "id": "basic",
+      "text": "最小应用",
+      "children": [
+        { "id": "ba-route", "text": "装饰器路由,<int:id> 转换", "children": [] },
+        { "id": "ba-return", "text": "dict 自动 JSON,元组带状态码", "children": [] }
+      ]
+    },
+    {
+      "id": "request",
+      "text": "请求与响应",
+      "children": [
+        { "id": "re-args", "text": "args / form / files / headers", "children": [] },
+        { "id": "re-resp", "text": "make_response 控制头与 cookie", "children": [] }
+      ]
+    },
+    {
+      "id": "blueprint",
+      "text": "蓝图",
+      "children": [
+        { "id": "bl-group", "text": "按资源分组 + 统一前缀", "children": [] },
+        { "id": "bl-register", "text": "应用只负责注册", "children": [] }
+      ]
+    },
+    {
+      "id": "context",
+      "text": "上下文",
+      "children": [
+        { "id": "co-g", "text": "g 是请求级临时存储", "children": [] },
+        { "id": "co-app", "text": "current_app 取配置", "children": [] }
+      ]
+    },
+    {
+      "id": "compare",
+      "text": "Flask vs FastAPI",
+      "children": [
+        { "id": "cp-wsgi", "text": "WSGI 同步 vs ASGI 异步", "children": [] },
+        { "id": "cp-validate", "text": "手动校验 vs Pydantic", "children": [] },
+        { "id": "cp-doc", "text": "扩展文档 vs 自动 OpenAPI", "children": [] }
+      ]
+    }
+  ]
+}

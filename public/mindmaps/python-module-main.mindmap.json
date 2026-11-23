@@ -1,0 +1,47 @@
+{
+  "id": "root",
+  "text": "模块入口",
+  "children": [
+    {
+      "id": "name",
+      "text": "__name__",
+      "children": [
+        { "id": "na-main", "text": "直接运行 = __main__", "children": [] },
+        { "id": "na-import", "text": "导入时为模块名", "children": [] }
+      ]
+    },
+    {
+      "id": "guard",
+      "text": "入口守卫",
+      "children": [
+        { "id": "gu-import", "text": "导入不产生副作用", "children": [] },
+        { "id": "gu-run", "text": "直接运行才执行 main", "children": [] }
+      ]
+    },
+    {
+      "id": "standard",
+      "text": "标准写法",
+      "children": [
+        { "id": "st-main", "text": "main(argv) 返回退出码", "children": [] },
+        { "id": "st-exit", "text": "raise SystemExit(main())", "children": [] }
+      ]
+    },
+    {
+      "id": "forms",
+      "text": "运行形态",
+      "children": [
+        { "id": "fo-file", "text": "python file.py", "children": [] },
+        { "id": "fo-module", "text": "python -m 包.模块", "children": [] },
+        { "id": "fo-script", "text": "安装后的命令入口", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "常见错误",
+      "children": [
+        { "id": "pi-side", "text": "顶层副作用,导入即执行", "children": [] },
+        { "id": "pi-deep-exit", "text": "深层 sys.exit 绕过清理", "children": [] }
+      ]
+    }
+  ]
+}

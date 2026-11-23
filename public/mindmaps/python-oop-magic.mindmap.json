@@ -1,0 +1,56 @@
+{
+  "id": "root",
+  "text": "魔术方法与协议",
+  "children": [
+    {
+      "id": "map",
+      "text": "语法到方法",
+      "children": [
+        { "id": "ma-bin", "text": "a + b → __add__", "children": [] },
+        { "id": "ma-len", "text": "len(x) → __len__", "children": [] },
+        { "id": "ma-getitem", "text": "x[i] → __getitem__", "children": [] }
+      ]
+    },
+    {
+      "id": "repr",
+      "text": "表示与真值",
+      "children": [
+        { "id": "re-repr", "text": "__repr__ 返回可重建表达式", "children": [] },
+        { "id": "re-bool", "text": "__bool__ / __len__ 决定真假", "children": [] }
+      ]
+    },
+    {
+      "id": "eq",
+      "text": "相等与哈希",
+      "children": [
+        { "id": "eq-notimpl", "text": "不认识类型返回 NotImplemented", "children": [] },
+        { "id": "eq-hash", "text": "定义 __eq__ 要同步 __hash__", "children": [] }
+      ]
+    },
+    {
+      "id": "order",
+      "text": "比较与排序",
+      "children": [
+        { "id": "or-lt", "text": "__lt__ 支撑 sorted", "children": [] },
+        { "id": "or-total", "text": "total_ordering 补齐比较", "children": [] }
+      ]
+    },
+    {
+      "id": "other",
+      "text": "其他钩子",
+      "children": [
+        { "id": "ot-iter", "text": "__iter__ / __next__", "children": [] },
+        { "id": "ot-ctx", "text": "__enter__ / __exit__", "children": [] },
+        { "id": "ot-call", "text": "__call__ 让实例可调用", "children": [] }
+      ]
+    },
+    {
+      "id": "avoid",
+      "text": "克制使用",
+      "children": [
+        { "id": "av-manual", "text": "不要手动调用 __len__ 之类", "children": [] },
+        { "id": "av-getattr", "text": "__getattr__ 别吞拼错属性", "children": [] }
+      ]
+    }
+  ]
+}

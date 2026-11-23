@@ -1,0 +1,38 @@
+{
+  "id": "root",
+  "text": "字典与集合",
+  "children": [
+    {
+      "id": "dict",
+      "text": "dict 操作",
+      "children": [
+        { "id": "di-get", "text": "get / setdefault / defaultdict 兜底", "children": [] },
+        { "id": "di-view", "text": "视图随动;3.7+ 保插入序", "children": [] }
+      ]
+    },
+    {
+      "id": "key",
+      "text": "键要求",
+      "children": [
+        { "id": "ke-hash", "text": "可哈希且 eq/hash 一致", "children": [] },
+        { "id": "ke-mut", "text": "可变对象不可作键", "children": [] }
+      ]
+    },
+    {
+      "id": "set",
+      "text": "set 运算",
+      "children": [
+        { "id": "se-ops", "text": "并交差对称差;空集合 set()", "children": [] },
+        { "id": "se-dedup", "text": "保序去重 dict.fromkeys", "children": [] }
+      ]
+    },
+    {
+      "id": "perf",
+      "text": "性能",
+      "children": [
+        { "id": "pe-o1", "text": "平均 O(1),冲突最坏 O(n)", "children": [] },
+        { "id": "pe-salt", "text": "hash 随机盐,不可持久化", "children": [] }
+      ]
+    }
+  ]
+}

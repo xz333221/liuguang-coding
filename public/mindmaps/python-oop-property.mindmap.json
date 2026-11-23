@@ -1,0 +1,46 @@
+{
+  "id": "root",
+  "text": "属性控制",
+  "children": [
+    {
+      "id": "property",
+      "text": "property",
+      "children": [
+        { "id": "pr-three", "text": "getter / setter / deleter 同名", "children": [] },
+        { "id": "pr-validate", "text": "setter 里做校验", "children": [] }
+      ]
+    },
+    {
+      "id": "compute",
+      "text": "计算与缓存",
+      "children": [
+        { "id": "co-recalc", "text": "只读 property 每次重算", "children": [] },
+        { "id": "co-cached", "text": "cached_property 首次写入 __dict__", "children": [] }
+      ]
+    },
+    {
+      "id": "descriptor",
+      "text": "描述符协议",
+      "children": [
+        { "id": "de-methods", "text": "__get__ / __set__ / __delete__", "children": [] },
+        { "id": "de-setname", "text": "__set_name__ 拿到属性名", "children": [] }
+      ]
+    },
+    {
+      "id": "priority",
+      "text": "优先级",
+      "children": [
+        { "id": "pr-data", "text": "数据描述符高于实例 __dict__", "children": [] },
+        { "id": "pr-func", "text": "函数是非数据描述符,可被实例覆盖", "children": [] }
+      ]
+    },
+    {
+      "id": "choose",
+      "text": "选型",
+      "children": [
+        { "id": "ch-multi", "text": "多字段同规则用描述符", "children": [] },
+        { "id": "ch-plain", "text": "无校验就直接暴露属性", "children": [] }
+      ]
+    }
+  ]
+}

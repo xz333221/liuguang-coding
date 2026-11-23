@@ -1,0 +1,46 @@
+{
+  "id": "root",
+  "text": "自定义异常与异常链",
+  "children": [
+    {
+      "id": "hierarchy",
+      "text": "异常层次",
+      "children": [
+        { "id": "hi-base", "text": "AppError 基类", "children": [] },
+        { "id": "hi-sub", "text": "按调用方处理粒度拆子类", "children": [] }
+      ]
+    },
+    {
+      "id": "data",
+      "text": "结构化字段",
+      "children": [
+        { "id": "da-field", "text": "消息给人,字段给程序", "children": [] },
+        { "id": "da-super", "text": "记得 super().__init__(msg)", "children": [] }
+      ]
+    },
+    {
+      "id": "chain",
+      "text": "异常链",
+      "children": [
+        { "id": "ch-from", "text": "from e 记录 __cause__", "children": [] },
+        { "id": "ch-none", "text": "from None 切断上下文", "children": [] }
+      ]
+    },
+    {
+      "id": "note",
+      "text": "补充信息",
+      "children": [
+        { "id": "no-add", "text": "add_note 追加说明(3.11+)", "children": [] },
+        { "id": "no-group", "text": "ExceptionGroup + except* 聚合失败", "children": [] }
+      ]
+    },
+    {
+      "id": "log",
+      "text": "记录",
+      "children": [
+        { "id": "lo-exc", "text": "log.exception 带堆栈", "children": [] },
+        { "id": "lo-once", "text": "同一异常只记一次", "children": [] }
+      ]
+    }
+  ]
+}

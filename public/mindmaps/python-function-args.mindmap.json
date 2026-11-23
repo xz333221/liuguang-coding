@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "参数体系",
+  "children": [
+    {
+      "id": "kinds",
+      "text": "五种形参",
+      "children": [
+        { "id": "ki-pos", "text": "位置 / 仅限位置(/ 之后)", "children": [] },
+        { "id": "ki-default", "text": "默认值参数", "children": [] },
+        { "id": "ki-var", "text": "*args 收位置,**kwargs 收关键字", "children": [] },
+        { "id": "ki-kwonly", "text": "* 之后仅限关键字", "children": [] }
+      ]
+    },
+    {
+      "id": "call",
+      "text": "调用侧",
+      "children": [
+        { "id": "ca-pos", "text": "位置在前,关键字按名匹配", "children": [] },
+        { "id": "ca-dup", "text": "同一形参传两次 → TypeError", "children": [] }
+      ]
+    },
+    {
+      "id": "bind",
+      "text": "绑定顺序",
+      "children": [
+        { "id": "bi-order", "text": "位置 → 关键字 → *args → **kwargs", "children": [] },
+        { "id": "bi-check", "text": "最后检查必填是否齐全", "children": [] }
+      ]
+    },
+    {
+      "id": "default",
+      "text": "默认值陷阱",
+      "children": [
+        { "id": "de-once", "text": "定义时求值一次,跨调用共享", "children": [] },
+        { "id": "de-none", "text": "可变默认与实时值用 None 占位", "children": [] }
+      ]
+    },
+    {
+      "id": "design",
+      "text": "设计建议",
+      "children": [
+        { "id": "ds-kw", "text": "布尔开关用仅限关键字", "children": [] },
+        { "id": "ds-forward", "text": "可变参数只用于转发", "children": [] }
+      ]
+    }
+  ]
+}

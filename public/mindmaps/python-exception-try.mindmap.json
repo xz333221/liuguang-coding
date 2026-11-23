@@ -1,0 +1,47 @@
+{
+  "id": "root",
+  "text": "try 四个子句",
+  "children": [
+    {
+      "id": "flow",
+      "text": "执行顺序",
+      "children": [
+        { "id": "fl-normal", "text": "无异常:try → else → finally", "children": [] },
+        { "id": "fl-error", "text": "有异常:try → except → finally", "children": [] },
+        { "id": "fl-unhandled", "text": "未匹配:finally 后继续上抛", "children": [] }
+      ]
+    },
+    {
+      "id": "else",
+      "text": "else",
+      "children": [
+        { "id": "el-scope", "text": "try 只放会捕获异常的语句", "children": [] },
+        { "id": "el-avoid", "text": "避免误捕成功路径的异常", "children": [] }
+      ]
+    },
+    {
+      "id": "finally",
+      "text": "finally",
+      "children": [
+        { "id": "fi-always", "text": "无条件执行,包括 return/break", "children": [] },
+        { "id": "fi-return", "text": "其中 return 会覆盖返回值,禁止", "children": [] }
+      ]
+    },
+    {
+      "id": "order",
+      "text": "except 顺序",
+      "children": [
+        { "id": "or-sub", "text": "具体异常在前", "children": [] },
+        { "id": "or-reraise", "text": "裸 raise 保留 traceback", "children": [] }
+      ]
+    },
+    {
+      "id": "resource",
+      "text": "资源清理",
+      "children": [
+        { "id": "re-with", "text": "优先 with 替代手写 finally", "children": [] },
+        { "id": "re-manual", "text": "多资源或特殊释放才手写", "children": [] }
+      ]
+    }
+  ]
+}

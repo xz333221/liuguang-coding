@@ -1,0 +1,47 @@
+{
+  "id": "root",
+  "text": "虚拟环境与 pip",
+  "children": [
+    {
+      "id": "why",
+      "text": "为什么隔离",
+      "children": [
+        { "id": "wh-conflict", "text": "不同项目依赖版本冲突", "children": [] },
+        { "id": "wh-repro", "text": "锁文件保证可复现", "children": [] }
+      ]
+    },
+    {
+      "id": "create",
+      "text": "创建与激活",
+      "children": [
+        { "id": "cr-venv", "text": "python -m venv .venv", "children": [] },
+        { "id": "cr-active", "text": "Scripts/activate 或 bin/activate", "children": [] },
+        { "id": "cr-direct", "text": "不激活可用环境内解释器", "children": [] }
+      ]
+    },
+    {
+      "id": "pip",
+      "text": "pip",
+      "children": [
+        { "id": "pi-install", "text": "install / uninstall / show / list", "children": [] },
+        { "id": "pi-freeze", "text": "freeze 导出精确版本", "children": [] }
+      ]
+    },
+    {
+      "id": "lock",
+      "text": "依赖清单",
+      "children": [
+        { "id": "lo-range", "text": "声明写范围", "children": [] },
+        { "id": "lo-pin", "text": "部署用锁定版本", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "常见问题",
+      "children": [
+        { "id": "pf-wrong", "text": "装到全局解释器", "children": [] },
+        { "id": "pf-git", "text": ".venv 不进仓库", "children": [] }
+      ]
+    }
+  ]
+}

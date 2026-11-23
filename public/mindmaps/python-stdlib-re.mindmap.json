@@ -1,0 +1,57 @@
+{
+  "id": "root",
+  "text": "正则表达式",
+  "children": [
+    {
+      "id": "basic",
+      "text": "基础",
+      "children": [
+        { "id": "ba-raw", "text": "统一用 r'' 原始字符串", "children": [] },
+        { "id": "ba-meta", "text": "字符类 / 量词 / 锚点", "children": [] },
+        { "id": "ba-greedy", "text": "默认贪婪,? 变非贪婪", "children": [] }
+      ]
+    },
+    {
+      "id": "api",
+      "text": "匹配函数",
+      "children": [
+        { "id": "ap-match", "text": "match 从开头", "children": [] },
+        { "id": "ap-search", "text": "search 任意位置", "children": [] },
+        { "id": "ap-full", "text": "fullmatch 整串校验", "children": [] }
+      ]
+    },
+    {
+      "id": "compile",
+      "text": "预编译",
+      "children": [
+        { "id": "co-compile", "text": "re.compile 复用 Pattern", "children": [] },
+        { "id": "co-named", "text": "常量集中管理模式", "children": [] }
+      ]
+    },
+    {
+      "id": "group",
+      "text": "分组",
+      "children": [
+        { "id": "gr-named", "text": "(?P<name>) 命名组", "children": [] },
+        { "id": "gr-noncap", "text": "(?:) 非捕获组", "children": [] },
+        { "id": "gr-findall", "text": "findall 有分组只返回组", "children": [] }
+      ]
+    },
+    {
+      "id": "sub",
+      "text": "替换与切分",
+      "children": [
+        { "id": "su-group", "text": "\\1 引用分组", "children": [] },
+        { "id": "su-callback", "text": "sub 可传回调函数", "children": [] }
+      ]
+    },
+    {
+      "id": "risk",
+      "text": "风险",
+      "children": [
+        { "id": "ri-backtrack", "text": "嵌套量词导致灾难性回溯", "children": [] },
+        { "id": "ri-escape", "text": "用户输入要 re.escape", "children": [] }
+      ]
+    }
+  ]
+}

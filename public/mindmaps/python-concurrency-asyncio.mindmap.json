@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "async / await 与事件循环",
+  "children": [
+    {
+      "id": "loop",
+      "text": "事件循环",
+      "children": [
+        { "id": "lo-single", "text": "单线程调度大量协程", "children": [] },
+        { "id": "lo-switch", "text": "await 等待时切换任务", "children": [] }
+      ]
+    },
+    {
+      "id": "syntax",
+      "text": "语法",
+      "children": [
+        { "id": "sy-define", "text": "async def 返回协程对象", "children": [] },
+        { "id": "sy-await", "text": "await 只能接可等待对象", "children": [] },
+        { "id": "sy-run", "text": "asyncio.run 程序入口", "children": [] }
+      ]
+    },
+    {
+      "id": "concurrency",
+      "text": "并发",
+      "children": [
+        { "id": "co-task", "text": "create_task 立即调度", "children": [] },
+        { "id": "co-gather", "text": "gather 收集多个结果", "children": [] },
+        { "id": "co-serial", "text": "顺序 await 是串行", "children": [] }
+      ]
+    },
+    {
+      "id": "block",
+      "text": "阻塞风险",
+      "children": [
+        { "id": "bl-sleep", "text": "time.sleep 卡住整个循环", "children": [] },
+        { "id": "bl-thread", "text": "to_thread / run_in_executor 桥接", "children": [] }
+      ]
+    },
+    {
+      "id": "scope",
+      "text": "适用边界",
+      "children": [
+        { "id": "sc-io", "text": "高并发 IO 合适", "children": [] },
+        { "id": "sc-cpu", "text": "CPU 密集用多进程", "children": [] }
+      ]
+    }
+  ]
+}

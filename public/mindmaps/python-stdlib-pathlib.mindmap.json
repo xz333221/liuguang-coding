@@ -1,0 +1,53 @@
+{
+  "id": "root",
+  "text": "文件与路径",
+  "children": [
+    {
+      "id": "path",
+      "text": "Path 对象",
+      "children": [
+        { "id": "pa-join", "text": "/ 拼接,name/stem/suffix", "children": [] },
+        { "id": "pa-resolve", "text": "resolve 解析绝对路径与链接", "children": [] }
+      ]
+    },
+    {
+      "id": "io",
+      "text": "读写",
+      "children": [
+        { "id": "io-encoding", "text": "必须显式 encoding", "children": [] },
+        { "id": "io-stream", "text": "大文件用 open 流式读取", "children": [] }
+      ]
+    },
+    {
+      "id": "walk",
+      "text": "遍历",
+      "children": [
+        { "id": "wa-iter", "text": "iterdir 一层", "children": [] },
+        { "id": "wa-glob", "text": "glob / rglob 按模式", "children": [] }
+      ]
+    },
+    {
+      "id": "ops",
+      "text": "增删复制",
+      "children": [
+        { "id": "op-mkdir", "text": "mkdir(parents, exist_ok)", "children": [] },
+        { "id": "op-shutil", "text": "copy2 / copytree / rmtree", "children": [] }
+      ]
+    },
+    {
+      "id": "temp",
+      "text": "临时目录",
+      "children": [
+        { "id": "te-tempfile", "text": "TemporaryDirectory 自动清理", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "常见问题",
+      "children": [
+        { "id": "pi-cwd", "text": "相对路径依赖 cwd", "children": [] },
+        { "id": "pi-rmtree", "text": "rmtree 前先确认路径", "children": [] }
+      ]
+    }
+  ]
+}

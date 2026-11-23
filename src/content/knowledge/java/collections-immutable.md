@@ -22,6 +22,16 @@ sources:
 
 ## List.of / Set.of / Map.of:真不可变
 
+```mermaid
+flowchart TD
+  A["不可变集合"] --> B["List.of / Set.of / Map.of<br/>真不可变"]
+  B --> C["修改抛 UnsupportedOperationException"]
+  B --> D["不允许 null"]
+  A --> E["Collections.unmodifiableXxx<br/>只是只读视图"]
+  E --> F["底层集合可变,内容仍会变"]
+  G["返回内部集合"] --> H["不可变副本或防御性拷贝"]
+```
+
 JDK9 起的 of 工厂创建**结构不可变**的集合：任何 add/remove/set 都抛 UnsupportedOperationException；且**禁止 null 元素**(of 时传 null 抛 NullPointerException)。
 
 ```java

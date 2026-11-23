@@ -20,6 +20,18 @@ sources:
 
 到目前为止程序都是单线程：一条执行流从头跑到尾。并发让多条执行流同时推进，提高吞吐与响应。这一篇讲线程怎么创建、有哪些状态、如何协作式停止。
 
+```mermaid
+flowchart TD
+  A["创建线程"] --> B["继承 Thread"]
+  A --> C["实现 Runnable"]
+  A --> D["Callable + FutureTask"]
+  E["start()"] -->|真正启动新线程| F["NEW → RUNNABLE"]
+  G["run()"] -->|只是普通方法调用| H["仍在当前线程"]
+  F --> I["BLOCKED / WAITING / TIMED_WAITING"]
+  I --> J["TERMINATED"]
+  K["interrupt()"] --> L["协作式中断信号,不是强杀"]
+```
+
 ## 三种创建方式
 
 ```java

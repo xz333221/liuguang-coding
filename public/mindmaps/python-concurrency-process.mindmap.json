@@ -1,0 +1,56 @@
+{
+  "id": "root",
+  "text": "多进程与进程池",
+  "children": [
+    {
+      "id": "compare",
+      "text": "进程 vs 线程",
+      "children": [
+        { "id": "co-mem", "text": "独立内存,数据靠通信", "children": [] },
+        { "id": "co-parallel", "text": "绕过 GIL 真正并行", "children": [] },
+        { "id": "co-cost", "text": "启动与内存开销大", "children": [] }
+      ]
+    },
+    {
+      "id": "api",
+      "text": "三种接口",
+      "children": [
+        { "id": "ap-process", "text": "Process 精细控制", "children": [] },
+        { "id": "ap-pool", "text": "Pool 老式进程池", "children": [] },
+        { "id": "ap-executor", "text": "ProcessPoolExecutor 推荐", "children": [] }
+      ]
+    },
+    {
+      "id": "spawn",
+      "text": "spawn 与守卫",
+      "children": [
+        { "id": "sp-main", "text": "Windows 必须 __main__ 守卫", "children": [] },
+        { "id": "sp-pickle", "text": "函数与数据必须可 pickle", "children": [] }
+      ]
+    },
+    {
+      "id": "ipc",
+      "text": "进程间通信",
+      "children": [
+        { "id": "ip-queue", "text": "Queue 多生产者多消费者", "children": [] },
+        { "id": "ip-shared", "text": "Value/Array/Manager/共享内存", "children": [] }
+      ]
+    },
+    {
+      "id": "grain",
+      "text": "任务粒度",
+      "children": [
+        { "id": "gr-size", "text": "任务太短则开销超过收益", "children": [] },
+        { "id": "gr-chunk", "text": "chunksize 成批分发", "children": [] }
+      ]
+    },
+    {
+      "id": "choose",
+      "text": "选型",
+      "children": [
+        { "id": "ch-io", "text": "IO 等待用线程/异步", "children": [] },
+        { "id": "ch-cpu", "text": "CPU 计算用进程", "children": [] }
+      ]
+    }
+  ]
+}

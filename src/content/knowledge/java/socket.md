@@ -22,6 +22,15 @@ IO 流解决本地读写，网络编程把流延伸到远端。这一篇讲 TCP/
 
 ## TCP:Socket / ServerSocket
 
+```mermaid
+flowchart TD
+  A["网络编程"] --> B["TCP<br/>Socket / ServerSocket,可靠有序"]
+  A --> C["UDP<br/>DatagramSocket,无连接"]
+  A --> D["HTTP 客户端<br/>java.net.http.HttpClient (JDK11+)"]
+  D --> E["同步 / 异步 / HTTP2"]
+  B --> F["服务端监听,客户端连接,流交换字节"]
+```
+
 TCP 面向连接、可靠、有序。服务端监听端口，客户端发起连接，双方通过输入/输出流交换字节：
 
 ```java

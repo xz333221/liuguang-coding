@@ -1,0 +1,45 @@
+{
+  "id": "root",
+  "text": "运算符与求值顺序",
+  "children": [
+    {
+      "id": "arith",
+      "text": "算术与比较",
+      "children": [
+        { "id": "ar-div", "text": "/ 真除 // 整除 ** 右结合", "children": [] },
+        { "id": "ar-chain", "text": "链式比较,中间只求值一次", "children": [] }
+      ]
+    },
+    {
+      "id": "logic",
+      "text": "逻辑短路",
+      "children": [
+        { "id": "lo-operand", "text": "and/or 返回操作数", "children": [] },
+        { "id": "lo-falsy", "text": "0/空/None 为假,兜底注意合法空值", "children": [] }
+      ]
+    },
+    {
+      "id": "member",
+      "text": "成员与身份",
+      "children": [
+        { "id": "me-in", "text": "in 成员 / is 仅单例", "children": [] }
+      ]
+    },
+    {
+      "id": "aug",
+      "text": "增强赋值",
+      "children": [
+        { "id": "au-mut", "text": "可变就地别名可见", "children": [] },
+        { "id": "au-imm", "text": "不可变改绑", "children": [] }
+      ]
+    },
+    {
+      "id": "prec",
+      "text": "优先级与新语法",
+      "children": [
+        { "id": "pr-pit", "text": "-2**2 / not a==b 易错", "children": [] },
+        { "id": "pr-walrus", "text": "条件表达式 / 海象", "children": [] }
+      ]
+    }
+  ]
+}

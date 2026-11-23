@@ -1,0 +1,38 @@
+{
+  "id": "root",
+  "text": "这份知识库怎么读（学习路线）",
+  "children": [
+    {
+      "id": "map",
+      "text": "章节地图",
+      "children": [
+        { "id": "mp-base", "text": "1-2 环境语法:会写", "children": [] },
+        { "id": "mp-mid", "text": "3-8 容器函数对象/迭代异常模块:写对", "children": [] },
+        { "id": "mp-adv", "text": "9-14 库/并发/工程/数据/Web/性能:写好写快", "children": [] }
+      ]
+    },
+    {
+      "id": "parts",
+      "text": "每篇四件",
+      "children": [
+        { "id": "pa-four", "text": "导图 / 正文 / 术语 / 来源", "children": [] }
+      ]
+    },
+    {
+      "id": "method",
+      "text": "读法",
+      "children": [
+        { "id": "me-run", "text": "边读边跑,改参数看变化", "children": [] },
+        { "id": "me-pit", "text": "易错点与误读优先", "children": [] },
+        { "id": "me-project", "text": "用项目串章", "children": [] }
+      ]
+    },
+    {
+      "id": "official",
+      "text": "以官方为准",
+      "children": [
+        { "id": "of-docs", "text": "API 细节查 docs.python.org", "children": [] }
+      ]
+    }
+  ]
+}

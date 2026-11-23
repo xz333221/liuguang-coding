@@ -30,6 +30,16 @@ s.setScore(89);
 
 ## 构造方法长什么样
 
+```mermaid
+flowchart TD
+  A["new Student(name, score)"] --> B["分配对象内存"]
+  B --> C["执行构造方法,初始化字段"]
+  C --> D["返回可用对象引用"]
+  E["未写构造方法"] --> F["编译器补一个无参构造"]
+  G["写了带参构造"] --> H["无参构造不再自动生成"]
+  I["多个构造方法"] --> J["用 this(...) 串联"]
+```
+
 ```java
 class Student {
     private String name;

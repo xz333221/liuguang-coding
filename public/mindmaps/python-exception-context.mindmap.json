@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "with 与上下文管理器",
+  "children": [
+    {
+      "id": "protocol",
+      "text": "with 协议",
+      "children": [
+        { "id": "pr-enter", "text": "__enter__ 返回 as 绑定值", "children": [] },
+        { "id": "pr-exit", "text": "__exit__(type, exc, tb) 负责释放", "children": [] },
+        { "id": "pr-suppress", "text": "返回 True 会压制异常", "children": [] }
+      ]
+    },
+    {
+      "id": "gen",
+      "text": "生成器写法",
+      "children": [
+        { "id": "ge-yield", "text": "yield 前进入、后退出", "children": [] },
+        { "id": "ge-finally", "text": "必须 try/finally 包住 yield", "children": [] }
+      ]
+    },
+    {
+      "id": "multi",
+      "text": "多资源",
+      "children": [
+        { "id": "mu-comma", "text": "一条 with 逗号分隔,逆序退出", "children": [] },
+        { "id": "mu-stack", "text": "ExitStack 动态登记", "children": [] }
+      ]
+    },
+    {
+      "id": "builtin",
+      "text": "常用工具",
+      "children": [
+        { "id": "bu-suppress", "text": "suppress 忽略指定异常", "children": [] },
+        { "id": "bu-null", "text": "nullcontext 可选上下文", "children": [] },
+        { "id": "bu-temp", "text": "TemporaryDirectory 自动清理", "children": [] }
+      ]
+    },
+    {
+      "id": "care",
+      "text": "注意",
+      "children": [
+        { "id": "ca-reenter", "text": "默认不可重入", "children": [] },
+        { "id": "ca-thread", "text": "with 不提供线程安全", "children": [] }
+      ]
+    }
+  ]
+}

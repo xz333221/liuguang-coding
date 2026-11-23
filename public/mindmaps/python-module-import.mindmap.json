@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "import 机制",
+  "children": [
+    {
+      "id": "steps",
+      "text": "三步",
+      "children": [
+        { "id": "st-find", "text": "按 sys.path 查找", "children": [] },
+        { "id": "st-exec", "text": "首次导入执行顶层代码", "children": [] },
+        { "id": "st-cache", "text": "写入 sys.modules,只执行一次", "children": [] }
+      ]
+    },
+    {
+      "id": "path",
+      "text": "sys.path",
+      "children": [
+        { "id": "pa-order", "text": "脚本目录 → PYTHONPATH → 标准库 → site-packages", "children": [] },
+        { "id": "pa-shadow", "text": "模块名别与标准库重名", "children": [] }
+      ]
+    },
+    {
+      "id": "forms",
+      "text": "语句形式",
+      "children": [
+        { "id": "fo-module", "text": "import a.b 绑定顶层 a", "children": [] },
+        { "id": "fo-from", "text": "from a import name 取名字", "children": [] },
+        { "id": "fo-star", "text": "import * 业务代码禁用", "children": [] }
+      ]
+    },
+    {
+      "id": "cycle",
+      "text": "循环导入",
+      "children": [
+        { "id": "cy-cause", "text": "导入期互相取未定义名字", "children": [] },
+        { "id": "cy-fix", "text": "拆依赖 / 延迟导入 / 只导入模块", "children": [] }
+      ]
+    },
+    {
+      "id": "dynamic",
+      "text": "动态导入",
+      "children": [
+        { "id": "dy-lib", "text": "importlib.import_module(字符串)", "children": [] },
+        { "id": "dy-safe", "text": "插件名走白名单", "children": [] }
+      ]
+    }
+  ]
+}

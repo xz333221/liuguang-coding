@@ -1,0 +1,44 @@
+{
+  "id": "root",
+  "text": "函数入门：参数与返回值",
+  "children": [
+    {
+      "id": "def",
+      "text": "定义与调用",
+      "children": [
+        { "id": "de-call", "text": "def 创建对象,调用才执行", "children": [] },
+        { "id": "de-none", "text": "无 return 得 None", "children": [] }
+      ]
+    },
+    {
+      "id": "pass",
+      "text": "按对象引用传递",
+      "children": [
+        { "id": "pa-rebind", "text": "改绑不影响外部", "children": [] },
+        { "id": "pa-mutate", "text": "就地修改别名可见", "children": [] }
+      ]
+    },
+    {
+      "id": "return",
+      "text": "返回值",
+      "children": [
+        { "id": "re-tuple", "text": "多值=元组解包,>3 用 dataclass", "children": [] }
+      ]
+    },
+    {
+      "id": "args",
+      "text": "参数",
+      "children": [
+        { "id": "ar-order", "text": "位置在前关键字在后", "children": [] },
+        { "id": "ar-default", "text": "默认值求值一次,可变用 None 占位", "children": [] }
+      ]
+    },
+    {
+      "id": "first",
+      "text": "一等对象",
+      "children": [
+        { "id": "fi-pass", "text": "可赋值/作参数/作返回", "children": [] }
+      ]
+    }
+  ]
+}

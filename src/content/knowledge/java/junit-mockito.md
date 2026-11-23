@@ -20,6 +20,18 @@ sources:
 
 构建的 test 阶段跑的就是单元测试。JUnit 负责"组织与断言",Mockito 负责"隔离依赖"。这一篇讲两者配合写出独立、可重复、覆盖边界的测试。
 
+```mermaid
+flowchart TD
+  A["JUnit 5"] --> B["@Test / 断言 / 生命周期"]
+  A --> C["@ParameterizedTest 数据驱动"]
+  D["Mockito"] --> E["mock 隔离外部依赖"]
+  E --> F["when / thenReturn 打桩"]
+  E --> G["verify 验证交互"]
+  B --> H["独立、可重复、覆盖边界"]
+  C --> H
+  F --> H
+```
+
 ## JUnit 5 基础
 
 ```java

@@ -1,0 +1,45 @@
+{
+  "id": "root",
+  "text": "Python 是什么：解释器、版本与生态",
+  "children": [
+    {
+      "id": "exec",
+      "text": "执行模型",
+      "children": [
+        { "id": "ex-bytecode", "text": "源码→字节码→虚拟机", "children": [] },
+        { "id": "ex-transparent", "text": "编译对使用者透明", "children": [] }
+      ]
+    },
+    {
+      "id": "typing",
+      "text": "动态类型",
+      "children": [
+        { "id": "ty-object", "text": "类型在对象上,检查在运行时", "children": [] }
+      ]
+    },
+    {
+      "id": "version",
+      "text": "版本",
+      "children": [
+        { "id": "ve-3x", "text": "只学 3.x,2 已停维护", "children": [] },
+        { "id": "ve-cycle", "text": "每年 minor,约五年支持", "children": [] }
+      ]
+    },
+    {
+      "id": "eco",
+      "text": "生态",
+      "children": [
+        { "id": "ec-stdlib", "text": "标准库 batteries included", "children": [] },
+        { "id": "ec-pypi", "text": "PyPI + pip;CPython 默认", "children": [] }
+      ]
+    },
+    {
+      "id": "fit",
+      "text": "适用边界",
+      "children": [
+        { "id": "fit-yes", "text": "脚本 / 数据 / Web / AI", "children": [] },
+        { "id": "fit-no", "text": "CPU 密集单线程是短板,有对策", "children": [] }
+      ]
+    }
+  ]
+}

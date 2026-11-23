@@ -1,0 +1,55 @@
+{
+  "id": "root",
+  "text": "collections 与 functools",
+  "children": [
+    {
+      "id": "counter",
+      "text": "Counter",
+      "children": [
+        { "id": "co-count", "text": "缺失键返回 0", "children": [] },
+        { "id": "co-top", "text": "most_common 取前 n", "children": [] }
+      ]
+    },
+    {
+      "id": "defaultdict",
+      "text": "defaultdict",
+      "children": [
+        { "id": "de-factory", "text": "构造参数是无参可调用对象", "children": [] },
+        { "id": "de-visit", "text": "访问即插入,查询用 get", "children": [] }
+      ]
+    },
+    {
+      "id": "deque",
+      "text": "deque",
+      "children": [
+        { "id": "dq-o1", "text": "两端操作 O(1)", "children": [] },
+        { "id": "dq-maxlen", "text": "maxlen 保留最近 N 个", "children": [] }
+      ]
+    },
+    {
+      "id": "namedtuple",
+      "text": "namedtuple",
+      "children": [
+        { "id": "na-field", "text": "字段名 + 可解包 + 不可变", "children": [] },
+        { "id": "na-vs", "text": "需要方法用 dataclass", "children": [] }
+      ]
+    },
+    {
+      "id": "misc",
+      "text": "其他容器",
+      "children": [
+        { "id": "mi-order", "text": "OrderedDict 仅剩 move_to_end 等", "children": [] },
+        { "id": "mi-chain", "text": "ChainMap 分层查找", "children": [] }
+      ]
+    },
+    {
+      "id": "functools",
+      "text": "functools",
+      "children": [
+        { "id": "fu-cache", "text": "lru_cache 只缓存纯函数", "children": [] },
+        { "id": "fu-partial", "text": "partial 固定参数", "children": [] },
+        { "id": "fu-cmp", "text": "cmp_to_key 适配旧比较函数", "children": [] }
+      ]
+    }
+  ]
+}

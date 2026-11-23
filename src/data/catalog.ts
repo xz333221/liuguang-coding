@@ -17,6 +17,7 @@
 import { frontendChapters } from './frontendOutline'
 import { javaChapters } from './javaOutline'
 import { opsChapters } from './opsOutline'
+import { pythonChapters } from './pythonOutline'
 
 export type CategoryStatus = 'active' | 'soon' | 'hidden'
 
@@ -64,8 +65,11 @@ export const catalog: Category[] = [
       {
         id: 'python',
         name: 'Python',
-        intro: '从名字与对象开始,到数据模型、并发与工程化。',
+        intro:
+          '按 14 章走完:环境与语法 → 容器、函数、面向对象 → 迭代器、异常、模块 → 标准库、并发、工程化 → 数据处理、Web 与性能。',
         status: 'active',
+        numbered: true,
+        children: pythonChapters,
       },
       {
         id: 'java',

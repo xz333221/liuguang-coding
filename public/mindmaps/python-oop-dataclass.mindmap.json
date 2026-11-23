@@ -1,0 +1,56 @@
+{
+  "id": "root",
+  "text": "dataclass 与枚举",
+  "children": [
+    {
+      "id": "basic",
+      "text": "基本生成",
+      "children": [
+        { "id": "ba-gen", "text": "__init__ / __repr__ / __eq__", "children": [] },
+        { "id": "ba-order", "text": "默认值字段排在必填之后", "children": [] }
+      ]
+    },
+    {
+      "id": "field",
+      "text": "field 与默认值",
+      "children": [
+        { "id": "fi-factory", "text": "可变默认用 default_factory", "children": [] },
+        { "id": "fi-compare", "text": "repr / compare / metadata 开关", "children": [] }
+      ]
+    },
+    {
+      "id": "switches",
+      "text": "装饰器开关",
+      "children": [
+        { "id": "sw-frozen", "text": "frozen 不可变并生成 __hash__", "children": [] },
+        { "id": "sw-order", "text": "order 生成比较方法", "children": [] },
+        { "id": "sw-kw", "text": "kw_only / slots", "children": [] }
+      ]
+    },
+    {
+      "id": "post",
+      "text": "__post_init__",
+      "children": [
+        { "id": "po-check", "text": "校验不变量与派生字段", "children": [] },
+        { "id": "po-frozen", "text": "frozen 下用 object.__setattr__", "children": [] }
+      ]
+    },
+    {
+      "id": "compare",
+      "text": "与相似类型分工",
+      "children": [
+        { "id": "co-named", "text": "NamedTuple 元组式不可变记录", "children": [] },
+        { "id": "co-typed", "text": "TypedDict 只描述字典形状", "children": [] }
+      ]
+    },
+    {
+      "id": "enum",
+      "text": "枚举",
+      "children": [
+        { "id": "en-enum", "text": "Enum 按身份比较", "children": [] },
+        { "id": "en-int", "text": "IntEnum 可当整数用", "children": [] },
+        { "id": "en-flag", "text": "Flag 按位组合", "children": [] }
+      ]
+    }
+  ]
+}

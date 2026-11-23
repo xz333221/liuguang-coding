@@ -22,6 +22,19 @@ sources:
 
 ## 基本结构与执行顺序
 
+```mermaid
+flowchart TD
+  A["进入 try 块"] --> B{"是否抛异常?"}
+  B -->|否| C["执行 finally"]
+  B -->|是| D["catch 按声明顺序匹配"]
+  D -->|匹配| E["执行对应 catch"]
+  D -->|不匹配| F["异常继续向上抛"]
+  C --> G["继续执行后面的代码"]
+  E --> C
+  F --> C
+  H["try-with-resources"] --> I["AutoCloseable 自动 close<br/>关闭异常记为 suppressed"]
+```
+
 ```java
 try {
     int n = Integer.parseInt("abc");   // 抛 NumberFormatException

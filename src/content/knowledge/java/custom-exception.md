@@ -22,6 +22,16 @@ JDK 自带的异常描述的是通用失败(文件不存在、下标越界)。�
 
 ## 继承谁：RuntimeException 还是 Exception
 
+```mermaid
+flowchart TD
+  A["自定义异常"] --> B{"调用方必须显式处理?"}
+  B -->|是| C["继承 Exception<br/>checked,需 throws 声明"]
+  B -->|否,编程或业务规则错误| D["继承 RuntimeException<br/>unchecked"]
+  C --> E["构造器传 message 与 cause"]
+  D --> E
+  E --> F["在边界校验与规则违反处抛出"]
+```
+
 自定义异常的第一步是选父类，这决定了它是否 checked:
 
 - 继承 `RuntimeException`(unchecked):表示**业务规则违反或编程错误**，调用方通常无法在编译期预知，也不应被强制逐层 catch。绝大多数业务异常选这条；

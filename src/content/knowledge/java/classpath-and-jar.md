@@ -25,6 +25,16 @@ sources:
 
 ## classpath:JVM 找类的清单
 
+```mermaid
+flowchart LR
+  A["全限定名 com.flowdash.Main"] --> B["classpath 搜索清单"]
+  B --> C["目录项 out/"]
+  C --> D["按包名找 com/flowdash/Main.class"]
+  B --> E["jar 项 lib/a.jar"]
+  E --> F["jar 内同名路径"]
+  G["java -jar app.jar"] -->|忽略 -cp| H["依赖写进 manifest 的 Class-Path"]
+```
+
 JVM 拿到一个全限定名，比如 com.flowdash.Main，就去 classpath 列出的位置里找 com/flowdash/Main.class。classpath 就是这张搜索清单：
 
 ```bash

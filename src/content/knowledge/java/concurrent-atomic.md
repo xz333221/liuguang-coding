@@ -20,6 +20,15 @@ sources:
 
 synchronized 是通用互斥，但粒度粗、有阻塞开销。java.util.concurrent 提供了一批**低锁/无锁**的线程安全工具：并发集合、原子类、阻塞队列。这一篇讲它们的原理与选型。
 
+```mermaid
+flowchart TD
+  A["java.util.concurrent"] --> B["ConcurrentHashMap<br/>桶级锁 + CAS"]
+  A --> C["CopyOnWriteArrayList<br/>写时复制,读多写少"]
+  A --> D["AtomicInteger<br/>CAS 无锁自增,需注意 ABA"]
+  A --> E["LongAdder<br/>分段累加,高竞争更优"]
+  A --> F["BlockingQueue<br/>生产者消费者"]
+```
+
 ## ConcurrentHashMap
 
 HashMap 非线程安全(并发 put 可能丢数据/死循环，JDK7 头插法扩容);Hashtable 全表 synchronized 太粗。ConcurrentHashMap 的演进：

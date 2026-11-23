@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "itertools 常用组合",
+  "children": [
+    {
+      "id": "infinite",
+      "text": "无限迭代器",
+      "children": [
+        { "id": "in-count", "text": "count 计数", "children": [] },
+        { "id": "in-cycle", "text": "cycle 轮转", "children": [] },
+        { "id": "in-limit", "text": "必须配 islice / 终止条件", "children": [] }
+      ]
+    },
+    {
+      "id": "finite",
+      "text": "有限迭代器",
+      "children": [
+        { "id": "fi-chain", "text": "chain 拼接", "children": [] },
+        { "id": "fi-slice", "text": "islice 按位置截取", "children": [] },
+        { "id": "fi-while", "text": "takewhile / dropwhile 按条件", "children": [] }
+      ]
+    },
+    {
+      "id": "combo",
+      "text": "组合生成",
+      "children": [
+        { "id": "co-product", "text": "product 笛卡尔积", "children": [] },
+        { "id": "co-perm", "text": "permutations 排列", "children": [] },
+        { "id": "co-comb", "text": "combinations 组合", "children": [] }
+      ]
+    },
+    {
+      "id": "groupby",
+      "text": "groupby",
+      "children": [
+        { "id": "gr-sort", "text": "只合并相邻,先排序", "children": [] },
+        { "id": "gr-consume", "text": "分组迭代器要及时消费", "children": [] }
+      ]
+    },
+    {
+      "id": "misc",
+      "text": "其他",
+      "children": [
+        { "id": "mi-pair", "text": "pairwise 相邻对", "children": [] },
+        { "id": "mi-tee", "text": "tee 分叉会缓存,慎用", "children": [] }
+      ]
+    }
+  ]
+}

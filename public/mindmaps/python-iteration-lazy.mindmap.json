@@ -1,0 +1,39 @@
+{
+  "id": "root",
+  "text": "生成器表达式与惰性",
+  "children": [
+    {
+      "id": "syntax",
+      "text": "语法对比",
+      "children": [
+        { "id": "sy-list", "text": "[] 立即求值,占内存", "children": [] },
+        { "id": "sy-gen", "text": "() 惰性,只记录算法", "children": [] }
+      ]
+    },
+    {
+      "id": "pipeline",
+      "text": "流水线",
+      "children": [
+        { "id": "pi-layer", "text": "层层套接,逐个拉取", "children": [] },
+        { "id": "pi-file", "text": "大文件逐行处理", "children": [] }
+      ]
+    },
+    {
+      "id": "traps",
+      "text": "陷阱",
+      "children": [
+        { "id": "tr-once", "text": "只能消费一次", "children": [] },
+        { "id": "tr-exc", "text": "异常延迟到消费端", "children": [] },
+        { "id": "tr-late", "text": "自由变量晚绑定", "children": [] }
+      ]
+    },
+    {
+      "id": "choose",
+      "text": "选型",
+      "children": [
+        { "id": "ch-multi", "text": "多次遍历 / 索引 / 排序先物化", "children": [] },
+        { "id": "ch-short", "text": "any / all 配生成器短路", "children": [] }
+      ]
+    }
+  ]
+}

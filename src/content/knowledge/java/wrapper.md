@@ -22,6 +22,15 @@ sources:
 
 ## 八对一一对应
 
+```mermaid
+flowchart LR
+  A["八种基本类型"] --> B["各自一个包装类"]
+  B --> C["都是不可变对象"]
+  B --> D["创建用 valueOf 静态工厂"]
+  B --> E["parseInt / MAX_VALUE 等高频 API"]
+  C --> F["比较内容用 equals"]
+```
+
 | 基本类型 | 包装类型 |
 |---|---|
 | byte | Byte |

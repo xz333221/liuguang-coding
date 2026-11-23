@@ -1,0 +1,55 @@
+{
+  "id": "root",
+  "text": "任务编排",
+  "children": [
+    {
+      "id": "gather",
+      "text": "gather",
+      "children": [
+        { "id": "ga-default", "text": "遇错即抛,其余不取消", "children": [] },
+        { "id": "ga-safe", "text": "return_exceptions 收集异常", "children": [] }
+      ]
+    },
+    {
+      "id": "group",
+      "text": "TaskGroup",
+      "children": [
+        { "id": "gr-cancel", "text": "失败取消其余任务", "children": [] },
+        { "id": "gr-eg", "text": "多个失败合并为 ExceptionGroup", "children": [] }
+      ]
+    },
+    {
+      "id": "timeout",
+      "text": "超时",
+      "children": [
+        { "id": "to-wait", "text": "wait_for 单次等待", "children": [] },
+        { "id": "to-ctx", "text": "asyncio.timeout 覆盖多段", "children": [] }
+      ]
+    },
+    {
+      "id": "cancel",
+      "text": "取消",
+      "children": [
+        { "id": "ca-request", "text": "cancel 只是请求,await 处生效", "children": [] },
+        { "id": "ca-reraise", "text": "CancelledError 要重新抛出", "children": [] },
+        { "id": "ca-shield", "text": "shield 保护关键段", "children": [] }
+      ]
+    },
+    {
+      "id": "backpressure",
+      "text": "背压",
+      "children": [
+        { "id": "ba-sem", "text": "Semaphore 限制并发数", "children": [] },
+        { "id": "ba-queue", "text": "有界 Queue 缓冲", "children": [] }
+      ]
+    },
+    {
+      "id": "bridge",
+      "text": "桥接阻塞",
+      "children": [
+        { "id": "br-thread", "text": "to_thread 短阻塞", "children": [] },
+        { "id": "br-proc", "text": "run_in_executor 处理 CPU", "children": [] }
+      ]
+    }
+  ]
+}

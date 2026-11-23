@@ -1,0 +1,45 @@
+{
+  "id": "root",
+  "text": "lambda 与高阶函数",
+  "children": [
+    {
+      "id": "lambda",
+      "text": "lambda 边界",
+      "children": [
+        { "id": "la-expr", "text": "只能一个表达式,不能写语句", "children": [] },
+        { "id": "la-noname", "text": "__name__ 是 <lambda>,别起名", "children": [] }
+      ]
+    },
+    {
+      "id": "key",
+      "text": "key 函数",
+      "children": [
+        { "id": "ke-sorted", "text": "sorted/min/max(..., key=)", "children": [] },
+        { "id": "ke-operator", "text": "itemgetter / attrgetter 更快", "children": [] }
+      ]
+    },
+    {
+      "id": "fmap",
+      "text": "map / filter / reduce",
+      "children": [
+        { "id": "fm-lazy", "text": "map/filter 返回迭代器", "children": [] },
+        { "id": "fm-comp", "text": "推导式通常更清晰", "children": [] }
+      ]
+    },
+    {
+      "id": "hoc",
+      "text": "高阶函数",
+      "children": [
+        { "id": "ho-partial", "text": "partial 固定参数", "children": [] },
+        { "id": "ho-return", "text": "可返回函数,构成闭包", "children": [] }
+      ]
+    },
+    {
+      "id": "def",
+      "text": "改用 def 的场合",
+      "children": [
+        { "id": "de-complex", "text": "多语句 / 需调试 / 需注解", "children": [] }
+      ]
+    }
+  ]
+}

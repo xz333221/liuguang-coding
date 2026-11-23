@@ -1,0 +1,54 @@
+{
+  "id": "root",
+  "text": "pandas DataFrame",
+  "children": [
+    {
+      "id": "objects",
+      "text": "对象",
+      "children": [
+        { "id": "ob-series", "text": "Series 一维带索引", "children": [] },
+        { "id": "ob-frame", "text": "DataFrame 共享行索引的列集合", "children": [] }
+      ]
+    },
+    {
+      "id": "io",
+      "text": "读写",
+      "children": [
+        { "id": "io-read", "text": "dtype / parse_dates / usecols", "children": [] },
+        { "id": "io-write", "text": "to_csv 记得 index=False", "children": [] }
+      ]
+    },
+    {
+      "id": "select",
+      "text": "选择",
+      "children": [
+        { "id": "se-loc", "text": "loc 按标签,切片含终点", "children": [] },
+        { "id": "se-iloc", "text": "iloc 按位置,切片不含终点", "children": [] }
+      ]
+    },
+    {
+      "id": "transform",
+      "text": "派生与修改",
+      "children": [
+        { "id": "tr-assign", "text": "assign 返回新对象", "children": [] },
+        { "id": "tr-loc", "text": "修改用 loc[条件, 列] = 值", "children": [] }
+      ]
+    },
+    {
+      "id": "group",
+      "text": "分组与合并",
+      "children": [
+        { "id": "gr-agg", "text": "groupby().agg() 命名聚合", "children": [] },
+        { "id": "gr-merge", "text": "merge / concat 连接", "children": [] }
+      ]
+    },
+    {
+      "id": "align",
+      "text": "对齐与缺失",
+      "children": [
+        { "id": "al-index", "text": "运算按索引对齐", "children": [] },
+        { "id": "al-na", "text": "缺失值导致类型提升", "children": [] }
+      ]
+    }
+  ]
+}

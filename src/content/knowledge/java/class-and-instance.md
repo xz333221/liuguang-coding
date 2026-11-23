@@ -27,6 +27,14 @@ sources:
 
 ## class 是模板，instance 是实物
 
+```mermaid
+flowchart TD
+  C["class Student<br/>模板"] --> N1["new Student()<br/>实例 1,字段独立"]
+  C --> N2["new Student()<br/>实例 2,字段独立"]
+  R["Student s 引用变量"] -->|指向| N1
+  R -.->|可改指向| N2
+```
+
 要描述一个学生，先定义一个类：
 
 ```java

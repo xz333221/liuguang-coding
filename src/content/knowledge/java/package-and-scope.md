@@ -25,6 +25,14 @@ sources:
 
 ## package:类的全限定名
 
+```mermaid
+flowchart TD
+  A["package com.shop.util"] --> B["全限定名 com.shop.util.StringUtil"]
+  B --> C["目录 com/shop/util/StringUtil.java"]
+  D["import com.other.StringUtil"] --> E["简写,不改变类的全名"]
+  F["访问权限"] --> G["private < 包级 < protected < public"]
+```
+
 ```java
 package com.flowdash.util;
 

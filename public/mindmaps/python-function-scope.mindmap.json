@@ -1,0 +1,45 @@
+{
+  "id": "root",
+  "text": "作用域与闭包",
+  "children": [
+    {
+      "id": "legb",
+      "text": "LEGB 查找",
+      "children": [
+        { "id": "le-local", "text": "函数内赋值整段都是局部", "children": [] },
+        { "id": "le-unbound", "text": "先引用后赋值 → UnboundLocalError", "children": [] }
+      ]
+    },
+    {
+      "id": "decl",
+      "text": "改写声明",
+      "children": [
+        { "id": "de-global", "text": "global 写回模块命名空间", "children": [] },
+        { "id": "de-nonlocal", "text": "nonlocal 写回最近外层函数", "children": [] }
+      ]
+    },
+    {
+      "id": "closure",
+      "text": "闭包",
+      "children": [
+        { "id": "cl-cell", "text": "自由变量存进 cell,外层先返回不销毁", "children": [] },
+        { "id": "cl-nonlocal", "text": "闭包内修改需 nonlocal", "children": [] }
+      ]
+    },
+    {
+      "id": "late",
+      "text": "晚绑定",
+      "children": [
+        { "id": "la-share", "text": "闭包捕获变量而非值", "children": [] },
+        { "id": "la-fix", "text": "lambda i=i 在定义时固定", "children": [] }
+      ]
+    },
+    {
+      "id": "class",
+      "text": "类体例外",
+      "children": [
+        { "id": "cs-skip", "text": "方法不走类体作用域", "children": [] }
+      ]
+    }
+  ]
+}

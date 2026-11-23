@@ -22,6 +22,17 @@ sources:
 
 ## 六种 scope
 
+```mermaid
+flowchart TD
+  A["依赖"] --> B["scope:compile / provided / runtime / test / system / import"]
+  A --> C["传递依赖:自动拉入间接依赖"]
+  C --> D["版本冲突"]
+  D --> E["仲裁:最近优先 + 声明优先"]
+  A --> F["dependencyManagement 统一版本"]
+  A --> G["exclusions 排除"]
+  H["mvn dependency:tree"] --> I["定位冲突来源"]
+```
+
 | scope | 编译 | 测试 | 运行 | 传递 | 典型 |
 | --- | --- | --- | --- | --- | --- |
 | compile(默认) | ✓ | ✓ | ✓ | ✓ | spring-core |

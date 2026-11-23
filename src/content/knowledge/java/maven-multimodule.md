@@ -22,6 +22,15 @@ sources:
 
 ## 聚合：modules
 
+```mermaid
+flowchart TD
+  A["父 pom (packaging=pom)"] --> B["聚合:modules 列出子模块"]
+  A --> C["继承:子模块复用配置"]
+  B --> D["reactor 按依赖拓扑排序构建"]
+  C --> E["dependencyManagement 统一版本"]
+  D --> F["install 后模块间才能互相引用"]
+```
+
 父 pom packaging=pom，用 modules 列出子模块：
 
 ```xml

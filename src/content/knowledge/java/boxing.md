@@ -22,6 +22,14 @@ sources:
 
 ## 编译器替你做了什么
 
+```mermaid
+flowchart LR
+  A["Integer n = 100"] -->|编译器插入| B["Integer.valueOf(100)"]
+  C["int x = n"] -->|编译器插入| D["n.intValue()"]
+  E["Integer 缓存 -128..127"] --> F["== 比较可能碰巧为 true"]
+  G["null 拆箱"] --> H["NullPointerException"]
+```
+
 ```java
 Integer n = 100;   // 装箱
 int x = n;         // 拆箱

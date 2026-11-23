@@ -1,0 +1,54 @@
+{
+  "id": "root",
+  "text": "优化手段",
+  "children": [
+    {
+      "id": "algorithm",
+      "text": "算法优先",
+      "children": [
+        { "id": "al-complex", "text": "降复杂度收益最大", "children": [] },
+        { "id": "al-struct", "text": "查找用 set/dict", "children": [] }
+      ]
+    },
+    {
+      "id": "builtin",
+      "text": "内置与 C 实现",
+      "children": [
+        { "id": "bu-sum", "text": "sum/any/max 优于手写", "children": [] },
+        { "id": "bu-comp", "text": "推导式循环在 C 层", "children": [] }
+      ]
+    },
+    {
+      "id": "cache",
+      "text": "缓存",
+      "children": [
+        { "id": "ca-pure", "text": "只缓存纯函数", "children": [] },
+        { "id": "ca-size", "text": "maxsize 必须有上限", "children": [] }
+      ]
+    },
+    {
+      "id": "io",
+      "text": "字符串与 IO",
+      "children": [
+        { "id": "io-join", "text": "join 替代 += 拼接", "children": [] },
+        { "id": "io-batch", "text": "批量读写减少往返", "children": [] }
+      ]
+    },
+    {
+      "id": "vector",
+      "text": "向量化与并行",
+      "children": [
+        { "id": "ve-numpy", "text": "数值密集用 numpy", "children": [] },
+        { "id": "ve-model", "text": "按瓶颈类型选并发模型", "children": [] }
+      ]
+    },
+    {
+      "id": "tradeoff",
+      "text": "权衡",
+      "children": [
+        { "id": "tr-read", "text": "别为常数牺牲可读性", "children": [] },
+        { "id": "tr-test", "text": "优化后跑测试与基准", "children": [] }
+      ]
+    }
+  ]
+}

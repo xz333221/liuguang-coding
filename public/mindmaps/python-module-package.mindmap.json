@@ -1,0 +1,47 @@
+{
+  "id": "root",
+  "text": "包与相对导入",
+  "children": [
+    {
+      "id": "layout",
+      "text": "目录与点号",
+      "children": [
+        { "id": "la-map", "text": "shop.orders.service → 对应文件", "children": [] },
+        { "id": "la-chain", "text": "导入时逐层执行 __init__", "children": [] }
+      ]
+    },
+    {
+      "id": "init",
+      "text": "__init__.py",
+      "children": [
+        { "id": "in-export", "text": "导出公共接口到包一层", "children": [] },
+        { "id": "in-light", "text": "保持轻量,别放重初始化", "children": [] },
+        { "id": "in-all", "text": "__all__ 控制 import *", "children": [] }
+      ]
+    },
+    {
+      "id": "relative",
+      "text": "相对导入",
+      "children": [
+        { "id": "re-dots", "text": "一个点当前包,两个点上一级", "children": [] },
+        { "id": "re-main", "text": "直接运行文件会失去包上下文", "children": [] },
+        { "id": "re-m", "text": "用 python -m 运行", "children": [] }
+      ]
+    },
+    {
+      "id": "namespace",
+      "text": "命名空间包",
+      "children": [
+        { "id": "na-420", "text": "PEP 420 可无 __init__.py", "children": [] },
+        { "id": "na-merge", "text": "同名目录合并", "children": [] }
+      ]
+    },
+    {
+      "id": "main",
+      "text": "__main__.py",
+      "children": [
+        { "id": "ma-m", "text": "python -m 包 执行入口", "children": [] }
+      ]
+    }
+  ]
+}

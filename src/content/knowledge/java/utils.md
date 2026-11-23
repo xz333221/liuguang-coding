@@ -22,6 +22,15 @@ sources:
 
 ## Math:数学运算
 
+```mermaid
+flowchart TD
+  A["常用工具类(全是静态方法)"] --> B["Math:数学运算"]
+  A --> C["Random:伪随机,给种子可复现"]
+  A --> D["HexFormat:字节与十六进制互转"]
+  A --> E["Objects:null 安全的比较与校验"]
+  A --> F["Arrays:打印 / 排序 / 填充"]
+```
+
 ```java
 Math.abs(-100);        // 100
 Math.max(100, 99);     // 100

@@ -25,6 +25,17 @@ sources:
 
 ## 两者是什么关系
 
+```mermaid
+flowchart TD
+  A["业务代码"] --> B["Mapper 接口"]
+  B --> C["MyBatis-Plus<br/>BaseMapper 单表 CRUD"]
+  B --> D["XML / 注解<br/>join、聚合、复杂映射"]
+  C --> E["SqlSessionFactory"]
+  D --> E
+  E --> F["JDBC"]
+  G["条件构造器 / 分页 / 逻辑删除"] --> C
+```
+
 - **MyBatis** 是 SQL 映射框架。你写 SQL，它负责把参数塞进去、把结果集变成对象；
 - **MyBatis-Plus** 不是另一个框架，是 MyBatis 的增强包。它复用同一个 `SqlSessionFactory`，通过插件与 `BaseMapper` 补上单表 CRUD、条件构造器、分页、逻辑删除、代码生成。
 

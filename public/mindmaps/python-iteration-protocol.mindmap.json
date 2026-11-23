@@ -1,0 +1,46 @@
+{
+  "id": "root",
+  "text": "可迭代对象与迭代器",
+  "children": [
+    {
+      "id": "flow",
+      "text": "for 的执行",
+      "children": [
+        { "id": "fl-iter", "text": "iter() 取迭代器", "children": [] },
+        { "id": "fl-next", "text": "反复 next()", "children": [] },
+        { "id": "fl-stop", "text": "StopIteration 结束", "children": [] }
+      ]
+    },
+    {
+      "id": "diff",
+      "text": "两者的区别",
+      "children": [
+        { "id": "di-iterable", "text": "可迭代对象:__iter__,位置不驻留", "children": [] },
+        { "id": "di-iterator", "text": "迭代器:__next__ + __iter__ 返回自身", "children": [] }
+      ]
+    },
+    {
+      "id": "once",
+      "text": "一次性",
+      "children": [
+        { "id": "on-exhaust", "text": "耗尽后不可重置", "children": [] },
+        { "id": "on-materialize", "text": "需多次遍历先 list()", "children": [] }
+      ]
+    },
+    {
+      "id": "custom",
+      "text": "自定义",
+      "children": [
+        { "id": "cu-yield", "text": "__iter__ 用生成器最简单", "children": [] },
+        { "id": "cu-state", "text": "手写迭代器需保持耗尽状态", "children": [] }
+      ]
+    },
+    {
+      "id": "legacy",
+      "text": "旧式迭代",
+      "children": [
+        { "id": "le-getitem", "text": "只有 __getitem__ 时按索引取到 IndexError", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "代码质量",
+  "children": [
+    {
+      "id": "ruff",
+      "text": "ruff",
+      "children": [
+        { "id": "ru-check", "text": "check --fix 自动修复", "children": [] },
+        { "id": "ru-format", "text": "format 统一格式", "children": [] },
+        { "id": "ru-rules", "text": "规则集按需启用", "children": [] }
+      ]
+    },
+    {
+      "id": "mypy",
+      "text": "mypy",
+      "children": [
+        { "id": "my-strict", "text": "strict 严格度分级推进", "children": [] },
+        { "id": "my-stub", "text": "第三方库装 stub", "children": [] },
+        { "id": "my-ignore", "text": "忽略要带原因", "children": [] }
+      ]
+    },
+    {
+      "id": "division",
+      "text": "分工",
+      "children": [
+        { "id": "di-style", "text": "ruff 管风格与缺陷模式", "children": [] },
+        { "id": "di-type", "text": "mypy 管类型一致性", "children": [] }
+      ]
+    },
+    {
+      "id": "precommit",
+      "text": "pre-commit",
+      "children": [
+        { "id": "pr-hook", "text": "提交前自动检查与修复", "children": [] },
+        { "id": "pr-slow", "text": "mypy 慢可放 CI", "children": [] }
+      ]
+    },
+    {
+      "id": "ci",
+      "text": "CI",
+      "children": [
+        { "id": "ci-order", "text": "快检查在前", "children": [] },
+        { "id": "ci-block", "text": "非零退出码阻断合并", "children": [] }
+      ]
+    }
+  ]
+}

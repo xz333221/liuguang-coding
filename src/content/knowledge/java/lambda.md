@@ -22,6 +22,16 @@ sources:
 
 ## 前提：函数式接口
 
+```mermaid
+flowchart TD
+  A["Lambda 表达式"] --> B["目标类型是函数式接口<br/>只有一个抽象方法"]
+  B --> C["作为接口实例使用"]
+  A --> D["捕获局部变量<br/>必须 effectively final"]
+  A --> E["this 指向外层实例<br/>匿名类指向自身"]
+  A --> F["编译为 invokedynamic"]
+  G["方法引用"] --> H["静态 / 实例 / 特定对象 / 构造器"]
+```
+
 Lambda 不是独立的"函数类型"，它必须赋值给一个**函数式接口**:只含**一个抽象方法**的接口(SAM,Single Abstract Method)。例如：
 
 ```java

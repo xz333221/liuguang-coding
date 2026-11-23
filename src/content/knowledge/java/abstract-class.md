@@ -24,6 +24,15 @@ sources:
 
 ## abstract 方法与 abstract 类
 
+```mermaid
+flowchart TD
+  S["abstract class Shape"] --> A["abstract double area()<br/>只有签名,没有方法体"]
+  A --> C["class Circle extends Shape<br/>实现 area()"]
+  A --> R["class Rect extends Shape<br/>实现 area()"]
+  S --> X["Shape 不能 new<br/>只能实例化具体子类"]
+  C --> P["Shape s = new Circle()<br/>多态调用 area()"]
+```
+
 ```java
 abstract class Shape {
     public abstract double area();

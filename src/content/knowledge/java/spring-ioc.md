@@ -22,6 +22,17 @@ new 对象把"创建谁、用哪个实现"硬编码在调用方，换实现/测�
 
 ## 容器与 Bean
 
+```mermaid
+flowchart TD
+  A["IoC 容器 ApplicationContext"] --> B["Bean 生命周期<br/>实例化 → 注入 → 初始化 → 使用 → 销毁"]
+  A --> C["注册:@Component 族扫描"]
+  A --> D["注册:@Bean 方法"]
+  E["注入方式"] --> F["构造器注入:推荐,不可变易测"]
+  E --> G["Setter 注入"]
+  E --> H["字段注入:便捷但难测"]
+  F --> I["默认单例,需注意循环依赖"]
+```
+
 ApplicationContext 是 IoC 容器，管理的对象称 **Bean**。Bean 由容器负责：实例化 → 属性注入 → 初始化回调(@PostConstruct/InitializingBean)→ 使用 → 销毁回调(@PreDestroy)。默认单例(scope=singleton)，全容器一个实例。
 
 注册 Bean 的方式：

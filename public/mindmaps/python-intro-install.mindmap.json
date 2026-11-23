@@ -1,0 +1,37 @@
+{
+  "id": "root",
+  "text": "安装 Python 与第一个程序",
+  "children": [
+    {
+      "id": "win",
+      "text": "Windows",
+      "children": [
+        { "id": "win-path", "text": "安装器勾 Add to PATH", "children": [] },
+        { "id": "win-alias", "text": "商店别名拦截;py 启动器管多版本", "children": [] }
+      ]
+    },
+    {
+      "id": "unix",
+      "text": "macOS / Linux",
+      "children": [
+        { "id": "un-brew", "text": "brew / apt / dnf,不动系统 python", "children": [] }
+      ]
+    },
+    {
+      "id": "verify",
+      "text": "验证",
+      "children": [
+        { "id": "ve-newterm", "text": "新开终端查 python/pip 版本", "children": [] },
+        { "id": "ve-venv", "text": "python -m venv 可创建", "children": [] }
+      ]
+    },
+    {
+      "id": "first",
+      "text": "第一个程序",
+      "children": [
+        { "id": "fi-print", "text": "print 输出", "children": [] },
+        { "id": "fi-input", "text": "input + f-string 交互", "children": [] }
+      ]
+    }
+  ]
+}

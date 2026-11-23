@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "引用计数与 GC",
+  "children": [
+    {
+      "id": "refcount",
+      "text": "引用计数",
+      "children": [
+        { "id": "re-count", "text": "计数归零立即回收", "children": [] },
+        { "id": "re-ops", "text": "赋值/入容器/传参增加计数", "children": [] }
+      ]
+    },
+    {
+      "id": "cycle",
+      "text": "循环引用",
+      "children": [
+        { "id": "cy-fail", "text": "互相引用计数不为 0", "children": [] },
+        { "id": "cy-gc", "text": "分代 GC 兜底", "children": [] },
+        { "id": "cy-collect", "text": "gc.collect 不宜频繁调用", "children": [] }
+      ]
+    },
+    {
+      "id": "leak",
+      "text": "滞留来源",
+      "children": [
+        { "id": "le-cache", "text": "无界全局缓存", "children": [] },
+        { "id": "le-closure", "text": "闭包捕获外层变量", "children": [] },
+        { "id": "le-exc", "text": "异常 traceback 引用栈帧", "children": [] }
+      ]
+    },
+    {
+      "id": "tools",
+      "text": "定位工具",
+      "children": [
+        { "id": "to-trace", "text": "tracemalloc 按行统计", "children": [] },
+        { "id": "to-ref", "text": "gc.get_referrers 查引用链", "children": [] }
+      ]
+    },
+    {
+      "id": "reduce",
+      "text": "减负",
+      "children": [
+        { "id": "rd-weak", "text": "weakref 不持有所有权", "children": [] },
+        { "id": "rd-slots", "text": "__slots__ 省对象开销", "children": [] }
+      ]
+    }
+  ]
+}

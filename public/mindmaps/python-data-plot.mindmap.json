@@ -1,0 +1,56 @@
+{
+  "id": "root",
+  "text": "matplotlib 可视化",
+  "children": [
+    {
+      "id": "api",
+      "text": "两套 API",
+      "children": [
+        { "id": "ap-pyplot", "text": "pyplot 全局状态,快速出图", "children": [] },
+        { "id": "ap-oo", "text": "Figure/Axes 面向对象,生产首选", "children": [] }
+      ]
+    },
+    {
+      "id": "charts",
+      "text": "图表类型",
+      "children": [
+        { "id": "ch-line", "text": "折线看趋势", "children": [] },
+        { "id": "ch-scatter", "text": "散点看关系", "children": [] },
+        { "id": "ch-bar", "text": "柱状做对比", "children": [] },
+        { "id": "ch-hist", "text": "直方看分布", "children": [] }
+      ]
+    },
+    {
+      "id": "font",
+      "text": "中文与负号",
+      "children": [
+        { "id": "fo-sans", "text": "font.sans-serif 配字体", "children": [] },
+        { "id": "fo-minus", "text": "axes.unicode_minus = False", "children": [] }
+      ]
+    },
+    {
+      "id": "save",
+      "text": "保存",
+      "children": [
+        { "id": "sa-dpi", "text": "dpi 与 bbox_inches", "children": [] },
+        { "id": "sa-close", "text": "批量出图必须 close", "children": [] }
+      ]
+    },
+    {
+      "id": "backend",
+      "text": "无界面环境",
+      "children": [
+        { "id": "be-agg", "text": "Agg 后端", "children": [] },
+        { "id": "be-font", "text": "容器内预置中文字体", "children": [] }
+      ]
+    },
+    {
+      "id": "seaborn",
+      "text": "seaborn",
+      "children": [
+        { "id": "se-stat", "text": "统计图与默认样式", "children": [] },
+        { "id": "se-layer", "text": "底层仍是 matplotlib", "children": [] }
+      ]
+    }
+  ]
+}

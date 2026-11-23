@@ -20,6 +20,18 @@ sources:
 
 线上 CPU 飙高、内存泄漏、线程阻塞，靠日志往往不够，要用 JDK 自带工具直接看 JVM 内部。这一篇把常用命令与参数串成排查流程。
 
+```mermaid
+flowchart LR
+  A["jps 找进程"] --> B["jstack 线程栈"]
+  A --> C["jmap 堆与 dump"]
+  A --> D["jstat GC 统计"]
+  A --> E["jinfo 参数"]
+  B --> F["定位死锁 / 阻塞"]
+  C --> G["MAT 分析 dump"]
+  D --> H["判断 GC 压力"]
+  I["Arthas"] --> J["dashboard / thread / trace / watch"]
+```
+
 ## jps:找进程
 
 ```bash

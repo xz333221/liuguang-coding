@@ -22,6 +22,17 @@ sources:
 
 ## 为什么需要泛型
 
+```mermaid
+flowchart TD
+  A["不用泛型"] --> B["元素类型都是 Object"]
+  B --> C["取出要强转,转错运行时 ClassCastException"]
+  D["用泛型"] --> E["class Box<T><br/>编译期约束类型参数"]
+  D --> F["<T> T first(List<T> xs)<br/>泛型方法推导返回类型"]
+  E --> G["取出无需强转"]
+  F --> G
+  H["List<String>"] --> I["不是 List<Object> 的子类型"]
+```
+
 没有泛型的写法：
 
 ```java

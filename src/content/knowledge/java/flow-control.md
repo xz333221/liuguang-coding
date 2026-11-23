@@ -28,6 +28,14 @@ sources:
 
 ## if:分支
 
+```mermaid
+flowchart TD
+  A["流程控制"] --> B["if / else if / else<br/>条件必须是 boolean"]
+  A --> C["switch<br/>多选,JDK 14 箭头写法无需 break"]
+  A --> D["for / while<br/>循环,注意边界差一"]
+  A --> E["break / continue<br/>跳出循环 / 跳过本轮"]
+```
+
 ```java
 int score = 75;
 if (score >= 90) {

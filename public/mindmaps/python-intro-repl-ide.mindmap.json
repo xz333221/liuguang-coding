@@ -1,0 +1,37 @@
+{
+  "id": "root",
+  "text": "REPL、脚本与 IDE",
+  "children": [
+    {
+      "id": "repl",
+      "text": "REPL",
+      "children": [
+        { "id": "re-echo", "text": "逐行求值自动回显,状态不持久", "children": [] },
+        { "id": "re-vsprint", "text": "回显带引号,print 输出内容", "children": [] }
+      ]
+    },
+    {
+      "id": "script",
+      "text": "脚本",
+      "children": [
+        { "id": "sc-noecho", "text": "不回显,需 print", "children": [] },
+        { "id": "sc-indent", "text": "缩进是语法,默认 UTF-8", "children": [] }
+      ]
+    },
+    {
+      "id": "ide",
+      "text": "IDE",
+      "children": [
+        { "id": "id-venv", "text": "绑定解释器 / 补全 / 调试 / 重构", "children": [] },
+        { "id": "id-choice", "text": "VS Code 轻量,PyCharm 深度", "children": [] }
+      ]
+    },
+    {
+      "id": "jupyter",
+      "text": "Jupyter",
+      "children": [
+        { "id": "ju-cell", "text": "单元格探索出图,不用于交付", "children": [] }
+      ]
+    }
+  ]
+}

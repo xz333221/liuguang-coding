@@ -1,0 +1,55 @@
+{
+  "id": "root",
+  "text": "HTTP 客户端",
+  "children": [
+    {
+      "id": "requests",
+      "text": "requests",
+      "children": [
+        { "id": "re-json", "text": "json= 自动序列化", "children": [] },
+        { "id": "re-status", "text": "raise_for_status 转异常", "children": [] },
+        { "id": "re-timeout", "text": "timeout 必填,元组分连接/读取", "children": [] }
+      ]
+    },
+    {
+      "id": "errors",
+      "text": "异常",
+      "children": [
+        { "id": "er-timeout", "text": "Timeout / ConnectionError", "children": [] },
+        { "id": "er-http", "text": "HTTPError 对应 4xx/5xx", "children": [] }
+      ]
+    },
+    {
+      "id": "session",
+      "text": "Session",
+      "children": [
+        { "id": "se-pool", "text": "复用连接与 TLS", "children": [] },
+        { "id": "se-default", "text": "集中管理头部与认证", "children": [] }
+      ]
+    },
+    {
+      "id": "retry",
+      "text": "重试",
+      "children": [
+        { "id": "rt-idem", "text": "只重试幂等方法", "children": [] },
+        { "id": "rt-backoff", "text": "退避与 Retry-After", "children": [] }
+      ]
+    },
+    {
+      "id": "httpx",
+      "text": "httpx",
+      "children": [
+        { "id": "hx-async", "text": "AsyncClient 原生异步", "children": [] },
+        { "id": "hx-http2", "text": "HTTP/2 可选", "children": [] }
+      ]
+    },
+    {
+      "id": "stream",
+      "text": "流式与默认配置",
+      "children": [
+        { "id": "st-chunk", "text": "iter_bytes 分块读取", "children": [] },
+        { "id": "st-safe", "text": "超时/重试/日志脱敏", "children": [] }
+      ]
+    }
+  ]
+}

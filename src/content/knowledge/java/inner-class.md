@@ -19,6 +19,15 @@ sources:
 
 ## Inner Class:依附于外部实例
 
+```mermaid
+flowchart TD
+  A["内部类"] --> B["Inner Class<br/>依附外部实例,可访问 private 成员"]
+  A --> C["匿名类<br/>new 时定义实现,一次性"]
+  A --> D["Static Nested Class<br/>不依附外部实例"]
+  B --> E["Outer.this 指向外部实例"]
+  C --> F["编译生成 Outer$1 之类"]
+```
+
 ```java
 class Outer {
     private String name;

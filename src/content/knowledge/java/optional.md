@@ -22,6 +22,17 @@ null 是 Java 里最常见的运行时异常来源之一。Optional 不消灭 nu
 
 ## 定位：返回值的容器
 
+```mermaid
+flowchart TD
+  A["Optional&lt;T&gt;"] --> B["of / ofNullable / empty 创建"]
+  B --> C["map / flatMap / filter 转换"]
+  C --> D{"取值"}
+  D --> E["orElse 立即给默认值"]
+  D --> F["orElseGet 延迟求默认值"]
+  D --> G["orElseThrow 抛异常"]
+  H["不要做字段 / 参数 / 集合元素"] --> I["避免 isPresent + get 反模式"]
+```
+
 Optional<T> 是一个最多装一个非 null 值的容器。设计意图是**方法返回类型**，表达"可能查不到":
 
 ```java

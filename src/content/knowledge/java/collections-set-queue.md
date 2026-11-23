@@ -22,6 +22,17 @@ List 允许重复、Map 按键取值，Set 与 Queue 则分别解决"去重"与"
 
 ## Set:不重复的集合
 
+```mermaid
+flowchart TD
+  A["Set 不重复"] --> B["HashSet:哈希,无序"]
+  A --> C["TreeSet:红黑树,有序"]
+  A --> D["LinkedHashSet:保持插入序"]
+  E["Queue / Deque"] --> F["ArrayDeque:栈与队列首选"]
+  E --> G["PriorityQueue:堆,按优先级出队"]
+  H["offer / poll / peek"] --> I["失败返回特殊值"]
+  J["add / remove / element"] --> K["失败抛异常"]
+```
+
 Set 语义：元素不重复(按 equals 判定)，多数实现无序。
 
 - **HashSet**:内部就是一个 HashMap，元素作 key、一个固定 Object 作 value。add/get 复杂度与 HashMap 相同(平均 O(1))。要求元素正确覆写 hashCode/equals;

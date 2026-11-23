@@ -1,0 +1,41 @@
+{
+  "id": "root",
+  "text": "序列化",
+  "children": [
+    {
+      "id": "json",
+      "text": "json",
+      "children": [
+        { "id": "js-map", "text": "类型映射有限,tuple 变 list", "children": [] },
+        { "id": "js-param", "text": "ensure_ascii / indent / sort_keys", "children": [] },
+        { "id": "js-default", "text": "default 编码,object_hook 解码", "children": [] }
+      ]
+    },
+    {
+      "id": "csv",
+      "text": "csv",
+      "children": [
+        { "id": "cs-newline", "text": "必须 newline=''", "children": [] },
+        { "id": "cs-dict", "text": "DictReader / DictWriter 按表头", "children": [] },
+        { "id": "cs-type", "text": "读出都是字符串,需显式转换", "children": [] }
+      ]
+    },
+    {
+      "id": "pickle",
+      "text": "pickle",
+      "children": [
+        { "id": "pi-any", "text": "支持任意 Python 对象", "children": [] },
+        { "id": "pi-unsafe", "text": "不可信数据等同任意代码执行", "children": [] }
+      ]
+    },
+    {
+      "id": "choose",
+      "text": "选型",
+      "children": [
+        { "id": "ch-api", "text": "跨语言用 json", "children": [] },
+        { "id": "ch-table", "text": "表格用 csv", "children": [] },
+        { "id": "ch-cache", "text": "内部缓存才用 pickle", "children": [] }
+      ]
+    }
+  ]
+}

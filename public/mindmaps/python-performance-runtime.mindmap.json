@@ -1,0 +1,56 @@
+{
+  "id": "root",
+  "text": "运行时选型",
+  "children": [
+    {
+      "id": "cpython",
+      "text": "CPython",
+      "children": [
+        { "id": "cp-default", "text": "生态与兼容性基准", "children": [] },
+        { "id": "cp-keep", "text": "无明确依据不要换", "children": [] }
+      ]
+    },
+    {
+      "id": "pypy",
+      "text": "PyPy",
+      "children": [
+        { "id": "py-jit", "text": "长驻纯 Python 计算受益", "children": [] },
+        { "id": "py-bad", "text": "短进程与 C 扩展密集不适合", "children": [] }
+      ]
+    },
+    {
+      "id": "compile",
+      "text": "编译热点",
+      "children": [
+        { "id": "co-mypyc", "text": "mypyc 依赖类型注解", "children": [] },
+        { "id": "co-cython", "text": "Cython 可声明 C 类型", "children": [] },
+        { "id": "co-part", "text": "只编译热点模块", "children": [] }
+      ]
+    },
+    {
+      "id": "native",
+      "text": "原生扩展",
+      "children": [
+        { "id": "na-rust", "text": "pyo3 + maturin", "children": [] },
+        { "id": "na-boundary", "text": "批量调用减少边界开销", "children": [] },
+        { "id": "na-gil", "text": "长计算释放 GIL", "children": [] }
+      ]
+    },
+    {
+      "id": "free",
+      "text": "free-threading",
+      "children": [
+        { "id": "fr-exp", "text": "3.13 实验构建", "children": [] },
+        { "id": "fr-prod", "text": "生产仍用标准构建 + 多进程", "children": [] }
+      ]
+    },
+    {
+      "id": "method",
+      "text": "选型方法",
+      "children": [
+        { "id": "me-profile", "text": "先 profile 确认瓶颈", "children": [] },
+        { "id": "me-cost", "text": "评估维护与部署成本", "children": [] }
+      ]
+    }
+  ]
+}

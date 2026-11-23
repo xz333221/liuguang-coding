@@ -22,6 +22,17 @@ sources:
 
 ## 现象：遍历中修改抛异常
 
+```mermaid
+sequenceDiagram
+  participant I as Iterator
+  participant L as ArrayList
+  I->>L: 创建时记录 expectedModCount = modCount
+  L->>L: list.remove(x) 修改结构,modCount++
+  I->>L: next()
+  L-->>I: 检查发现 expectedModCount != modCount
+  I-->>I: 抛 ConcurrentModificationException
+```
+
 ```java
 List<String> list = new ArrayList<>(List.of("a", "b", "c"));
 for (String s : list) {

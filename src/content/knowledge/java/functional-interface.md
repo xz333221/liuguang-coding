@@ -22,6 +22,16 @@ sources:
 
 ## 按形状分类
 
+```mermaid
+flowchart LR
+  A["Function&lt;T,R&gt;"] --> A1["T → R 转换,map"]
+  B["Consumer&lt;T&gt;"] --> B1["T → void 消费,forEach"]
+  C["Supplier&lt;T&gt;"] --> C1["() → T 供给"]
+  D["Predicate&lt;T&gt;"] --> D1["T → boolean 判断,filter"]
+  E["组合"] --> E1["andThen / compose / negate"]
+  F["基本类型特化"] --> F1["IntFunction 等避免装箱"]
+```
+
 | 接口 | 抽象方法 | 形状 | 用途 |
 | --- | --- | --- | --- |
 | Function<T,R> | R apply(T t) | T → R | 转换 |

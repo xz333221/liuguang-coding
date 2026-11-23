@@ -28,6 +28,16 @@ sources:
 
 ## 第一个正则
 
+```mermaid
+flowchart TD
+  A["正则字符串"] -->|反斜杠双写| B["Pattern.compile"]
+  B --> C["Pattern 对象,可缓存复用"]
+  C --> D["Matcher"]
+  D --> E["matches() 全匹配"]
+  D --> F["find() 找子串"]
+  D --> G["group(n) 取分组内容"]
+```
+
 ```java
 "abc".matches("abc");    // true
 "Abc".matches("abc");    // false,大小写敏感

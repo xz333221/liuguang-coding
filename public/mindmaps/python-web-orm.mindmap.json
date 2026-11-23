@@ -1,0 +1,56 @@
+{
+  "id": "root",
+  "text": "SQLAlchemy 与数据库",
+  "children": [
+    {
+      "id": "engine",
+      "text": "Engine",
+      "children": [
+        { "id": "en-pool", "text": "连接池,应用级单例", "children": [] },
+        { "id": "en-ping", "text": "pool_pre_ping 存活检查", "children": [] }
+      ]
+    },
+    {
+      "id": "model",
+      "text": "模型",
+      "children": [
+        { "id": "mo-mapped", "text": "Mapped[T] 类型与可空性", "children": [] },
+        { "id": "mo-column", "text": "mapped_column 主键/索引/默认", "children": [] },
+        { "id": "mo-rel", "text": "relationship + back_populates", "children": [] }
+      ]
+    },
+    {
+      "id": "session",
+      "text": "Session 与事务",
+      "children": [
+        { "id": "se-unit", "text": "工作单元,commit 统一发送", "children": [] },
+        { "id": "se-flush", "text": "flush 拿自增 id", "children": [] },
+        { "id": "se-life", "text": "请求级创建,非线程安全", "children": [] }
+      ]
+    },
+    {
+      "id": "query",
+      "text": "查询",
+      "children": [
+        { "id": "qu-select", "text": "select().where() 链式", "children": [] },
+        { "id": "qu-scalars", "text": "scalars / execute 的区别", "children": [] }
+      ]
+    },
+    {
+      "id": "nplus1",
+      "text": "N+1",
+      "children": [
+        { "id": "np-lazy", "text": "懒加载每次访问都查", "children": [] },
+        { "id": "np-preload", "text": "selectinload / joinedload", "children": [] }
+      ]
+    },
+    {
+      "id": "migration",
+      "text": "迁移",
+      "children": [
+        { "id": "mi-alembic", "text": "Alembic 生成并人工检查", "children": [] },
+        { "id": "mi-noall", "text": "生产不用 create_all 代替", "children": [] }
+      ]
+    }
+  ]
+}

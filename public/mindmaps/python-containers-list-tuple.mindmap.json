@@ -1,0 +1,40 @@
+{
+  "id": "root",
+  "text": "列表与元组",
+  "children": [
+    {
+      "id": "list",
+      "text": "list 可变",
+      "children": [
+        { "id": "li-methods", "text": "append/extend/pop/sort 就地", "children": [] },
+        { "id": "li-none", "text": "就地方法返回 None,新列表用 sorted", "children": [] },
+        { "id": "li-sort", "text": "稳定排序,key 每元素一次", "children": [] }
+      ]
+    },
+    {
+      "id": "tuple",
+      "text": "tuple 不可变",
+      "children": [
+        { "id": "tu-comma", "text": "单元素带逗号", "children": [] },
+        { "id": "tu-inner", "text": "内部可变对象仍可改", "children": [] },
+        { "id": "tu-use", "text": "多值返回 / 字典键 / 固定记录", "children": [] }
+      ]
+    },
+    {
+      "id": "seq",
+      "text": "共同序列操作",
+      "children": [
+        { "id": "se-slice", "text": "切片得新序列(浅拷贝)", "children": [] },
+        { "id": "se-repeat", "text": "* 重复嵌套可变=共享引用", "children": [] }
+      ]
+    },
+    {
+      "id": "choose",
+      "text": "选型",
+      "children": [
+        { "id": "ch-deque", "text": "两端进出用 deque", "children": [] },
+        { "id": "ch-named", "text": "带名字记录用 namedtuple/dataclass", "children": [] }
+      ]
+    }
+  ]
+}

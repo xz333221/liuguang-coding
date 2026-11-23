@@ -25,6 +25,17 @@ sources:
 
 ## 策略：把 if-else 换成查表
 
+```mermaid
+flowchart TD
+  A["行为型模式"] --> B["策略<br/>算法抽成接口 + Map 查表"]
+  A --> C["观察者<br/>一对多通知"]
+  A --> D["模板方法<br/>final 固定流程,子类填步骤"]
+  C --> C1["Spring ApplicationEvent + @EventListener"]
+  C1 --> C2["默认同步,异常会影响发布方"]
+  D --> D1["JdbcTemplate 即此结构"]
+  B --> E["分支少而稳定时直接 if-else"]
+```
+
 订单折扣的常见写法：
 
 ```java

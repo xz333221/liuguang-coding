@@ -1,0 +1,46 @@
+{
+  "id": "root",
+  "text": "类与实例",
+  "children": [
+    {
+      "id": "create",
+      "text": "创建与初始化",
+      "children": [
+        { "id": "cr-new", "text": "__new__ 创建,__init__ 初始化", "children": [] },
+        { "id": "cr-classattr", "text": "类属性共享,实例属性各自一份", "children": [] }
+      ]
+    },
+    {
+      "id": "lookup",
+      "text": "属性查找",
+      "children": [
+        { "id": "lo-inst", "text": "先实例 __dict__ 后类", "children": [] },
+        { "id": "lo-mutable", "text": "可变类属性被所有实例共享", "children": [] }
+      ]
+    },
+    {
+      "id": "methods",
+      "text": "三种方法",
+      "children": [
+        { "id": "me-inst", "text": "实例方法收 self", "children": [] },
+        { "id": "me-class", "text": "classmethod 收 cls,常做替代构造", "children": [] },
+        { "id": "me-static", "text": "staticmethod 无隐式参数", "children": [] }
+      ]
+    },
+    {
+      "id": "self",
+      "text": "self 与绑定",
+      "children": [
+        { "id": "se-eq", "text": "a.m(x) 等价 A.m(a, x)", "children": [] }
+      ]
+    },
+    {
+      "id": "access",
+      "text": "访问控制",
+      "children": [
+        { "id": "ac-mangle", "text": "__name 改写成 _类名__name", "children": [] },
+        { "id": "ac-slots", "text": "__slots__ 限制属性并省内存", "children": [] }
+      ]
+    }
+  ]
+}

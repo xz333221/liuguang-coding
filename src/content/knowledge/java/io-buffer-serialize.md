@@ -22,6 +22,17 @@ sources:
 
 ## 缓冲：减少系统调用
 
+```mermaid
+flowchart LR
+  A["无缓冲:逐字节 read"] -->|每次都系统调用| B["开销大"]
+  C["BufferedInputStream"] --> D["一次读满 8KB 缓冲"]
+  D --> E["后续 read 从内存取"]
+  E --> F["系统调用显著减少"]
+  G["序列化"] --> H["ObjectOutputStream → 字节流"]
+  H --> I["Serializable / transient / serialVersionUID"]
+  I --> J["安全与兼容风险,跨系统优先 JSON"]
+```
+
 无缓冲时，读一个字节就一次系统调用；BufferedInputStream 内部维护一个缓冲区(默认 8KB)，一次系统调用读满缓冲，后续 read 从内存取：
 
 ```java

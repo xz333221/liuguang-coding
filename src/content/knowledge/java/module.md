@@ -20,6 +20,15 @@ sources:
 
 jar 解决了「类怎么打包」，但没解决「依赖怎么声明」。a.jar 必须配 b.jar 才能跑，这件事 jar 自己不知道，全靠人在命令行把 classpath 写全，漏一个就 ClassNotFoundException。Java 9 引入模块(Module)，就是给类容器加上依赖说明书。
 
+```mermaid
+flowchart TD
+  A["module-info.java"] --> B["requires 声明依赖模块"]
+  A --> C["exports 导出包"]
+  D["classpath"] --> E["无依赖声明,靠手工拼全"]
+  A --> F["jlink 按需裁剪 JRE"]
+  B --> G["缺失依赖在链接或启动期暴露"]
+```
+
 ## 从 rt.jar 说起
 
 Java 9 之前，标准库是一个 60 多 MB 的 rt.jar，不管你用不用，整个跟着 JVM。Java 9 把它拆成了几十个模块，放在 $JAVA_HOME/jmods 目录下：java.base.jmod、java.xml.jmod、java.desktop.jmod……

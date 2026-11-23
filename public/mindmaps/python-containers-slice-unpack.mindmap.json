@@ -1,0 +1,39 @@
+{
+  "id": "root",
+  "text": "切片与解包",
+  "children": [
+    {
+      "id": "slice",
+      "text": "切片语义",
+      "children": [
+        { "id": "sl-half", "text": "[start:stop:step] 含头不含尾", "children": [] },
+        { "id": "sl-bound", "text": "索引越界报错,切片越界截断", "children": [] },
+        { "id": "sl-rev", "text": "[::-1] 反转得新对象", "children": [] }
+      ]
+    },
+    {
+      "id": "copy",
+      "text": "切片与拷贝",
+      "children": [
+        { "id": "cp-shallow", "text": "xs[:] 浅拷贝", "children": [] },
+        { "id": "cp-assign", "text": "列表切片赋值,步长须等长", "children": [] }
+      ]
+    },
+    {
+      "id": "unpack",
+      "text": "解包",
+      "children": [
+        { "id": "up-swap", "text": "右侧整体求值;a,b=b,a", "children": [] },
+        { "id": "up-star", "text": "星号收集剩余为列表,最多一个", "children": [] },
+        { "id": "up-count", "text": "数量不匹配 ValueError", "children": [] }
+      ]
+    },
+    {
+      "id": "iter",
+      "text": "与迭代协议",
+      "children": [
+        { "id": "it-any", "text": "接受任何可迭代对象,星号耗尽生成器", "children": [] }
+      ]
+    }
+  ]
+}

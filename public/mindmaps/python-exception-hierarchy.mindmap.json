@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "异常体系",
+  "children": [
+    {
+      "id": "tree",
+      "text": "异常树",
+      "children": [
+        { "id": "tr-base", "text": "BaseException 根", "children": [] },
+        { "id": "tr-exc", "text": "业务只处理 Exception 分支", "children": [] },
+        { "id": "tr-special", "text": "SystemExit / KeyboardInterrupt 不吞", "children": [] }
+      ]
+    },
+    {
+      "id": "builtin",
+      "text": "常见内置异常",
+      "children": [
+        { "id": "bu-value", "text": "ValueError 值不合法", "children": [] },
+        { "id": "bu-type", "text": "TypeError 类型不支持", "children": [] },
+        { "id": "bu-lookup", "text": "KeyError / IndexError", "children": [] }
+      ]
+    },
+    {
+      "id": "raise",
+      "text": "raise",
+      "children": [
+        { "id": "ra-from", "text": "raise ... from e 保留原因链", "children": [] },
+        { "id": "ra-none", "text": "from None 切断上下文", "children": [] }
+      ]
+    },
+    {
+      "id": "match",
+      "text": "匹配规则",
+      "children": [
+        { "id": "ma-sub", "text": "子类在前,父类在后", "children": [] },
+        { "id": "ma-bare", "text": "禁止裸 except", "children": [] }
+      ]
+    },
+    {
+      "id": "style",
+      "text": "EAFP 与 LBYL",
+      "children": [
+        { "id": "st-eafp", "text": "先做再处理,Python 惯用", "children": [] },
+        { "id": "st-default", "text": "dict.get / getattr 默认值折中", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "id": "root",
+  "text": "GIL 与多线程",
+  "children": [
+    {
+      "id": "what",
+      "text": "GIL 是什么",
+      "children": [
+        { "id": "wh-lock", "text": "全局互斥锁,一次一个线程执行字节码", "children": [] },
+        { "id": "wh-impl", "text": "CPython 实现细节,非语言规范", "children": [] }
+      ]
+    },
+    {
+      "id": "why",
+      "text": "为什么存在",
+      "children": [
+        { "id": "wy-refcount", "text": "保护引用计数与解释器状态", "children": [] },
+        { "id": "wy-simple", "text": "单线程性能好,实现简单", "children": [] }
+      ]
+    },
+    {
+      "id": "io",
+      "text": "IO 密集",
+      "children": [
+        { "id": "io-release", "text": "阻塞 IO / sleep 释放 GIL", "children": [] },
+        { "id": "io-pool", "text": "线程池重叠等待时间", "children": [] }
+      ]
+    },
+    {
+      "id": "cpu",
+      "text": "CPU 密集",
+      "children": [
+        { "id": "cpu-proc", "text": "多进程真正并行", "children": [] },
+        { "id": "cpu-ext", "text": "numpy 等 C 扩展释放 GIL", "children": [] },
+        { "id": "cpu-free", "text": "free-threading 仍实验", "children": [] }
+      ]
+    },
+    {
+      "id": "atomic",
+      "text": "原子性",
+      "children": [
+        { "id": "at-byte", "text": "只保证单条字节码粒度", "children": [] },
+        { "id": "at-lock", "text": "复合操作仍需 Lock", "children": [] }
+      ]
+    }
+  ]
+}

@@ -22,6 +22,16 @@ sources:
 
 ## interface:纯契约
 
+```mermaid
+flowchart LR
+  I["interface Runnable"] --> M["void run()<br/>默认 public abstract"]
+  M --> C1["class A implements Runnable"]
+  M --> C2["class B implements Runnable"]
+  C1 --> X["一个类可实现多个接口<br/>弥补单继承限制"]
+  C2 --> X
+  I --> D["JDK 8+ default 方法<br/>加方法不强制实现类改动"]
+```
+
 ```java
 interface Runnable {
     void run();

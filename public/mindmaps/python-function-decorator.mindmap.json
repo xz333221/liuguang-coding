@@ -1,0 +1,52 @@
+{
+  "id": "root",
+  "text": "装饰器",
+  "children": [
+    {
+      "id": "manual",
+      "text": "手动包装",
+      "children": [
+        { "id": "ma-rebind", "text": "f = timed(f) 重新绑定名字", "children": [] },
+        { "id": "ma-once", "text": "装饰在定义时执行一次", "children": [] }
+      ]
+    },
+    {
+      "id": "sugar",
+      "text": "@ 语法糖",
+      "children": [
+        { "id": "su-equiv", "text": "@deco 等价 f = deco(f)", "children": [] },
+        { "id": "su-wrap", "text": "包装逻辑每次调用都执行", "children": [] }
+      ]
+    },
+    {
+      "id": "wraps",
+      "text": "functools.wraps",
+      "children": [
+        { "id": "wr-meta", "text": "复制 __name__/__doc__/注解", "children": [] },
+        { "id": "wr-sig", "text": "__wrapped__ 让签名可查", "children": [] }
+      ]
+    },
+    {
+      "id": "param",
+      "text": "带参数装饰器",
+      "children": [
+        { "id": "pa-three", "text": "配置 → 装饰 → 包装 三层", "children": [] }
+      ]
+    },
+    {
+      "id": "stack",
+      "text": "叠加顺序",
+      "children": [
+        { "id": "st-inner", "text": "由内向外装饰,由外向内调用", "children": [] }
+      ]
+    },
+    {
+      "id": "builtin",
+      "text": "内置装饰器",
+      "children": [
+        { "id": "bu-static", "text": "staticmethod / classmethod / property", "children": [] },
+        { "id": "bu-cache", "text": "lru_cache / cached_property", "children": [] }
+      ]
+    }
+  ]
+}

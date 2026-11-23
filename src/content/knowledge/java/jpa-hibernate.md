@@ -25,6 +25,16 @@ sources:
 
 ## 规范与实现
 
+```mermaid
+flowchart TD
+  A["JPA 规范"] --> B["Hibernate 实现"]
+  B --> C["Spring Data JPA<br/>JpaRepository + 派生方法"]
+  C --> D["EntityManager<br/>persist / find / merge / remove"]
+  D --> E["持久化上下文与脏检查<br/>自动生成 UPDATE"]
+  E --> F["懒加载处理不当 → N+1"]
+  G["MyBatis:以 SQL 为中心"] -.->|对比| A
+```
+
 - **JPA**(Jakarta Persistence API)是一份**规范**，只定义接口与注解，不提供实现；
 - **Hibernate** 是最常用的实现，另有 EclipseLink;
 - **Spring Data JPA** 在 Hibernate 之上再包一层：写个接口继承 `JpaRepository`，方法名按约定起，实现类由框架生成。

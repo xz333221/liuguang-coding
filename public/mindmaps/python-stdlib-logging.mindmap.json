@@ -1,0 +1,54 @@
+{
+  "id": "root",
+  "text": "日志与命令行",
+  "children": [
+    {
+      "id": "levels",
+      "text": "日志级别",
+      "children": [
+        { "id": "le-order", "text": "DEBUG < INFO < WARNING < ERROR < CRITICAL", "children": [] },
+        { "id": "le-filter", "text": "低于配置级别被过滤", "children": [] }
+      ]
+    },
+    {
+      "id": "logger",
+      "text": "logger 层级",
+      "children": [
+        { "id": "lo-name", "text": "getLogger(__name__) 带模块名", "children": [] },
+        { "id": "lo-prop", "text": "向父级传播到 root", "children": [] }
+      ]
+    },
+    {
+      "id": "handler",
+      "text": "handler 与 formatter",
+      "children": [
+        { "id": "ha-target", "text": "控制台 / 文件 / 轮转", "children": [] },
+        { "id": "ha-format", "text": "asctime / levelname / name", "children": [] }
+      ]
+    },
+    {
+      "id": "division",
+      "text": "库与应用分工",
+      "children": [
+        { "id": "di-lib", "text": "库只声明 logger", "children": [] },
+        { "id": "di-app", "text": "应用入口统一配置", "children": [] }
+      ]
+    },
+    {
+      "id": "argparse",
+      "text": "argparse",
+      "children": [
+        { "id": "ar-type", "text": "type / choices / action", "children": [] },
+        { "id": "ar-sub", "text": "子命令 add_subparsers", "children": [] }
+      ]
+    },
+    {
+      "id": "combine",
+      "text": "组合",
+      "children": [
+        { "id": "co-main", "text": "main(argv) 便于测试", "children": [] },
+        { "id": "co-config", "text": "参数控制日志级别与输出", "children": [] }
+      ]
+    }
+  ]
+}

@@ -25,6 +25,17 @@ sources:
 
 ## 规范的三个角色
 
+```mermaid
+flowchart LR
+  A["HTTP 请求"] --> B["Tomcat 接受连接并解析"]
+  B --> C["Filter 链"]
+  C --> D["DispatcherServlet"]
+  D --> E["HandlerMapping"]
+  E --> F["Controller 方法"]
+  G["Listener"] --> H["监听容器事件"]
+  I["HandlerInterceptor"] --> J["MVC 层拦截"]
+```
+
 Servlet 规范定义了三个可插拔的组件：
 
 - **Servlet**:接收请求、生成响应。你写的每个 Controller，最终都由一个 Servlet(`DispatcherServlet`)接手；

@@ -22,6 +22,17 @@ Spring 能把你写的类自动装配成 Bean,MyBatis 能把结果集填进你�
 
 ## Class 对象：反射的入口
 
+```mermaid
+flowchart TD
+  A["Class 对象<br/>每个类在 JVM 唯一"] --> B["Field:读写字段"]
+  A --> C["Method:调用方法"]
+  A --> D["Constructor:创建实例"]
+  B --> E["setAccessible 突破访问检查"]
+  C --> E
+  D --> E
+  E --> F["代价:安全限制与性能开销"]
+```
+
 每个被加载的类在 JVM 里对应**唯一一个** Class 对象，描述该类的结构(字段、方法、构造器、注解)。三种获取方式：
 
 ```java
