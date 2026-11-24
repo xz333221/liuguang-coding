@@ -100,21 +100,10 @@ const outline: OutlineNode[] = [
     ],
   },
   {
-    id: 'ops-middleware',
-    name: '中间件运维',
-    intro: '缓存、消息与数据库等外部组件,运维关注容量、持久化与故障转移。',
+    id: 'ops-database',
+    name: '数据库',
+    intro: '关系型数据库的安装、SQL、索引、事务、备份、复制与高可用,以 MySQL 为主线。',
     children: [
-      {
-        id: 'ops-redis',
-        name: 'Redis',
-        intro: '从单机部署与基本操作,到数据类型、持久化、备份与高可用架构。',
-        children: [
-          { id: 'ops-redis-intro', name: '单机部署与基本操作' },
-          { id: 'ops-redis-types', name: '数据类型与选型' },
-          { id: 'ops-redis-persistence', name: '持久化与备份: RDB、AOF 与恢复' },
-          { id: 'ops-redis-ha', name: '高可用: 主从、Sentinel 与 Cluster' },
-        ],
-      },
       {
         id: 'ops-mysql',
         name: 'MySQL',
@@ -203,6 +192,24 @@ const outline: OutlineNode[] = [
               { id: 'ops-mysql-security-basic', name: '注入防护、审计与加密' },
             ],
           },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'ops-middleware',
+    name: '中间件',
+    intro: '缓存、消息等外部组件,运维关注容量、持久化与故障转移。',
+    children: [
+      {
+        id: 'ops-redis',
+        name: 'Redis',
+        intro: '从单机部署与基本操作,到数据类型、持久化、备份与高可用架构。',
+        children: [
+          { id: 'ops-redis-intro', name: '单机部署与基本操作' },
+          { id: 'ops-redis-types', name: '数据类型与选型' },
+          { id: 'ops-redis-persistence', name: '持久化与备份: RDB、AOF 与恢复' },
+          { id: 'ops-redis-ha', name: '高可用: 主从、Sentinel 与 Cluster' },
         ],
       },
     ],
