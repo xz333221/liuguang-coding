@@ -36,6 +36,11 @@ const total = ref(0)
 const error = ref('')
 const voice = ref(VOICES[0].id)
 const rate = ref(1)
+// 自绘下拉:原生 select 的展开层由系统渲染,CSS 改不动
+const voiceOpen = ref(false)
+const rateOpen = ref(false)
+const voicePickRef = ref<HTMLElement | null>(null)
+const ratePickRef = ref<HTMLElement | null>(null)
 const autonext = ref(true)
 const jumping = ref(false)
 const chunks: string[] = []
@@ -474,6 +479,41 @@ function onDockResize() {
   if (dockPos.value) dockPos.value = clampDock(dockPos.value.x, dockPos.value.y)
 }
 
+function closePicks() {
+  voiceOpen.value = false
+  rateOpen.value = false
+}
+
+function toggleVoicePick() {
+  rateOpen.value = false
+  voiceOpen.value = !voiceOpen.value
+}
+
+function toggleRatePick() {
+  voiceOpen.value = false
+  rateOpen.value = !rateOpen.value
+}
+
+function pickVoice(id: string) {
+  voice.value = id
+  voiceOpen.value = false
+}
+
+function pickRate(value: number) {
+  rate.value = value
+  rateOpen.value = false
+}
+
+function onPickPointerDown(event: PointerEvent) {
+  const target = event.target as Node
+  if (voicePickRef.value?.contains(target) || ratePickRef.value?.contains(target)) return
+  closePicks()
+}
+
+function onPickKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape') closePicks()
+}
+
 onMounted(() => {
   const savedVoice = localStorage.getItem(VOICE_KEY) ?? ''
   if (VOICES.some((item) => item.id === savedVoice)) voice.value = savedVoice
@@ -483,6 +523,8 @@ onMounted(() => {
   collect()
   loadDockPos()
   addEventListener('resize', onDockResize)
+  document.addEventListener('pointerdown', onPickPointerDown)
+  document.addEventListener('keydown', onPickKeydown)
   // 上一篇读完后跳过来的：直接接着读
   if (sessionStorage.getItem(AUTOPLAY_KEY) === '1') {
     sessionStorage.removeItem(AUTOPLAY_KEY)
@@ -492,6 +534,8 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   removeEventListener('resize', onDockResize)
+  document.removeEventListener('pointerdown', onPickPointerDown)
+  document.removeEventListener('keydown', onPickKeydown)
   stop()
 })
 </script>
@@ -507,18 +551,119 @@ onBeforeUnmount(() => {
     >
       {{ label }}
     </button>
-    <select
-      v-model="voice"
+    <div
+      ref="voicePickRef"
       class="read-pick"
-      :disabled="fallback"
-      :title="fallback ? '已回退浏览器语音,音色由系统决定' : '朗读音色'"
-      aria-label="朗读音色"
+      :class="{ 'is-open': voiceOpen, 'is-disabled': fallback }"
     >
-      <option v-for="item in VOICES" :key="item.id" :value="item.id">{{ item.label }}</option>
-    </select>
-    <select v-model.number="rate" class="read-pick" aria-label="朗读语速">
-      <option v-for="item in RATES" :key="item" :value="item">{{ item }}x</option>
-    </select>
+      <button
+        type="button"
+        class="read-pick__trigger"
+        :disabled="fallback"
+        :title="fallback ? '已回退浏览器语音,音色由系统决定' : '朗读音色'"
+        aria-haspopup="listbox"
+        :aria-expanded="voiceOpen"
+        aria-label="朗读音色"
+        @click="toggleVoicePick"
+      >
+        <span>{{ voiceLabel }}</span>
+        <svg class="read-pick__caret" viewBox="0 0 12 8" aria-hidden="true">
+          <path
+            d="M1 1.5 6 6.5 11 1.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+      <ul v-if="voiceOpen" class="read-pick__menu" role="listbox" aria-label="朗读音色">
+        <li v-for="item in VOICES" :key="item.id">
+          <button
+            type="button"
+            class="read-pick__option"
+            :class="{ 'is-active': item.id === voice }"
+            role="option"
+            :aria-selected="item.id === voice"
+            @click="pickVoice(item.id)"
+          >
+            <span>{{ item.label }}</span>
+            <svg
+              v-if="item.id === voice"
+              class="read-pick__check"
+              viewBox="0 0 12 12"
+              aria-hidden="true"
+            >
+              <path
+                d="M2 6.5 5 9.5 10 3.5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div ref="ratePickRef" class="read-pick read-pick--right" :class="{ 'is-open': rateOpen }">
+      <button
+        type="button"
+        class="read-pick__trigger"
+        aria-haspopup="listbox"
+        :aria-expanded="rateOpen"
+        aria-label="朗读语速"
+        @click="toggleRatePick"
+      >
+        <span>{{ rate }}x</span>
+        <svg class="read-pick__caret" viewBox="0 0 12 8" aria-hidden="true">
+          <path
+            d="M1 1.5 6 6.5 11 1.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+      <ul
+        v-if="rateOpen"
+        class="read-pick__menu read-pick__menu--right"
+        role="listbox"
+        aria-label="朗读语速"
+      >
+        <li v-for="value in RATES" :key="value">
+          <button
+            type="button"
+            class="read-pick__option"
+            :class="{ 'is-active': value === rate }"
+            role="option"
+            :aria-selected="value === rate"
+            @click="pickRate(value)"
+          >
+            <span>{{ value }}x</span>
+            <svg
+              v-if="value === rate"
+              class="read-pick__check"
+              viewBox="0 0 12 12"
+              aria-hidden="true"
+            >
+              <path
+                d="M2 6.5 5 9.5 10 3.5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </div>
     <button v-if="state !== 'idle'" type="button" class="lg-chip" @click="stop">停止</button>
     <label v-if="nextHref" class="read-auto" title="读完这一篇后自动跳到下一篇并接着朗读">
       <input v-model="autonext" type="checkbox" />
@@ -606,35 +751,107 @@ onBeforeUnmount(() => {
 }
 
 .read-pick {
-  appearance: none;
-  padding: 3px 22px 3px 9px;
+  position: relative;
+  display: inline-flex;
+}
+
+.read-pick__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
   border: 1px solid var(--line, #e6e9ed);
   border-radius: 7px;
-  background-color: transparent;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%239a9a9a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 7px center;
-  background-size: 10px 7px;
+  background: transparent;
   color: inherit;
+  font: inherit;
   font-size: 12px;
   line-height: 1.6;
   cursor: pointer;
-  color-scheme: dark;
   transition: border-color 0.2s, color 0.2s;
 }
 
-.read-pick:hover {
+.read-pick__trigger:hover {
   border-color: var(--line-strong, currentColor);
 }
 
-.read-pick:focus-visible {
+.read-pick__trigger:focus-visible {
   outline: 2px solid var(--accent, #b3261e);
   outline-offset: 2px;
 }
 
-.read-pick:disabled {
+.read-pick__trigger:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+.read-pick.is-open .read-pick__trigger {
+  border-color: var(--accent, #b3261e);
+}
+
+.read-pick__caret {
+  width: 10px;
+  height: 7px;
+  flex-shrink: 0;
+  transition: transform 0.18s ease;
+}
+
+.read-pick.is-open .read-pick__caret {
+  transform: rotate(180deg);
+}
+
+.read-pick__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 80;
+  min-width: 100%;
+  max-height: 260px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  border: 1px solid var(--line, rgba(255, 255, 255, 0.14));
+  border-radius: 10px;
+  background: var(--panel, #1a1714);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.read-pick__menu--right {
+  left: auto;
+  right: 0;
+}
+
+.read-pick__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  white-space: nowrap;
+  text-align: left;
+  cursor: pointer;
+}
+
+.read-pick__option:hover {
+  background: color-mix(in srgb, var(--accent, #b3261e) 12%, transparent);
+}
+
+.read-pick__option.is-active {
+  color: var(--accent, #b3261e);
+}
+
+.read-pick__check {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
 }
 
 /* ---------- 朗读时浮在底部的迷你控制条 ---------- */

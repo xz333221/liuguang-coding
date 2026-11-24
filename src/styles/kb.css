@@ -1557,7 +1557,7 @@
 #kb-side-left {
   flex: 0 0 240px;
   width: 240px;
-  overflow: hidden;
+
   transition:
     width 0.22s ease,
     flex-basis 0.22s ease,
@@ -1567,6 +1567,7 @@
 html[data-kb-left='closed'] #kb-side-left {
   width: 0;
   flex-basis: 0;
+  overflow: hidden;
   opacity: 0;
   pointer-events: none;
 }
