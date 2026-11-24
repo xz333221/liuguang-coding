@@ -115,6 +115,96 @@ const outline: OutlineNode[] = [
           { id: 'ops-redis-ha', name: '高可用: 主从、Sentinel 与 Cluster' },
         ],
       },
+      {
+        id: 'ops-mysql',
+        name: 'MySQL',
+        intro: '从安装与 SQL,到索引、事务、备份、复制与高可用:按运维视角维护关系型数据库。',
+        children: [
+          {
+            id: 'ops-mysql-basics',
+            name: '安装与连接',
+            intro: '选对版本,把实例装起来,连上并完成最小初始化。',
+            children: [
+              { id: 'ops-mysql-intro', name: 'MySQL 的定位与版本选择' },
+              { id: 'ops-mysql-install', name: '单机安装与 Docker 部署' },
+              { id: 'ops-mysql-connect', name: '连接、字符集与最小初始化' },
+            ],
+          },
+          {
+            id: 'ops-mysql-sql',
+            name: 'SQL 与表设计',
+            intro: '会写增删改查,也知道字段类型与约束怎么选。',
+            children: [
+              { id: 'ops-mysql-sql-basic', name: '库表与增删改查' },
+              { id: 'ops-mysql-schema', name: '数据类型、约束与表设计' },
+            ],
+          },
+          {
+            id: 'ops-mysql-index',
+            name: '索引与执行计划',
+            intro: '理解 B+ 树索引,能用 EXPLAIN 与慢查询把 SQL 定位到具体环节。',
+            children: [
+              { id: 'ops-mysql-index-btree', name: 'B+ 树与索引类型' },
+              { id: 'ops-mysql-explain', name: 'EXPLAIN 与慢查询定位' },
+              { id: 'ops-mysql-index-design', name: '索引设计原则与失效场景' },
+            ],
+          },
+          {
+            id: 'ops-mysql-tx',
+            name: '事务、锁与隔离',
+            intro: 'ACID、MVCC 与锁共同决定并发行为,也是死锁排查的基础。',
+            children: [
+              { id: 'ops-mysql-transaction', name: '事务、隔离级别与 MVCC' },
+              { id: 'ops-mysql-lock', name: '锁、死锁与排查' },
+            ],
+          },
+          {
+            id: 'ops-mysql-backup',
+            name: '备份与恢复',
+            intro: '逻辑与物理两条备份路线,以及可验证的恢复流程。',
+            children: [
+              { id: 'ops-mysql-backup-basic', name: '逻辑备份与物理备份' },
+              { id: 'ops-mysql-restore', name: '恢复演练与误删处理' },
+            ],
+          },
+          {
+            id: 'ops-mysql-replication',
+            name: '主从复制',
+            intro: 'binlog 如何驱动复制,以及延迟与不一致的排查。',
+            children: [
+              { id: 'ops-mysql-repl-basic', name: '复制原理与主从搭建' },
+              { id: 'ops-mysql-repl-lag', name: '复制延迟与故障排查' },
+            ],
+          },
+          {
+            id: 'ops-mysql-ha',
+            name: '高可用',
+            intro: '从外部编排到 InnoDB Cluster,关注切换与脑裂。',
+            children: [
+              { id: 'ops-mysql-ha-basic', name: '高可用方案与 InnoDB Cluster' },
+              { id: 'ops-mysql-failover', name: '故障切换与脑裂防范' },
+            ],
+          },
+          {
+            id: 'ops-mysql-tuning',
+            name: '容量与性能',
+            intro: '参数、慢查询与容量规划:让实例在压力下保持稳定。',
+            children: [
+              { id: 'ops-mysql-config', name: '关键参数与容量规划' },
+              { id: 'ops-mysql-slow-query', name: '慢查询与 SQL 调优' },
+            ],
+          },
+          {
+            id: 'ops-mysql-security',
+            name: '安全与权限',
+            intro: '最小授权、注入防护与加密,覆盖账号、传输与备份。',
+            children: [
+              { id: 'ops-mysql-account', name: '账号、权限与最小授权' },
+              { id: 'ops-mysql-security-basic', name: '注入防护、审计与加密' },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
