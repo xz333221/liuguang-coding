@@ -10,6 +10,10 @@ import { glossaryTermsPlugin } from './src/lib/markdown-terms'
 // 所以在这里定义一次、两边共用。目前站点部署在域名根路径。
 const base = '/'
 
+// 本机直连微软语音接口拿不到音频时,把 /api/tts 单独代理到线上:
+//   TTS_PROXY=https://coding.flowdash.cn npm run dev
+const ttsProxy = process.env.TTS_PROXY
+
 export default defineConfig({
   site: 'https://coding.flowdash.cn',
   base,
@@ -37,6 +41,9 @@ export default defineConfig({
       // 开发时 astro dev 跑在 4321,接口在 8787:同源代理过去,
       // 登录、闯关进度、模型配置这些 /api 请求才发得出去(生产是同域,不需要)
       proxy: {
+        ...(ttsProxy
+          ? { '/api/tts': { target: ttsProxy, changeOrigin: true, secure: false } }
+          : {}),
         '/api': {
           target: 'http://127.0.0.1:8787',
           changeOrigin: true,

@@ -57,7 +57,20 @@ const year = new Date().getFullYear()
       <div
         class="lg-scroll-slim sticky top-16 max-h-[calc(100dvh-4rem)] overflow-x-hidden overflow-y-auto py-8"
       >
-        <p class="mb-3 px-3 text-[0.72rem] tracking-[0.08em] text-muted">知识分类</p>
+        <div class="kb-side-head">
+          <p class="text-[0.72rem] tracking-[0.08em] text-muted">知识分类</p>
+          <button
+            type="button"
+            class="kb-pane-btn"
+            data-pane-toggle="left"
+            aria-controls="kb-side-left"
+            aria-expanded="true"
+            aria-label="收起知识分类"
+            title="收起知识分类"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 6l-6 6 6 6" /></svg>
+          </button>
+        </div>
         <Sidebar current={category} currentTopic={topic} page={page} scope="d" />
       </div>
     </aside>
@@ -86,6 +99,18 @@ const year = new Date().getFullYear()
   </footer>
 
   <div class="kb-pane-mask" data-pane-mask hidden></div>
+
+  <button
+    type="button"
+    class="kb-pane-rail kb-pane-rail--left"
+    data-pane-toggle="left"
+    aria-controls="kb-side-left"
+    aria-expanded="false"
+    aria-label="展开知识分类"
+    title="展开知识分类"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6l6 6-6 6" /></svg>
+  </button>
 
   <ChatPanel client:only="react" article={article} />
   <ModelConfigDialog client:only="vue" />

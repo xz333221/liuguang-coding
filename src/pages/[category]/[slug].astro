@@ -114,20 +114,7 @@ const jsonLd = JSON.stringify({
           {meta?.name} · {topic.data.level} · {formatDate(topic.data.updated)} 更新
         </p>
         <button type="button" class="lg-chip" data-chat-open>问这篇</button>
-        <button
-          type="button"
-          class="lg-chip hidden md:inline-flex"
-          data-pane-toggle="left"
-          aria-controls="kb-side-left"
-          aria-expanded="true"
-        >分类</button>
-        <button
-          type="button"
-          class="lg-chip inline-flex"
-          data-pane-toggle="right"
-          aria-controls="kb-side-right"
-          aria-expanded="true"
-        >大纲</button>
+
         <ReadAloud client:only="vue" nextHref={next ? topicPath(next) : ''} nextTitle={next?.data.title ?? ''} />
       </div>
 
@@ -188,9 +175,22 @@ const jsonLd = JSON.stringify({
     </article>
 
     <aside id="kb-side-right" class="hidden lg:block">
-      <div class="sticky top-20 grid gap-10">
+      <div class="sticky top-20 grid gap-8">
+        <div class="kb-side-head">
+          <p class="text-[0.72rem] tracking-[0.08em] text-muted">本页结构</p>
+          <button
+            type="button"
+            class="kb-pane-btn"
+            data-pane-toggle="right"
+            aria-controls="kb-side-right"
+            aria-expanded="true"
+            aria-label="收起本页大纲"
+            title="收起本页大纲"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6l6 6-6 6" /></svg>
+          </button>
+        </div>
         <nav aria-label="本页结构" class="text-[0.82rem]">
-          <p class="mb-3 text-[0.72rem] tracking-[0.08em] text-muted">本页结构</p>
           <ul class="grid gap-2">
             {mindmapSrc ? <li><a href="#map" class="text-muted transition-colors hover:text-ink">知识地图</a></li> : null}
             {Demo ? <li><a href="#demo" class="text-muted transition-colors hover:text-ink">动手看一遍</a></li> : null}
@@ -203,6 +203,18 @@ const jsonLd = JSON.stringify({
         <Toc headings={headings} />
       </div>
     </aside>
+
+    <button
+      type="button"
+      class="kb-pane-rail kb-pane-rail--right"
+      data-pane-toggle="right"
+      aria-controls="kb-side-right"
+      aria-expanded="false"
+      aria-label="展开本页大纲"
+      title="展开本页大纲"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 6l-6 6 6 6" /></svg>
+    </button>
   </div>
 </DocsLayout>
 

@@ -1548,18 +1548,10 @@
   }
 }
 /* ---------- 朗读跟随:当前朗读到的正文块 ---------- */
-/* 用内阴影画左侧竖线,不引入伪元素,避免被构建链把 ::before 合并到主规则上 */
 #read .lg-prose .is-reading {
-  position: relative;
   scroll-margin-top: 5.5rem;
-  border-radius: 5px;
-  background: color-mix(in srgb, var(--accent, #b3261e) 6%, transparent);
-  box-shadow:
-    inset 3px 0 0 0 var(--accent, #b3261e),
-    0 0 0 4px color-mix(in srgb, var(--accent, #b3261e) 6%, transparent);
-  transition:
-    background-color 0.25s ease,
-    box-shadow 0.25s ease;
+  background: color-mix(in srgb, var(--highlight, #f2b75e) 14%, transparent);
+  transition: background-color 0.25s ease;
 }
 /* ---------- 左右栏展开 / 收起 ---------- */
 #kb-side-left {
@@ -1645,7 +1637,101 @@ html[data-kb-right='closed'] #kb-side-right {
   background: rgba(0, 0, 0, 0.38);
 }
 
-.lg-chip.is-pane-on {
-  border-color: var(--accent);
-  color: var(--accent);
+/* ---------- 侧栏标题行与折叠按钮 ---------- */
+.kb-side-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.kb-side-head p {
+  margin: 0;
+}
+
+.kb-pane-btn {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.kb-pane-btn:hover {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.kb-pane-btn svg,
+.kb-pane-rail svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 收起后贴在页面左右边缘的把手 */
+.kb-pane-rail {
+  position: fixed;
+  top: 42%;
+  z-index: 65;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 62px;
+  padding: 0;
+  border: 1px solid var(--line);
+  background: var(--panel, #ffffff);
+  color: var(--muted);
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.kb-pane-rail--left {
+  left: 0;
+  border-left: 0;
+  border-radius: 0 10px 10px 0;
+}
+
+.kb-pane-rail--right {
+  right: 0;
+  border-right: 0;
+  border-radius: 10px 0 0 10px;
+}
+
+html[data-kb-left='closed'] .kb-pane-rail--left {
+  display: flex;
+}
+
+html[data-kb-right='closed'] .kb-pane-rail--right {
+  display: flex;
+}
+
+.kb-pane-rail:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+
+@media (max-width: 767px) {
+  .kb-pane-rail--left {
+    display: none !important;
+  }
 }

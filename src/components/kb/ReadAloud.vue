@@ -43,6 +43,19 @@ const chunks: string[] = []
 const chunkEls: (Element | null)[] = []
 let readingEl: Element | null = null
 
+// 朗读条位置:拖动后记住,下次打开沿用
+const DOCK_KEY = 'flowlight-kb-dock-pos'
+const dockRef = ref<HTMLElement | null>(null)
+const dockPos = ref<{ x: number; y: number } | null>(null)
+const dockDragging = ref(false)
+let dockPointer: {
+  id: number
+  startX: number
+  startY: number
+  offsetX: number
+  offsetY: number
+} | null = null
+
 const supported = typeof window !== 'undefined' && typeof fetch === 'function'
 const label = computed(() =>
   state.value === 'loading' ? '加载中…' : state.value === 'playing' ? '暂停' : state.value === 'paused' ? '继续' : '朗读',
@@ -88,14 +101,44 @@ function pushText(text: string, el: Element | null) {
   for (const piece of splitLong(text)) pushChunk(piece, el)
 }
 
-/** 抓正文里的段落、标题、列表项;代码块转成口语后一起读,表格和导图跳过 */
+function cellText(cell: Element): string {
+  return (cell.textContent ?? '').replace(/\s+/g, ' ').trim()
+}
+
+/** 表格转成能听懂的说明:先说列,再逐行读 */
+function tableToSpeech(table: HTMLTableElement): string {
+  const rows = Array.from(table.rows).filter((row) => row.closest('table') === table)
+  if (!rows.length) return ''
+  const firstCells = Array.from(rows[0].cells)
+  const hasHeader = firstCells.some((cell) => cell.tagName === 'TH')
+  const header = hasHeader ? firstCells.map(cellText) : []
+  const body = hasHeader ? rows.slice(1) : rows
+  const parts: string[] = []
+  if (header.length) parts.push(`共 ${header.length} 列,表头是 ${header.join('、')}。`)
+  body.forEach((row, rowIndex) => {
+    const cells = Array.from(row.cells).map(cellText)
+    if (!cells.length) return
+    const pairs = cells
+      .map((value, cellIndex) => `${header[cellIndex] || `第 ${cellIndex + 1} 列`}是${value || '空'}`)
+      .join('，')
+    parts.push(`第 ${rowIndex + 1} 行，${pairs}。`)
+  })
+  return parts.join('')
+}
+
+/** 抓正文里的段落、标题、列表项;代码块与表格转成口语后一起读,导图跳过 */
 function collect() {
   if (chunks.length) return
   const root = document.querySelector('#read .lg-prose')
   if (!root) return
-  const skip = 'script, style, table, .mermaid-block, .mindmap-block, [data-no-speech]'
+  const skip = 'script, style, .mermaid-block, .mindmap-block, [data-no-speech]'
   const walk = (el: Element) => {
     if (el.matches(skip)) return
+    if (el.matches('table')) {
+      const speech = tableToSpeech(el as HTMLTableElement)
+      if (speech) pushText(`表格。${speech}`, el)
+      return
+    }
     if (el.matches('pre')) {
       const codeEl = el.querySelector('code') ?? el
       const classes = `${el.getAttribute('class') ?? ''} ${codeEl.getAttribute('class') ?? ''}`
@@ -346,6 +389,91 @@ watch(rate, (next) => {
   }
 })
 
+const dockStyle = computed(() =>
+  dockPos.value
+    ? { left: `${dockPos.value.x}px`, top: `${dockPos.value.y}px`, bottom: 'auto', transform: 'none' }
+    : undefined,
+)
+
+function clampDock(x: number, y: number) {
+  const el = dockRef.value
+  if (!el) return { x, y }
+  const maxX = Math.max(8, window.innerWidth - el.offsetWidth - 8)
+  const maxY = Math.max(8, window.innerHeight - el.offsetHeight - 8)
+  return { x: Math.min(Math.max(8, x), maxX), y: Math.min(Math.max(8, y), maxY) }
+}
+
+function loadDockPos() {
+  try {
+    const raw = localStorage.getItem(DOCK_KEY)
+    if (!raw) return
+    const saved = JSON.parse(raw) as { x?: unknown; y?: unknown }
+    if (typeof saved.x === 'number' && typeof saved.y === 'number') {
+      dockPos.value = clampDock(saved.x, saved.y)
+    }
+  } catch {
+    /* 位置数据坏了就当没存过 */
+  }
+}
+
+function saveDockPos() {
+  if (!dockPos.value) return
+  try {
+    localStorage.setItem(DOCK_KEY, JSON.stringify(dockPos.value))
+  } catch {
+    /* ignore */
+  }
+}
+
+function onDockPointerDown(event: PointerEvent) {
+  if ((event.target as Element).closest('button, select, a, input')) return
+  const el = dockRef.value
+  if (!el) return
+  const rect = el.getBoundingClientRect()
+  dockPointer = {
+    id: event.pointerId,
+    startX: event.clientX,
+    startY: event.clientY,
+    offsetX: event.clientX - rect.left,
+    offsetY: event.clientY - rect.top,
+  }
+  el.setPointerCapture(event.pointerId)
+}
+
+function onDockPointerMove(event: PointerEvent) {
+  if (!dockPointer || event.pointerId !== dockPointer.id) return
+  const moved =
+    Math.abs(event.clientX - dockPointer.startX) + Math.abs(event.clientY - dockPointer.startY)
+  if (!dockDragging.value && moved < 5) return
+  if (!dockDragging.value) {
+    dockDragging.value = true
+    document.body.style.userSelect = 'none'
+  }
+  dockPos.value = clampDock(event.clientX - dockPointer.offsetX, event.clientY - dockPointer.offsetY)
+}
+
+function onDockPointerUp(event: PointerEvent) {
+  if (!dockPointer || event.pointerId !== dockPointer.id) return
+  const wasDragging = dockDragging.value
+  dockPointer = null
+  dockDragging.value = false
+  document.body.style.userSelect = ''
+  if (wasDragging) saveDockPos()
+}
+
+function resetDockPos() {
+  dockPos.value = null
+  try {
+    localStorage.removeItem(DOCK_KEY)
+  } catch {
+    /* ignore */
+  }
+}
+
+function onDockResize() {
+  if (dockPos.value) dockPos.value = clampDock(dockPos.value.x, dockPos.value.y)
+}
+
 onMounted(() => {
   const savedVoice = localStorage.getItem(VOICE_KEY) ?? ''
   if (VOICES.some((item) => item.id === savedVoice)) voice.value = savedVoice
@@ -353,6 +481,8 @@ onMounted(() => {
   if (RATES.includes(savedRate)) rate.value = savedRate
   if (localStorage.getItem(AUTONEXT_KEY) === '0') autonext.value = false
   collect()
+  loadDockPos()
+  addEventListener('resize', onDockResize)
   // 上一篇读完后跳过来的：直接接着读
   if (sessionStorage.getItem(AUTOPLAY_KEY) === '1') {
     sessionStorage.removeItem(AUTOPLAY_KEY)
@@ -361,6 +491,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  removeEventListener('resize', onDockResize)
   stop()
 })
 </script>
@@ -402,10 +533,29 @@ onBeforeUnmount(() => {
     <Transition name="read-dock">
       <div
         v-if="state !== 'idle'"
+        ref="dockRef"
         class="read-dock rounded-full border border-line bg-panel/95 px-3.5 py-2 text-ink shadow-lg backdrop-blur"
+        :class="{ 'is-dragging': dockDragging }"
+        :style="dockStyle"
         role="status"
         aria-live="polite"
+        @pointerdown="onDockPointerDown"
+        @pointermove="onDockPointerMove"
+        @pointerup="onDockPointerUp"
+        @pointercancel="onDockPointerUp"
+        @dblclick="resetDockPos"
       >
+        <span class="read-dock__grip" title="拖动，双击复位" aria-hidden="true">
+          <svg viewBox="0 0 8 14">
+            <path
+              d="M2 2h.01M6 2h.01M2 7h.01M6 7h.01M2 12h.01M6 12h.01"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+            />
+          </svg>
+        </span>
         <span class="read-dock__dot" :class="{ 'is-paused': state === 'paused' }" aria-hidden="true" />
         <div class="read-dock__text">
           <strong>{{ state === 'loading' ? '准备朗读' : state === 'paused' ? '已暂停' : '朗读中' }}</strong>
@@ -457,17 +607,34 @@ onBeforeUnmount(() => {
 
 .read-pick {
   appearance: none;
-  background: transparent;
-  border: 1px solid #e6e9ed;
-  padding: 3px 8px;
+  padding: 3px 22px 3px 9px;
+  border: 1px solid var(--line, #e6e9ed);
+  border-radius: 7px;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%239a9a9a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  background-size: 10px 7px;
+  color: inherit;
   font-size: 12px;
   line-height: 1.6;
-  color: inherit;
   cursor: pointer;
+  color-scheme: dark;
+  transition: border-color 0.2s, color 0.2s;
 }
 
 .read-pick:hover {
-  border-color: currentColor;
+  border-color: var(--line-strong, currentColor);
+}
+
+.read-pick:focus-visible {
+  outline: 2px solid var(--accent, #b3261e);
+  outline-offset: 2px;
+}
+
+.read-pick:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 /* ---------- 朗读时浮在底部的迷你控制条 ---------- */
@@ -484,6 +651,25 @@ onBeforeUnmount(() => {
   background: var(--panel, #ffffff);
   border-color: var(--line, rgba(0, 0, 0, 0.12));
   color: var(--ink, inherit);
+  touch-action: none;
+}
+
+.read-dock.is-dragging {
+  cursor: grabbing;
+}
+
+.read-dock__grip {
+  display: grid;
+  place-items: center;
+  width: 14px;
+  flex-shrink: 0;
+  color: var(--muted, #6b7280);
+  cursor: grab;
+}
+
+.read-dock__grip svg {
+  width: 8px;
+  height: 14px;
 }
 
 .read-dock__dot {
