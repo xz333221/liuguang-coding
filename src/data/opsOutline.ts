@@ -216,6 +216,12 @@ const outline: OutlineNode[] = [
         id: 'ops-kafka',
         name: 'Kafka',
         intro: '消息队列的部署、主题与分区、消费组与可靠性。',
+        children: [
+          { id: 'ops-kafka-intro', name: '部署、核心概念与选型' },
+          { id: 'ops-kafka-topic', name: '主题、分区与副本' },
+          { id: 'ops-kafka-consumer', name: '消费组、位移与重平衡' },
+          { id: 'ops-kafka-ops', name: '可靠性、监控与故障处理' },
+        ],
       },
     ],
   },
@@ -223,11 +229,21 @@ const outline: OutlineNode[] = [
     id: 'ops-security',
     name: '安全与权限',
     intro: '最小权限、密钥管理、防火墙与备份加密。',
+    children: [
+      { id: 'ops-security-firewall', name: '防火墙与最小暴露面' },
+      { id: 'ops-security-secret', name: '密钥与凭据管理' },
+      { id: 'ops-security-backup', name: '备份加密与审计' },
+    ],
   },
   {
     id: 'ops-capacity',
     name: '容量与成本',
     intro: '磁盘、内存、带宽与成本:容量规划与扩容时机。',
+    children: [
+      { id: 'ops-capacity-plan', name: '容量规划方法' },
+      { id: 'ops-capacity-scale', name: '扩容与缩容' },
+      { id: 'ops-capacity-cost', name: '成本优化与预算' },
+    ],
   },
 ]
 

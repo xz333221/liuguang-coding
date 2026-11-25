@@ -14,6 +14,7 @@
 //   · 「筹备中」由子树里的文章数推导,不是看 status —— 所以大纲节点一律 active,
 //     补上文章后徽标自动消失。方向级的 soon(前端/后端那些)仍照旧声明。
 
+import { aiChapters } from './aiOutline'
 import { frontendChapters } from './frontendOutline'
 import { javaChapters } from './javaOutline'
 import { opsChapters } from './opsOutline'
@@ -39,13 +40,13 @@ export const catalog: Category[] = [
     id: 'product',
     name: '产品设计',
     intro: '需求判断、流程设计、指标与迭代节奏。',
-    status: 'soon',
+    status: 'hidden',
   },
   {
     id: 'ui',
     name: 'UI 设计',
     intro: '视觉层级、排版、色彩与组件规范。',
-    status: 'soon',
+    status: 'hidden',
   },
   {
     id: 'frontend',
@@ -94,13 +95,15 @@ export const catalog: Category[] = [
     id: 'algorithm',
     name: '算法',
     intro: '先学会衡量一段代码有多慢,再看经典结构与方法怎么把规模问题做小。',
-    status: 'active',
+    status: 'hidden',
   },
   {
     id: 'ai',
     name: 'AI',
     intro: '大模型怎么生成文字、怎么调参、怎么把模型接进真实系统。',
     status: 'active',
+    numbered: true,
+    children: aiChapters,
   },
 ]
 
