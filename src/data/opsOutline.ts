@@ -102,7 +102,7 @@ const outline: OutlineNode[] = [
   {
     id: 'ops-database',
     name: '数据库',
-    intro: '关系型数据库的安装、SQL、索引、事务、备份、复制与高可用,以 MySQL 为主线。',
+    intro: '关系型与键值数据库的安装、SQL、索引、事务、备份、复制与高可用,以 MySQL 为主线。',
     children: [
       {
         id: 'ops-mysql',
@@ -194,13 +194,6 @@ const outline: OutlineNode[] = [
           },
         ],
       },
-    ],
-  },
-  {
-    id: 'ops-middleware',
-    name: '中间件',
-    intro: '缓存、消息等外部组件,运维关注容量、持久化与故障转移。',
-    children: [
       {
         id: 'ops-redis',
         name: 'Redis',
@@ -211,6 +204,18 @@ const outline: OutlineNode[] = [
           { id: 'ops-redis-persistence', name: '持久化与备份: RDB、AOF 与恢复' },
           { id: 'ops-redis-ha', name: '高可用: 主从、Sentinel 与 Cluster' },
         ],
+      },
+    ],
+  },
+  {
+    id: 'ops-middleware',
+    name: '中间件',
+    intro: '消息队列等异步通信组件,先以 Kafka 为主线。',
+    children: [
+      {
+        id: 'ops-kafka',
+        name: 'Kafka',
+        intro: '消息队列的部署、主题与分区、消费组与可靠性。',
       },
     ],
   },
