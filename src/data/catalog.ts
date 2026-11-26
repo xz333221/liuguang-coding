@@ -15,6 +15,7 @@
 //     补上文章后徽标自动消失。方向级的 soon(前端/后端那些)仍照旧声明。
 
 import { aiChapters } from './aiOutline'
+import { bigdataChapters } from './bigdataOutline'
 import { frontendChapters } from './frontendOutline'
 import { javaChapters } from './javaOutline'
 import { opsChapters } from './opsOutline'
@@ -90,6 +91,15 @@ export const catalog: Category[] = [
     status: 'active',
     numbered: true,
     children: opsChapters,
+  },
+  {
+    id: 'bigdata',
+    name: '大数据',
+    intro:
+      '按 10 章走完:技术栈全景 → HDFS 与文件格式 → Spark 批处理 → Flink 流处理 → 数仓建模 → 湖仓表格式 → CDC 集成 → 调度治理 → OLAP → 平台运维与成本。',
+    status: 'active',
+    numbered: true,
+    children: bigdataChapters,
   },
   {
     id: 'algorithm',
