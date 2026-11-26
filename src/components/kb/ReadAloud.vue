@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { codeLabel, codeToSpeech } from '../../lib/code-speech'
+import { speechTextOf } from '../../lib/speech-text'
 
 // 文章朗读条。音频优先走服务端 /api/tts(Edge 音色 + 缓存),
 // 服务端不可用时自动回退到浏览器自带的 speechSynthesis,不额外装依赖。
@@ -111,7 +112,10 @@ function pushText(text: string, el: Element | null) {
 }
 
 function cellText(cell: Element): string {
-  return (cell.textContent ?? '').replace(/\s+/g, ' ').trim()
+  // 术语的悬浮解释卡是 aria-hidden 的,克隆一份删掉再取字,免得混进表头/单元格
+  const copy = cell.cloneNode(true) as Element
+  copy.querySelectorAll('[aria-hidden="true"]').forEach((node) => node.remove())
+  return (copy.textContent ?? '').replace(/\s+/g, ' ').trim()
 }
 
 /** 表格转成能听懂的说明:先说列,再逐行读 */
@@ -161,7 +165,9 @@ function collect() {
     }
     const isBlock = el.matches('p, h2, h3, h4, li, blockquote, dt, dd')
     if (isBlock && !el.querySelector('p, h2, h3, h4, li, blockquote, dt, dd')) {
-      const text = (el.textContent || '').replace(/\s+/g, ' ').trim()
+      // 用 speechTextOf 而不是 textContent:跳过术语的解释气泡、脚注序号,
+      // 并给术语/行内代码/加粗前后补停顿
+      const text = speechTextOf(el)
       if (text) pushText(text, el)
       return
     }

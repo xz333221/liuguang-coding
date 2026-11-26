@@ -142,6 +142,8 @@ frontmatter 写 `terms: ["采样对应的 id", ...]`(id 一律加引号，否则
 
 实现上分两个组件:`ReadAloud.vue` 负责队列与播放,对外暴露 `startFromElement(el)`;`SelectionToolbar.vue` 负责监听选区、定位浮条,点朗读时在 `window` 上派发 `kb-read-from` 事件(详情带选区起点所在的块),`ReadAloud` 接住后按元素反查块索引再播。走事件而不是拿组件实例,是因为两个 island 分别挂在 Astro 页面上,拿不到彼此的 `ref`。浮条只在选区起点位于 `#read .lg-prose` 内时出现,滚动、窗口缩放、清空选区、按 Esc 都会收起。
 
+朗读文本不是直接拿 `textContent`,而是走 `lib/speech-text.ts` 的 `speechTextOf()`:术语的悬浮解释卡(`.lg-term-tip`,aria-hidden)、`<sup>` 脚注序号、mermaid/导图容器整段跳过;术语、加粗、行内代码前后补顿号/逗号当停顿,`<br>` 读成逗号,收尾再合并连续标点、清掉首尾悬挂的停顿符 —— 不然 TTS 会把「名字绑定把名字指向对象的操作」连成一串。表格单元格也走同一套跳过规则。单测在 `shots/scripts/verify-speech-text.mjs`(假 DOM,不用浏览器),真实页面验收在 `shots/scripts/verify-speech-text-page.mjs`。
+
 ## 常驻问答面板
 
 右下角常驻一个「问一问」。打开后是从右侧滑出的窄栏(移动端整屏),页头的「问答」和文章标题下的「问这篇」都能把它拉出来。
