@@ -312,11 +312,11 @@ async function playAt(index: number, id: number) {
     const url = await fetchUrl(index, id)
     if (id !== runId) return
     fallback.value = false
-    if (!audio) {
-      audio = new Audio()
-      audio.onended = () => {
-        if (state.value === 'playing') playAt(current.value, runId)
-      }
+    if (!audio) audio = new Audio()
+    // 每次开播都重新挂 onended:resetAudio 会把它摘掉,只在创建时挂一次的话,
+    // 点过停止 / 重新朗读之后再读,第一段读完就断链,不再往下走
+    audio.onended = () => {
+      if (state.value === 'playing') playAt(current.value, runId)
     }
     audio.src = url
     audio.playbackRate = rate.value
