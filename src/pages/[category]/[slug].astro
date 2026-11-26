@@ -2,6 +2,7 @@
 import Breadcrumbs from '../../components/kb/Breadcrumbs.astro'
 import MindMapPanel from '../../components/kb/MindMapPanel.vue'
 import ReadAloud from '../../components/kb/ReadAloud.vue'
+import SelectionToolbar from '../../components/kb/SelectionToolbar.vue'
 import SourceList from '../../components/kb/SourceList.astro'
 import Toc from '../../components/kb/Toc.astro'
 import { findCategory, pathOf } from '../../data/catalog'
@@ -144,6 +145,7 @@ const jsonLd = JSON.stringify({
         <div class="lg-prose">
           <Content />
         </div>
+        <SelectionToolbar client:only="vue" />
       </section>
 
       <SourceList sources={topic.data.sources} />

@@ -12,6 +12,10 @@ const AUTONEXT_KEY = 'flowlight-kb-autonext'
 // 跨页接管:跳转前写一个标记,下一篇的朗读条看到它就自动开读
 const AUTOPLAY_KEY = 'flowlight-kb-autoplay-next'
 
+// 正文里能对应到朗读块的元素。chunks 也可能来自 pre(代码)、table(表格),
+// 所以选区落在这两种里时也要能找回所在块。
+const BLOCK_SELECTOR = 'p, h2, h3, h4, li, blockquote, dt, dd, pre, table'
+
 const VOICES = [
   { id: 'zh-CN-XiaoxiaoNeural', label: '晓晓' },
   { id: 'zh-CN-XiaoyiNeural', label: '晓伊' },
@@ -327,13 +331,36 @@ async function playAt(index: number, id: number) {
   }
 }
 
-function start() {
-  if (!supported) return
-  error.value = ''
+/** 从文档顺序上找到选区起点所对应的朗读块 */
+function chunkIndexOf(target: Element): number {
+  if (!chunkEls.length) return 0
+  const direct = chunkEls.indexOf(target)
+  if (direct >= 0) return direct
+  const block = target.closest(BLOCK_SELECTOR)
+  const byBlock = block ? chunkEls.indexOf(block) : -1
+  if (byBlock >= 0) return byBlock
+  // 选中的是块里的行内元素(链接、加粗)或更外层的容器:取文档顺序上第一个排在它后面的块
+  for (let i = 0; i < chunkEls.length; i += 1) {
+    const el = chunkEls[i]
+    if (!el) continue
+    const position = target.compareDocumentPosition(el)
+    if (position & (Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_POSITION_CONTAINED_BY)) return i
+  }
+  return 0
+}
+
+function resetPlayback() {
   runId += 1
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel()
   fallback.value = false
   resetAudio()
   releaseUrls()
+}
+
+function start() {
+  if (!supported) return
+  error.value = ''
+  resetPlayback()
   collect()
   if (!chunks.length) {
     error.value = '这一页没找到可朗读的正文'
@@ -343,12 +370,30 @@ function start() {
   playAt(0, runId)
 }
 
+/** 从选区所在的段落开始读,而不是从头读 */
+function startFromElement(target: Element) {
+  if (!supported) return
+  const root = document.querySelector('#read .lg-prose')
+  if (!root || !root.contains(target)) {
+    start()
+    return
+  }
+  error.value = ''
+  resetPlayback()
+  // 重收集一次:索引必须和当前 DOM 对齐,顺带把上面异步改过的正文算进来
+  chunks.length = 0
+  chunkEls.length = 0
+  collect()
+  if (!chunks.length) {
+    error.value = '这一页没找到可朗读的正文'
+    return
+  }
+  total.value = chunks.length
+  playAt(chunkIndexOf(target), runId)
+}
+
 function stop() {
-  runId += 1
-  if ('speechSynthesis' in window) window.speechSynthesis.cancel()
-  fallback.value = false
-  resetAudio()
-  releaseUrls()
+  resetPlayback()
   finish()
 }
 
@@ -514,6 +559,12 @@ function onPickKeydown(event: KeyboardEvent) {
   if (event.key === 'Escape') closePicks()
 }
 
+// 选中文字浮条用自定义事件喊一声,省得跨 Astro 页面去拿组件实例
+function onReadFrom(event: Event) {
+  const detail = (event as CustomEvent<unknown>).detail
+  if (detail instanceof Element) startFromElement(detail)
+}
+
 onMounted(() => {
   const savedVoice = localStorage.getItem(VOICE_KEY) ?? ''
   if (VOICES.some((item) => item.id === savedVoice)) voice.value = savedVoice
@@ -523,6 +574,7 @@ onMounted(() => {
   collect()
   loadDockPos()
   addEventListener('resize', onDockResize)
+  addEventListener('kb-read-from', onReadFrom)
   document.addEventListener('pointerdown', onPickPointerDown)
   document.addEventListener('keydown', onPickKeydown)
   // 上一篇读完后跳过来的：直接接着读
@@ -534,10 +586,13 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   removeEventListener('resize', onDockResize)
+  removeEventListener('kb-read-from', onReadFrom)
   document.removeEventListener('pointerdown', onPickPointerDown)
   document.removeEventListener('keydown', onPickKeydown)
   stop()
 })
+
+defineExpose({ start, stop, toggle, startFromElement })
 </script>
 
 <template>
