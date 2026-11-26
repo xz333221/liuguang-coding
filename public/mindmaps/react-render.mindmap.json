@@ -1,0 +1,41 @@
+{
+  "id": "root",
+  "text": "React 渲染流程",
+  "children": [
+    {
+      "id": "render",
+      "text": "render 阶段",
+      "children": [
+        { "id": "re-loop", "text": "workLoop 可中断", "children": [] },
+        { "id": "re-begin", "text": "beginWork 向下协调", "children": [] },
+        { "id": "re-complete", "text": "completeWork 向上收尾", "children": [] }
+      ]
+    },
+    {
+      "id": "commit",
+      "text": "commit 阶段",
+      "children": [
+        { "id": "co-before", "text": "beforeMutation", "children": [] },
+        { "id": "co-mutation", "text": "mutation 操作 DOM", "children": [] },
+        { "id": "co-layout", "text": "layout 生命周期与 ref", "children": [] }
+      ]
+    },
+    {
+      "id": "double",
+      "text": "双缓冲",
+      "children": [
+        { "id": "do-current", "text": "current 树", "children": [] },
+        { "id": "do-wip", "text": "workInProgress 树", "children": [] },
+        { "id": "do-swap", "text": "commit 后交换", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "注意",
+      "children": [
+        { "id": "pit-side", "text": "render 阶段不能有副作用", "children": [] },
+        { "id": "pit-block", "text": "commit 不可中断", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "id": "root",
+  "text": "React 并发特性",
+  "children": [
+    {
+      "id": "transition",
+      "text": "useTransition",
+      "children": [
+        { "id": "tr-low", "text": "标记 Transition Lane", "children": [] },
+        { "id": "tr-interrupt", "text": "可被输入打断", "children": [] },
+        { "id": "tr-pending", "text": "isPending 表示过渡中", "children": [] }
+      ]
+    },
+    {
+      "id": "deferred",
+      "text": "useDeferredValue",
+      "children": [
+        { "id": "de-lag", "text": "先渲染旧值", "children": [] },
+        { "id": "de-bg", "text": "后台重渲染新值", "children": [] },
+        { "id": "de-diff", "text": "延迟值而非更新函数", "children": [] }
+      ]
+    },
+    {
+      "id": "suspense",
+      "text": "Suspense",
+      "children": [
+        { "id": "su-promise", "text": "捕获 Promise", "children": [] },
+        { "id": "su-fallback", "text": "显示 fallback", "children": [] },
+        { "id": "su-boundary", "text": "隔离加载状态", "children": [] }
+      ]
+    },
+    {
+      "id": "boundary",
+      "text": "边界",
+      "children": [
+        { "id": "bo-side", "text": "render 必须无副作用", "children": [] },
+        { "id": "bo-lib", "text": "第三方库需兼容并发", "children": [] }
+      ]
+    }
+  ]
+}

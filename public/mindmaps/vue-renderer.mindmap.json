@@ -1,0 +1,41 @@
+{
+  "id": "root",
+  "text": "Vue 渲染器",
+  "children": [
+    {
+      "id": "vnode",
+      "text": "VNode",
+      "children": [
+        { "id": "vnode-type", "text": "type: 标签或组件", "children": [] },
+        { "id": "vnode-el", "text": "el 指向真实 DOM", "children": [] },
+        { "id": "vnode-flag", "text": "shapeFlag 位运算标记", "children": [] }
+      ]
+    },
+    {
+      "id": "patch",
+      "text": "patch 分支",
+      "children": [
+        { "id": "patch-mount", "text": "无旧节点: mount", "children": [] },
+        { "id": "patch-replace", "text": "type/key 不同: 替换", "children": [] },
+        { "id": "patch-update", "text": "相同: 递归更新", "children": [] }
+      ]
+    },
+    {
+      "id": "diff",
+      "text": "同层 diff",
+      "children": [
+        { "id": "diff-head", "text": "头尾同步", "children": [] },
+        { "id": "diff-map", "text": "key → 旧索引映射", "children": [] },
+        { "id": "diff-lis", "text": "LIS 决定最小移动", "children": [] }
+      ]
+    },
+    {
+      "id": "key",
+      "text": "key 的作用",
+      "children": [
+        { "id": "key-reuse", "text": "同 key 复用节点", "children": [] },
+        { "id": "key-index", "text": "index 作 key 等于无 key", "children": [] }
+      ]
+    }
+  ]
+}

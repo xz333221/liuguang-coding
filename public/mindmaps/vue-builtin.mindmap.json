@@ -1,0 +1,40 @@
+{
+  "id": "root",
+  "text": "Vue 内置组件",
+  "children": [
+    {
+      "id": "keepalive",
+      "text": "KeepAlive",
+      "children": [
+        { "id": "keep-cache", "text": "缓存 vnode 与实例", "children": [] },
+        { "id": "keep-lru", "text": "max 触发 LRU 淘汰", "children": [] },
+        { "id": "keep-hooks", "text": "activated / deactivated", "children": [] }
+      ]
+    },
+    {
+      "id": "teleport",
+      "text": "Teleport",
+      "children": [
+        { "id": "tele-target", "text": "to 选择器或元素", "children": [] },
+        { "id": "tele-move", "text": "只移动 DOM,逻辑仍在原树", "children": [] }
+      ]
+    },
+    {
+      "id": "suspense",
+      "text": "Suspense",
+      "children": [
+        { "id": "sus-async", "text": "等待 async setup", "children": [] },
+        { "id": "sus-fallback", "text": "fallback 占位", "children": [] },
+        { "id": "sus-exp", "text": "仍属实验性", "children": [] }
+      ]
+    },
+    {
+      "id": "other",
+      "text": "其他",
+      "children": [
+        { "id": "other-transition", "text": "Transition / TransitionGroup", "children": [] },
+        { "id": "other-dynamic", "text": "component :is", "children": [] }
+      ]
+    }
+  ]
+}

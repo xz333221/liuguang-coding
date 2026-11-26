@@ -1,0 +1,40 @@
+{
+  "id": "root",
+  "text": "React 调度与优先级",
+  "children": [
+    {
+      "id": "lane",
+      "text": "Lane 模型",
+      "children": [
+        { "id": "lane-bits", "text": "位运算表示优先级", "children": [] },
+        { "id": "lane-merge", "text": "多个更新按位或合并", "children": [] },
+        { "id": "lane-starve", "text": "过期时间防饥饿", "children": [] }
+      ]
+    },
+    {
+      "id": "schedule",
+      "text": "调度入口",
+      "children": [
+        { "id": "sc-ensure", "text": "ensureRootIsScheduled", "children": [] },
+        { "id": "sc-priority", "text": "Lane → Scheduler 优先级", "children": [] }
+      ]
+    },
+    {
+      "id": "slice",
+      "text": "时间切片",
+      "children": [
+        { "id": "sl-msg", "text": "MessageChannel 让出", "children": [] },
+        { "id": "sl-yield", "text": "shouldYield 判断", "children": [] },
+        { "id": "sl-sync", "text": "SyncLane 不切片", "children": [] }
+      ]
+    },
+    {
+      "id": "source",
+      "text": "优先级来源",
+      "children": [
+        { "id": "src-input", "text": "输入: 高优先级", "children": [] },
+        { "id": "src-transition", "text": "startTransition: 可打断", "children": [] }
+      ]
+    }
+  ]
+}

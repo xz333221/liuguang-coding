@@ -1,0 +1,41 @@
+{
+  "id": "root",
+  "text": "Vue 状态管理",
+  "children": [
+    {
+      "id": "inject",
+      "text": "provide / inject",
+      "children": [
+        { "id": "inj-chain", "text": "provides 原型链向上查找", "children": [] },
+        { "id": "inj-copy", "text": "首次 provide 创建自己的对象", "children": [] },
+        { "id": "inj-ref", "text": "注入 ref 才保持响应式", "children": [] }
+      ]
+    },
+    {
+      "id": "pinia",
+      "text": "Pinia",
+      "children": [
+        { "id": "pin-state", "text": "state 函数 + reactive", "children": [] },
+        { "id": "pin-getter", "text": "getters 用 computed", "children": [] },
+        { "id": "pin-action", "text": "actions 是方法", "children": [] },
+        { "id": "pin-cache", "text": "同名 store 只创建一次", "children": [] }
+      ]
+    },
+    {
+      "id": "choose",
+      "text": "选型",
+      "children": [
+        { "id": "ch-local", "text": "组件内用 ref", "children": [] },
+        { "id": "ch-cross", "text": "跨页面用 Pinia", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "常见问题",
+      "children": [
+        { "id": "pit-destructure", "text": "解构 store 丢响应式", "children": [] },
+        { "id": "pit-cycle", "text": "store 循环依赖", "children": [] }
+      ]
+    }
+  ]
+}

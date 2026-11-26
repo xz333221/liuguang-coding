@@ -1,0 +1,41 @@
+{
+  "id": "root",
+  "text": "Vue 3 响应式",
+  "children": [
+    {
+      "id": "proxy",
+      "text": "Proxy 拦截",
+      "children": [
+        { "id": "proxy-get", "text": "get: Reflect.get + track", "children": [] },
+        { "id": "proxy-set", "text": "set: 比较新旧值 + trigger", "children": [] },
+        { "id": "proxy-lazy", "text": "对象结果再 reactive,惰性深层", "children": [] }
+      ]
+    },
+    {
+      "id": "deps",
+      "text": "依赖表",
+      "children": [
+        { "id": "deps-weak", "text": "targetMap 用 WeakMap", "children": [] },
+        { "id": "deps-set", "text": "每个属性一个 Dep(Set)", "children": [] },
+        { "id": "deps-active", "text": "activeEffect 指向当前 effect", "children": [] }
+      ]
+    },
+    {
+      "id": "effect",
+      "text": "ReactiveEffect",
+      "children": [
+        { "id": "effect-clean", "text": "执行前清理旧依赖", "children": [] },
+        { "id": "effect-scheduler", "text": "scheduler 交给队列", "children": [] },
+        { "id": "effect-stop", "text": "stop 后不再触发", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "失效场景",
+      "children": [
+        { "id": "pit-destructure", "text": "解构丢代理", "children": [] },
+        { "id": "pit-replace", "text": "整体替换变量", "children": [] }
+      ]
+    }
+  ]
+}

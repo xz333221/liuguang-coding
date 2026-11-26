@@ -1,0 +1,40 @@
+{
+  "id": "root",
+  "text": "React 合成事件",
+  "children": [
+    {
+      "id": "delegate",
+      "text": "事件委托",
+      "children": [
+        { "id": "de-root", "text": "监听根容器", "children": [] },
+        { "id": "de-fiber", "text": "沿 Fiber 向上收集", "children": [] },
+        { "id": "de-dynamic", "text": "动态节点无需重绑", "children": [] }
+      ]
+    },
+    {
+      "id": "synthetic",
+      "text": "SyntheticEvent",
+      "children": [
+        { "id": "sy-api", "text": "统一 API 与 nativeEvent", "children": [] },
+        { "id": "sy-pool", "text": "17 后不再池化", "children": [] },
+        { "id": "sy-stop", "text": "stopPropagation 只影响合成链", "children": [] }
+      ]
+    },
+    {
+      "id": "priority",
+      "text": "事件优先级",
+      "children": [
+        { "id": "pr-discrete", "text": "click / keydown 离散", "children": [] },
+        { "id": "pr-continuous", "text": "mousemove 连续", "children": [] }
+      ]
+    },
+    {
+      "id": "batching",
+      "text": "批量与 flushSync",
+      "children": [
+        { "id": "ba-auto", "text": "18 起自动批量", "children": [] },
+        { "id": "ba-flush", "text": "flushSync 强制同步", "children": [] }
+      ]
+    }
+  ]
+}

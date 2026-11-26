@@ -1,0 +1,40 @@
+{
+  "id": "root",
+  "text": "ref 与 computed",
+  "children": [
+    {
+      "id": "ref",
+      "text": "RefImpl",
+      "children": [
+        { "id": "ref-value", "text": "get/set value 收集与触发", "children": [] },
+        { "id": "ref-object", "text": "对象值内部转 reactive", "children": [] },
+        { "id": "ref-dep", "text": "dep 挂在 ref 实例上", "children": [] }
+      ]
+    },
+    {
+      "id": "computed",
+      "text": "ComputedRefImpl",
+      "children": [
+        { "id": "comp-dirty", "text": "_dirty 脏标记", "children": [] },
+        { "id": "comp-lazy", "text": "读取时才计算", "children": [] },
+        { "id": "comp-scheduler", "text": "依赖变化只置脏", "children": [] }
+      ]
+    },
+    {
+      "id": "scope",
+      "text": "effectScope",
+      "children": [
+        { "id": "scope-collect", "text": "run 时收集 effect", "children": [] },
+        { "id": "scope-stop", "text": "stop 批量清理", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "常见问题",
+      "children": [
+        { "id": "pit-side", "text": "computed 里写副作用", "children": [] },
+        { "id": "pit-leak", "text": "scope 未停止导致泄漏", "children": [] }
+      ]
+    }
+  ]
+}

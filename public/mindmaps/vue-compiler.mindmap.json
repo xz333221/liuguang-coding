@@ -1,0 +1,40 @@
+{
+  "id": "root",
+  "text": "Vue 编译器",
+  "children": [
+    {
+      "id": "parse",
+      "text": "parse",
+      "children": [
+        { "id": "parse-ast", "text": "标签/属性/插值 → AST", "children": [] },
+        { "id": "parse-pos", "text": "记录源码位置", "children": [] }
+      ]
+    },
+    {
+      "id": "transform",
+      "text": "transform",
+      "children": [
+        { "id": "tr-element", "text": "transformElement 生成 PatchFlag", "children": [] },
+        { "id": "tr-if", "text": "v-if / v-for 转条件与循环", "children": [] },
+        { "id": "tr-hoist", "text": "静态节点提升", "children": [] }
+      ]
+    },
+    {
+      "id": "codegen",
+      "text": "codegen",
+      "children": [
+        { "id": "cg-render", "text": "生成 render 函数", "children": [] },
+        { "id": "cg-flag", "text": "动态部分带 PatchFlag", "children": [] }
+      ]
+    },
+    {
+      "id": "opt",
+      "text": "编译时优化",
+      "children": [
+        { "id": "opt-hoist", "text": "静态 vnode 只创建一次", "children": [] },
+        { "id": "opt-block", "text": "Block Tree 收集动态节点", "children": [] },
+        { "id": "opt-memo", "text": "v-memo 跳过未变子树", "children": [] }
+      ]
+    }
+  ]
+}

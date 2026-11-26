@@ -1,0 +1,49 @@
+{
+  "id": "root",
+  "text": "React 生态与工程化",
+  "children": [
+    {
+      "id": "router",
+      "text": "路由",
+      "children": [
+        { "id": "ro-loader", "text": "loader 预加载数据", "children": [] },
+        { "id": "ro-action", "text": "action 处理提交", "children": [] },
+        { "id": "ro-nested", "text": "嵌套路由与错误边界", "children": [] }
+      ]
+    },
+    {
+      "id": "server-state",
+      "text": "服务端状态",
+      "children": [
+        { "id": "ss-query", "text": "TanStack Query 缓存与失效", "children": [] },
+        { "id": "ss-truth", "text": "不要复制进全局 store", "children": [] }
+      ]
+    },
+    {
+      "id": "client-state",
+      "text": "客户端状态",
+      "children": [
+        { "id": "cs-context", "text": "Context 低频共享", "children": [] },
+        { "id": "cs-zustand", "text": "Zustand 细粒度订阅", "children": [] },
+        { "id": "cs-redux", "text": "Redux Toolkit 复杂流程", "children": [] }
+      ]
+    },
+    {
+      "id": "rsc",
+      "text": "RSC",
+      "children": [
+        { "id": "rs-server", "text": "服务端组件不打包", "children": [] },
+        { "id": "rs-client", "text": "'use client' 交互边界", "children": [] },
+        { "id": "rs-next", "text": "Next.js App Router", "children": [] }
+      ]
+    },
+    {
+      "id": "choose",
+      "text": "选型",
+      "children": [
+        { "id": "ch-spa", "text": "SPA: Vite + Router", "children": [] },
+        { "id": "ch-seo", "text": "SEO: Next/Remix", "children": [] }
+      ]
+    }
+  ]
+}

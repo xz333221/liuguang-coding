@@ -1,0 +1,41 @@
+{
+  "id": "root",
+  "text": "元素与 Fiber",
+  "children": [
+    {
+      "id": "element",
+      "text": "ReactElement",
+      "children": [
+        { "id": "el-type", "text": "type / key / ref / props", "children": [] },
+        { "id": "el-immutable", "text": "不可变,每次 render 新建", "children": [] },
+        { "id": "el-symbol", "text": "$$typeof 标识合法元素", "children": [] }
+      ]
+    },
+    {
+      "id": "jsx",
+      "text": "JSX 编译",
+      "children": [
+        { "id": "jsx-runtime", "text": "jsx / jsxs 自动运行时", "children": [] },
+        { "id": "jsx-dev", "text": "开发环境 jsxDEV", "children": [] }
+      ]
+    },
+    {
+      "id": "fiber",
+      "text": "Fiber",
+      "children": [
+        { "id": "fb-tree", "text": "return/child/sibling 链表树", "children": [] },
+        { "id": "fb-state", "text": "memoizedState 存 Hooks", "children": [] },
+        { "id": "fb-lane", "text": "lanes 表示优先级", "children": [] },
+        { "id": "fb-alt", "text": "alternate 双缓冲", "children": [] }
+      ]
+    },
+    {
+      "id": "diff",
+      "text": "两棵树",
+      "children": [
+        { "id": "df-element", "text": "元素树: 轻量描述", "children": [] },
+        { "id": "df-fiber", "text": "Fiber 树: 工作单元", "children": [] }
+      ]
+    }
+  ]
+}

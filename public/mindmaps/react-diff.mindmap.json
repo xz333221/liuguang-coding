@@ -1,0 +1,41 @@
+{
+  "id": "root",
+  "text": "React 协调与 Diff",
+  "children": [
+    {
+      "id": "same",
+      "text": "同层比较",
+      "children": [
+        { "id": "sa-layer", "text": "只比同一父节点", "children": [] },
+        { "id": "sa-cross", "text": "跨层移动 = 删除 + 新建", "children": [] },
+        { "id": "sa-type", "text": "type 不同直接替换", "children": [] }
+      ]
+    },
+    {
+      "id": "list",
+      "text": "数组 reconcile",
+      "children": [
+        { "id": "li-key", "text": "key 建映射匹配", "children": [] },
+        { "id": "li-last", "text": "lastPlacedIndex 判断移动", "children": [] },
+        { "id": "li-index", "text": "index 作 key 导致全量更新", "children": [] }
+      ]
+    },
+    {
+      "id": "double",
+      "text": "双缓冲",
+      "children": [
+        { "id": "do-current", "text": "current 显示中", "children": [] },
+        { "id": "do-wip", "text": "workInProgress 构建中", "children": [] },
+        { "id": "do-alt", "text": "alternate 互相复用", "children": [] }
+      ]
+    },
+    {
+      "id": "vs",
+      "text": "与 Vue 对比",
+      "children": [
+        { "id": "vs-fiber", "text": "Fiber 链表可中断", "children": [] },
+        { "id": "vs-lis", "text": "Vue 用 LIS 最小移动", "children": [] }
+      ]
+    }
+  ]
+}

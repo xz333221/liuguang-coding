@@ -1,0 +1,42 @@
+{
+  "id": "root",
+  "text": "Vue SSR 与 hydration",
+  "children": [
+    {
+      "id": "render",
+      "text": "服务端渲染",
+      "children": [
+        { "id": "render-app", "text": "createSSRApp", "children": [] },
+        { "id": "render-string", "text": "renderToString 输出 HTML", "children": [] },
+        { "id": "render-data", "text": "预取数据序列化", "children": [] }
+      ]
+    },
+    {
+      "id": "hydrate",
+      "text": "hydration",
+      "children": [
+        { "id": "hydrate-bind", "text": "接管 DOM 并绑定事件", "children": [] },
+        { "id": "hydrate-match", "text": "结构必须一致", "children": [] },
+        { "id": "hydrate-warn", "text": "mismatch 警告", "children": [] }
+      ]
+    },
+    {
+      "id": "mismatch",
+      "text": "mismatch 原因",
+      "children": [
+        { "id": "mis-time", "text": "时间 / 随机数", "children": [] },
+        { "id": "mis-browser", "text": "浏览器专属 API", "children": [] },
+        { "id": "mis-async", "text": "异步数据顺序", "children": [] }
+      ]
+    },
+    {
+      "id": "engineering",
+      "text": "工程化",
+      "children": [
+        { "id": "eng-vite", "text": "Vite SSR 入口", "children": [] },
+        { "id": "eng-nuxt", "text": "Nuxt 封装路由与预取", "children": [] },
+        { "id": "eng-stream", "text": "流式渲染降低 TTFB", "children": [] }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "id": "root",
+  "text": "React Hooks 原理",
+  "children": [
+    {
+      "id": "dispatcher",
+      "text": "dispatcher",
+      "children": [
+        { "id": "dis-mount", "text": "mount 用 OnMount", "children": [] },
+        { "id": "dis-update", "text": "update 用 OnUpdate", "children": [] },
+        { "id": "dis-switch", "text": "按 Fiber 状态切换", "children": [] }
+      ]
+    },
+    {
+      "id": "list",
+      "text": "Hooks 链表",
+      "children": [
+        { "id": "li-order", "text": "调用顺序即节点顺序", "children": [] },
+        { "id": "li-fiber", "text": "挂在 Fiber.memoizedState", "children": [] },
+        { "id": "li-rule", "text": "不能条件/循环调用", "children": [] }
+      ]
+    },
+    {
+      "id": "state",
+      "text": "useState",
+      "children": [
+        { "id": "st-queue", "text": "更新队列 + dispatch", "children": [] },
+        { "id": "st-lane", "text": "按 Lane 优先级调度", "children": [] },
+        { "id": "st-fn", "text": "函数式更新", "children": [] }
+      ]
+    },
+    {
+      "id": "effect",
+      "text": "useEffect",
+      "children": [
+        { "id": "ef-commit", "text": "commit 后异步执行", "children": [] },
+        { "id": "ef-deps", "text": "依赖数组决定重跑", "children": [] },
+        { "id": "ef-clean", "text": "清理函数先于下次执行", "children": [] }
+      ]
+    },
+    {
+      "id": "pitfall",
+      "text": "闭包陷阱",
+      "children": [
+        { "id": "pit-old", "text": "空依赖读到旧值", "children": [] },
+        { "id": "pit-ref", "text": "useRef 保存最新值", "children": [] }
+      ]
+    }
+  ]
+}

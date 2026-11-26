@@ -1,0 +1,48 @@
+{
+  "id": "root",
+  "text": "Vue 组件实例",
+  "children": [
+    {
+      "id": "instance",
+      "text": "实例结构",
+      "children": [
+        { "id": "inst-props", "text": "props / attrs / slots", "children": [] },
+        { "id": "inst-setup", "text": "setupState 存绑定", "children": [] },
+        { "id": "inst-subtree", "text": "subTree 是渲染结果", "children": [] }
+      ]
+    },
+    {
+      "id": "props",
+      "text": "props 与 attrs",
+      "children": [
+        { "id": "props-readonly", "text": "shallowReadonly 只读", "children": [] },
+        { "id": "props-attrs", "text": "未声明属性进 attrs", "children": [] },
+        { "id": "props-inherit", "text": "inheritAttrs: false 阻止自动透传", "children": [] }
+      ]
+    },
+    {
+      "id": "setup",
+      "text": "setup",
+      "children": [
+        { "id": "setup-once", "text": "挂载前执行一次", "children": [] },
+        { "id": "setup-context", "text": "attrs / slots / emit / expose", "children": [] }
+      ]
+    },
+    {
+      "id": "lifecycle",
+      "text": "生命周期",
+      "children": [
+        { "id": "life-current", "text": "依赖 currentInstance", "children": [] },
+        { "id": "life-array", "text": "钩子存入实例数组", "children": [] }
+      ]
+    },
+    {
+      "id": "update",
+      "text": "更新判断",
+      "children": [
+        { "id": "up-props", "text": "props/children 变化才更新", "children": [] },
+        { "id": "up-memo", "text": "v-memo / v-once 跳过", "children": [] }
+      ]
+    }
+  ]
+}
