@@ -3,7 +3,10 @@
     在 Windows 服务器上发布 coding.flowdash.cn。
 
 .DESCRIPTION
-    拉 main → 清掉过期的 Astro 内容缓存 → npm ci → 构建 dist → 健康检查 → 服务没起来就拉起来。
+    拉 main → 清掉过期的 Astro 内容缓存 → npm ci → 蓝绿构建(输出到 dist-next,校验后原子切换,dist-prev 留作旧资源兜底) → 健康检查 → 服务没起来就拉起来。
+
+    构建全程旧 dist 完好、继续对外服务;只有首次部署(dist 里还没有 index.html)才写
+    .building 标记,让 server 对访客回「正在更新」提示页。
 
     为什么不复用 deploy-on-server.sh:
       - 那台机器是 Windows,cmd / PowerShell 里没有 bash;
@@ -22,6 +25,10 @@
 
 .PARAMETER SkipInstall
     跳过 npm ci(只改了几篇正文时可用,省三四分钟)。
+
+.PARAMETER SwitchOnly
+    跳过拉代码 / 装依赖 / 构建,只对已存在的 dist-next 做产物校验和切换
+    (dist → dist-prev,dist-next → dist)。用于上次切换失败后的重试,以及测试切换逻辑。
 
 .PARAMETER SkipBuild
     跳过构建,只做拉取与健康检查。
@@ -56,6 +63,7 @@ param(
     [int]$Port = 8787,
     [switch]$SkipInstall,
     [switch]$SkipBuild,
+    [switch]$SwitchOnly,
     [switch]$SkipHealth,
     [string]$RestartQueue = '',
     [string]$RestartTask = 'FlowdashSites',
@@ -125,6 +133,37 @@ function Write-Err {
     param([string]$Text)
     Write-Host ("    " + $Text) -ForegroundColor Red
     Write-LogLine ("    ERR " + $Text)
+}
+
+# 阶段耗时日志:npm ci / astro build / 切换这类大阶段打时间戳,后续看耗时不用翻整个日志。
+function Write-Phase {
+    param([string]$Phase, [string]$Event, [double]$ElapsedSec = -1)
+    $line = ("[phase] {0}  {1}  {2}" -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $Phase, $Event)
+    if ($ElapsedSec -ge 0) { $line += ("  (耗时 {0:N1}s)" -f $ElapsedSec) }
+    Write-Host ("    " + $line)
+    Write-LogLine $line
+}
+
+# 带重试的目录改名。Windows 上 dist 可能正被 express.static / 杀软 / 资源管理器
+# 短暂占用导致改名失败,重试 3 次、间隔 1 秒,仍失败返回 $false 由调用方决定回滚。
+# 用 Rename-Item 而不是 Move-Item:Move-Item 在目录被占用时会退化为「复制+删除」,
+# 失败时会把旧 dist 撕成残壳(部分文件已搬走);Rename-Item 是纯改名,失败就是失败,
+# 不会动目录内容。Rename-Item 只在父目录内改名,而这正是蓝绿切换要做的。
+function Move-DirWithRetry {
+    param([string]$From, [string]$To)
+    $parent = Split-Path -Parent $From
+    $newName = Split-Path -Leaf $To
+    for ($i = 1; $i -le 3; $i++) {
+        try {
+            Rename-Item -LiteralPath $From -NewName $newName -ErrorAction Stop
+            return $true
+        }
+        catch {
+            Write-Warn ("改名 " + $From + " → " + $To + " 第 " + $i + " 次失败:" + $_.Exception.Message)
+            if ($i -lt 3) { Start-Sleep -Seconds 1 }
+        }
+    }
+    return $false
 }
 
 # 跑一个外部命令并收集输出。PS 5.1 里 `2>&1` 会把 stderr 变成 ErrorRecord,
@@ -350,7 +389,12 @@ try {
     Write-Host ("日志: " + $logFile)
     Write-LogLine ("# 发布开始 " + (Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + "  " + $AppDir)
 
+    if ($SwitchOnly) {
+        Write-Warn '按 -SwitchOnly 跳过工作区检查 / 拉代码 / 清缓存 / 装依赖 / 构建,只做 dist-next 校验与切换'
+    }
+
     # ---------- 1. 工作区干净检查 ----------
+    if (-not $SwitchOnly) {
     Write-Step 1 '检查工作区'
     $status = Invoke-Capture -Exe 'git' -Arguments @('-C', $AppDir, 'status', '--porcelain')
     if ($status.Code -ne 0) { throw 'git status 失败,确认 git 已安装且在 PATH 里' }
@@ -397,47 +441,122 @@ try {
     }
     else {
         Write-Host '    npm ci(几分钟;没改依赖时可用 -SkipInstall 跳过)'
+        $phaseStart = Get-Date
+        Write-Phase 'npm-ci' 'npm ci 开始'
         Invoke-Exe -Exe 'npm.cmd' -Arguments @('ci', '--no-audit', '--no-fund') -WorkDir $AppDir -LogFile $logFile -Label 'npm ci' | Out-Null
+        Write-Phase 'npm-ci' 'npm ci 结束' ((Get-Date) - $phaseStart).TotalSeconds
         Write-Ok '依赖就绪'
     }
+    } # end if (-not $SwitchOnly)
 
-    # ---------- 5. 构建站点 ----------
-    Write-Step 5 '构建站点'
+    # ---------- 5. 构建站点(蓝绿) ----------
+    Write-Step 5 '构建站点(蓝绿:构建到 dist-next,校验通过后原子切换)'
     $pages = $null
-    if ($SkipBuild) {
+    if ($SkipBuild -and -not $SwitchOnly) {
         Write-Warn '按 -SkipBuild 跳过构建'
     }
     else {
-        # 构建标记:server/index.mjs 看到它(且 mtime 够新鲜)就知道 dist 正在被
-        # Astro 清空重写,对浏览器导航回「正在更新」提示页而不是 404。
-        # 构建成败都要删掉标记,用 try/finally 保证,崩了也不能把站点钉在提示页上。
+        $distDir = Join-Path $AppDir 'dist'
+        $distNextDir = Join-Path $AppDir 'dist-next'
+        $distPrevDir = Join-Path $AppDir 'dist-prev'
+        $distIndex = Join-Path $distDir 'index.html'
         $buildFlag = Join-Path $AppDir '.building'
-        Set-Content -Path $buildFlag -Value (Get-Date -Format o) -Encoding ascii
-        Write-Ok '已写入 .building 标记'
-        try {
-            $env:PUBLIC_CHAT_PROXY = '/api/chat'
-            $env:PUBLIC_MODEL_API = '/api/ai-model'
-            $buildOut = Invoke-Exe -Exe 'npm.cmd' -Arguments @('run', 'build') -WorkDir $AppDir -LogFile $logFile -Label 'npm run build'
 
-            $match = [regex]::Match($buildOut, '(\d+)\s+page\(s\) built')
-            if ($match.Success) {
-                $pages = [int]$match.Groups[1].Value
-                Write-Ok ("构建完成:" + $pages + " 页")
+        if ($SwitchOnly) {
+            Write-Warn '按 -SwitchOnly 跳过构建,直接校验并切换已有的 dist-next'
+        }
+        else {
+            # 上一轮发布的 dist-prev(静态资源兜底用)在这轮构建开始时清掉;
+            # 残留的 dist-next(上次构建中途崩了没走到切换)也清掉,保证产物干净。
+            if (Test-Path $distPrevDir) {
+                Remove-Item $distPrevDir -Recurse -Force
+                Write-Ok '已清理上一轮的 dist-prev'
             }
-            else {
-                Write-Warn '构建结束,但没从输出里读到页面数(看日志确认)'
+            if (Test-Path $distNextDir) {
+                Remove-Item $distNextDir -Recurse -Force
+                Write-Warn '已清理残留的 dist-next'
             }
 
-            $indexFile = Join-Path $AppDir 'dist\index.html'
-            if (-not (Test-Path $indexFile)) {
-                throw 'dist\index.html 不存在,构建产物不完整(先看日志,别让服务对外)'
+            # 只有首次部署(dist 里还没有 index.html)才写 .building 标记:
+            # 蓝绿发布全程旧 dist 都完好,server 会继续服务旧版,不需要挡访客。
+            $firstDeploy = -not (Test-Path $distIndex)
+            if ($firstDeploy) {
+                Set-Content -Path $buildFlag -Value (Get-Date -Format o) -Encoding ascii
+                Write-Ok 'dist 里没有 index.html(首次部署),已写入 .building 标记'
             }
-            Write-Ok 'dist\index.html 就位'
+
+            try {
+                $env:PUBLIC_CHAT_PROXY = '/api/chat'
+                $env:PUBLIC_MODEL_API = '/api/ai-model'
+                # 关键:让 Astro 输出到 dist-next,构建全程不碰线上正在服务的 dist。
+                $env:ASTRO_OUT_DIR = 'dist-next'
+                $phaseStart = Get-Date
+                Write-Phase 'astro-build' 'npm run build 开始(输出目录 dist-next)'
+                $buildOut = Invoke-Exe -Exe 'npm.cmd' -Arguments @('run', 'build') -WorkDir $AppDir -LogFile $logFile -Label 'npm run build'
+                Write-Phase 'astro-build' 'npm run build 结束' ((Get-Date) - $phaseStart).TotalSeconds
+
+                $match = [regex]::Match($buildOut, '(\d+)\s+page\(s\) built')
+                if ($match.Success) {
+                    $pages = [int]$match.Groups[1].Value
+                    Write-Ok ("构建完成:" + $pages + " 页")
+                }
+                else {
+                    Write-Warn '构建结束,但没从输出里读到页面数(看日志确认)'
+                }
+            }
+            catch {
+                # 构建失败:删掉写了一半的 dist-next,旧 dist 原样保留,站点不受影响
+                Remove-Item $distNextDir -Recurse -Force -ErrorAction SilentlyContinue
+                Write-Err '构建失败,已删除 dist-next,旧 dist 原样保留'
+                throw
+            }
+            finally {
+                if ($firstDeploy) {
+                    Remove-Item $buildFlag -Force -ErrorAction SilentlyContinue
+                    Write-Ok '已删除 .building 标记'
+                }
+            }
         }
-        finally {
-            Remove-Item $buildFlag -Force -ErrorAction SilentlyContinue
-            Write-Ok '已删除 .building 标记'
+
+        # 产物完整性校验:缺关键文件就不切换,旧 dist 原样继续服务
+        foreach ($required in @('index.html', '404.html')) {
+            if (-not (Test-Path (Join-Path $distNextDir $required))) {
+                if (-not $SwitchOnly) {
+                    Remove-Item $distNextDir -Recurse -Force -ErrorAction SilentlyContinue
+                }
+                throw ("dist-next\" + $required + " 不存在,构建产物不完整;不切换,旧 dist 原样保留" + $(if (-not $SwitchOnly) { "(dist-next 已删除)" }))
+            }
         }
+        Write-Ok 'dist-next 校验通过(index.html / 404.html 就位)'
+
+        # 写 version.txt(当前提交 hash),/api/health 的 siteRev 能一眼确认新版本已生效
+        if ($commitHash) {
+            Set-Content -Path (Join-Path $distNextDir 'version.txt') -Value $commitHash -Encoding ascii
+        }
+
+        # ---------- 切换 ----------
+        $phaseStart = Get-Date
+        Write-Phase 'switch' '开始切换 dist'
+        if (Test-Path $distDir) {
+            if (-not (Move-DirWithRetry -From $distDir -To $distPrevDir)) {
+                throw 'dist 改名为 dist-prev 三次都失败,放弃切换(旧 dist 完好,dist-next 保留待人工处理)'
+            }
+        }
+        else {
+            Write-Ok 'dist 不存在(首次发布),跳过 dist → dist-prev'
+        }
+        if (-not (Move-DirWithRetry -From $distNextDir -To $distDir)) {
+            Write-Err 'dist-next 改名为 dist 失败,尝试回滚 dist-prev → dist'
+            if (Test-Path $distPrevDir) {
+                Move-DirWithRetry -From $distPrevDir -To $distDir | Out-Null
+            }
+            throw '切换失败已回滚到旧版本(dist-next 保留待人工处理)'
+        }
+        if (-not (Test-Path (Join-Path $distDir 'index.html'))) {
+            throw '切换后 dist\index.html 不存在,发布状态异常,请人工检查'
+        }
+        Write-Phase 'switch' '切换完成,新版本已上线' ((Get-Date) - $phaseStart).TotalSeconds
+        Write-Ok 'dist-prev 保留,供 server 给旧页面的静态资源请求兜底,下轮发布开始时清理'
     }
 
     # ---------- 6. 健康检查 ----------

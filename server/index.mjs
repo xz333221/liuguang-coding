@@ -25,7 +25,7 @@
 //          数据库(系统环境变量或仓库根 .env):DB_HOST / DB_PORT / DB_USER / DB_PASSWORD / DB_NAME
 import './env.mjs' // 必须第一个 import:.env 要先于下面这些读环境变量的模块加载
 import express from 'express'
-import { existsSync, statSync } from 'node:fs'
+import { existsSync, readFileSync, statSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createAiModelMiddleware } from 'ai-model-form/server'
@@ -49,6 +49,10 @@ import {
 
 const here = dirname(fileURLToPath(import.meta.url))
 const DIST = process.env.DIST_DIR ?? join(here, '..', 'dist')
+// 上一轮发布留的旧版目录(deploy-on-windows.ps1 切换时把 dist 改名而来):
+// 切换瞬间,正在浏览旧页面的访客还会请求旧版带内容哈希的 /_astro/ 资源,
+// 新 dist 里已经没有,从这里兜底,避免拿到 404。每轮发布开始时会被清掉重建。
+const DIST_PREV = process.env.DIST_PREV_DIR ?? join(here, '..', 'dist-prev')
 const PORT = Number(process.env.PORT ?? 8787)
 
 // 构建标记:deploy-on-windows.ps1 在 npm run build 前创建(写入时间戳)、结束后删除。
@@ -155,9 +159,21 @@ app.use(express.json({ limit: '512kb' }))
 // 数据库连不上不阻塞启动:站点照发,需要库的接口回 503,后台重试
 startDatabaseWithRetry()
 
+// 当前发布的版本:deploy 脚本构建成功后把 commit hash 写进 dist\version.txt,
+// 蓝绿切换后访问 /api/health 看 siteRev 就能确认新版本已生效。读不到(老版本 dist
+// 还没写过这个文件、或首次部署还没构建完)返回 null,不影响其它字段。
+function siteRev() {
+  try {
+    return readFileSync(join(DIST, 'version.txt'), 'utf8').trim() || null
+  } catch {
+    return null
+  }
+}
+
 app.get('/api/health', (_req, res) => {
   res.json({
     ok: true,
+    siteRev: siteRev(),
     models: listModels().length,
     dataDir: DATA_DIR,
     site: existsSync(DIST),
@@ -332,61 +348,84 @@ app.delete('/api/ai-model/models/:id', async (req, res, next) => {
 app.use('/api', createAiModelMiddleware())
 
 // 站点
-// 构建期间(Astro 正在清空重写 dist),浏览器导航一律给「正在更新」提示页:
-// 就算某页恰好还搜得到,也可能是写到一半的文件,不如统一说明情况。
+// 「正在更新」提示页只在 dist 连 index.html 都没有(首次部署还在构建)时对 HTML
+// 导航生效;dist 完整时即使 .building 标记还挂着(蓝绿构建中),也照常服务旧版,
+// 不再像旧逻辑那样把整站挡在提示页外十几分钟。
 // 资源请求(非 HTML)不走这里,保持原有语义,避免前端脚本把 HTML 当 CSS/JS 解析报错。
 app.use((req, res, next) => {
   if (req.path.startsWith('/api/')) return next()
-  if (isBuilding() && String(req.headers.accept ?? '').includes('text/html')) {
+  if (isBuilding() && !existsSync(join(DIST, 'index.html')) && String(req.headers.accept ?? '').includes('text/html')) {
     return respondBuilding(res)
   }
   next()
 })
 
-if (existsSync(DIST)) {
-  app.use(
-    express.static(DIST, {
-      index: 'index.html',
-      extensions: ['html'],
-      setHeaders(res, filePath) {
-        // 带内容哈希的构建产物可以长缓存;图片和导图留一小时;HTML 不缓存
-        if (filePath.includes('/_astro/')) {
-          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
-        } else if (filePath.endsWith('.html')) {
-          res.setHeader('Cache-Control', 'no-cache')
-        } else if (filePath.endsWith('search-index.json')) {
-          // 索引跟着构建走,发布后要立刻能搜到新文章;保留 ETag,让浏览器发条件请求。
-          res.setHeader('Cache-Control', 'no-cache')
-        } else if (/\.(png|jpe?g|svg|webp|woff2?|json)$/i.test(filePath)) {
-          res.setHeader('Cache-Control', 'public, max-age=3600')
-        }
-      },
-    }),
-  )
-  app.use((req, res) => {
-    // 只对浏览器导航(HTML 请求)区分「dist 不完整」和真 404;
-    // 非 HTML 请求(静态资源)只回 404 状态,不给任何 HTML 页面。
-    if (!String(req.headers.accept ?? '').includes('text/html')) {
-      return res.status(404).type('text/plain; charset=utf-8').send('Not Found')
-    }
-    // 构建标记过期失效后,如果 index.html 仍缺席,说明 dist 被清空后没写回完
-    // (比如构建崩了),同样给提示页而不是把「页面没找到」甩给访客
-    if (!existsSync(join(DIST, 'index.html'))) {
-      return respondBuilding(res)
-    }
-    // 404.html 自己也没了(dist 清空的窗口期)时,退化为提示页。
-    // 用 root 写法而不是拼绝对路径:send 会拒绝路径里带「.」开头的目录
-    // (比如从 .zen-worktrees 这类 worktree 目录里跑的时候),root 则不受影响。
-    if (existsSync(join(DIST, '404.html'))) {
-      return res.status(404).sendFile('404.html', { root: DIST })
-    }
-    respondBuilding(res)
-  })
-} else {
-  app.use((_req, res) => {
-    respondBuilding(res, '知识库正在更新', '站点还没准备好，正在构建，通常几分钟，最多十几分钟。这个页面会自动刷新，不用手动操作。')
-  })
+// dist 里带内容哈希的构建产物长缓存,图片和导图留一小时,HTML 不缓存;
+// dist 和 dist-prev 两个 static 实例共用同一套头。
+function applyStaticCacheHeaders(res, filePath) {
+  // Windows 上 send 给的 filePath 是反斜杠绝对路径,两种分隔符都要认
+  if (/[\\/]_astro[\\/]/.test(filePath)) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+  } else if (filePath.endsWith('.html')) {
+    res.setHeader('Cache-Control', 'no-cache')
+  } else if (filePath.endsWith('search-index.json')) {
+    // 索引跟着构建走,发布后要立刻能搜到新文章;保留 ETag,让浏览器发条件请求。
+    res.setHeader('Cache-Control', 'no-cache')
+  } else if (/\.(png|jpe?g|svg|webp|woff2?|json)$/i.test(filePath)) {
+    res.setHeader('Cache-Control', 'public, max-age=3600')
+  }
 }
+
+const distStatic = express.static(DIST, {
+  index: 'index.html',
+  extensions: ['html'],
+  setHeaders: applyStaticCacheHeaders,
+})
+
+// dist 的存在性必须每次请求判断,不能在启动时定死:首次部署时 server 往往先于
+// 构建启动,旧逻辑 existsSync(DIST) 为假就永远不挂 static,构建完 dist 出现了
+// 也还是提示页,必须重启进程才有页面。包装中间件让 dist 一出现立刻可服务。
+app.use((req, res, next) => {
+  if (!existsSync(join(DIST, 'index.html'))) return next()
+  distStatic(req, res, next)
+})
+
+// 切换兜底:dist ↔ dist-next 原子改名后,正在浏览旧页面的访客还会继续请求
+// 旧版带内容哈希的 /_astro/ 资源(HTML 不缓存,但 CSS/JS 是一年 immutable),
+// 新 dist 里已经没有这些文件 —— 从上一版 dist-prev 里取同名路径,再拿不到才 404。
+// 只兜非 HTML:页面本身应该跟着新版走,不能让旧页面在切换后还一直被服务。
+const distPrevStatic = express.static(DIST_PREV, { index: false, setHeaders: applyStaticCacheHeaders })
+app.use((req, res, next) => {
+  if (
+    (req.method === 'GET' || req.method === 'HEAD') &&
+    req.path.startsWith('/_astro/') &&
+    !String(req.headers.accept ?? '').includes('text/html') &&
+    existsSync(DIST_PREV)
+  ) {
+    distPrevStatic(req, res, next)
+    return
+  }
+  next()
+})
+
+// 收尾:没被 dist / dist-prev 接住的请求按 HTML / 非 HTML 分流。
+// HTML 导航区分「dist 不完整」和真 404;非 HTML(静态资源)只回 404 状态,不给 HTML。
+app.use((req, res) => {
+  if (!String(req.headers.accept ?? '').includes('text/html')) {
+    return res.status(404).type('text/plain; charset=utf-8').send('Not Found')
+  }
+  // dist 里没有 index.html:首次部署还在构建(或构建崩了没写回),给提示页
+  if (!existsSync(join(DIST, 'index.html'))) {
+    return respondBuilding(res)
+  }
+  // 404.html 自己也没了(dist 清空的窗口期)时,退化为提示页。
+  // 用 root 写法而不是拼绝对路径:send 会拒绝路径里带「.」开头的目录
+  // (比如从 .zen-worktrees 这类 worktree 目录里跑的时候),root 则不受影响。
+  if (existsSync(join(DIST, '404.html'))) {
+    return res.status(404).sendFile('404.html', { root: DIST })
+  }
+  respondBuilding(res)
+})
 
 // 兜底:没被上面接住的错,统一翻成 JSON,别把堆栈甩给浏览器
 app.use((error, _req, res, _next) => {

@@ -17,6 +17,9 @@ const ttsProxy = process.env.TTS_PROXY
 export default defineConfig({
   site: 'https://coding.flowdash.cn',
   base,
+  // 构建输出目录可被环境变量覆盖(蓝绿发布用:构建到 dist-next,成功后再切):
+  //   ASTRO_OUT_DIR=dist-next npm run build
+  outDir: process.env.ASTRO_OUT_DIR ?? './dist',
   integrations: [
     react(),
     vue(),
