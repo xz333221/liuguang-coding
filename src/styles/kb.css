@@ -87,6 +87,23 @@
     transition: color 0.2s;
   }
 
+  /* 站外链接:文字后面缀一个外向箭头,代表点开就离开本站 */
+  .lg-header-ext {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .lg-header-ext svg {
+    width: 0.78rem;
+    height: 0.78rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    opacity: 0.75;
+  }
+
   .lg-header-link:hover {
     color: var(--ink);
   }
