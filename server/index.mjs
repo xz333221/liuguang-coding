@@ -25,7 +25,7 @@
 //          数据库(系统环境变量或仓库根 .env):DB_HOST / DB_PORT / DB_USER / DB_PASSWORD / DB_NAME
 import './env.mjs' // 必须第一个 import:.env 要先于下面这些读环境变量的模块加载
 import express from 'express'
-import { existsSync } from 'node:fs'
+import { existsSync, statSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createAiModelMiddleware } from 'ai-model-form/server'
@@ -50,6 +50,103 @@ import {
 const here = dirname(fileURLToPath(import.meta.url))
 const DIST = process.env.DIST_DIR ?? join(here, '..', 'dist')
 const PORT = Number(process.env.PORT ?? 8787)
+
+// 构建标记:deploy-on-windows.ps1 在 npm run build 前创建(写入时间戳)、结束后删除。
+// 全量构建只要十几分钟,标记超过 45 分钟就当无效——上次构建中途崩了没清干净时,
+// 不能让站点永远钉在「正在更新」提示页上。
+const BUILD_FLAG = join(here, '..', '.building')
+const BUILD_FLAG_MAX_AGE_MS = 45 * 60 * 1000
+
+function isBuilding() {
+  try {
+    return Date.now() - statSync(BUILD_FLAG).mtimeMs < BUILD_FLAG_MAX_AGE_MS
+  } catch {
+    // 标记不存在(绝大多数请求都走这里):不在构建中
+    return false
+  }
+}
+
+// 「正在更新」提示页:构建期间 dist 会被 Astro 先清空再逐页写回,这时候来的访客
+// 既拿不到正文、也拿不到 404.html。给一个自包含的页面(纯内联 CSS/SVG,不依赖
+// dist 里任何资源),靠 meta refresh 每 15 秒自动刷新,构建完成后自动回到正常站点。
+function buildingPageHtml(heading, description) {
+  return `<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="15">
+<title>知识库正在更新 · 流光 coding 知识库</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: #f7f4ee;
+    color: #201c17;
+    font-family: system-ui, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    text-align: center;
+  }
+  main { max-width: 26em; }
+  .mark-rect { fill: #f0ece4; }
+  .mark-dot { fill: #201c17; }
+  h1 { margin: 1.4rem 0 0; font-size: 1.6rem; font-weight: 500; letter-spacing: -0.01em; }
+  p { margin: 1rem auto 0; max-width: 24em; font-size: 0.92rem; line-height: 1.8; color: #6b645c; }
+  .dots { margin-top: 1.6rem; display: flex; gap: 0.45rem; justify-content: center; }
+  .dots span {
+    width: 0.5rem; height: 0.5rem; border-radius: 50%;
+    background: #e9a23b; animation: pulse 1.2s ease-in-out infinite;
+  }
+  .dots span:nth-child(2) { animation-delay: 0.2s }
+  .dots span:nth-child(3) { animation-delay: 0.4s }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.25; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+  .btn {
+    display: inline-block; margin-top: 2.4rem; padding: 0.72rem 1.5rem;
+    border-radius: 999px; background: #e9a23b; color: #1a1408;
+    font-size: 0.92rem; font-weight: 500; text-decoration: none;
+  }
+  .btn:hover { filter: brightness(1.05); }
+  @media (prefers-color-scheme: dark) {
+    body { background: #0b0a09; color: #f5f2ee; }
+    .mark-rect { fill: #1c1917; }
+    .mark-dot { fill: #f5f2ee; }
+    p { color: #a9a29a; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <svg width="56" height="56" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+    <rect width="64" height="64" rx="15" class="mark-rect"/>
+    <path d="M9 41 L55 17" stroke="#e9a23b" stroke-width="7" stroke-linecap="round"/>
+    <path d="M15 55 L59 31" stroke="#e9a23b" stroke-width="7" stroke-linecap="round" opacity="0.34"/>
+    <circle cx="21" cy="20" r="4.5" class="mark-dot"/>
+  </svg>
+  <h1>${heading}</h1>
+  <p>${description}</p>
+  <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
+  <a class="btn" href="/">回知识库首页</a>
+</main>
+</body>
+</html>`
+}
+
+// 提示页统一走 503 + Retry-After:让浏览器和反代都知道这是临时状态
+function respondBuilding(res, heading = '知识库正在更新', description = '站点正在重新构建，通常几分钟，最多十几分钟。这个页面会自动刷新，不用手动操作。') {
+  res
+    .status(503)
+    .setHeader('Retry-After', '20')
+    .type('html; charset=utf-8')
+    .send(buildingPageHtml(heading, description))
+}
 
 const app = express()
 app.disable('x-powered-by')
@@ -235,6 +332,17 @@ app.delete('/api/ai-model/models/:id', async (req, res, next) => {
 app.use('/api', createAiModelMiddleware())
 
 // 站点
+// 构建期间(Astro 正在清空重写 dist),浏览器导航一律给「正在更新」提示页:
+// 就算某页恰好还搜得到,也可能是写到一半的文件,不如统一说明情况。
+// 资源请求(非 HTML)不走这里,保持原有语义,避免前端脚本把 HTML 当 CSS/JS 解析报错。
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/')) return next()
+  if (isBuilding() && String(req.headers.accept ?? '').includes('text/html')) {
+    return respondBuilding(res)
+  }
+  next()
+})
+
 if (existsSync(DIST)) {
   app.use(
     express.static(DIST, {
@@ -255,12 +363,28 @@ if (existsSync(DIST)) {
       },
     }),
   )
-  app.use((_req, res) => {
-    res.status(404).sendFile(join(DIST, '404.html'))
+  app.use((req, res) => {
+    // 只对浏览器导航(HTML 请求)区分「dist 不完整」和真 404;
+    // 非 HTML 请求(静态资源)只回 404 状态,不给任何 HTML 页面。
+    if (!String(req.headers.accept ?? '').includes('text/html')) {
+      return res.status(404).type('text/plain; charset=utf-8').send('Not Found')
+    }
+    // 构建标记过期失效后,如果 index.html 仍缺席,说明 dist 被清空后没写回完
+    // (比如构建崩了),同样给提示页而不是把「页面没找到」甩给访客
+    if (!existsSync(join(DIST, 'index.html'))) {
+      return respondBuilding(res)
+    }
+    // 404.html 自己也没了(dist 清空的窗口期)时,退化为提示页。
+    // 用 root 写法而不是拼绝对路径:send 会拒绝路径里带「.」开头的目录
+    // (比如从 .zen-worktrees 这类 worktree 目录里跑的时候),root 则不受影响。
+    if (existsSync(join(DIST, '404.html'))) {
+      return res.status(404).sendFile('404.html', { root: DIST })
+    }
+    respondBuilding(res)
   })
 } else {
   app.use((_req, res) => {
-    res.status(500).type('text/plain; charset=utf-8').send('还没构建站点:先跑 npm run build')
+    respondBuilding(res, '知识库正在更新', '站点还没准备好，正在构建，通常几分钟，最多十几分钟。这个页面会自动刷新，不用手动操作。')
   })
 }
 

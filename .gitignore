@@ -35,6 +35,9 @@ tmp/
 # 服务端数据(模型配置里有明文密钥)
 server/data/
 
+# 发布脚本构建期间的状态标记(deploy-on-windows.ps1 创建/删除,server 据此回「正在更新」页)
+.building
+
 # 本地环境变量(数据库连接、模型密钥,别进仓库)
 .env
 .env.*

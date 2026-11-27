@@ -286,24 +286,36 @@ try {
         Write-Warn '按 -SkipBuild 跳过构建'
     }
     else {
-        $env:PUBLIC_CHAT_PROXY = '/api/chat'
-        $env:PUBLIC_MODEL_API = '/api/ai-model'
-        $buildOut = Invoke-Exe -Exe 'npm.cmd' -Arguments @('run', 'build') -WorkDir $AppDir -LogFile $logFile -Label 'npm run build'
+        # 构建标记:server/index.mjs 看到它(且 mtime 够新鲜)就知道 dist 正在被
+        # Astro 清空重写,对浏览器导航回「正在更新」提示页而不是 404。
+        # 构建成败都要删掉标记,用 try/finally 保证,崩了也不能把站点钉在提示页上。
+        $buildFlag = Join-Path $AppDir '.building'
+        Set-Content -Path $buildFlag -Value (Get-Date -Format o) -Encoding ascii
+        Write-Ok '已写入 .building 标记'
+        try {
+            $env:PUBLIC_CHAT_PROXY = '/api/chat'
+            $env:PUBLIC_MODEL_API = '/api/ai-model'
+            $buildOut = Invoke-Exe -Exe 'npm.cmd' -Arguments @('run', 'build') -WorkDir $AppDir -LogFile $logFile -Label 'npm run build'
 
-        $match = [regex]::Match($buildOut, '(\d+)\s+page\(s\) built')
-        if ($match.Success) {
-            $pages = [int]$match.Groups[1].Value
-            Write-Ok ("构建完成:" + $pages + " 页")
-        }
-        else {
-            Write-Warn '构建结束,但没从输出里读到页面数(看日志确认)'
-        }
+            $match = [regex]::Match($buildOut, '(\d+)\s+page\(s\) built')
+            if ($match.Success) {
+                $pages = [int]$match.Groups[1].Value
+                Write-Ok ("构建完成:" + $pages + " 页")
+            }
+            else {
+                Write-Warn '构建结束,但没从输出里读到页面数(看日志确认)'
+            }
 
-        $indexFile = Join-Path $AppDir 'dist\index.html'
-        if (-not (Test-Path $indexFile)) {
-            throw 'dist\index.html 不存在,构建产物不完整(先看日志,别让服务对外)'
+            $indexFile = Join-Path $AppDir 'dist\index.html'
+            if (-not (Test-Path $indexFile)) {
+                throw 'dist\index.html 不存在,构建产物不完整(先看日志,别让服务对外)'
+            }
+            Write-Ok 'dist\index.html 就位'
         }
-        Write-Ok 'dist\index.html 就位'
+        finally {
+            Remove-Item $buildFlag -Force -ErrorAction SilentlyContinue
+            Write-Ok '已删除 .building 标记'
+        }
     }
 
     # ---------- 6. 健康检查 ----------
