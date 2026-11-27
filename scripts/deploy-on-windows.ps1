@@ -29,6 +29,14 @@
 .PARAMETER SkipHealth
     不做健康检查,也不尝试拉起服务。
 
+.PARAMETER RestartQueue
+    保活重启队列文件的路径。默认取环境变量 FLOWDASH_RESTART_QUEUE,再退到
+    C:\Users\000000\.flowdash-restart-queue。该文件存在时,健康检查前会优先通过
+    它触发保活脚本重启后端(见第 6 步注释);文件不存在则完全忽略这条通道。
+
+.PARAMETER RestartTask
+    执行保活重启的计划任务名,默认 FlowdashSites(与队列文件配套)。
+
 .PARAMETER AllowDirty
     工作区有未提交改动时仍然继续(默认停下并列出改动,避免覆盖别人正在写的东西)。
 
@@ -49,11 +57,24 @@ param(
     [switch]$SkipInstall,
     [switch]$SkipBuild,
     [switch]$SkipHealth,
+    [string]$RestartQueue = '',
+    [string]$RestartTask = 'FlowdashSites',
     [switch]$AllowDirty
 )
 
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
+
+# 保活队列通道的参数默认值:env 变量优先,再退到服务器上的固定路径。
+# 放在 param 外面解析,和 $AppDir 同一个原因(PS 5.1 的求值时机问题 + 要读环境变量)。
+if (-not $RestartQueue) {
+    $RestartQueue = $env:FLOWDASH_RESTART_QUEUE
+}
+if (-not $RestartQueue) {
+    $RestartQueue = 'C:\Users\000000\.flowdash-restart-queue'
+}
+# 队列文件里写的 pm2 应用名,与 pm2 start --name 保持一致。
+$RestartApp = 'liuguang-coding'
 
 # param 的默认值里拿不到 $PSScriptRoot(PS 5.1 的求值时机问题),放到这里解析。
 if (-not $AppDir) {
@@ -211,6 +232,101 @@ function Wait-Health {
     return (Test-Health)
 }
 
+# 拿 /api/health 的 JSON 里的 uptime(秒)。拿不到(JSON 解析失败、服务没起)返回 $null,
+# 调用方把 $null 当"未知"处理,不影响重启判断的主路径。
+function Get-HealthUptime {
+    try {
+        $resp = Invoke-WebRequest -UseBasicParsing -Uri ("http://127.0.0.1:{0}/api/health" -f $Port) -TimeoutSec 5
+        $json = $resp.Content | ConvertFrom-Json
+        if ($null -ne $json.uptime) { return [double]$json.uptime }
+        return $null
+    }
+    catch {
+        return $null
+    }
+}
+
+# 拿当前占用 $Port 的监听进程 PID,拿不到返回 $null。
+function Get-ListenerPid {
+    $l = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($l) { return $l.OwningProcess }
+    return $null
+}
+
+# 优先重启通道:通过保活队列让 Session 0 里的计划任务替我们执行 pm2 restart。
+# 为什么要这么做:
+#   8787 的 node 进程由 pm2 守护,而 pm2 守护进程跑在 Session 0(计划任务 S4U 启动),
+#   普通会话执行任何 pm2 命令都会 EPERM rpc.sock 连不上守护进程;
+#   更糟的是 pm2 失败后,健康检查会被"旧进程回的 200"骗过 —— 部署看起来成功,
+#   实际 server/index.mjs 的新代码根本没上线(2026-11-27 实测踩过)。
+#   保活脚本(FlowdashSites 计划任务,同样在 Session 0)每 5 分钟读一次队列文件,
+#   对文件里每行一个的 pm2 应用名逐个 restart;往队列写一行再 schtasks /run
+#   可以立即触发,这条路实测 20 秒左右新进程就能起来。
+# 只有队列文件存在时才走这条通道(其它机器没有它,保持原逻辑不变)。
+# 返回 $true 表示已确认新进程上线,调用方可以跳过原有的 pm2 / 直接拉起兜底。
+function Restart-BackendViaKeepaliveQueue {
+    if (-not (Test-Path -LiteralPath $RestartQueue)) { return $false }
+
+    Write-Host ("    检测到保活队列文件 " + $RestartQueue + ",优先走保活通道重启后端")
+
+    # 重启前先记录旧进程的 PID 和 uptime,轮询时用来判断"确实换了个新进程"。
+    $prePid = Get-ListenerPid
+    $preUptime = Get-HealthUptime
+    $prePidText = if ($prePid) { $prePid } else { '?' }
+    $preUptimeText = if ($null -ne $preUptime) { [math]::Round($preUptime, 1) } else { '?' }
+    Write-Host ("    重启前:PID=" + $prePidText + " uptime=" + $preUptimeText)
+
+    # 把本应用追加进队列。用 Add-Content 只追加,绝不覆盖文件里其它应用的行;
+    # 最后一行已经是它就不重复追加,避免保活脚本连续两轮重启同一个应用。
+    $needAppend = $true
+    try {
+        $lastLine = (Get-Content -LiteralPath $RestartQueue -Tail 1 -ErrorAction Stop)
+        if ($lastLine -and $lastLine.Trim() -eq $RestartApp) { $needAppend = $false }
+    }
+    catch {
+        # 读不出来(文件正被别的进程占用等)就按需要追加处理,Append 本身幂等。
+    }
+    if ($needAppend) {
+        Add-Content -Path $RestartQueue -Value $RestartApp -Encoding ascii
+        Write-Ok ("已把 " + $RestartApp + " 写入保活重启队列")
+    }
+    else {
+        Write-Ok '队列里已有本应用,不重复追加'
+    }
+
+    # 立即触发计划任务;失败则放弃这条通道,退回原有的 pm2 / 直接拉起逻辑。
+    $run = Invoke-Capture -Exe 'schtasks.exe' -Arguments @('/run', '/tn', $RestartTask)
+    if ($run.Code -ne 0) {
+        Write-Warn ("schtasks /run " + $RestartTask + " 失败,退回原重启逻辑: " + ($run.Lines -join ' | '))
+        return $false
+    }
+    Write-Ok ("已触发计划任务 " + $RestartTask)
+
+    # 轮询最多 90 秒。成功 = uptime 明显回落(小于重启前的值,或干脆从很小的值开始),
+    # 或监听 PID 变了 —— 两条满足其一都说明旧进程确实被换掉了,不是旧进程在回 200。
+    $deadline = (Get-Date).AddSeconds(90)
+    while ((Get-Date) -lt $deadline) {
+        Start-Sleep -Seconds 3
+        $nowPid = Get-ListenerPid
+        $nowUptime = Get-HealthUptime
+
+        $pidChanged = ($null -ne $nowPid -and $null -ne $prePid -and $nowPid -ne $prePid)
+        $uptimeDropped = ($null -ne $nowUptime -and (
+                ($null -eq $preUptime -and $nowUptime -lt 60) -or
+                ($null -ne $preUptime -and $nowUptime -lt $preUptime) -or
+                ($nowUptime -lt 60)
+            ))
+
+        if ($pidChanged -or $uptimeDropped) {
+            Write-Ok ("后端已通过保活队列重启(新PID=" + $(if ($nowPid) { $nowPid } else { '?' }) + " uptime=" + $(if ($null -ne $nowUptime) { [math]::Round($nowUptime, 1) } else { '?' }) + "),不用再试 pm2")
+            return $true
+        }
+    }
+
+    Write-Warn '等了 90 秒保活通道没有确认到新进程,继续走原有的 pm2 / 直接拉起兜底'
+    return $false
+}
+
 try {
     Write-Host ''
     Write-Host '流光 coding 知识库 · Windows 发布' -ForegroundColor White
@@ -328,6 +444,14 @@ try {
         # 只做健康检查会把它当成"正常",于是新加的后端路由(比如 /api/tts)
         # 在线上一直 404 —— 2026-11-21 就是这么踩到的。
         # 所以部署完先无条件重启后端,再检查健康状态。
+
+        # 首选通道:保活队列重启(仅当队列文件存在,即部署目标就是那台有
+        # FlowdashSites 计划任务的服务器)。成功确认新进程上线后直接跳过
+        # 下面的 pm2 分支 —— 普通会话连不上 Session 0 的 pm2 守护进程,
+        # 在这里执行 pm2 命令只会 EPERM,然后被旧进程的 200 骗过去。
+        $restartedViaQueue = Restart-BackendViaKeepaliveQueue
+
+        if (-not $restartedViaQueue) {
         $pm2 = Get-Command 'pm2.cmd' -ErrorAction SilentlyContinue
         if ($pm2) {
             # 必须"干净重启"。历史部署可能留下一个不在 pm2 里的 node 进程占着端口:
@@ -360,6 +484,7 @@ try {
             }
             Start-Sleep -Seconds 2
         }
+        } # end if (-not $restartedViaQueue)
 
         if (Wait-Health -Seconds 5) {
             Write-Ok ("http://127.0.0.1:" + $Port + "/api/health 正常")
