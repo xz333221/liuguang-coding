@@ -262,12 +262,18 @@ function Get-ListenerPid {
 #   保活脚本(FlowdashSites 计划任务,同样在 Session 0)每 5 分钟读一次队列文件,
 #   对文件里每行一个的 pm2 应用名逐个 restart;往队列写一行再 schtasks /run
 #   可以立即触发,这条路实测 20 秒左右新进程就能起来。
-# 只有队列文件存在时才走这条通道(其它机器没有它,保持原逻辑不变)。
+# 只在计划任务确实存在时才走这条通道:其它机器没有这个任务就自然退回原逻辑。
+# 不能用「队列文件是否存在」当开关 —— 保活 tick 消费完就把它删掉,正常状态下它永远
+# 不在,那条分支就永远进不去(2026-11-27 演练踩到:脚本又退回去,被旧进程的 200 骗成发布成功)。
 # 返回 $true 表示已确认新进程上线,调用方可以跳过原有的 pm2 / 直接拉起兜底。
 function Restart-BackendViaKeepaliveQueue {
-    if (-not (Test-Path -LiteralPath $RestartQueue)) { return $false }
+    $taskQuery = Invoke-Capture -Exe 'schtasks.exe' -Arguments @('/query', '/tn', $RestartTask)
+    if ($taskQuery.Code -ne 0) {
+        Write-Host ("    没有计划任务 " + $RestartTask + ",不走保活通道")
+        return $false
+    }
 
-    Write-Host ("    检测到保活队列文件 " + $RestartQueue + ",优先走保活通道重启后端")
+    Write-Host ("    检测到计划任务 " + $RestartTask + ",优先走保活通道重启后端")
 
     # 重启前先记录旧进程的 PID 和 uptime,轮询时用来判断"确实换了个新进程"。
     $prePid = Get-ListenerPid
