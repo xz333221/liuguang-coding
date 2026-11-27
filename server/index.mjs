@@ -144,7 +144,7 @@ function respondBuilding(res, heading = '知识库正在更新', description = '
   res
     .status(503)
     .setHeader('Retry-After', '20')
-    .type('html; charset=utf-8')
+    .type('text/html; charset=utf-8')
     .send(buildingPageHtml(heading, description))
 }
 
