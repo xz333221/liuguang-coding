@@ -77,6 +77,19 @@ const outline: OutlineNode[] = [
     ],
   },
   {
+    id: 'bigdata-nosql',
+    name: 'NoSQL 数据库',
+    intro: '文档型与列式数据库:按访问模式选择数据模型、索引与一致性策略。',
+    children: [
+      { id: 'bigdata-mongodb-model', name: 'MongoDB: 文档模型与 CRUD' },
+      { id: 'bigdata-mongodb-index', name: 'MongoDB: 索引、聚合与事务' },
+      { id: 'bigdata-mongodb-cluster', name: 'MongoDB: 副本集、分片与运维' },
+      { id: 'bigdata-hbase-model', name: 'HBase: 表模型、RowKey 与 Region' },
+      { id: 'bigdata-hbase-readwrite', name: 'HBase: 读写路径与性能' },
+      { id: 'bigdata-hbase-ops', name: 'HBase: 集群运维与故障' },
+    ],
+  },
+  {
     id: 'bigdata-integration',
     name: '数据集成',
     intro: '数据怎么进湖仓:CDC、离线同步与消息链路的取舍。',
@@ -103,6 +116,17 @@ const outline: OutlineNode[] = [
       { id: 'bigdata-clickhouse', name: 'ClickHouse: MergeTree 与物化视图' },
       { id: 'bigdata-doris', name: 'Doris / StarRocks: MPP 与数据模型' },
       { id: 'bigdata-trino', name: 'Trino / Presto: 联邦查询与连接器' },
+    ],
+  },
+  {
+    id: 'bigdata-cloud',
+    name: '云上大数据',
+    intro: 'AWS、Azure 与 GCP 的托管大数据服务:对象存储、批流计算与成本边界。',
+    children: [
+      { id: 'bigdata-cloud-aws', name: 'AWS: S3、EMR 与 Glue' },
+      { id: 'bigdata-cloud-azure', name: 'Azure: Data Lake、HDInsight 与 Synapse' },
+      { id: 'bigdata-cloud-gcp', name: 'GCP: GCS、Dataproc 与 BigQuery' },
+      { id: 'bigdata-cloud-choice', name: '云上选型、成本与迁移' },
     ],
   },
   {
