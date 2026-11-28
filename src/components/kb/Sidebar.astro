@@ -115,4 +115,35 @@ const openPath = new Set(current ? [...pathOf(current).map((item) => item.id), c
       // 隐私模式下写不进去,本次开合仍然生效
     }
   })
+
+  // 换一篇文章是整页重载,侧栏的滚动容器会回到顶部,正在读的那一节往往
+  // 在下面很远,只能自己往回翻。加载后把当前高亮那一行摆到侧栏上部
+  // 三分之一处:位置固定,前后翻文章时目录不会忽上忽下。
+  function revealActive() {
+    // 同一页有两份侧栏,各自定位;同一个节点既是章节又是文章时会有两条
+    // 高亮行,取最靠后的那条 = 最深的那个,也就是正在读的文章
+    const targets = new Map<HTMLElement, HTMLElement>()
+    for (const item of document.querySelectorAll<HTMLElement>('.lg-nav-item[data-active="true"]')) {
+      const box = item.closest<HTMLElement>('[data-kb-nav-scroll]')
+      if (box) targets.set(box, item)
+    }
+    for (const [box, item] of targets) {
+      // 侧栏收起时宽高为 0,这时滚了也白滚,等展开后再补一次
+      if (!box.clientWidth || !box.clientHeight) continue
+      const top = item.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop
+      const slack = Math.max(0, (box.clientHeight - item.offsetHeight) * 0.34)
+      box.scrollTop = Math.max(0, top - slack)
+    }
+  }
+
+  revealActive()
+
+  // 侧栏收起状态下重新展开:宽度是慢慢抽出来的,等过渡结束再定位,
+  // 不然量到的是窄屏下的换行高度,位置会偏
+  let revealTimer = 0
+  new MutationObserver(() => {
+    if (document.documentElement.dataset.kbLeft !== 'open') return
+    clearTimeout(revealTimer)
+    revealTimer = window.setTimeout(revealActive, 260)
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-kb-left'] })
 </script>
